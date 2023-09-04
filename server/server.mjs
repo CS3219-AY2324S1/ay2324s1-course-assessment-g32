@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use("/record", records);
 
-// start the Express server
+// start Express server
 app.listen(PORT, () => {
 	console.log(`Server is running on port: ${PORT}`);
 });

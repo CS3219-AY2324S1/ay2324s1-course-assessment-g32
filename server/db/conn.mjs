@@ -11,7 +11,7 @@ try {
 	console.error(e);
 }
 
-// To update again to the name of our database
+// To update to the name of our database
 let db = conn.db("sample_training");
 
 export default db;

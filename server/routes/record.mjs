@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
 	res.send(results).status(200);
 });
 
-// This section will help you get a single record by id
+// This section will help you get a single record by id.
 router.get("/:id", async (req, res) => {
 	let collection = await db.collection("records");
 	let query = { _id: new ObjectId(req.params.id) };
@@ -50,7 +50,7 @@ router.patch("/:id", async (req, res) => {
 	res.send(result).status(200);
 });
 
-// This section will help you delete a record
+// This section will help you delete a record.
 router.delete("/:id", async (req, res) => {
 	const query = { _id: new ObjectId(req.params.id) };
 
