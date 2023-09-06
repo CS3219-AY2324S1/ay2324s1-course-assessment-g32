@@ -14,13 +14,11 @@ const columns = [
 
 const QuestionList = () => {
   const [tableData, setTableData] = useState([])
-
   useEffect(() => {
-
   // Dummy Data, to be replaced by Database when set up
+
     const dataToStore = questions;
     const dataToStoreString = JSON.stringify(dataToStore);
-    console.log(dataToStoreString)
 
     Cookies.set('questions', dataToStoreString, { expires: 7 });
 
@@ -42,7 +40,6 @@ const QuestionList = () => {
     const navigate = useNavigate();
     const handleRowClick = (params) => {
       navigate('/question/' + params.row.id);
-      console.log(params.row.id);
     };
 
   return (

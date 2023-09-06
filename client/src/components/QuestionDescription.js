@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { Box } from '@mui/material'
 import './QuestionDescription.css';
 import Cookies from 'js-cookie';
-import { useParams } from 'react-router-dom';
-
+import { navigate, useParams, useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const QuestionDescription = () => {
 
@@ -25,11 +28,38 @@ const QuestionDescription = () => {
       }
   }, []);
 
+  const navigate = useNavigate();
+  const handleBackClick = () => {
+    navigate('../');
+  };
+  const handleEditClick = () => {
+    //TODO
+    console.log('Edit Button Clicked!')
+  };
+  const handleDeleteClick = () => {
+    //TODO
+    console.log('Delete Button Clicked!')
+  };
+
   return (
   <Box bgcolor="#2d2d2d"  sx={{ height: '90vh', width: '80%', borderRadius: '25px', p: 3, boxShadow: 2, border: 2}}>
+
     <div className="question-description">
-      <h1>Question {id}</h1>
-      <h2>{question[0]?.title}</h2>
+        <div className="horizontal-row">
+            <Button variant ="outlined"
+                    onClick={handleBackClick} startIcon={<ArrowBackIosIcon />}>
+              Back
+            </Button>
+            <Button style={{maxWidth: '110px', minWidth: '110px', float: 'right'}} color="error" variant ="contained"
+                    onClick={handleDeleteClick} startIcon={<DeleteIcon />}>
+              Delete
+            </Button>
+            <Button style={{maxWidth: '110px', minWidth: '110px', float: 'right' }} variant ="contained"
+                    sx={{ mr: 2 }} onClick={handleEditClick} startIcon={<EditIcon />}>
+              Edit
+            </Button>
+        </div>
+        <h1>{question[0]?.title}</h1>
       <h3>Difficulty: {question[0]?.difficulty}</h3>
       <p>{question[0]?.description}</p>
     </div>
