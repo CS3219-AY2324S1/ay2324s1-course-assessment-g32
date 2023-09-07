@@ -1,14 +1,18 @@
-// In src/index.js 
-const express = require("express"); 
+const cors = require('cors');
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
-const app = express(); 
-const PORT = process.env.PORT || 3000; 
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-// For testing purposes 
-app.get("/", (req, res) => { 
-    res.send("<h2>It's Working!</h2>"); 
-}); 
+app.use(cors());
+app.use(bodyParser.json());
 
-app.listen(PORT, () => { 
-    console.log(`API is listening on port ${PORT}`); 
-});
+MONGOCLIENT = 'mongodb+srv://root:password12345678@cluster0.lfbgr2v.mongodb.net/?retryWrites=true&w=majority'
+mongoose.connect(MONGOCLIENT)
+  .then(() => {
+    app.listen(PORT);
+    console.log(`API is listening on port ${PORT}`);
+  })
+  .catch(err => console.log(err));
