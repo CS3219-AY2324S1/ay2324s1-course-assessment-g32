@@ -2,6 +2,7 @@ const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const authRoutes = require('./server/routes/auth');
 require('dotenv').config();
 
 const app = express();
@@ -10,6 +11,9 @@ const MONGOCLIENT = process.env.ATLAS_URI || "";
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// Use the authRoutes for handling authentication-related routes
+app.use('/auth', authRoutes);
 
 mongoose.connect(MONGOCLIENT,
   {
