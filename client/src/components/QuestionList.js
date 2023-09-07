@@ -5,6 +5,8 @@ import './QuestionList.css';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import questions from '../json/questions.json'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const columns = [
   { field: 'id', headerName: 'ID', width:100, headerClassName: 'theme--header'},
@@ -14,27 +16,37 @@ const columns = [
 
 const QuestionList = () => {
   const [tableData, setTableData] = useState([])
+
   useEffect(() => {
   // Dummy Data, to be replaced by Database when set up
 
-    const dataToStore = questions;
-    const dataToStoreString = JSON.stringify(dataToStore);
 
-    Cookies.set('questions', dataToStoreString, { expires: 7 });
-
-    // End of Dummy Data
+    // Set to true to reset cookies to example ones
+    const reset = false;
 
     // Read data from cookies
     const cookieData = Cookies.get('questions');
 
-    if (cookieData) {
-      try {
-        const parsedData = JSON.parse(cookieData);
-        setTableData(parsedData);
-      } catch (error) {
-        console.error('Error parsing cookie data:', error);
-      }
+    if (reset || !cookieData) {
+        console.log('Resetting cookies');
+        try {
+            const dataToStoreString = JSON.stringify(questions);
+            Cookies.set('questions', dataToStoreString);
+
+        } catch (error) {
+            console.error('Error loading json data::', error);
+        }
     }
+
+
+    try {
+      const parsedData = JSON.parse(cookieData);
+      setTableData(parsedData);
+    } catch (error) {
+      console.error('Error parsing cookie data:', error);
+    }
+    // End of Dummy Data
+
   }, []);
 
     const navigate = useNavigate();
@@ -69,7 +81,7 @@ const QuestionList = () => {
         }}
 
       />
-
+    <ToastContainer />
     </Box>
 
   )

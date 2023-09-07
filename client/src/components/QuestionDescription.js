@@ -7,10 +7,12 @@ import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const QuestionDescription = () => {
 
-  const [question, setQuestion] = useState([])
+  const [question, setQuestion] = useState([]);
 
   const { id } = useParams();
 
@@ -32,13 +34,27 @@ const QuestionDescription = () => {
   const handleBackClick = () => {
     navigate('../');
   };
+
   const handleEditClick = () => {
-    //TODO
-    console.log('Edit Button Clicked!')
+    const cookieData = Cookies.get('questions');
+    const parsedData = JSON.parse(cookieData);
+    const objectToEdit = parsedData.find(item => item.id == id)
+    objectToEdit.description = "Edited Description";
+    Cookies.set('questions', JSON.stringify(parsedData));
   };
+
   const handleDeleteClick = () => {
-    //TODO
-    console.log('Delete Button Clicked!')
+    const cookieData = Cookies.get('questions');
+    const parsedData = JSON.parse(cookieData);
+    const indexToDelete = parsedData.findIndex(item => item.id == id);
+    if (indexToDelete !== -1) {
+      parsedData.splice(indexToDelete, 1);
+    }
+    Cookies.set('questions', JSON.stringify(parsedData));
+    toast.success('Successfully Deleted !', {
+        position: toast.POSITION.BOTTOM_RIGHT
+    });
+    navigate('../');
   };
 
   return (
@@ -64,6 +80,7 @@ const QuestionDescription = () => {
       <p>{question[0]?.description}</p>
     </div>
   </Box>
+
   )
 }
 
