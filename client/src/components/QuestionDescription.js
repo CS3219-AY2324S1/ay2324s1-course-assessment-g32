@@ -22,7 +22,7 @@ const QuestionDescription = () => {
       if (cookieData) {
         try {
           const parsedData = JSON.parse(cookieData);
-          setQuestion(parsedData.filter((question) => question.id == id));
+          setQuestion(parsedData.filter((question) => question.id == id)[0]);
           console.log(parsedData.filter((question) => question.id == id));
         } catch (error) {
           console.error('Error parsing cookie data:', error);
@@ -36,11 +36,7 @@ const QuestionDescription = () => {
   };
 
   const handleEditClick = () => {
-    const cookieData = Cookies.get('questions');
-    const parsedData = JSON.parse(cookieData);
-    const objectToEdit = parsedData.find(item => item.id == id)
-    objectToEdit.description = "Edited Description";
-    Cookies.set('questions', JSON.stringify(parsedData));
+    navigate('../edit/' + id);
   };
 
   const handleDeleteClick = () => {
@@ -51,7 +47,7 @@ const QuestionDescription = () => {
       parsedData.splice(indexToDelete, 1);
     }
     Cookies.set('questions', JSON.stringify(parsedData));
-    toast.success('Successfully Deleted !', {
+    toast.success('Successfully Deleted!', {
         position: toast.POSITION.BOTTOM_RIGHT
     });
     navigate('../');
@@ -75,9 +71,9 @@ const QuestionDescription = () => {
               Edit
             </Button>
         </div>
-        <h1>{question[0]?.title}</h1>
-      <h3>Difficulty: {question[0]?.difficulty}</h3>
-      <p>{question[0]?.description}</p>
+        <h1>{question?.title}</h1>
+      <h3>Difficulty: {question?.difficulty}</h3>
+      <p>{question?.description}</p>
     </div>
   </Box>
 
