@@ -2,56 +2,40 @@ import React, { useState, useEffect } from 'react'
 import { Box } from '@mui/material'
 import './EditQuestion.css';
 import Cookies from 'js-cookie';
-import { navigate, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TextField from '@mui/material/TextField';
 import SaveIcon from '@mui/icons-material/Save';
+import FormControl from '@mui/material/FormControl';
+
 
 const styles = {
   textBox: {
-width: '80%',
-        '& .MuiInputBase-input': {
-          color: 'white',
-        },
-        '& .MuiOutlinedInput-root': {
-          '& fieldset': {
-            borderColor: 'white',
-          },
-          '&:hover fieldset': {
-            borderColor: 'white',
-          },
-        },
-        backgroundColor: '#3d3d3d',
-        borderRadius: '5px',
-        margin: '10px',
+  width: '80%',
+  '& .MuiInputBase-input': {
+    color: 'white',
   },
+  backgroundColor: '#3d3d3d',
+  margin: '10px',
+    },
 };
-
 
 const EditQuestion = () => {
 
   const { id } = useParams();
-  const [question, setQuestion] = useState([]);
   const [newIDValue, setIDValue] = useState();
   const [newTitleValue, setTitleValue] = useState();
   const [newDescriptionValue, setDescriptionValue] = useState();
   const [newDifficultyValue, setDifficultyValue] = useState();
 
   useEffect(() => {
-      console.log(id);
-  }, []);
-
-  useEffect(() => {
       const cookieData = Cookies.get('questions');
       if (cookieData) {
         try {
           const parsedData = JSON.parse(cookieData);
-          setQuestion(parsedData.filter((question) => question.id == id)[0]);
           setIDValue(parsedData.filter((question) => question.id == id)[0].id);
           setTitleValue(parsedData.filter((question) => question.id == id)[0].title);
           setDescriptionValue(parsedData.filter((question) => question.id == id)[0].description);
@@ -70,10 +54,21 @@ const EditQuestion = () => {
   };
 
   const handleSaveClick = () => {
+
+    // Check if all fields are filled up
+    if (!newIDValue || !newTitleValue || !newDescriptionValue || !newDifficultyValue) {
+      toast.error('Please fill in all fields!', {
+          position: toast.POSITION.BOTTOM_RIGHT
+      });
+      return;
+    }
+
     const cookieData = Cookies.get('questions');
     const parsedData = JSON.parse(cookieData);
     console.log(newIDValue);
     var updatedParsedData = parsedData;
+
+    // Check if this page is for editing or creating a new question
     if (id != null) {
         updatedParsedData = updatedParsedData.map((item) => {
           if (item.id == id) {
@@ -96,7 +91,18 @@ const EditQuestion = () => {
   };
 
   const handleIDValueChange = (event) => {
-    setIDValue(event.target.value);
+    const regex = /[^0-9]/;
+
+    // Check if ID contains only numbers
+    if (regex.test(event.target.value)) {
+      toast.error('ID can only contain digits!', {
+          position: toast.POSITION.BOTTOM_RIGHT
+      });
+      const newValue = event.target.value.replace(/[^0-9]/g, '');
+      setIDValue(newValue);
+    } else{
+      setIDValue(event.target.value);
+    }
   };
 
   const handleTitleValueChange = (event) => {
@@ -118,69 +124,66 @@ const EditQuestion = () => {
             onClick={handleBackClick} startIcon={<ArrowBackIosIcon />}>
       Back
     </Button>
-    <div style={{
-        textAlign: 'center',
-               }}>
-    <div>
-    <TextField
-      required
-      variant="filled"
-      id="outlined-required"
-      label="ID"
-      multiline
-      rows={1}
-      defaultValue= {question?.id}
-        InputLabelProps={{
-          style: { color: '#fff' },
-        }}
-      sx={styles.textBox}
-      onChange={handleIDValueChange}
-    />
-    <TextField
-      required
-      variant="filled"
-      id="outlined-required"
-      label="Title"
-      multiline
-      rows={1}
-      defaultValue={question?.title}
-        InputLabelProps={{
-          style: { color: '#fff' },
-        }}
-      sx={styles.textBox}
-      onChange={handleTitleValueChange}
-    />
-    <TextField
-      required
-      variant="filled"
-      id="outlined-required"
-      label="Complexity"
-      multiline
-      rows={1}
-      defaultValue={question?.difficulty}
-        InputLabelProps={{
-          style: { color: '#fff' },
-        }}
-      sx={styles.textBox}
-      onChange={handleDifficultyValueChange}
-    />
-    <TextField
-      required
-      variant="filled"
-      id="outlined-multiline-static"
-      multiline
-      label="Description"
-      rows={16}
-      defaultValue={question?.description}
-        InputLabelProps={{
-          style: { color: '#fff' },
-        }}
-      sx={styles.textBox}
-        onChange={handleDescriptionValueChange}
-    />
-    </div>
-    </div>
-
+    <FormControl fullWidth>
+      <div style={{
+          textAlign: 'center',
+                 }}>
+        <TextField
+          required
+          inputProps={{
+            inputMode: 'numeric',
+            pattern: '[0-9]*',
+          }}
+          variant="filled"
+          id="outlined-required"
+          label="ID"
+          value = {newIDValue}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+          sx={styles.textBox}
+          onChange={handleIDValueChange}
+        />
+        <TextField
+          required
+          variant="filled"
+          id="outlined-required"
+          label="Title"
+          value={newTitleValue}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+          sx={styles.textBox}
+          onChange={handleTitleValueChange}
+        />
+        <TextField
+          required
+          variant="filled"
+          id="outlined-required"
+          label="Complexity"
+          value={newDifficultyValue}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+          sx={styles.textBox}
+          onChange={handleDifficultyValueChange}
+        />
+        <TextField
+          required
+          variant="filled"
+          id="outlined-multiline-static"
+          multiline
+          label="Description"
+          rows={10}
+          value={newDescriptionValue}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+          sx={styles.textBox}
+            onChange={handleDescriptionValueChange}
+        />
+      </div>
+    </FormControl>
     <Button style={{maxWidth: '110px', minWidth: '110px', float: 'right' }} variant ="contained"
             sx={{ mr: 2 }} color="success" onClick={handleSaveClick} startIcon={<SaveIcon />}>
       Save
