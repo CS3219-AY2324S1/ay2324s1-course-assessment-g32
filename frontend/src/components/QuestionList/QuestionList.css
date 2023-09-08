@@ -1,0 +1,15 @@
+.MuiDataGrid-root .MuiDataGrid-cell {
+    border-color: transparent !important;
+}
+
+.MuiDataGrid-root .MuiDataGrid-colCell {
+    border-color: transparent !important;
+}
+
+.MuiDataGrid-root .MuiDataGrid-row {
+    border-color: transparent !important;
+}
+
+.leftSpacer {
+    margin-left: 50px;
+}
