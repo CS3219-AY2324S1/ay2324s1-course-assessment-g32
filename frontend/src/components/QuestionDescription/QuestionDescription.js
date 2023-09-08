@@ -6,11 +6,13 @@ import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './QuestionDescription.css'
 
 const QuestionDescription = () => {
 
-  const [question, setQuestion] = useState([])
+  const [question, setQuestion] = useState([]);
 
   const { id } = useParams();
 
@@ -20,7 +22,7 @@ const QuestionDescription = () => {
     if (cookieData) {
       try {
         const parsedData = JSON.parse(cookieData);
-        setQuestion(parsedData.filter((question) => question.id == id));
+        setQuestion(parsedData.filter((question) => question.id == id)[0]);
         console.log(parsedData.filter((question) => question.id == id));
       } catch (error) {
         console.error('Error parsing cookie data:', error);
@@ -32,13 +34,23 @@ const QuestionDescription = () => {
   const handleBackClick = () => {
     navigate('../');
   };
+
   const handleEditClick = () => {
-    //TODO
-    console.log('Edit Button Clicked!')
+    navigate('../edit/' + id);
   };
+
   const handleDeleteClick = () => {
-    //TODO
-    console.log('Delete Button Clicked!')
+    const cookieData = Cookies.get('questions');
+    const parsedData = JSON.parse(cookieData);
+    const indexToDelete = parsedData.findIndex(item => item.id == id);
+    if (indexToDelete !== -1) {
+      parsedData.splice(indexToDelete, 1);
+    }
+    Cookies.set('questions', JSON.stringify(parsedData));
+    toast.success('Successfully Deleted!', {
+      position: toast.POSITION.BOTTOM_RIGHT
+    });
+    navigate('../');
   };
 
   return (
@@ -59,12 +71,13 @@ const QuestionDescription = () => {
             Edit
           </Button>
         </div>
-        <h1>{question[0]?.title}</h1>
-        <h3>Difficulty: {question[0]?.difficulty}</h3>
-        <p>{question[0]?.description}</p>
+        <h1>{question?.title}</h1>
+        <h3>Difficulty: {question?.difficulty}</h3>
+        <p>{question?.description}</p>
       </div>
     </Box>
+
   )
 }
 
-export default QuestionDescription
+export default QuestionDescription;
