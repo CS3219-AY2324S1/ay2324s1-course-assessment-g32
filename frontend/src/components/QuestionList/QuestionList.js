@@ -3,14 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { DataGrid } from '@mui/x-data-grid'
 import { Box } from '@mui/material'
-<<<<<<< HEAD
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 import 'react-toastify/dist/ReactToastify.css';
-=======
-import questions from '../../json/questions.json'
->>>>>>> 928d712 (Fix wrong import bug)
 import './QuestionList.css';
 
 const columns = [
@@ -95,6 +91,7 @@ const QuestionList = () => {
           },
         }}
       />
+
 
       <Button style={{ maxWidth: '110px', minWidth: '110px', float: 'right' }} variant="contained"
         sx={{ m: 2 }} onClick={handleNewQuestionClick} color="success" startIcon={<AddIcon />}>
