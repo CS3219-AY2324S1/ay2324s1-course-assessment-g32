@@ -4,10 +4,11 @@ import { Box } from '@mui/material'
 import './QuestionList.css';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import stored_questions from '../json/questions.json'
 import 'react-toastify/dist/ReactToastify.css';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
+import Stack from '@mui/material/Stack';
+
 
 const columns = [
   { field: 'id', headerName: 'ID', width:100, headerClassName: 'theme--header'},
@@ -21,23 +22,13 @@ const QuestionList = () => {
   useEffect(() => {
   // Dummy Data, to be replaced by Database when set up
 
-
-    // Set to true to reset cookies to example ones
-    const reset = false;
-
     // Read data from cookies
-    const cookieData = Cookies.get('questions');
 
-    if (reset || !cookieData) {
-        console.log('Resetting cookies');
-        try {
-            const dataToStoreString = JSON.stringify(stored_questions);
-            Cookies.set('questions', dataToStoreString, { expires: 7 });
-
-        } catch (error) {
-            console.error('Error loading json data::', error);
-        }
+    if (!Cookies.get('questions')) {
+        Cookies.set('questions', JSON.stringify([]));
     }
+
+    const cookieData = Cookies.get('questions');
 
 
     try {
@@ -71,6 +62,22 @@ const QuestionList = () => {
         hideFooterSelectedRowCount
         hideFooter
         rowHeight={60}
+        components={{
+        NoRowsOverlay: () => (
+          <Stack height="100%" alignItems="center" justifyContent="center">
+            <h2>
+              No Questions Found!
+            </h2>
+          </Stack>
+        ),
+        NoResultsOverlay: () => (
+          <Stack height="100%" alignItems="center" justifyContent="center">
+            <h2>
+              Search Found No Questions!
+            </h2>
+          </Stack>
+        )
+        }}
         sx={{
             boxShadow: 2,
             border: 2,

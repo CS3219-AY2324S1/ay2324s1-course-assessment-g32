@@ -13,3 +13,10 @@
 .leftSpacer {
   margin-left: 50px;
 }
+
+h2 {
+  font-weight: 400;
+  line-height: 1.334;
+  letter-spacing: 0em;
+  color: #fff;
+}

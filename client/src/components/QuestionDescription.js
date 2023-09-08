@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { Box } from '@mui/material'
 import './QuestionDescription.css';
 import Cookies from 'js-cookie';
-import { navigate, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const QuestionDescription = () => {
