@@ -22,8 +22,8 @@ const QuestionDescription = () => {
     if (cookieData) {
       try {
         const parsedData = JSON.parse(cookieData);
-        setQuestion(parsedData.filter((question) => question.id == id)[0]);
-        console.log(parsedData.filter((question) => question.id == id));
+        setQuestion(parsedData.filter((question) => question.id === id)[0]);
+        console.log(parsedData.filter((question) => question.id === id));
       } catch (error) {
         console.error('Error parsing cookie data:', error);
       }
@@ -42,7 +42,7 @@ const QuestionDescription = () => {
   const handleDeleteClick = () => {
     const cookieData = Cookies.get('questions');
     const parsedData = JSON.parse(cookieData);
-    const indexToDelete = parsedData.findIndex(item => item.id == id);
+    const indexToDelete = parsedData.findIndex(item => item.id === id);
     if (indexToDelete !== -1) {
       parsedData.splice(indexToDelete, 1);
     }
