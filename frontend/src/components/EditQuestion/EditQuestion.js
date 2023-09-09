@@ -35,11 +35,11 @@ const EditQuestion = () => {
     if (cookieData) {
       try {
         const parsedData = JSON.parse(cookieData);
-        setIDValue(parsedData.filter((question) => question.id == id)[0].id);
-        setTitleValue(parsedData.filter((question) => question.id == id)[0].title);
-        setDescriptionValue(parsedData.filter((question) => question.id == id)[0].description);
-        setDifficultyValue(parsedData.filter((question) => question.id == id)[0].difficulty);
-        console.log(parsedData.filter((question) => question.id == id));
+        setIDValue(parsedData.filter((question) => question.id === id)[0].id);
+        setTitleValue(parsedData.filter((question) => question.id === id)[0].title);
+        setDescriptionValue(parsedData.filter((question) => question.id === id)[0].description);
+        setDifficultyValue(parsedData.filter((question) => question.id === id)[0].difficulty);
+        console.log(parsedData.filter((question) => question.id === id));
       } catch (error) {
         console.error('Error parsing cookie data:', error);
       }
@@ -70,9 +70,9 @@ const EditQuestion = () => {
     // Check if this page is for editing or creating a new question
     if (id != null) {
       updatedParsedData = updatedParsedData.map((item) => {
-        if (item.id == id) {
+        if (item.id === id) {
           return {
-            id: parseInt(newIDValue), title: newTitleValue,
+            id: newIDValue, title: newTitleValue,
             description: newDescriptionValue, difficulty: newDifficultyValue
           };
         }
@@ -80,7 +80,7 @@ const EditQuestion = () => {
       });
     } else {
       updatedParsedData.push({
-        id: parseInt(newIDValue), title: newTitleValue,
+        id: newIDValue, title: newTitleValue,
         description: newDescriptionValue, difficulty: newDifficultyValue
       });
     }
