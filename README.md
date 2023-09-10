@@ -3,16 +3,25 @@
 # Setup
 
 ## Frontend
+
 ```
 cd frontend
 npm install --legacy-peer-deps
 ```
+
 ## Backend
+
 ```
 cd backend
 npm install
 ```
 
+## Setup MySQL locally
+
+1. Download and install [MySQL](https://dev.mysql.com/downloads/mysql/).
+2. Search for **MySQL 8.1 Command Line Client** on your computer. Execute it to open up the terminal.
+3. Enter your root password.
+4. Run the SQL statements in `./backend/schema.sql` on the terminal.
 
 # Start
 
@@ -20,6 +29,7 @@ npm install
 cd frontend
 npm start
 ```
+
 ```
 cd backend
 npm run dev
