@@ -1,6 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
+
+  const navigate = useNavigate();
+
+  const handleSignupClick = () => {
+    navigate("/signup");
+  };
+
   return (
     <div className="Auth-form-container">
       <form className="Auth-form">
@@ -8,7 +16,7 @@ function Login() {
           <h3 className="Auth-form-title">Sign In</h3>
           <div className="text-center">
             Not registered yet?{" "}
-            <span className="link-primary">
+            <span className="link-primary" onClick={handleSignupClick}>
               Sign Up
             </span>
           </div>
