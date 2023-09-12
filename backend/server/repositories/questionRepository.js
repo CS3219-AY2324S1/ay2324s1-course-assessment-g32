@@ -1,7 +1,12 @@
 const Question = require('../models/question');
 
 const findByTitle = async (title) => {
-  return await Question.findOne({ title });
+  try {
+    return await Question.findOne({ title });
+  } catch (err) {
+    throw err;
+  }
+
 }
 
 const createQuestion = async (title, complexity, description) => {
@@ -22,29 +27,52 @@ const createQuestion = async (title, complexity, description) => {
 }
 
 const getQuestions = async () => {
-  // Return all questions without the description
-  return await Question.find({}, { description: 0 });
+  try {
+    // Return all questions without the description
+    return await Question.find({}, { description: 0 });
+  } catch (err) {
+    throw err;
+  }
+
 }
 
 const getQuestionDetails = async (id) => {
-  return await Question.findOne({ _id: id });
+  try {
+    return await Question.findOne({ _id: id });
+  } catch (err) {
+    throw err;
+  }
+
 }
 
 const findById = async (id) => {
-  return await Question.find({ _id: id });
+  try {
+    return await Question.find({ _id: id });
+  } catch (err) {
+    throw err;
+  }
 }
 
 const editQuestion = async (id, title, complexity, description) => {
-  const fields = {
-    title: title,
-    complexity: complexity,
-    description: description
-  };
-  return Question.updateOne({ _id: id }, { $set: fields });
+  try {
+    const fields = {
+      title: title,
+      complexity: complexity,
+      description: description
+    };
+    return Question.updateOne({ _id: id }, { $set: fields });
+  } catch (err) {
+    throw err;
+  }
+
 }
 
 const deleteQuestion = async (id) => {
-  return await Question.deleteOne({ _id: id });
+  try {
+    return await Question.deleteOne({ _id: id });
+  } catch (err) {
+    throw err;
+  }
 }
 
 module.exports = {

@@ -21,7 +21,17 @@ const QuestionDescription = () => {
     getQuestionDetails(id).then((response) => {
       setQuestion(response.data.question);
     }).catch((error) => {
-      console.log(error);
+      navigate('../');
+      if (error.response.status === 400) {
+        toast.error('Request Error: ' + error.response.data.error, {
+          position: toast.POSITION.BOTTOM_RIGHT
+        });
+        console.error('Validation Error:', error.response.data.error);
+      } else {
+        toast.error('Server Error: ' + error.message, {
+          position: toast.POSITION.BOTTOM_RIGHT
+        });
+      }
     });
   }, []);
 
@@ -41,7 +51,9 @@ const QuestionDescription = () => {
       });
       navigate('../');
     }).catch((error) => {
-      console.log(error);
+      toast.error('Server Error: ' + error.message, {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
     });
   };
 

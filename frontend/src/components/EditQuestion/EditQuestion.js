@@ -29,9 +29,9 @@ const EditQuestion = () => {
 
   const { id } = useParams();
 
-  const [newTitleValue, setTitleValue] = useState();
-  const [newDescriptionValue, setDescriptionValue] = useState();
-  const [newComplexityValue, setComplexityValue] = useState();
+  const [newTitleValue, setTitleValue] = useState([]);
+  const [newDescriptionValue, setDescriptionValue] = useState([]);
+  const [newComplexityValue, setComplexityValue] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -42,7 +42,17 @@ const EditQuestion = () => {
       setDescriptionValue(response.data.question.description);
       setIsLoading(false);
     }).catch((error) => {
-      console.log(error);
+      navigate('../');
+      if (error.response.status === 400) {
+        toast.error('Request Error: ' + error.response.data.error, {
+          position: toast.POSITION.BOTTOM_RIGHT
+        });
+        console.error('Validation Error:', error.response.data.error);
+      } else {
+        toast.error('Server Error: ' + error.message, {
+          position: toast.POSITION.BOTTOM_RIGHT
+        });
+      }
     });
 
   }, []);

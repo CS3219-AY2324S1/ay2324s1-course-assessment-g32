@@ -7,12 +7,6 @@ const createQuestion = async (title, complexity, description) => {
       throw { status: 400, message: 'Missing inputs' };
     }
 
-    // Check if a question with the same title already exists
-    const existingQuestion = await questionRepository.findByTitle(title);
-    if (existingQuestion) {
-      throw { status: 400, message: 'Question already exists' };
-    }
-
     const question = await questionRepository.createQuestion(title, complexity, description);
 
     return question;
@@ -35,10 +29,12 @@ const getQuestions = async () => {
 const getQuestionDetails = async (id) => {
   try {
     const question = await questionRepository.getQuestionDetails(id);
+    if (!question) {
+      throw { status: 400, message: 'Question does not exist' };
+    }
     return question;
   } catch (err) {
-    console.error(err);
-    throw err;
+    throw { status: 400, message: 'Question does not exist' };
   }
 }
 
@@ -48,7 +44,7 @@ const editQuestion = async (id, title, complexity, description) => {
     const existingQuestion = await questionRepository.findById(id);
 
     if (!existingQuestion) {
-      throw { status: 400, message: 'Question does not exist, cannot be updated' };
+      throw { status: 400, message: 'Question does not exist' };
     }
 
     // Check for missing inputs
@@ -58,22 +54,15 @@ const editQuestion = async (id, title, complexity, description) => {
     const question = await questionRepository.editQuestion(id, title, complexity, description);
     return question;
   } catch (err) {
-    throw err;
+    throw { status: 400, message: 'Question does not exist' };
   }
 }
 
 const deleteQuestion = async (id) => {
   try {
-    // Check if id does not exist in database
-    const existingQuestion = await questionRepository.findById(id);
-
-    if (!existingQuestion) {
-      throw { status: 400, message: 'Question does not exist' };
-    }
-
     await questionRepository.deleteQuestion(id);
   } catch (err) {
-    throw err;
+    throw { status: 400, message: 'Question does not exist' };
   }
 }
 
