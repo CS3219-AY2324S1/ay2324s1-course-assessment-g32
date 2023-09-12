@@ -52,10 +52,24 @@ const edit = async (req, res) => {
   }
 }
 
+// Define a controller function for deleting a question
+const deleteQuestion = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const question = await questionService.deleteQuestion(id);
+    res.json({ message: 'Question deleted successfully', question });
+  } catch (err) {
+    res
+      .status(err?.status || 500)
+      .json({ error: err?.message || err });
+  }
+}
+
 
 module.exports = {
   create,
   getAll,
   getQuestionDetails,
-  edit
+  edit,
+  deleteQuestion
 };

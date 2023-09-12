@@ -55,7 +55,10 @@ const EditQuestion = () => {
   const handleSaveClick = () => {
 
     editQuestion(id, newTitleValue, newComplexityValue, newDescriptionValue).then((response) => {
-      console.log(response);
+      navigate(-1);
+      toast.success('Question edited successfully!', {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
     }).catch((error) => {
       if (error.response.status === 400) {
         toast.error('Validation Error: ' + error.response.data.error, {

@@ -38,7 +38,7 @@ const CreateQuestion = () => {
   const handleSaveClick = () => {
 
     createQuestion(newTitleValue, newComplexityValue, newDescriptionValue).then((response) => {
-      console.log(response);
+      navigate('../question/' + response.data.question._id);
     }).catch((error) => {
       if (error.response.status === 400) {
         toast.error('Validation Error: ' + error.response.data.error, {

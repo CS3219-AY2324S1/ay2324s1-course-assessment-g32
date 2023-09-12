@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getQuestionDetails } from '../../engine/QuestionEngine.js';
+import { getQuestionDetails, deleteQuestion } from '../../engine/QuestionEngine.js';
 import './QuestionDescription.css'
 
 const QuestionDescription = () => {
@@ -35,17 +35,14 @@ const QuestionDescription = () => {
   };
 
   const handleDeleteClick = () => {
-    const cookieData = Cookies.get('questions');
-    const parsedData = JSON.parse(cookieData);
-    const indexToDelete = parsedData.findIndex(item => item.id === id);
-    if (indexToDelete !== -1) {
-      parsedData.splice(indexToDelete, 1);
-    }
-    Cookies.set('questions', JSON.stringify(parsedData));
-    toast.success('Successfully Deleted!', {
-      position: toast.POSITION.BOTTOM_RIGHT
+    deleteQuestion(id).then((response) => {
+      toast.success('Successfully Deleted!', {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
+      navigate('../');
+    }).catch((error) => {
+      console.log(error);
     });
-    navigate('../');
   };
 
   return (

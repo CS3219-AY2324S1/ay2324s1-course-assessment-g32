@@ -62,9 +62,25 @@ const editQuestion = async (id, title, complexity, description) => {
   }
 }
 
+const deleteQuestion = async (id) => {
+  try {
+    // Check if id does not exist in database
+    const existingQuestion = await questionRepository.findById(id);
+
+    if (!existingQuestion) {
+      throw { status: 400, message: 'Question does not exist' };
+    }
+
+    await questionRepository.deleteQuestion(id);
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   createQuestion,
   getQuestions,
   getQuestionDetails,
-  editQuestion
+  editQuestion,
+  deleteQuestion
 };

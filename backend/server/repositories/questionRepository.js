@@ -43,11 +43,16 @@ const editQuestion = async (id, title, complexity, description) => {
   return Question.updateOne({ _id: id }, { $set: fields });
 }
 
+const deleteQuestion = async (id) => {
+  return await Question.deleteOne({ _id: id });
+}
+
 module.exports = {
   findByTitle,
   createQuestion,
   getQuestions,
   getQuestionDetails,
   findById,
-  editQuestion
+  editQuestion,
+  deleteQuestion
 };

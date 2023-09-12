@@ -15,5 +15,8 @@ router.get('/getQuestionDetails', questionController.getQuestionDetails)
 // Defining the edit question route
 router.post('/edit', questionController.edit);
 
+// Defining the delete question route
+router.delete('/delete', questionController.deleteQuestion);
+
 
 module.exports = router;
