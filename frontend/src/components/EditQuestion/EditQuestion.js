@@ -83,15 +83,15 @@ const EditQuestion = () => {
 
   const handleTitleValueChange = (event) => {
     setTitleValue(event.target.value);
-  }
+  };
 
   const handleDescriptionValueChange = (event) => {
     setDescriptionValue(event.target.value);
-  }
+  };
 
   const handleComplexityValueChange = (event) => {
     setComplexityValue(event.target.value);
-  }
+  };
 
 
   return (
@@ -157,6 +157,6 @@ const EditQuestion = () => {
     </Box>
 
   )
-}
+};
 
 export default EditQuestion;

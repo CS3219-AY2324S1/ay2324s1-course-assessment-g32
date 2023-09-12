@@ -7,7 +7,7 @@ const findByTitle = async (title) => {
     throw err;
   }
 
-}
+};
 
 const createQuestion = async (title, complexity, description) => {
   try {
@@ -24,7 +24,7 @@ const createQuestion = async (title, complexity, description) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 const getQuestions = async () => {
   try {
@@ -34,7 +34,7 @@ const getQuestions = async () => {
     throw err;
   }
 
-}
+};
 
 const getQuestionDetails = async (id) => {
   try {
@@ -43,7 +43,7 @@ const getQuestionDetails = async (id) => {
     throw err;
   }
 
-}
+};
 
 const findById = async (id) => {
   try {
@@ -51,7 +51,7 @@ const findById = async (id) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 const editQuestion = async (id, title, complexity, description) => {
   try {
@@ -65,7 +65,7 @@ const editQuestion = async (id, title, complexity, description) => {
     throw err;
   }
 
-}
+};
 
 const deleteQuestion = async (id) => {
   try {
@@ -73,7 +73,7 @@ const deleteQuestion = async (id) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 module.exports = {
   findByTitle,

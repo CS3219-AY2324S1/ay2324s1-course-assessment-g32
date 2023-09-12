@@ -23,7 +23,7 @@ const getAll = async (req, res) => {
       .status(err?.status || 500)
       .json({ error: err?.message || err });
   }
-}
+};
 
 // Define a controller function for getting details for a question
 const getQuestionDetails = async (req, res) => {
@@ -36,7 +36,7 @@ const getQuestionDetails = async (req, res) => {
       .status(err?.status || 500)
       .json({ error: err?.message || err });
   }
-}
+};
 
 // Define a controller function for editing a question
 const edit = async (req, res) => {
@@ -49,7 +49,7 @@ const edit = async (req, res) => {
       .status(err?.status || 500)
       .json({ error: err?.message || err });
   }
-}
+};
 
 // Define a controller function for deleting a question
 const deleteQuestion = async (req, res) => {
@@ -62,7 +62,7 @@ const deleteQuestion = async (req, res) => {
       .status(err?.status || 500)
       .json({ error: err?.message || err });
   }
-}
+};
 
 
 module.exports = {

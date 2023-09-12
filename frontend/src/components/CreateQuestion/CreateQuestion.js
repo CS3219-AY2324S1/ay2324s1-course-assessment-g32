@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -59,15 +58,15 @@ const CreateQuestion = () => {
 
   const handleTitleValueChange = (event) => {
     setTitleValue(event.target.value);
-  }
+  };
 
   const handleDescriptionValueChange = (event) => {
     setDescriptionValue(event.target.value);
-  }
+  };
 
   const handleComplexityValueChange = (event) => {
     setComplexityValue(event.target.value);
-  }
+  };
 
 
   return (

@@ -24,7 +24,7 @@ const getQuestions = async () => {
     console.error(err);
     throw err;
   }
-}
+};
 
 const getQuestionDetails = async (id) => {
   try {
@@ -36,7 +36,7 @@ const getQuestionDetails = async (id) => {
   } catch (err) {
     throw { status: 400, message: 'Question does not exist' };
   }
-}
+};
 
 const editQuestion = async (id, title, complexity, description) => {
   try {
@@ -56,7 +56,7 @@ const editQuestion = async (id, title, complexity, description) => {
   } catch (err) {
     throw { status: 400, message: 'Question does not exist' };
   }
-}
+};
 
 const deleteQuestion = async (id) => {
   try {
@@ -64,7 +64,7 @@ const deleteQuestion = async (id) => {
   } catch (err) {
     throw { status: 400, message: 'Question does not exist' };
   }
-}
+};
 
 module.exports = {
   createQuestion,

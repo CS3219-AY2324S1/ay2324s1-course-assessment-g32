@@ -13,11 +13,11 @@ export const createQuestion = async (title, complexity, description) => {
       'Content-Type': 'application/json'
     }
   })
-}
+};
 
 export const getQuestions = async () => {
   return axios.get(rootUrl + "/getAll")
-}
+};
 
 export const getQuestionDetails = async (questionId) => {
   return axios.get(rootUrl + "/getQuestionDetails", {
@@ -25,7 +25,7 @@ export const getQuestionDetails = async (questionId) => {
        id: questionId
      }
    })
-}
+};
 
 export const editQuestion = async (id, title, complexity, description) => {
   const questionData = {
@@ -39,7 +39,7 @@ export const editQuestion = async (id, title, complexity, description) => {
       'Content-Type': 'application/json'
     }
   })
-}
+};
 
 export const deleteQuestion = async (id) => {
   return axios.delete(rootUrl + '/delete', {
@@ -47,4 +47,4 @@ export const deleteQuestion = async (id) => {
       id: id
     }
   })
-}
+};
