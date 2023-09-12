@@ -39,6 +39,9 @@ const CreateQuestion = () => {
 
     createQuestion(newTitleValue, newComplexityValue, newDescriptionValue).then((response) => {
       navigate('../question/' + response.data.question._id);
+      toast.success('Question created successfully!', {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
     }).catch((error) => {
       if (error.response.status === 400) {
         toast.error('Validation Error: ' + error.response.data.error, {
