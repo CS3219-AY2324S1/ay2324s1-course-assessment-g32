@@ -33,7 +33,6 @@ const EditQuestion = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-
     getQuestionDetails(id).then((response) => {
       setTitleValue(response.data.question.title);
       setComplexityValue(response.data.question.complexity);
@@ -53,7 +52,7 @@ const EditQuestion = () => {
       }
     });
 
-  });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const navigate = useNavigate();
   const handleBackClick = () => {
