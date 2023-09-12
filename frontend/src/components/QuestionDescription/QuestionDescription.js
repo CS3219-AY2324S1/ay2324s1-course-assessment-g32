@@ -56,7 +56,7 @@ const QuestionDescription = () => {
       });
     });
   };
-  // bgcolor="#2d2d2d"
+  
   return (
     <Box className="box" sx={{ borderRadius: '25px', p: 3, boxShadow: 2, border: 2 }}>
 

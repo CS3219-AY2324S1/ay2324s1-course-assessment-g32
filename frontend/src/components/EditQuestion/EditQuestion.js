@@ -52,7 +52,7 @@ const EditQuestion = () => {
       }
     });
 
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const navigate = useNavigate();
   const handleBackClick = () => {
