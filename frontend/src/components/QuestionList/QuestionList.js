@@ -1,48 +1,42 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { DataGrid } from '@mui/x-data-grid'
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+import { getQuestions } from '../../api_connector/QuestionApi.js';
 import './QuestionList.css';
 
+
 const columns = [
-  { field: 'id', headerName: 'ID', width: 100, headerClassName: 'theme--header' },
+  { field: 'no', headerName: 'No.', width: 100, headerClassName: 'theme--header' },
   { field: 'title', headerName: 'Title', width: 800, headerClassName: 'theme--header' },
-  { field: 'difficulty', headerName: 'Difficulty', width: 200, headerClassName: 'theme--header' }
+  { field: 'complexity', headerName: 'Complexity', width: 200, headerClassName: 'theme--header' }
 ]
 
 const QuestionList = () => {
   const [tableData, setTableData] = useState([])
 
   useEffect(() => {
-    // Dummy Data, to be replaced by Database when set up
 
-    // Read data from cookies
-
-    if (!Cookies.get('questions')) {
-      Cookies.set('questions', JSON.stringify([]));
-    }
-
-    const cookieData = Cookies.get('questions');
-
-
-    try {
-      const parsedData = JSON.parse(cookieData);
-      setTableData(parsedData);
-    } catch (error) {
-      console.error('Error parsing cookie data:', error);
-    }
-    // End of Dummy Data
+    // Read data from backend
+    getQuestions().then((response) => {
+      setTableData(response.data.questions);
+    })
+    .catch((error) => {
+      toast.error('Server Error: ' + error.response.data.error, {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
+    });
 
   }, []);
 
   const navigate = useNavigate();
   const handleRowClick = (params) => {
-    navigate('/question/' + params.row.id);
+    navigate('/question/' + params.row._id);
   };
 
   const handleNewQuestionClick = () => {
@@ -53,8 +47,16 @@ const QuestionList = () => {
 
     <Box bgcolor="#2d2d2d" sx={{ height: '80vh', width: '80%', borderRadius: '25px' }}>
       <DataGrid
-        rows={tableData}
+        rows={
+          tableData.map((row, index) => {
+            return {
+              no: index + 1,
+              ...row
+            }
+          })
+        }
         columns={columns}
+        getRowId={(row) => row._id}
         onRowClick={handleRowClick}
         pageSize={12}
         hideFooterPagination

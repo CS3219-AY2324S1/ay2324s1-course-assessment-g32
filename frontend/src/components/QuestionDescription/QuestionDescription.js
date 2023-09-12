@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getQuestionDetails, deleteQuestion } from '../../api_connector/QuestionApi.js';
 import './QuestionDescription.css'
 
 const QuestionDescription = () => {
@@ -17,17 +18,21 @@ const QuestionDescription = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const cookieData = Cookies.get('questions');
-
-    if (cookieData) {
-      try {
-        const parsedData = JSON.parse(cookieData);
-        setQuestion(parsedData.filter((question) => question.id == id)[0]);
-        console.log(parsedData.filter((question) => question.id == id));
-      } catch (error) {
-        console.error('Error parsing cookie data:', error);
+    getQuestionDetails(id).then((response) => {
+      setQuestion(response.data.question);
+    }).catch((error) => {
+      navigate('../');
+      if (error.response.status === 400) {
+        toast.error('Request Error: ' + error.response.data.error, {
+          position: toast.POSITION.BOTTOM_RIGHT
+        });
+        console.error('Validation Error:', error.response.data.error);
+      } else {
+        toast.error('Server Error: ' + error.message, {
+          position: toast.POSITION.BOTTOM_RIGHT
+        });
       }
-    }
+    });
   }, []);
 
   const navigate = useNavigate();
@@ -40,17 +45,16 @@ const QuestionDescription = () => {
   };
 
   const handleDeleteClick = () => {
-    const cookieData = Cookies.get('questions');
-    const parsedData = JSON.parse(cookieData);
-    const indexToDelete = parsedData.findIndex(item => item.id == id);
-    if (indexToDelete !== -1) {
-      parsedData.splice(indexToDelete, 1);
-    }
-    Cookies.set('questions', JSON.stringify(parsedData));
-    toast.success('Successfully Deleted!', {
-      position: toast.POSITION.BOTTOM_RIGHT
+    deleteQuestion(id).then((response) => {
+      toast.success('Successfully Deleted!', {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
+      navigate('../');
+    }).catch((error) => {
+      toast.error('Server Error: ' + error.message, {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
     });
-    navigate('../');
   };
 
   return (
@@ -72,7 +76,7 @@ const QuestionDescription = () => {
           </Button>
         </div>
         <h1>{question?.title}</h1>
-        <h3>Difficulty: {question?.difficulty}</h3>
+        <h3>Complexity: {question?.complexity}</h3>
         <p>{question?.description}</p>
       </div>
     </Box>
