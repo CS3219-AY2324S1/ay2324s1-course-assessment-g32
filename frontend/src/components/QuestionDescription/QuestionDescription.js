@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getQuestionDetails } from '../../engine/QuestionEngine.js';
 import './QuestionDescription.css'
 
 const QuestionDescription = () => {
@@ -17,17 +18,11 @@ const QuestionDescription = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const cookieData = Cookies.get('questions');
-
-    if (cookieData) {
-      try {
-        const parsedData = JSON.parse(cookieData);
-        setQuestion(parsedData.filter((question) => question.id === id)[0]);
-        console.log(parsedData.filter((question) => question.id === id));
-      } catch (error) {
-        console.error('Error parsing cookie data:', error);
-      }
-    }
+    getQuestionDetails(id).then((response) => {
+      setQuestion(response.data.question);
+    }).catch((error) => {
+      console.log(error);
+    });
   }, []);
 
   const navigate = useNavigate();
@@ -72,7 +67,7 @@ const QuestionDescription = () => {
           </Button>
         </div>
         <h1>{question?.title}</h1>
-        <h3>Difficulty: {question?.difficulty}</h3>
+        <h3>Complexity: {question?.complexity}</h3>
         <p>{question?.description}</p>
       </div>
     </Box>

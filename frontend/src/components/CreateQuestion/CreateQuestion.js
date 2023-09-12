@@ -9,9 +9,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import FormControl from '@mui/material/FormControl';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { editQuestion } from '../../engine/QuestionEngine.js';
-import { getQuestionDetails } from '../../engine/QuestionEngine.js';
-import './EditQuestion.css';
+import {createQuestion} from '../../engine/QuestionEngine.js';
+import './CreateQuestion.css';
 
 
 const styles = {
@@ -25,27 +24,11 @@ const styles = {
   },
 };
 
-const EditQuestion = () => {
-
-  const { id } = useParams();
+const CreateQuestion = () => {
 
   const [newTitleValue, setTitleValue] = useState();
   const [newDescriptionValue, setDescriptionValue] = useState();
   const [newComplexityValue, setComplexityValue] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-
-    getQuestionDetails(id).then((response) => {
-      setTitleValue(response.data.question.title);
-      setComplexityValue(response.data.question.complexity);
-      setDescriptionValue(response.data.question.description);
-      setIsLoading(false);
-    }).catch((error) => {
-      console.log(error);
-    });
-
-  }, []);
 
   const navigate = useNavigate();
   const handleBackClick = () => {
@@ -54,7 +37,7 @@ const EditQuestion = () => {
 
   const handleSaveClick = () => {
 
-    editQuestion(newTitleValue, newComplexityValue, newDescriptionValue).then((response) => {
+    createQuestion(newTitleValue, newComplexityValue, newDescriptionValue).then((response) => {
       console.log(response);
     }).catch((error) => {
       if (error.response.status === 400) {
@@ -94,49 +77,44 @@ const EditQuestion = () => {
         <div style={{
           textAlign: 'center',
         }}>
-          {isLoading ? <h1>Loading...</h1> : (
-          <>
-            <TextField
-              required
-              variant="filled"
-              id="outlined-required"
-              label="Title"
-              value={newTitleValue}
-              InputLabelProps={{
-                style: { color: '#fff' },
-              }}
-              sx={styles.textBox}
-              onChange={handleTitleValueChange}
-            />
-            <TextField
-              required
-              variant="filled"
-              id="outlined-required"
-              label="Complexity"
-              value={newComplexityValue}
-              InputLabelProps={{
-                style: { color: '#fff' },
-              }}
-              sx={styles.textBox}
-              onChange={handleComplexityValueChange}
-            />
-            <TextField
-              required
-              variant="filled"
-              id="outlined-multiline-static"
-              multiline
-              label="Description"
-              rows={10}
-              value={newDescriptionValue}
-              InputLabelProps={{
-                style: { color: '#fff' },
-              }}
-              sx={styles.textBox}
-              onChange={handleDescriptionValueChange}
-            />
-          </>
-          )}
-
+          <TextField
+            required
+            variant="filled"
+            id="outlined-required"
+            label="Title"
+            value={newTitleValue}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            sx={styles.textBox}
+            onChange={handleTitleValueChange}
+          />
+          <TextField
+            required
+            variant="filled"
+            id="outlined-required"
+            label="Complexity"
+            value={newComplexityValue}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            sx={styles.textBox}
+            onChange={handleComplexityValueChange}
+          />
+          <TextField
+            required
+            variant="filled"
+            id="outlined-multiline-static"
+            multiline
+            label="Description"
+            rows={10}
+            value={newDescriptionValue}
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            sx={styles.textBox}
+            onChange={handleDescriptionValueChange}
+          />
         </div>
       </FormControl>
       <Button style={{ maxWidth: '110px', minWidth: '110px', float: 'right' }} variant="contained"
@@ -149,4 +127,4 @@ const EditQuestion = () => {
   )
 }
 
-export default EditQuestion;
+export default CreateQuestion;

@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const authRoutes = require('./server/routes/auth');
+const questionRoutes = require('./server/routes/question');
 require('dotenv').config();
 
 const app = express();
@@ -14,6 +15,9 @@ app.use(bodyParser.json());
 
 // Use the authRoutes for handling authentication-related routes
 app.use('/auth', authRoutes);
+
+// Use the questionRoutes for handling question-related routes
+app.use('/question', questionRoutes);
 
 mongoose.connect(MONGOCLIENT,
   {
