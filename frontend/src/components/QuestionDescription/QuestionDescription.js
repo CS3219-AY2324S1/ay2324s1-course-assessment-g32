@@ -56,9 +56,9 @@ const QuestionDescription = () => {
       });
     });
   };
-
+  // bgcolor="#2d2d2d"
   return (
-    <Box bgcolor="#2d2d2d" sx={{ height: '90vh', width: '80%', borderRadius: '25px', p: 3, boxShadow: 2, border: 2 }}>
+    <Box className="box" sx={{ borderRadius: '25px', p: 3, boxShadow: 2, border: 2 }}>
 
       <div className="question-description">
         <div className="horizontal-row">
@@ -75,7 +75,7 @@ const QuestionDescription = () => {
             Edit
           </Button>
         </div>
-        <h1>{question?.title}</h1>
+        <h1 className="question-title">{question?.title}</h1>
         <h3>Complexity: {question?.complexity}</h3>
         <p>{question?.description}</p>
       </div>

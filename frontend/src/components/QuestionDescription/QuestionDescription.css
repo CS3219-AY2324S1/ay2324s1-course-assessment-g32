@@ -3,10 +3,16 @@
     font: 400 1rem/1rem "Roboto", sans-serif;
 }
 
+.box {
+    background-color: #2d2d2d;
+    width: 80%;
+}
+
 .horizontal-row {}
 
 h1 {
     text-align: center;
     padding-bottom: 0.7em;
     border-bottom: 1px solid #fff;
+    min-width: 300px;
 }
