@@ -6,15 +6,24 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./server/routes/auth");
 require("dotenv").config();
 
-const app = express();
+// Retrieve environment variables
 const PORT = process.env.PORT || 3000;
 const MONGOCLIENT = process.env.ATLAS_URI || "";
+const mysqlPassword = process.env.MY_SQL_PWD || "";
+const mysqlDbName = process.env.MY_SQL_DB_NAME || "";
 
+console.log("Starting server ...");
+
+
+// start the Express (web) server
+const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use("/auth", authRoutes); // Use the authRoutes for handling authentication-related routes
+app.listen(PORT, () => {
+	console.log(`Running server on port: ${PORT}`);
+});
 
-// Use the authRoutes for handling authentication-related routes
-app.use("/auth", authRoutes);
 
 // MongoDB
 mongoose.connect(MONGOCLIENT, {
@@ -24,27 +33,23 @@ mongoose.connect(MONGOCLIENT, {
 
 const mongoDb = mongoose.connection;
 mongoDb.once("open", () => {
-	console.log("Connected to the MongoDB database");
+	console.log("SUCCESS: Connected to the MongoDB database");
 });
 mongoDb.on("error", (error) => {
-	console.error("MongoDB database connection error:", error);
+	console.error("MongoDB database connection error\n", error);
 });
+
 
 // MySQL
 const mysqlDb = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "password", // to update to your own password
-	database: "assignmentdb", // to match the database name
+	password: mysqlPassword,
+	database: mysqlDbName,
 });
 mysqlDb.connect((error) => {
-	if (error) {
+	if (error)
 		console.error("MySQL database connection error:", error);
-	}
-	console.log("Connected to the MySQL database");
-});
-
-// start the Express (web) server
-app.listen(PORT, () => {
-	console.log(`Server is running on port: ${PORT}`);
+	else
+		console.log("SUCCESS: Connected to the MySQL database");
 });
