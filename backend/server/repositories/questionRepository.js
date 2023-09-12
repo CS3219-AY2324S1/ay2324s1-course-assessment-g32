@@ -30,9 +30,24 @@ const getQuestionDetails = async (id) => {
   return await Question.findOne({ _id: id });
 }
 
+const findById = async (id) => {
+  return await Question.find({ _id: id });
+}
+
+const editQuestion = async (id, title, complexity, description) => {
+  const fields = {
+    title: title,
+    complexity: complexity,
+    description: description
+  };
+  return Question.updateOne({ _id: id }, { $set: fields });
+}
+
 module.exports = {
   findByTitle,
   createQuestion,
   getQuestions,
-  getQuestionDetails
+  getQuestionDetails,
+  findById,
+  editQuestion
 };

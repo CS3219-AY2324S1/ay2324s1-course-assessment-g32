@@ -54,7 +54,7 @@ const EditQuestion = () => {
 
   const handleSaveClick = () => {
 
-    editQuestion(newTitleValue, newComplexityValue, newDescriptionValue).then((response) => {
+    editQuestion(id, newTitleValue, newComplexityValue, newDescriptionValue).then((response) => {
       console.log(response);
     }).catch((error) => {
       if (error.response.status === 400) {

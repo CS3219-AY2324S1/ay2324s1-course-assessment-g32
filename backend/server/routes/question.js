@@ -12,5 +12,8 @@ router.get('/getAll', questionController.getAll);
 // Define the get question details route
 router.get('/getQuestionDetails', questionController.getQuestionDetails)
 
+// Defining the edit question route
+router.post('/edit', questionController.edit);
+
 
 module.exports = router;

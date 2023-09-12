@@ -42,8 +42,29 @@ const getQuestionDetails = async (id) => {
   }
 }
 
+const editQuestion = async (id, title, complexity, description) => {
+  try {
+    // Check if id does not exist in database
+    const existingQuestion = await questionRepository.findById(id);
+
+    if (!existingQuestion) {
+      throw { status: 400, message: 'Question does not exist, cannot be updated' };
+    }
+
+    // Check for missing inputs
+    if (!title || !complexity || !description) {
+      throw { status: 400, message: 'Missing inputs' };
+    }
+    const question = await questionRepository.editQuestion(id, title, complexity, description);
+    return question;
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   createQuestion,
   getQuestions,
-  getQuestionDetails
+  getQuestionDetails,
+  editQuestion
 };

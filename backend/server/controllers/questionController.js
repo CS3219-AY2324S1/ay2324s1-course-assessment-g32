@@ -39,9 +39,23 @@ const getQuestionDetails = async (req, res) => {
   }
 }
 
+// Define a controller function for editing a question
+const edit = async (req, res) => {
+  try {
+    const { id, title, complexity, description } = req.body;
+    const question = await questionService.editQuestion(id, title, complexity, description);
+    res.json({ message: 'Question edited successfully', question });
+  } catch (err) {
+    res
+      .status(err?.status || 500)
+      .json({ error: err?.message || err });
+  }
+}
+
 
 module.exports = {
   create,
   getAll,
-  getQuestionDetails
+  getQuestionDetails,
+  edit
 };
