@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { DataGrid } from '@mui/x-data-grid'
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 import 'react-toastify/dist/ReactToastify.css';
-import {getQuestions} from '../../engine/QuestionEngine';
+import { toast } from 'react-toastify';
+import { getQuestions } from '../../api_connector/QuestionApi.js';
 import './QuestionList.css';
 
 
@@ -27,7 +27,9 @@ const QuestionList = () => {
       setTableData(response.data.questions);
     })
     .catch((error) => {
-      console.log(error);
+      toast.error('Server Error: ' + error.response.data.error, {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
     });
 
   }, []);

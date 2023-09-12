@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -9,8 +8,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import FormControl from '@mui/material/FormControl';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { editQuestion } from '../../engine/QuestionEngine.js';
-import { getQuestionDetails } from '../../engine/QuestionEngine.js';
+import { editQuestion, getQuestionDetails } from '../../api_connector/QuestionApi.js';
 import './EditQuestion.css';
 
 
@@ -55,7 +53,7 @@ const EditQuestion = () => {
       }
     });
 
-  }, []);
+  });
 
   const navigate = useNavigate();
   const handleBackClick = () => {

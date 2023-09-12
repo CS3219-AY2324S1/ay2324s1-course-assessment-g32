@@ -9,7 +9,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import FormControl from '@mui/material/FormControl';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {createQuestion} from '../../engine/QuestionEngine.js';
+import {createQuestion} from '../../api_connector/QuestionApi.js';
 import './CreateQuestion.css';
 
 

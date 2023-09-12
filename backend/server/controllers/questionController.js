@@ -30,7 +30,6 @@ const getQuestionDetails = async (req, res) => {
   try {
     const { id } = req.query;
     const question = await questionService.getQuestionDetails(id);
-    console.log(question);
     res.json({ message: 'Question retrieved successfully', question });
   } catch (err) {
     res

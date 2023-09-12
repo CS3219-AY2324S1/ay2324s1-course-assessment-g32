@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getQuestionDetails, deleteQuestion } from '../../engine/QuestionEngine.js';
+import { getQuestionDetails, deleteQuestion } from '../../api_connector/QuestionApi.js';
 import './QuestionDescription.css'
 
 const QuestionDescription = () => {
