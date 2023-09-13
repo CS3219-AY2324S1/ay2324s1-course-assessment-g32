@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { getQuestionDetails, deleteQuestion } from '../../api_connector/QuestionApi.js';
+import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
 import './QuestionDescription.css'
 

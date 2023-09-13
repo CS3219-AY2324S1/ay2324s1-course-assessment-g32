@@ -5,7 +5,7 @@ import { Box } from '@mui/material'
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
-import { getQuestions } from '../../api_connector/QuestionApi.js';
+import { getQuestions } from '../../api/QuestionApi.js';
 import { showServerErrorToast } from '../../utils/toast.js';
 import './QuestionList.css';
 

@@ -3,7 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const showSuccessToast = (message) => {
   toast.success(message, {
-    position: toast.POSITION.BOTTOM_RIGHT,
+    position: toast.POSITION.BOTTOM_RIGHT
   });
 };
 

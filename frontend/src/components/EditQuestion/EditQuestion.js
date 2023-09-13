@@ -6,7 +6,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import TextField from '@mui/material/TextField';
 import SaveIcon from '@mui/icons-material/Save';
 import FormControl from '@mui/material/FormControl';
-import { editQuestion, getQuestionDetails } from '../../api_connector/QuestionApi.js';
+import { editQuestion, getQuestionDetails } from '../../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
 import './EditQuestion.css';
 
