@@ -9,6 +9,8 @@ require("dotenv").config();
 // Retrieve environment variables
 const PORT = process.env.PORT || 3000;
 const MONGOCLIENT = process.env.ATLAS_URI || "";
+const mysqlHost = process.env.MY_SQL_HOST || "localhost";
+const mysqlUser = process.env.MY_SQL_USER || "root";
 const mysqlPassword = process.env.MY_SQL_PWD || "";
 const mysqlDbName = process.env.MY_SQL_DB_NAME || "";
 
@@ -40,10 +42,11 @@ mongoDb.on("error", (error) => {
 });
 
 
+
 // MySQL
 const mysqlDb = mysql.createConnection({
-	host: "localhost",
-	user: "root",
+	host: mysqlHost,
+	user: mysqlUser,
 	password: mysqlPassword,
 	database: mysqlDbName,
 });
