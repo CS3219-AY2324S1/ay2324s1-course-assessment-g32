@@ -64,7 +64,6 @@ const deleteQuestion = async (req, res) => {
   }
 };
 
-
 module.exports = {
   create,
   getAll,

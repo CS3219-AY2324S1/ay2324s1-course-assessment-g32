@@ -10,12 +10,13 @@ const QuestionSchema = new Schema({
   },
   complexity: {
     type: String,
+    enum: ['Easy', 'Medium', 'Hard'], // Define the allowed values here
     required: true
   },
   description: {
     type: String,
     required: true
-  },
+  }
 });
 
 // Create a model named "Question", which represents a collection in the database

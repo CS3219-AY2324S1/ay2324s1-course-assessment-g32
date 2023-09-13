@@ -1,14 +1,5 @@
 const Question = require('../models/question');
 
-const findByTitle = async (title) => {
-  try {
-    return await Question.findOne({ title });
-  } catch (err) {
-    throw err;
-  }
-
-};
-
 const createQuestion = async (title, complexity, description) => {
   try {
     const question = new Question({
@@ -33,7 +24,6 @@ const getQuestions = async () => {
   } catch (err) {
     throw err;
   }
-
 };
 
 const getQuestionDetails = async (id) => {
@@ -42,12 +32,19 @@ const getQuestionDetails = async (id) => {
   } catch (err) {
     throw err;
   }
-
 };
 
 const findById = async (id) => {
   try {
     return await Question.find({ _id: id });
+  } catch (err) {
+    throw err;
+  }
+};
+
+const findByTitle = async (title) => {
+  try {
+    return await Question.findOne({ title });
   } catch (err) {
     throw err;
   }
@@ -64,7 +61,6 @@ const editQuestion = async (id, title, complexity, description) => {
   } catch (err) {
     throw err;
   }
-
 };
 
 const deleteQuestion = async (id) => {
@@ -76,11 +72,11 @@ const deleteQuestion = async (id) => {
 };
 
 module.exports = {
-  findByTitle,
   createQuestion,
   getQuestions,
   getQuestionDetails,
   findById,
+  findByTitle,
   editQuestion,
   deleteQuestion
 };
