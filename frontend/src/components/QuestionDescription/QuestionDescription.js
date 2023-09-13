@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getQuestionDetails, deleteQuestion } from '../../api_connector/QuestionApi.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
 import './QuestionDescription.css'
 
 const QuestionDescription = () => {
@@ -16,26 +15,26 @@ const QuestionDescription = () => {
   const [question, setQuestion] = useState([]);
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getQuestionDetails(id).then((response) => {
-      setQuestion(response.data.question);
-    }).catch((error) => {
-      navigate('../');
-      if (error.response.status === 400) {
-        toast.error('Request Error: ' + error.response.data.error, {
-          position: toast.POSITION.BOTTOM_RIGHT
-        });
-        console.error('Validation Error:', error.response.data.error);
-      } else {
-        toast.error('Server Error: ' + error.message, {
-          position: toast.POSITION.BOTTOM_RIGHT
-        });
+    const fetchData = async () => {
+      try {
+        const questions = await getQuestionDetails(id);
+        setQuestion(questions);
+      } catch (error) {
+        navigate('../');
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
       }
-    });
+    };
+
+    fetchData();
   }, []);
 
-  const navigate = useNavigate();
   const handleBackClick = () => {
     navigate('../');
   };
@@ -45,18 +44,15 @@ const QuestionDescription = () => {
   };
 
   const handleDeleteClick = () => {
-    deleteQuestion(id).then((response) => {
-      toast.success('Successfully Deleted!', {
-        position: toast.POSITION.BOTTOM_RIGHT
-      });
+    try {
+      deleteQuestion(id);
+      showSuccessToast('Successfully Deleted!');
       navigate('../');
-    }).catch((error) => {
-      toast.error('Server Error: ' + error.message, {
-        position: toast.POSITION.BOTTOM_RIGHT
-      });
-    });
+    } catch (error) {
+      showServerErrorToast(error);
+    }
   };
-  
+
   return (
     <Box className="box" sx={{ borderRadius: '25px', p: 3, boxShadow: 2, border: 2 }}>
 
@@ -80,8 +76,7 @@ const QuestionDescription = () => {
         <p>{question?.description}</p>
       </div>
     </Box>
-
   )
-}
+};
 
 export default QuestionDescription;

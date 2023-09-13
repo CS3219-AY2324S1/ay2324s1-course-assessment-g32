@@ -6,9 +6,9 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 import { getQuestions } from '../../api_connector/QuestionApi.js';
+import { showServerErrorToast } from '../../utils/toast.js';
 import 'react-toastify/dist/ReactToastify.css';
 import './QuestionList.css';
-
 
 const columns = [
   { field: 'no', headerName: 'No.', width: 100, headerClassName: 'theme--header' },
@@ -22,9 +22,14 @@ const QuestionList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const questions = await getQuestions();
-      setTableData(questions);
+      try {
+        const questions = await getQuestions();
+        setTableData(questions);
+      } catch (error) {
+        showServerErrorToast(error);
+      };
     };
+
     fetchData();
   }, []);
 
@@ -94,6 +99,6 @@ const QuestionList = () => {
     </Box>
 
   )
-}
+};
 
 export default QuestionList;

@@ -6,11 +6,10 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import TextField from '@mui/material/TextField';
 import SaveIcon from '@mui/icons-material/Save';
 import FormControl from '@mui/material/FormControl';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {createQuestion} from '../../api_connector/QuestionApi.js';
+import { createQuestion } from '../../api_connector/QuestionApi.js';
+import { showServerErrorToast, showSuccessToast, showValidationErrorToast } from '../../utils/toast.js';
 import './CreateQuestion.css';
-
 
 const styles = {
   textBox: {
@@ -34,26 +33,18 @@ const CreateQuestion = () => {
     navigate(-1);
   };
 
-  const handleSaveClick = () => {
-
-    createQuestion(newTitleValue, newComplexityValue, newDescriptionValue).then((response) => {
+  const handleSaveClick = async () => {
+    try {
+      const response = await createQuestion(newTitleValue, newComplexityValue, newDescriptionValue);
       navigate('../question/' + response.data.question._id);
-      toast.success('Question created successfully!', {
-        position: toast.POSITION.BOTTOM_RIGHT
-      });
-    }).catch((error) => {
+      showSuccessToast('Question Created Successfully!');
+    } catch (error) {
       if (error.response.status === 400) {
-        toast.error('Validation Error: ' + error.response.data.error, {
-          position: toast.POSITION.BOTTOM_RIGHT
-        });
-        console.error('Validation Error:', error.response.data.error);
+        showValidationErrorToast(error);
       } else {
-        toast.error('Server Error: ' + error.message, {
-          position: toast.POSITION.BOTTOM_RIGHT
-        });
+        showServerErrorToast(error);
       }
-    });
-
+    }
   };
 
   const handleTitleValueChange = (event) => {
@@ -67,7 +58,6 @@ const CreateQuestion = () => {
   const handleComplexityValueChange = (event) => {
     setComplexityValue(event.target.value);
   };
-
 
   return (
     <Box bgcolor="#2d2d2d" sx={{ height: '90vh', width: '80%', borderRadius: '25px', p: 3, boxShadow: 2, border: 2 }}>
@@ -125,8 +115,7 @@ const CreateQuestion = () => {
       </Button>
 
     </Box>
-
   )
-}
+};
 
 export default CreateQuestion;
