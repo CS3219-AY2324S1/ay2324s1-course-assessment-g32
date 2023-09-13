@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const rootUrl = 'http://localhost:3000/question';
 
@@ -16,15 +17,23 @@ export const createQuestion = async (title, complexity, description) => {
 };
 
 export const getQuestions = async () => {
-  return axios.get(rootUrl + "/getAll")
+  try {
+    const response = await axios.get(rootUrl + "/getAll");
+    return response.data.questions;
+  } catch (error) {
+    toast.error('Server Error: ' + error.response.data.error, {
+      position: toast.POSITION.BOTTOM_RIGHT
+    });
+    throw error; // Re-throw the error to propagate it further if needed
+  }
 };
 
 export const getQuestionDetails = async (questionId) => {
   return axios.get(rootUrl + "/getQuestionDetails", {
-     params: {
-       id: questionId
-     }
-   })
+    params: {
+      id: questionId
+    }
+  });
 };
 
 export const editQuestion = async (id, title, complexity, description) => {
@@ -38,7 +47,7 @@ export const editQuestion = async (id, title, complexity, description) => {
     headers: {
       'Content-Type': 'application/json'
     }
-  })
+  });
 };
 
 export const deleteQuestion = async (id) => {
@@ -46,5 +55,5 @@ export const deleteQuestion = async (id) => {
     params: {
       id: id
     }
-  })
+  });
 };

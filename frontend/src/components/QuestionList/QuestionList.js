@@ -5,9 +5,8 @@ import { Box } from '@mui/material'
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
-import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
 import { getQuestions } from '../../api_connector/QuestionApi.js';
+import 'react-toastify/dist/ReactToastify.css';
 import './QuestionList.css';
 
 
@@ -18,20 +17,15 @@ const columns = [
 ]
 
 const QuestionList = () => {
+
   const [tableData, setTableData] = useState([])
 
   useEffect(() => {
-
-    // Read data from backend
-    getQuestions().then((response) => {
-      setTableData(response.data.questions);
-    })
-    .catch((error) => {
-      toast.error('Server Error: ' + error.response.data.error, {
-        position: toast.POSITION.BOTTOM_RIGHT
-      });
-    });
-
+    const fetchData = async () => {
+      const questions = await getQuestions();
+      setTableData(questions);
+    };
+    fetchData();
   }, []);
 
   const navigate = useNavigate();
@@ -44,11 +38,10 @@ const QuestionList = () => {
   };
 
   return (
-
     <Box bgcolor="#2d2d2d" sx={{ height: '80vh', width: '80%', borderRadius: '25px' }}>
       <DataGrid
         rows={
-          tableData.map((row, index) => {
+          tableData?.map((row, index) => {
             return {
               no: index + 1,
               ...row
@@ -93,7 +86,6 @@ const QuestionList = () => {
           },
         }}
       />
-
 
       <Button style={{ maxWidth: '110px', minWidth: '110px', float: 'right' }} variant="contained"
         sx={{ m: 2 }} onClick={handleNewQuestionClick} color="success" startIcon={<AddIcon />}>
