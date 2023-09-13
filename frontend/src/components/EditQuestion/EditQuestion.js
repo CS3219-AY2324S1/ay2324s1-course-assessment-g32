@@ -95,7 +95,7 @@ const EditQuestion = () => {
 
 
   return (
-    <Box bgcolor="#2d2d2d" sx={{ height: '90vh', width: '80%', borderRadius: '25px', p: 3, boxShadow: 2, border: 2 }}>
+    <Box className="box" sx={{ borderRadius: '25px', p: 3, boxShadow: 2, border: 2 }}>
       <Button variant="outlined"
         onClick={handleBackClick} startIcon={<ArrowBackIosIcon />}>
         Back
