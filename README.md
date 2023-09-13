@@ -9,6 +9,7 @@ Download and install these software if you do not have them locally.
 For development, you may also want to install:
 - [MongoDB Compass](https://www.mongodb.com/try/download/compass)
 - [Docker Desktop](https://www.docker.com/get-started/)
+- [Postman](https://www.postman.com/downloads/)
 
 # Setup
 
@@ -32,16 +33,20 @@ For development, you may also want to install:
 
 ```
 cd frontend && start npm install && cd ..
-cd backend && start npm install && cd..
+cd backend && start npm install && cd ..
+
 ```
 
 # Start Application
+
+Start local MySQL Server
 
 Start all services by: 
 ```
 cd frontend && start npm start && cd ..
 cd backend && start npm run dev && cd ..
+
 ```
 Or start them indvidually:  
 - Frontend: `cd frontend && npm start`  
-- Backend: `cd backend && npm run dev`  
+- Backend: `cd backend && npm start`  
