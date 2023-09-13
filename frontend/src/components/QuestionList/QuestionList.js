@@ -7,7 +7,6 @@ import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 import { getQuestions } from '../../api_connector/QuestionApi.js';
 import { showServerErrorToast } from '../../utils/toast.js';
-import 'react-toastify/dist/ReactToastify.css';
 import './QuestionList.css';
 
 const columns = [

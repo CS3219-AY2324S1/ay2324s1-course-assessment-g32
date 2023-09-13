@@ -6,7 +6,6 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import TextField from '@mui/material/TextField';
 import SaveIcon from '@mui/icons-material/Save';
 import FormControl from '@mui/material/FormControl';
-import 'react-toastify/dist/ReactToastify.css';
 import { createQuestion } from '../../api_connector/QuestionApi.js';
 import { showServerErrorToast, showSuccessToast, showValidationErrorToast } from '../../utils/toast.js';
 import './CreateQuestion.css';

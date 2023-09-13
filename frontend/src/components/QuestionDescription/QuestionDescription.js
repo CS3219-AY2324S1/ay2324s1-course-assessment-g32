@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import 'react-toastify/dist/ReactToastify.css';
 import { getQuestionDetails, deleteQuestion } from '../../api_connector/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
 import './QuestionDescription.css'
