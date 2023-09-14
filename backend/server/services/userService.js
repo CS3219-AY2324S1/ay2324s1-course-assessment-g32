@@ -56,7 +56,7 @@ const loginUser = async (email, password) => {
     // Check if a user with the given email exists
     await userDatabase.findByEmail(email)
       .then(id => userId = id);
-    console.log(userId);
+  
     if (!userId) {
       throw { status: 400, message: 'Email not registered with any user' };
     }
@@ -87,10 +87,31 @@ const getUserInfo = async (userId, email) => {
   }
 };
 
-module.exports = {
-  createUser,
-  loginUser,
+const deleteUser = async (id) => {
+  try {
+    var _success = Boolean();
 
-  // still in testing
-  getUserInfo,
+    // Check for missing inputs
+    if (!id) {
+      throw { status: 400, message: 'Missing id' };
+    }
+
+    await userDatabase.deleteUser(id).then(x => _success = x);
+
+    if (!_success) {
+      throw { status: 400, message: 'Failed to delete user. Does user exists?' }; 
+    }
+
+    } catch (err) {
+      throw err;
+    }
+};
+
+module.exports = {
+  createUser, // Create
+  getUserInfo, // Read
+  // TODO: Update
+  deleteUser, // Delete
+
+  loginUser,
 };
