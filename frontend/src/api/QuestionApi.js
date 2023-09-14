@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const rootUrl = 'http://localhost:3000/question';
 
-export const createQuestion = async (title, complexity, description) => {
+export const createQuestion = (title, complexity, description) => {
   const questionData = {
     title: title,
     complexity: complexity,
@@ -16,18 +16,20 @@ export const createQuestion = async (title, complexity, description) => {
 };
 
 export const getQuestions = async () => {
-  return axios.get(rootUrl + "/getAll")
+  const response = await axios.get(rootUrl + "/getAll");
+  return response.data.questions;
 };
 
 export const getQuestionDetails = async (questionId) => {
-  return axios.get(rootUrl + "/getQuestionDetails", {
-     params: {
-       id: questionId
-     }
-   })
+  const questionDetails = await axios.get(rootUrl + "/getQuestionDetails", {
+    params: {
+      id: questionId
+    }
+  });
+  return questionDetails.data.question;
 };
 
-export const editQuestion = async (id, title, complexity, description) => {
+export const editQuestion = (id, title, complexity, description) => {
   const questionData = {
     id: id,
     title: title,
@@ -38,13 +40,13 @@ export const editQuestion = async (id, title, complexity, description) => {
     headers: {
       'Content-Type': 'application/json'
     }
-  })
+  });
 };
 
-export const deleteQuestion = async (id) => {
+export const deleteQuestion = (id) => {
   return axios.delete(rootUrl + '/delete', {
     params: {
       id: id
     }
-  })
+  });
 };

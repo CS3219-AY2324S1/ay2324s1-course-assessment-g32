@@ -18,5 +18,4 @@ router.post('/edit', questionController.edit);
 // Defining the delete question route
 router.delete('/delete', questionController.deleteQuestion);
 
-
 module.exports = router;

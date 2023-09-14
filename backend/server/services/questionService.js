@@ -8,7 +8,6 @@ const createQuestion = async (title, complexity, description) => {
     }
 
     const question = await questionRepository.createQuestion(title, complexity, description);
-
     return question;
   } catch (err) {
     throw err;
@@ -18,7 +17,6 @@ const createQuestion = async (title, complexity, description) => {
 const getQuestions = async () => {
   try {
     const questions = await questionRepository.getQuestions();
-
     return questions;
   } catch (err) {
     console.error(err);
@@ -32,6 +30,7 @@ const getQuestionDetails = async (id) => {
     if (!question) {
       throw { status: 400, message: 'Question does not exist' };
     }
+
     return question;
   } catch (err) {
     throw { status: 400, message: 'Question does not exist' };
@@ -42,7 +41,6 @@ const editQuestion = async (id, title, complexity, description) => {
   try {
     // Check if id does not exist in database
     const existingQuestion = await questionRepository.findById(id);
-
     if (!existingQuestion) {
       throw { status: 400, message: 'Question does not exist' };
     }
@@ -51,6 +49,7 @@ const editQuestion = async (id, title, complexity, description) => {
     if (!title || !complexity || !description) {
       throw { status: 400, message: 'Missing inputs' };
     }
+
     const question = await questionRepository.editQuestion(id, title, complexity, description);
     return question;
   } catch (err) {
