@@ -46,7 +46,7 @@ const createUser = async (email, password, confirmPassword) => {
 
 const loginUser = async (email, password) => {
   try {
-    var noSuchUser = Boolean();
+    var userId = Number();
 
     // Check for missing inputs
     if (!email || !password) {
@@ -54,23 +54,20 @@ const loginUser = async (email, password) => {
     }
 
     // Check if a user with the given email exists
-    const existingUserCheck = userDatabase
-      .findByEmail(email)
-      .then(userId => { 
-        noSuchUser = userId == null; 
-      });
-    await existingUserCheck;
-    if (noSuchUser) {
-      throw { status: 400, message: 'User not found' };
+    await userDatabase.findByEmail(email)
+      .then(id => userId = id);
+    console.log(userId);
+    if (!userId) {
+      throw { status: 400, message: 'Email not registered with any user' };
     }
 
     // Compare the entered password with the hashed password stored in the database
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
+    // FIXME: need to find a way to retrieve stored hashed password
+    if (!bcrypt.compareSync(password, user.password)) {
       throw { status: 400, message: 'Incorrect password' };
     }
 
-    return user;
+    return userId;
   } catch (err) {
     throw err;
   }

@@ -19,7 +19,7 @@ const conn = mysql.createConnection({
  * userId is undefined -> Error with SQL query;
  * userId is null -> Cannot find user with email;
  * 
- * @param {*} email 
+ * @param {string} email 
  * @returns userId
  */
 const findByEmail = async (email) => {
@@ -61,8 +61,8 @@ const createUser = async (email, password) => {
 /**
  * Provide a email and hashed password
  * 
- * @param {*} email User of user
- * @param {*} password Hashed password of user
+ * @param {string} email User of user
+ * @param {string} password Hashed password of user
  * @returns boolean if the provided password matches the one in the database
  */
 const verifyPassword = async (email, password) => {
