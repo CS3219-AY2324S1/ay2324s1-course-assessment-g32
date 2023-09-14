@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import { getQuestions } from '../../api/QuestionApi.js';
-import { showServerErrorToast } from '../../utils/toast.js';
-import './QuestionList.css';
+import { getQuestions } from '../api/QuestionApi.js';
+import { showServerErrorToast } from '../utils/toast.js';
 
 const QuestionList = () => {
 
@@ -48,11 +47,26 @@ const QuestionList = () => {
     navigate('/new');
   };
 
+  const getComplexityColor = (complexity) => {
+    switch (complexity) {
+      case 'Easy':
+        return 'bg-success';
+      case 'Medium':
+        return 'bg-warning';
+      case 'Hard':
+        return 'bg-danger';
+      default:
+        return 'bg-primary';
+    }
+  };
+
   const questionList = tableData.map((question, index) => (
     <tr key={question._id} onClick={() => handleRowClick(question._id)}>
       <th scope="row">{index + 1}</th>
       <td>{question.title}</td>
-      <td>{question.complexity}</td>
+      <td>
+        <span class={`badge ${getComplexityColor(question?.complexity)}`}>{question.complexity} </span>
+      </td>
     </tr>
   ));
 
