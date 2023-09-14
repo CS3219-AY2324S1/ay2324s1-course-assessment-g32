@@ -55,8 +55,8 @@ const CreateQuestion = () => {
           <label for="createQuestionTitle">Title</label>
         </div>
         <div class="form-floating mb-3">
-          <select class="form-select mb-3" id="createQuestitonComplexity" onChange={handleComplexityValueChange} required>
-            <option selected disabled value="">Select a complexity...</option>
+          <select class="form-select mb-3" id="createQuestitonComplexity" defaultValue="" onChange={handleComplexityValueChange} required>
+            <option disabled value="">Select a complexity...</option>
             <option value="Easy">Easy</option>
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>

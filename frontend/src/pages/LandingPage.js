@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import QuestionList from '../components/QuestionList';
 import QuestionDescription from '../components/QuestionDescription';
-import EditQuestion from '../components/EditQuestion/EditQuestion';
+import EditQuestion from '../components/EditQuestion';
 import CreateQuestion from '../components/CreateQuestion/CreateQuestion';
 import './LandingPage.css';
 
