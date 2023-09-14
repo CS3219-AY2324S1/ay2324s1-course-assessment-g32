@@ -44,7 +44,7 @@ Start local MySQL Server
 Start all services by: 
 ```
 cd frontend && start npm start && cd ..
-cd backend && start npm run dev && cd ..
+cd backend && start npm start && cd ..
 
 ```
 Or start them indvidually:  
