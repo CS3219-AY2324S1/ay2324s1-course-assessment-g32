@@ -74,7 +74,7 @@ const EditQuestion = () => {
       : (
         <div class="container">
           <h1>Edit</h1>
-          <form class="create-question-form needs-validation" onSubmit={handleSaveClick} novalidate>
+          <form class="create-question-form needs-validation" onSubmit={handleSaveClick} noValidate>
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="createQuestionTitle" placeholder="title" value={newTitleValue} onChange={handleTitleValueChange} required />
               <label for="createQuestionTitle">Title</label>
