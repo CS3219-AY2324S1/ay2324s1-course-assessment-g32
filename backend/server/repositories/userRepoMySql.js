@@ -96,8 +96,12 @@ const getUserInfoByEmail = async (email) => {
 const getUserInfoById = async (userId) => {
   var _userInfo = {};
 
+  const selectStmt = `
+    SELECT id, username, email, created_at, updated_at 
+    FROM users WHERE id=?;`;
+
   const query = conn.promise()
-    .query("SELECT * FROM users WHERE id=?;", [userId])
+    .query(selectStmt, [userId])
     .then( ([rows, fields]) => {
       const userInfo = rows[0];
 
