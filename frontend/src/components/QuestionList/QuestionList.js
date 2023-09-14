@@ -17,7 +17,6 @@ const QuestionList = () => {
     const fetchDataAndInitializeTable = async () => {
       try {
         const questions = await getQuestions();
-        console.log(questions);
         setTableData(questions);
       } catch (error) {
         showServerErrorToast(error);
