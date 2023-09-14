@@ -1,25 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Box } from '@mui/material'
-import Button from '@mui/material/Button';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import TextField from '@mui/material/TextField';
-import SaveIcon from '@mui/icons-material/Save';
-import FormControl from '@mui/material/FormControl';
 import { createQuestion } from '../../api/QuestionApi.js';
 import { showServerErrorToast, showSuccessToast, showValidationErrorToast } from '../../utils/toast.js';
 import './CreateQuestion.css';
-
-const styles = {
-  textBox: {
-    width: '80%',
-    '& .MuiInputBase-input': {
-      color: 'white',
-    },
-    backgroundColor: '#3d3d3d',
-    margin: '10px',
-  },
-};
 
 const CreateQuestion = () => {
 
@@ -32,7 +15,9 @@ const CreateQuestion = () => {
     navigate(-1);
   };
 
-  const handleSaveClick = async () => {
+  const handleSaveClick = async (e) => {
+    e.preventDefault();
+
     try {
       const response = await createQuestion(newTitleValue, newComplexityValue, newDescriptionValue);
       navigate('../question/' + response.data.question._id);
@@ -47,73 +32,47 @@ const CreateQuestion = () => {
   };
 
   const handleTitleValueChange = (event) => {
+    console.log(event.target.value);
     setTitleValue(event.target.value);
   };
 
-  const handleDescriptionValueChange = (event) => {
-    setDescriptionValue(event.target.value);
-  };
-
   const handleComplexityValueChange = (event) => {
+    console.log(event.target.value);
     setComplexityValue(event.target.value);
   };
 
-  return (
-    <Box bgcolor="#2d2d2d" sx={{ height: '90vh', width: '80%', borderRadius: '25px', p: 3, boxShadow: 2, border: 2 }}>
-      <Button variant="outlined"
-        onClick={handleBackClick} startIcon={<ArrowBackIosIcon />}>
-        Back
-      </Button>
-      <FormControl fullWidth>
-        <div style={{
-          textAlign: 'center',
-        }}>
-          <TextField
-            required
-            variant="filled"
-            id="outlined-required"
-            label="Title"
-            value={newTitleValue}
-            InputLabelProps={{
-              style: { color: '#fff' },
-            }}
-            sx={styles.textBox}
-            onChange={handleTitleValueChange}
-          />
-          <TextField
-            required
-            variant="filled"
-            id="outlined-required"
-            label="Complexity"
-            value={newComplexityValue}
-            InputLabelProps={{
-              style: { color: '#fff' },
-            }}
-            sx={styles.textBox}
-            onChange={handleComplexityValueChange}
-          />
-          <TextField
-            required
-            variant="filled"
-            id="outlined-multiline-static"
-            multiline
-            label="Description"
-            rows={10}
-            value={newDescriptionValue}
-            InputLabelProps={{
-              style: { color: '#fff' },
-            }}
-            sx={styles.textBox}
-            onChange={handleDescriptionValueChange}
-          />
-        </div>
-      </FormControl>
-      <Button style={{ maxWidth: '110px', minWidth: '110px', float: 'right' }} variant="contained"
-        sx={{ mr: 2 }} color="success" onClick={handleSaveClick} startIcon={<SaveIcon />}>
-        Save
-      </Button>
+  const handleDescriptionValueChange = (event) => {
+    console.log(event.target.value);
+    setDescriptionValue(event.target.value);
+  };
 
-    </Box>
+  return (
+    <div class="container">
+      <h1>Add a Question</h1>
+      <form class="create-question-form needs-validation" onSubmit={handleSaveClick} noValidate>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="createQuestionTitle" placeholder="title" onChange={handleTitleValueChange} required />
+          <label for="createQuestionTitle">Title</label>
+        </div>
+        <div class="form-floating mb-3">
+          <select class="form-select mb-3" id="createQuestitonComplexity" defaultValue="" onChange={handleComplexityValueChange} required>
+            <option disabled value="">Select a complexity...</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+          <label for="createQuestitonComplexity">Complexity</label>
+        </div>
+        <div class="form-floating mb-3">
+          <textarea class="form-control" id="createQuestionDescription" placeholder="description" onChange={handleDescriptionValueChange} required />
+          <label for="createQuestionTitle">Description</label>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary" onClick={handleBackClick}>Back</button>
+          <button type="submit" class="btn btn-success">Save</button>
+        </div>
+      </form>
+    </div>
   )
 };
 
