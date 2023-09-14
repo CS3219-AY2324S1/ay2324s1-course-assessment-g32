@@ -57,32 +57,6 @@ const createUser = async (email, password) => {
   return _userId;
 };
 
-// TODO: test code
-/**
- * Provide a email and hashed password
- * 
- * @param {string} email User of user
- * @param {string} password Hashed password of user
- * @returns boolean if the provided password matches the one in the database
- */
-const verifyPassword = async (email, password) => {
-  var _isMatch = Boolean();
-
-  const query = conn.promise()
-    .query("SELECT id FROM users WHERE email=? AND password=?;", 
-      [email, password]
-    )
-    .then( ([rows, fields]) => {
-      _isMatch = rows.length > 0;
-      if (rows.length > 1)
-        console.warn("email + password is not unique");
-    })
-    .catch(console.error);
-
-  await query; // Wait for reply from database
-  return _isMatch;
-};
-
 const getUserInfoByEmail = async (email) => {
   var _userId = Number();
   await findByEmail(email).then(id => _userId = id);
@@ -157,7 +131,11 @@ const updateUser = async (userId, pkg) => {
   return _success;
 };
 
-// TODO : test code
+/**
+ * Delete user of given userId from the database.
+ * @param {int|string} userId 
+ * @returns If the deletion was successful
+ */
 const deleteUser = async (userId) => {
   var _success = Boolean();
 
@@ -184,6 +162,5 @@ module.exports = {
   deleteUser,
   getUserInfoByEmail,
   getUserInfoById,
-  verifyPassword,
 };
   
