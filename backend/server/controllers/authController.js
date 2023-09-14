@@ -5,7 +5,6 @@ const signup = async (req, res) => {
   try {
     const { email, password, confirmPassword } = req.body;
     await userService.createUser(email, password, confirmPassword);
-
     res.json({ message: 'User registered successfully' });
   } catch (err) {
     res
@@ -42,10 +41,23 @@ const getUserInfo = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.body;
+    await userService.deleteUser(id);
+    res.json({ message: 'User deleted' });
+  } catch (err) {
+    res
+      .status(err?.status || 400)
+      .json({ error: err?.message || err });
+  }
+};
+
 module.exports = {
   signup,
   login,
 
   // Still in testing
   getUserInfo,
+  deleteUser, 
 };
