@@ -52,11 +52,11 @@ Or start them indvidually:
 
 # Developer Notes
 
-| Backend API Path | Purpose |
-| --- | --- |
-|`/auth/signup`| See `/user/create` |
-|`/auth/login`| Used to login |
-|`/user/create`| Used to create new user |
-|`/user/read`| Used to get user info |
-|`/user/update`| Used to update user info (username, password) |
-|`/user/delete`| Used to delete user |
+| Backend API Path | Purpose | Parameters (JSON format) |
+| --- | --- | --- |
+|`/auth/signup`| See `/user/create` | See `/user/create` |
+|`/auth/login`| Used to login | `email` <br> `password` |
+|`/user/create`| Used to create new user | `email` <br> `password` <br> `confirmPassword` |
+|`/user/read`| Used to get user info | `id` or `email` |
+|`/user/update`| Used to update user info (username, password) | `id` <br> `username` or `password` |
+|`/user/delete`| Used to delete user | `id` |
