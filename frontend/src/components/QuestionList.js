@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 import 'datatables.net';
@@ -7,8 +7,7 @@ import { getQuestions } from '../api/QuestionApi.js';
 import { showServerErrorToast } from '../utils/toast.js';
 
 const QuestionList = () => {
-
-  const [tableData, setTableData] = useState([])
+  const [tableData, setTableData] = useState([]);
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
@@ -19,7 +18,7 @@ const QuestionList = () => {
         setTableData(questions);
       } catch (error) {
         showServerErrorToast(error);
-      };
+      }
     };
 
     fetchDataAndInitializeTable();
@@ -62,36 +61,40 @@ const QuestionList = () => {
 
   const questionList = tableData.map((question, index) => (
     <tr key={question._id} onClick={() => handleRowClick(question._id)}>
-      <th scope="row">{index + 1}</th>
+      <th scope='row'>{index + 1}</th>
       <td>{question.title}</td>
       <td>
-        <span class={`badge ${getComplexityColor(question?.complexity)}`}>{question.complexity} </span>
+        <span className={`badge ${getComplexityColor(question?.complexity)}`}>{question.complexity} </span>
       </td>
     </tr>
   ));
 
   return (
-    <div class="container">
+    <div className='container'>
       <h1>Question List</h1>
-      <table ref={tableRef} class="table table-hover table-striped">
-        <thead class="table-dark">
+      <table ref={tableRef} className='table table-hover table-striped'>
+        <thead className='table-dark'>
           <tr>
-            <th scope="col" width="100">No.</th>
-            <th scope="col" width="800">Title</th>
-            <th scope="col" width="200">Complexity</th>
+            <th scope='col' width='100'>
+              No.
+            </th>
+            <th scope='col' width='800'>
+              Title
+            </th>
+            <th scope='col' width='200'>
+              Complexity
+            </th>
           </tr>
         </thead>
-        <tbody class="table-group-divider">
-          {questionList}
-        </tbody>
+        <tbody className='table-group-divider'>{questionList}</tbody>
       </table>
-      <div className="text-md-end">
-        <button type="button" className="btn btn-success" onClick={handleNewQuestionClick}>
+      <div className='text-md-end'>
+        <button type='button' className='btn btn-success' onClick={handleNewQuestionClick}>
           Add
         </button>
       </div>
     </div>
-  )
+  );
 };
 
 export default QuestionList;
