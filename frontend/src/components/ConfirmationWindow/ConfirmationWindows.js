@@ -13,8 +13,8 @@ export function DeletionWindow({ onClose, onConfirm }) {
         </p>
         <hr />
         <div className='d-flex justify-content-end'>
-          <button type='button' class='btn btn-outline-danger me-2' onClick={onClose}>No</button>
-          <button type='button' class='btn btn-danger' onClick={onConfirm}>Yes</button>
+          <button type='button' className='btn btn-outline-danger me-2' onClick={onClose}>No</button>
+          <button type='button' className='btn btn-danger' onClick={onConfirm}>Yes</button>
         </div>
       </Alert>
     </div>
@@ -33,8 +33,8 @@ export function EditWindow({ onClose, onConfirm }) {
         <hr />
 
         <div className='d-flex justify-content-end'>
-          <button type='button' class='btn btn-outline-danger me-2' onClick={onClose}>No</button>
-          <button type='button' class='btn btn-danger' onClick={onConfirm}>Yes</button>
+          <button type='button' className='btn btn-outline-danger me-2' onClick={onClose}>No</button>
+          <button type='button' className='btn btn-danger' onClick={onConfirm}>Yes</button>
         </div>
       </Alert>
     </div>
