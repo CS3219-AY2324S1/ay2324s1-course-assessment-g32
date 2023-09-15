@@ -49,7 +49,6 @@ const CreateQuestion = () => {
   };
 
   const handleTagsChange = (tags) => {
-    console.log(tags);
     setTags(tags);
   };
 
@@ -90,7 +89,7 @@ const CreateQuestion = () => {
             addKeys={[9, 13, 188]} // Tab, Enter, Comma
           />
         </div>
-        <div class="form-floating mb-3">
+        <div className="form-floating mb-3">
           <TextEditor value={newDescriptionValue} onChange={handleDescriptionValueChange} />
         </div>
         <div className='d-flex justify-content-between'>

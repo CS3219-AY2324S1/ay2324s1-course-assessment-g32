@@ -5,7 +5,7 @@ import './TextEditor.css';
 
 const TextEditor = ({ value, onChange }) => {
   return (
-    <div class="quill-container">
+    <div className="quill-container">
       <ReactQuill
         placeholder='Description...'
         value={value}

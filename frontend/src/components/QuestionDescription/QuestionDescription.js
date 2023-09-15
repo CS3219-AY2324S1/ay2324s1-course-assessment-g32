@@ -69,8 +69,8 @@ const QuestionDescription = () => {
   };
 
   const RenderTags = () => {
-    return tagsValue?.map((tag) => {
-      return <span class="badge bg-secondary">{tag}</span>
+    return tagsValue?.map((tag, index) => {
+      return <span key={index} className="badge bg-secondary">{tag}</span>
     });
   };
 
@@ -92,9 +92,9 @@ const QuestionDescription = () => {
             </div>
           </div>
         </div>
-        <div class="card-body">
-          <h1 class="card-title">{titleValue}</h1>
-          <div class="scrollable-div" dangerouslySetInnerHTML={{ __html: descriptionValue }}></div>
+        <div className="card-body">
+          <h1 className="card-title">{titleValue}</h1>
+          <div className="scrollable-div" dangerouslySetInnerHTML={{ __html: descriptionValue }}></div>
         </div>
         <div className='card-footer d-flex'>
           <div className='d-flex flex-wrap gap-1'>{RenderTags()}</div>

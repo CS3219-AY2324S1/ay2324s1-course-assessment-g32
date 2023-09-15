@@ -117,16 +117,12 @@ const EditQuestion = () => {
             addKeys={[9, 13, 188]} // Tab, Enter, Comma
           />
         </div>
-        <div className='form-floating mb-3'>
-          <textarea className='form-control' id='createQuestionDescription' placeholder='description' value={newDescriptionValue} onChange={handleDescriptionValueChange} required />
-          <label htmlFor='createQuestionTitle'>Description</label>
-        </div>
-        <div class="form-floating mb-3">
+        <div className="form-floating mb-3">
           <TextEditor value={newDescriptionValue} onChange={handleDescriptionValueChange} />
         </div>
-        <div class="d-flex justify-content-between">
-          <button type="button" class="btn btn-secondary" onClick={handleBackClick}>Back</button>
-          <button type="submit" class="btn btn-success">Save</button>
+        <div className="d-flex justify-content-between">
+          <button type="button" className="btn btn-secondary" onClick={handleBackClick}>Back</button>
+          <button type="submit" className="btn btn-success">Save</button>
         </div>
       </form>
     </div>
