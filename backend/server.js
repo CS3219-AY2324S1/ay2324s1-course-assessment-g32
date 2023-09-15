@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const authRoutes = require("./server/routes/auth");
-const testRoutes = require("./server/routes/test");
+const userRoutes = require("./server/routes/user");
 require("dotenv").config();
 
 // Retrieve environment variables
@@ -23,7 +23,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/auth", authRoutes); // Use the authRoutes for handling authentication-related routes
-app.use("/test", testRoutes);
+app.use("/user", userRoutes);
 app.listen(PORT, () => {
 	console.log(`Running server on port: ${PORT}`);
 });
