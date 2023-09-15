@@ -4,13 +4,14 @@ import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import { editQuestion, getQuestionDetails } from '../../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
+import TextEditor from '../TextEditor/TextEditor.js';
 import './EditQuestion.css';
 
 const EditQuestion = () => {
 
-  const [newTitleValue, setTitleValue] = useState([]);
-  const [newDescriptionValue, setDescriptionValue] = useState([]);
-  const [newComplexityValue, setComplexityValue] = useState([]);
+  const [newTitleValue, setTitleValue] = useState('');
+  const [newComplexityValue, setComplexityValue] = useState('');
+  const [newDescriptionValue, setDescriptionValue] = useState('');
   const [newTags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -64,10 +65,6 @@ const EditQuestion = () => {
     setTitleValue(event.target.value);
   };
 
-  const handleDescriptionValueChange = (event) => {
-    setDescriptionValue(event.target.value);
-  };
-
   const handleComplexityValueChange = (event) => {
     setComplexityValue(event.target.value);
   };
@@ -85,6 +82,10 @@ const EditQuestion = () => {
     setTagInput(input);
   };
 
+  const handleDescriptionValueChange = (html) => {
+    setDescriptionValue(html);
+  };
+
   return (
     isLoading
       ? <div class="spinner-border text-primary" role="status">
@@ -95,17 +96,17 @@ const EditQuestion = () => {
           <h1>Edit</h1>
           <form class="create-question-form needs-validation" onSubmit={handleSaveClick} noValidate>
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="createQuestionTitle" placeholder="title" value={newTitleValue} onChange={handleTitleValueChange} required />
-              <label for="createQuestionTitle">Title</label>
+              <input type="text" class="form-control" id="editQuestionTitle" placeholder="title" value={newTitleValue} onChange={handleTitleValueChange} required />
+              <label for="editQuestionTitle">Title</label>
             </div>
             <div class="form-floating mb-3">
-              <select class="form-select mb-3" id="createQuestitonComplexity" value={newComplexityValue} onChange={handleComplexityValueChange} required>
+              <select class="form-select mb-3" id="editQuestitonComplexity" value={newComplexityValue} onChange={handleComplexityValueChange} required>
                 <option disabled value="">Select a complexity...</option>
                 <option value="Easy">Easy</option>
                 <option value="Medium">Medium</option>
                 <option value="Hard">Hard</option>
               </select>
-              <label for="createQuestitonComplexity">Complexity</label>
+              <label for="editQuestitonComplexity">Complexity</label>
             </div>
             <div class="form-floating mb-3">
               <TagsInput
@@ -116,17 +117,16 @@ const EditQuestion = () => {
                 addOnBlur={true}
                 addKeys={[9, 13, 188]} // Tab, Enter, Comma
               />
-            </div>
+            </div >
             <div class="form-floating mb-3">
-              <textarea class="form-control" id="createQuestionDescription" placeholder="description" value={newDescriptionValue} onChange={handleDescriptionValueChange} required />
-              <label for="createQuestionTitle">Description</label>
+              <TextEditor value={newDescriptionValue} onChange={handleDescriptionValueChange} />
             </div>
             <div class="d-flex justify-content-between">
               <button type="button" class="btn btn-secondary" onClick={handleBackClick}>Back</button>
               <button type="submit" class="btn btn-success">Save</button>
             </div>
-          </form>
-        </div>
+          </form >
+        </div >
       )
   )
 };

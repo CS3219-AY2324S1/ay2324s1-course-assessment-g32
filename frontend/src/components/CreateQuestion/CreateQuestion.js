@@ -39,17 +39,14 @@ const CreateQuestion = () => {
   };
 
   const handleTitleValueChange = (event) => {
-    console.log(event.target.value);
     setTitleValue(event.target.value);
   };
 
   const handleComplexityValueChange = (event) => {
-    console.log(event.target.value);
     setComplexityValue(event.target.value);
   };
 
   const handleDescriptionValueChange = (html) => {
-    console.log(html);
     setDescriptionValue(html);
   };
 
