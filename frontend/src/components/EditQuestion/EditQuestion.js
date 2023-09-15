@@ -135,12 +135,8 @@ const EditQuestion = () => {
               <button type="button" class="btn btn-secondary" onClick={handleBackClick}>Back</button>
               <button type="submit" class="btn btn-success">Save</button>
             </div>
-            <EditWindow
-              isOpen={isEditWindowOpen}
-              onClose={handleEditWindowClose}
-              onConfirm={handleConfirmQuit}
-            />
           </form>
+          {isEditWindowOpen && <EditWindow onClose={handleEditWindowClose} onConfirm={handleConfirmQuit}/>}
         </div>
       )
   )

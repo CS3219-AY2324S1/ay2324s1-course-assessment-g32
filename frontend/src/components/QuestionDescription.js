@@ -88,11 +88,6 @@ const QuestionDescription = () => {
             </div>
           </div>
         </div>
-        <DeletionWindow
-          isOpen={isDeletionWindowOpen}
-          onClose={handleDeletionWindowClose}
-          onConfirm={handleConfirmDeletion}
-        />
         <div class="card-body">
           <h1 class="card-title">{question?.title}</h1>
           <p>{question?.description}</p>
@@ -106,6 +101,8 @@ const QuestionDescription = () => {
           </div>
         </div>
       </div>
+      {isDeletionWindowOpen && <DeletionWindow onConfirm={handleConfirmDeletion}
+      onClose={handleDeletionWindowClose} />}
     </div>
   )
 };
