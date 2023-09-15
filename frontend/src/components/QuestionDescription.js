@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { getQuestionDetails, deleteQuestion } from '../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
+import { DeletionWindow } from './ConfirmationWindows.js';
 
 const QuestionDescription = () => {
 
   const [question, setQuestion] = useState([]);
+  const [isDeletionWindowOpen, setDeletionWindowOpen] = useState(false);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -37,6 +39,11 @@ const QuestionDescription = () => {
   };
 
   const handleDeleteClick = () => {
+    setDeletionWindowOpen(true);
+  };
+
+  const handleConfirmDeletion = () => {
+    setDeletionWindowOpen(false);
     try {
       deleteQuestion(id);
       showSuccessToast('Successfully Deleted!');
@@ -44,6 +51,10 @@ const QuestionDescription = () => {
     } catch (error) {
       showServerErrorToast(error);
     }
+  };
+
+  const handleDeletionWindowClose = () => {
+    setDeletionWindowOpen(false);
   };
 
   const getComplexityColor = (complexity) => {
@@ -77,6 +88,11 @@ const QuestionDescription = () => {
             </div>
           </div>
         </div>
+        <DeletionWindow
+          isOpen={isDeletionWindowOpen}
+          onClose={handleDeletionWindowClose}
+          onConfirm={handleConfirmDeletion}
+        />
         <div class="card-body">
           <h1 class="card-title">{question?.title}</h1>
           <p>{question?.description}</p>
