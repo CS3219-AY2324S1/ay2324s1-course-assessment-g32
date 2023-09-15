@@ -6,7 +6,6 @@ import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from
 const QuestionDescription = () => {
 
   const [question, setQuestion] = useState([]);
-  const tags = ['tag1', 'tag2', 'tag3'];
 
   const { id } = useParams();
   const navigate = useNavigate();
