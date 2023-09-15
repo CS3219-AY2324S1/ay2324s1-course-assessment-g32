@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
-import { editQuestion, getQuestionDetails } from '../../api/QuestionApi.js';
-import { EditWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
-import './EditQuestion.css';
+import { editQuestion, getQuestionDetails } from '../api/QuestionApi.js';
+import { EditWindow } from './ConfirmationWindow/ConfirmationWindows.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../utils/toast.js';
+import TextEditor from './TextEditor/TextEditor.js';
+import '../css/Tags.css';
 
 const EditQuestion = () => {
-  const [newTitleValue, setTitleValue] = useState([]);
-  const [newDescriptionValue, setDescriptionValue] = useState([]);
-  const [newComplexityValue, setComplexityValue] = useState([]);
+
+  const [newTitleValue, setTitleValue] = useState('');
+  const [newComplexityValue, setComplexityValue] = useState('');
+  const [newDescriptionValue, setDescriptionValue] = useState('');
   const [newTags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -74,10 +76,6 @@ const EditQuestion = () => {
     setTitleValue(event.target.value);
   };
 
-  const handleDescriptionValueChange = (event) => {
-    setDescriptionValue(event.target.value);
-  };
-
   const handleComplexityValueChange = (event) => {
     setComplexityValue(event.target.value);
   };
@@ -92,6 +90,10 @@ const EditQuestion = () => {
       return;
     }
     setTagInput(input);
+  };
+
+  const handleDescriptionValueChange = (html) => {
+    setDescriptionValue(html);
   };
 
   return isLoading ? (
@@ -127,17 +129,12 @@ const EditQuestion = () => {
             addKeys={[9, 13, 188]} // Tab, Enter, Comma
           />
         </div>
-        <div className='form-floating mb-3'>
-          <textarea className='form-control' id='createQuestionDescription' placeholder='description' value={newDescriptionValue} onChange={handleDescriptionValueChange} required />
-          <label htmlFor='createQuestionTitle'>Description</label>
+        <div className="form-floating mb-3">
+          <TextEditor value={newDescriptionValue} onChange={handleDescriptionValueChange} />
         </div>
-        <div className='d-flex justify-content-between'>
-          <button type='button' className='btn btn-secondary' onClick={handleBackClick}>
-            Back
-          </button>
-          <button type='submit' className='btn btn-success'>
-            Save
-          </button>
+        <div className="d-flex justify-content-between">
+          <button type="button" className="btn btn-secondary" onClick={handleBackClick}>Back</button>
+          <button type="submit" className="btn btn-success">Save</button>
         </div>
       </form>
       {isEditWindowOpen && <EditWindow onClose={handleEditWindowClose} onConfirm={handleConfirmQuit}/>}

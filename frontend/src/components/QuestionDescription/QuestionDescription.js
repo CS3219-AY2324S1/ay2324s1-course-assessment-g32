@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getQuestionDetails, deleteQuestion } from '../api/QuestionApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
-import { DeletionWindow } from './ConfirmationWindow/ConfirmationWindows.js';
+import DOMPurify from 'dompurify';
+import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
+import { DeletionWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
+import './QuestionDescription.css';
+import '../../css/Tags.css';
 
 const QuestionDescription = () => {
-  const [question, setQuestion] = useState([]);
+
+  const [titleValue, setTitleValue] = useState('');
+  const [complexityValue, setComplexityValue] = useState('');
+  const [tagsValue, setTagsValue] = useState([]);
+  const [descriptionValue, setDescriptionValue] = useState('');
   const [isDeletionWindowOpen, setDeletionWindowOpen] = useState(false);
 
   const { id } = useParams();
@@ -14,8 +21,12 @@ const QuestionDescription = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const questions = await getQuestionDetails(id);
-        setQuestion(questions);
+        const question = await getQuestionDetails(id);
+        setTitleValue(question.title);
+        setComplexityValue(question.complexity);
+        setTagsValue(question.tags);
+        const sanitizedDescription = DOMPurify.sanitize(question.description);
+        setDescriptionValue(sanitizedDescription);
       } catch (error) {
         navigate('../');
         if (error.response.status === 400) {
@@ -41,10 +52,10 @@ const QuestionDescription = () => {
     setDeletionWindowOpen(true);
   };
 
-  const handleConfirmDeletion = () => {
+  const handleConfirmDeletion = async () => {
     setDeletionWindowOpen(false);
     try {
-      deleteQuestion(id);
+      await deleteQuestion(id);
       showSuccessToast('Successfully Deleted!');
       navigate('../');
     } catch (error) {
@@ -70,8 +81,8 @@ const QuestionDescription = () => {
   };
 
   const RenderTags = () => {
-    return question?.tags?.map((tag) => {
-      return <span className='badge bg-secondary'>{tag}</span>;
+    return tagsValue?.map((tag, index) => {
+      return <span key={index} className="badge bg-secondary">{tag}</span>
     });
   };
 
@@ -93,14 +104,14 @@ const QuestionDescription = () => {
             </div>
           </div>
         </div>
-        <div className='card-body'>
-          <h1 className='card-title'>{question?.title}</h1>
-          <p>{question?.description}</p>
+        <div className="card-body">
+          <h1 className="card-title">{titleValue}</h1>
+          <div className="scrollable-div" dangerouslySetInnerHTML={{ __html: descriptionValue }}></div>
         </div>
         <div className='card-footer d-flex'>
           <div className='d-flex flex-wrap gap-1'>{RenderTags()}</div>
           <div className='ms-auto'>
-            <span className={`badge ${getComplexityColor(question?.complexity)}`}>{question?.complexity}</span>
+            <span className={`badge ${getComplexityColor(complexityValue)}`}>{complexityValue}</span>
           </div>
         </div>
       </div>
