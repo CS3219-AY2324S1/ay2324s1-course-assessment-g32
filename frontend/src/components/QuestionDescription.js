@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getQuestionDetails, deleteQuestion } from '../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
 import { DeletionWindow } from './ConfirmationWindow/ConfirmationWindows.js';
 
 const QuestionDescription = () => {
-
   const [question, setQuestion] = useState([]);
   const [isDeletionWindowOpen, setDeletionWindowOpen] = useState(false);
 
@@ -28,7 +27,7 @@ const QuestionDescription = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id, navigate]);
 
   const handleBackClick = () => {
     navigate('../');
@@ -72,39 +71,43 @@ const QuestionDescription = () => {
 
   const RenderTags = () => {
     return question?.tags?.map((tag) => {
-      return <span class="badge bg-secondary">{tag}</span>
+      return <span className='badge bg-secondary'>{tag}</span>;
     });
   };
 
   return (
-    <div class="container">
-      <div class="card text-center">
-        <div class="card-header">
-          <div class="d-flex justify-content-between">
-            <button type="button" class="btn btn-secondary" onClick={handleBackClick}>Back</button>
+    <div className='container'>
+      <div className='card text-center'>
+        <div className='card-header'>
+          <div className='d-flex justify-content-between'>
+            <button type='button' className='btn btn-secondary' onClick={handleBackClick}>
+              Back
+            </button>
             <div>
-              <button type="button" class="btn btn-primary me-2" onClick={handleEditClick}>Edit</button>
-              <button type="button" class="btn btn-danger" onClick={handleDeleteClick}>Delete</button>
+              <button type='button' className='btn btn-primary me-2' onClick={handleEditClick}>
+                Edit
+              </button>
+              <button type='button' className='btn btn-danger' onClick={handleDeleteClick}>
+                Delete
+              </button>
             </div>
           </div>
         </div>
-        <div class="card-body">
-          <h1 class="card-title">{question?.title}</h1>
+        <div className='card-body'>
+          <h1 className='card-title'>{question?.title}</h1>
           <p>{question?.description}</p>
         </div>
-        <div class="card-footer d-flex">
-          <div class="d-flex flex-wrap gap-1">
-            {RenderTags()}
-          </div>
-          <div class="ms-auto">
-            <span class={`badge ${getComplexityColor(question?.complexity)}`}>{question?.complexity}</span>
+        <div className='card-footer d-flex'>
+          <div className='d-flex flex-wrap gap-1'>{RenderTags()}</div>
+          <div className='ms-auto'>
+            <span className={`badge ${getComplexityColor(question?.complexity)}`}>{question?.complexity}</span>
           </div>
         </div>
       </div>
       {isDeletionWindowOpen && <DeletionWindow onConfirm={handleConfirmDeletion}
       onClose={handleDeletionWindowClose} />}
     </div>
-  )
+  );
 };
 
 export default QuestionDescription;
