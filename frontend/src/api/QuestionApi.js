@@ -2,11 +2,12 @@ import axios from 'axios';
 
 const rootUrl = 'http://localhost:3000/question';
 
-export const createQuestion = (title, complexity, description) => {
+export const createQuestion = (title, complexity, description, tags) => {
   const questionData = {
     title: title,
     complexity: complexity,
-    description: description
+    description: description,
+    tags: tags
   };
   return axios.post(rootUrl + "/create", questionData, {
     headers: {
@@ -29,12 +30,13 @@ export const getQuestionDetails = async (questionId) => {
   return questionDetails.data.question;
 };
 
-export const editQuestion = (id, title, complexity, description) => {
+export const editQuestion = (id, title, complexity, description, tags) => {
   const questionData = {
     id: id,
     title: title,
     complexity: complexity,
-    description: description
+    description: description,
+    tags: tags
   };
   return axios.post(rootUrl + '/edit', questionData, {
     headers: {
