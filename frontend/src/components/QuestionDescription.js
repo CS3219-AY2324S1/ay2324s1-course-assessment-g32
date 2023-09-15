@@ -64,7 +64,7 @@ const QuestionDescription = () => {
     return question?.tags?.map((tag) => {
       return <span class="badge bg-secondary me-1">{tag}</span>
     });
-  }
+  };
 
   return (
     <div class="container">
