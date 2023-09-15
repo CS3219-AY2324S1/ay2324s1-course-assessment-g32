@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
@@ -60,25 +60,27 @@ const CreateQuestion = () => {
     }
     setTagInput(input);
   };
-  
+
   return (
-    <div class="container">
+    <div className='container'>
       <h1>Add a Question</h1>
-      <form class="create-question-form needs-validation" onSubmit={handleSaveClick} >
-        <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="createQuestionTitle" placeholder="title" onChange={handleTitleValueChange} />
-          <label for="createQuestionTitle">Title</label>
+      <form className='create-question-form needs-validation' onSubmit={handleSaveClick} >
+        <div className='form-floating mb-3'>
+          <input type='text' className='form-control' id='createQuestionTitle' placeholder='title' onChange={handleTitleValueChange} />
+          <label htmlFor='createQuestionTitle'>Title</label>
         </div>
-        <div class="form-floating mb-3">
-          <select class="form-select mb-3" id="createQuestitonComplexity" defaultValue="" onChange={handleComplexityValueChange} >
-            <option disabled value="">Select a complexity...</option>
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Hard">Hard</option>
+        <div className='form-floating mb-3'>
+          <select className='form-select mb-3' id='createQuestitonComplexity' defaultValue='' onChange={handleComplexityValueChange} >
+            <option disabled value=''>
+              Select a complexity...
+            </option>
+            <option value='Easy'>Easy</option>
+            <option value='Medium'>Medium</option>
+            <option value='Hard'>Hard</option>
           </select>
-          <label for="createQuestitonComplexity">Complexity</label>
+          <label htmlFor='createQuestitonComplexity'>Complexity</label>
         </div>
-        <div class="form-floating mb-3">
+        <div className='form-floating mb-3'>
           <TagsInput
             value={newTags}
             onChange={handleTagsChange}
@@ -91,13 +93,13 @@ const CreateQuestion = () => {
         <div class="form-floating mb-3">
           <TextEditor value={newDescriptionValue} onChange={handleDescriptionValueChange} />
         </div>
-        <div class="d-flex justify-content-between">
-          <button type="button" class="btn btn-secondary" onClick={handleBackClick}>Back</button>
-          <button type="submit" class="btn btn-success">Save</button>
+        <div className='d-flex justify-content-between'>
+          <button type='button' className='btn btn-secondary' onClick={handleBackClick}>Back</button>
+          <button type='submit' className='btn btn-success'>Save</button>
         </div>
       </form>
-    </div>
-  )
+    </div >
+  );
 };
 
 export default CreateQuestion;

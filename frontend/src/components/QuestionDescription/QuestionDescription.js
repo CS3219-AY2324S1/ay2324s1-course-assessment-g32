@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi.js';
@@ -35,7 +35,7 @@ const QuestionDescription = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id, navigate]);
 
   const handleBackClick = () => {
     navigate('../');
@@ -75,32 +75,36 @@ const QuestionDescription = () => {
   };
 
   return (
-    <div class="container">
-      <div class="card text-center">
-        <div class="card-header">
-          <div class="d-flex justify-content-between">
-            <button type="button" class="btn btn-secondary" onClick={handleBackClick}>Back</button>
+    <div className='container'>
+      <div className='card text-center'>
+        <div className='card-header'>
+          <div className='d-flex justify-content-between'>
+            <button type='button' className='btn btn-secondary' onClick={handleBackClick}>
+              Back
+            </button>
             <div>
-              <button type="button" class="btn btn-primary me-2" onClick={handleEditClick}>Edit</button>
-              <button type="button" class="btn btn-danger" onClick={handleDeleteClick}>Delete</button>
+              <button type='button' className='btn btn-primary me-2' onClick={handleEditClick}>
+                Edit
+              </button>
+              <button type='button' className='btn btn-danger' onClick={handleDeleteClick}>
+                Delete
+              </button>
             </div>
           </div>
         </div>
-        <div class="card-body">
-          <h1 class="card-title">{titleValue}</h1>
-          <div class="scrollable-div" dangerouslySetInnerHTML={{ __html: descriptionValue }}></div>
+        <div className='card-body'>
+          <h1 className='card-title'>{titleValue}</h1>
+          <p>{descriptionValue}</p>
         </div>
-        <div class="card-footer d-flex">
-          <div class="d-flex flex-wrap gap-1">
-            {RenderTags()}
-          </div>
-          <div class="ms-auto">
-            <span class={`badge ${getComplexityColor(complexityValue)}`}>{complexityValue}</span>
+        <div className='card-footer d-flex'>
+          <div className='d-flex flex-wrap gap-1'>{RenderTags()}</div>
+          <div className='ms-auto'>
+            <span className={`badge ${getComplexityColor(complexityValue)}`}>{complexityValue}</span>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default QuestionDescription;
