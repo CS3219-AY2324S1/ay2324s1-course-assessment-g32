@@ -54,7 +54,6 @@ const CreateQuestion = () => {
   };
 
   const handleTagsChange = (tags) => {
-    console.log(tags);
     setTags(tags);
   };
 
