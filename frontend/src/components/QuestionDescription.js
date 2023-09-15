@@ -36,9 +36,9 @@ const QuestionDescription = () => {
     navigate('../edit/' + id);
   };
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = async () => {
     try {
-      deleteQuestion(id);
+      await deleteQuestion(id);
       showSuccessToast('Successfully Deleted!');
       navigate('../');
     } catch (error) {
