@@ -6,6 +6,7 @@ import { createQuestion } from '../../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
 import TextEditor from '../TextEditor/TextEditor.js';
 import './CreateQuestion.css';
+import '../../css/Tags.css';
 
 const CreateQuestion = () => {
 

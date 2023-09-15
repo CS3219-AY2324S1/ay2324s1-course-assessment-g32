@@ -5,6 +5,7 @@ import 'react-tagsinput/react-tagsinput.css';
 import { editQuestion, getQuestionDetails } from '../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../utils/toast.js';
 import TextEditor from './TextEditor/TextEditor.js';
+import '../css/Tags.css';
 
 const EditQuestion = () => {
 

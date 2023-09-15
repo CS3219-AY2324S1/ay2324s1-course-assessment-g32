@@ -4,6 +4,7 @@ import DOMPurify from 'dompurify';
 import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
 import './QuestionDescription.css';
+import '../../css/Tags.css';
 
 const QuestionDescription = () => {
 
