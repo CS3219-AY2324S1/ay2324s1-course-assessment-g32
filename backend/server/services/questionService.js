@@ -2,8 +2,8 @@ const questionRepository = require('../repositories/questionRepository');
 
 const createQuestion = async (title, complexity, description, tags) => {
   try {
-
-    const innerText = description.replace(/<[^>]+>/g, '');
+  
+    const innerText = description.replace(/<[^>]+>|\s+/g, '');
     // Check for missing inputs
     if (!title || !complexity || !innerText) {
       throw { status: 400, message: 'Missing inputs' };
@@ -46,7 +46,7 @@ const editQuestion = async (id, title, complexity, description, tags) => {
       throw { status: 400, message: 'Question does not exist' };
     }
 
-    const innerText = description.replace(/<[^>]+>/g, '');
+    const innerText = description.replace(/<[^>]+>|\s+/g, '');
 
     // Check for missing inputs
     if (!title || !complexity || !innerText) {
