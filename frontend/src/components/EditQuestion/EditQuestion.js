@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import { editQuestion, getQuestionDetails } from '../../api/QuestionApi.js';
+import { EditWindow } from '../ConfirmationWindows.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
 import './EditQuestion.css';
 
@@ -14,6 +15,7 @@ const EditQuestion = () => {
   const [newTags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditWindowOpen, setEditWindowOpen] = useState(false);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -41,7 +43,16 @@ const EditQuestion = () => {
   }, []);
 
   const handleBackClick = () => {
+    setEditWindowOpen(true);
+  };
+
+  const handleConfirmQuit = () => {
+    setEditWindowOpen(false);
     navigate(-1);
+  };
+
+  const handleEditWindowClose = () => {
+    setEditWindowOpen(false);
   };
 
   const handleSaveClick = async (e) => {
@@ -124,6 +135,11 @@ const EditQuestion = () => {
               <button type="button" class="btn btn-secondary" onClick={handleBackClick}>Back</button>
               <button type="submit" class="btn btn-success">Save</button>
             </div>
+            <EditWindow
+              isOpen={isEditWindowOpen}
+              onClose={handleEditWindowClose}
+              onConfirm={handleConfirmQuit}
+            />
           </form>
         </div>
       )
