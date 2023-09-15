@@ -94,13 +94,13 @@ const EditQuestion = () => {
       : (
         <div class="container">
           <h1>Edit</h1>
-          <form class="create-question-form needs-validation" onSubmit={handleSaveClick} noValidate>
+          <form class="create-question-form needs-validation" onSubmit={handleSaveClick} >
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="editQuestionTitle" placeholder="title" value={newTitleValue} onChange={handleTitleValueChange} required />
+              <input type="text" class="form-control" id="editQuestionTitle" placeholder="title" value={newTitleValue} onChange={handleTitleValueChange} />
               <label for="editQuestionTitle">Title</label>
             </div>
             <div class="form-floating mb-3">
-              <select class="form-select mb-3" id="editQuestitonComplexity" value={newComplexityValue} onChange={handleComplexityValueChange} required>
+              <select class="form-select mb-3" id="editQuestitonComplexity" value={newComplexityValue} onChange={handleComplexityValueChange} >
                 <option disabled value="">Select a complexity...</option>
                 <option value="Easy">Easy</option>
                 <option value="Medium">Medium</option>

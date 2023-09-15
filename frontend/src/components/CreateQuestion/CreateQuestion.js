@@ -71,13 +71,13 @@ const CreateQuestion = () => {
   return (
     <div class="container">
       <h1>Add a Question</h1>
-      <form class="create-question-form needs-validation" onSubmit={handleSaveClick} noValidate>
+      <form class="create-question-form needs-validation" onSubmit={handleSaveClick} >
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="createQuestionTitle" placeholder="title" onChange={handleTitleValueChange} required />
+          <input type="text" class="form-control" id="createQuestionTitle" placeholder="title" onChange={handleTitleValueChange} />
           <label for="createQuestionTitle">Title</label>
         </div>
         <div class="form-floating mb-3">
-          <select class="form-select mb-3" id="createQuestitonComplexity" defaultValue="" onChange={handleComplexityValueChange} required>
+          <select class="form-select mb-3" id="createQuestitonComplexity" defaultValue="" onChange={handleComplexityValueChange} >
             <option disabled value="">Select a complexity...</option>
             <option value="Easy">Easy</option>
             <option value="Medium">Medium</option>
