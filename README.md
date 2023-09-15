@@ -3,7 +3,7 @@
 # Software Requirements
 
 Download and install these software if you do not have them locally.
-- NodeJS
+- [NodeJS](https://nodejs.org/en/download)
 - [MySQL](https://dev.mysql.com/downloads/mysql/)
 
 For development, you may also want to install:
@@ -28,7 +28,6 @@ For development, you may also want to install:
    Example: if your root password is "password1234", 
    `MY_SQL_PWD=password1234`
 
-
 ## Install NodeJS packages
 
 ```
@@ -39,7 +38,7 @@ cd backend && start npm install && cd ..
 
 # Start Application
 
-Start local MySQL Server
+Start local MySQL Server (Windows Service), if necessary.
 
 Start all services by: 
 ```
@@ -50,3 +49,14 @@ cd backend && start npm start && cd ..
 Or start them indvidually:  
 - Frontend: `cd frontend && npm start`  
 - Backend: `cd backend && npm start`  
+
+# Developer Notes
+
+| Backend API Path | Purpose | Parameters (JSON format) |
+| --- | --- | --- |
+|`/auth/signup`| See `/user/create` | See `/user/create` |
+|`/auth/login`| Used to login | `email` <br> `password` |
+|`/user/create`| Used to create new user | `email` <br> `password` <br> `confirmPassword` |
+|`/user/read`| Used to get user info | `id` or `email` |
+|`/user/update`| Used to update user info (username, password) | `id` <br> `username` or `password` |
+|`/user/delete`| Used to delete user | `id` |

@@ -1,6 +1,34 @@
 const userDatabase = require('../repositories/userRepoMySql');
-
 const bcrypt = require('bcrypt');
+
+const loginUser = async (email, password) => {
+  try {
+    var userId = Number();
+
+    // Check for missing inputs
+    if (!email || !password) {
+      throw { status: 400, message: 'Missing inputs' };
+    }
+
+    // Check if a user with the given email exists
+    await userDatabase.findByEmail(email)
+      .then(id => userId = id);
+  
+    if (!userId) {
+      throw { status: 400, message: 'Email not registered with any user' };
+    }
+
+    // Compare the entered password with the hashed password stored in the database
+    // FIXME: need to find a way to retrieve stored hashed password
+    if (!bcrypt.compareSync(password, user.password)) {
+      throw { status: 400, message: 'Incorrect password' };
+    }
+
+    return userId;
+  } catch (err) {
+    throw err;
+  }
+};
 
 const createUser = async (email, password, confirmPassword) => {
   try {
@@ -39,35 +67,6 @@ const createUser = async (email, password, confirmPassword) => {
     
     // Create using with email and hashed password
     userDatabase.createUser(email, bcrypt.hash(password, 10));
-  } catch (err) {
-    throw err;
-  }
-};
-
-const loginUser = async (email, password) => {
-  try {
-    var userId = Number();
-
-    // Check for missing inputs
-    if (!email || !password) {
-      throw { status: 400, message: 'Missing inputs' };
-    }
-
-    // Check if a user with the given email exists
-    await userDatabase.findByEmail(email)
-      .then(id => userId = id);
-  
-    if (!userId) {
-      throw { status: 400, message: 'Email not registered with any user' };
-    }
-
-    // Compare the entered password with the hashed password stored in the database
-    // FIXME: need to find a way to retrieve stored hashed password
-    if (!bcrypt.compareSync(password, user.password)) {
-      throw { status: 400, message: 'Incorrect password' };
-    }
-
-    return userId;
   } catch (err) {
     throw err;
   }
