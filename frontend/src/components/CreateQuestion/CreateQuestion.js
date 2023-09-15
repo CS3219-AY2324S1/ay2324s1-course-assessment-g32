@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import { createQuestion } from '../../api/QuestionApi.js';
+import { EditWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
 import './CreateQuestion.css';
 
@@ -13,10 +14,21 @@ const CreateQuestion = () => {
   const [newComplexityValue, setComplexityValue] = useState();
   const [newTags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
+  const [isEditWindowOpen, setEditWindowOpen] = useState(false);
 
   const navigate = useNavigate();
+
   const handleBackClick = () => {
+    setEditWindowOpen(true);
+  };
+
+  const handleConfirmQuit = () => {
+    setEditWindowOpen(false);
     navigate(-1);
+  };
+
+  const handleEditWindowClose = () => {
+    setEditWindowOpen(false);
   };
 
   const handleSaveClick = async (e) => {
@@ -62,11 +74,6 @@ const CreateQuestion = () => {
     setTagInput(input);
   };
 
-  // const handleRemoveTag = (tagIndex) => {
-  //   const updatedTags = newTags.filter((_, index) => index !== tagIndex);
-  //   setTags(updatedTags);
-  // };
-
   return (
     <div className='container'>
       <h1>Add a Question</h1>
@@ -109,6 +116,7 @@ const CreateQuestion = () => {
           </button>
         </div>
       </form>
+      {isEditWindowOpen && <EditWindow onClose={handleEditWindowClose} onConfirm={handleConfirmQuit}/>}
     </div>
   );
 };

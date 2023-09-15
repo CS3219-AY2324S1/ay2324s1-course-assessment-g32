@@ -104,8 +104,7 @@ const QuestionDescription = () => {
           </div>
         </div>
       </div>
-      {isDeletionWindowOpen && <DeletionWindow onConfirm={handleConfirmDeletion}
-      onClose={handleDeletionWindowClose} />}
+      {isDeletionWindowOpen && <DeletionWindow onConfirm={handleConfirmDeletion} onClose={handleDeletionWindowClose} />}
     </div>
   );
 };
