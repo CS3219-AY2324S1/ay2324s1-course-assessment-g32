@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { Form, Button } from 'react-bootstrap';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import { createQuestion } from '../../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
+import TextEditor from '../TextEditor/TextEditor.js';
 import './CreateQuestion.css';
+import '../../css/Tags.css';
 
 const CreateQuestion = () => {
-  const [newTitleValue, setTitleValue] = useState();
-  const [newDescriptionValue, setDescriptionValue] = useState();
-  const [newComplexityValue, setComplexityValue] = useState();
+
+  const [newTitleValue, setTitleValue] = useState('');
+  const [newComplexityValue, setComplexityValue] = useState('');
   const [newTags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
+  const [newDescriptionValue, setDescriptionValue] = useState('');
 
   const navigate = useNavigate();
   const handleBackClick = () => {
@@ -36,22 +38,18 @@ const CreateQuestion = () => {
   };
 
   const handleTitleValueChange = (event) => {
-    console.log(event.target.value);
     setTitleValue(event.target.value);
   };
 
   const handleComplexityValueChange = (event) => {
-    console.log(event.target.value);
     setComplexityValue(event.target.value);
   };
 
-  const handleDescriptionValueChange = (event) => {
-    console.log(event.target.value);
-    setDescriptionValue(event.target.value);
+  const handleDescriptionValueChange = (html) => {
+    setDescriptionValue(html);
   };
 
   const handleTagsChange = (tags) => {
-    console.log(tags);
     setTags(tags);
   };
 
@@ -63,21 +61,16 @@ const CreateQuestion = () => {
     setTagInput(input);
   };
 
-  // const handleRemoveTag = (tagIndex) => {
-  //   const updatedTags = newTags.filter((_, index) => index !== tagIndex);
-  //   setTags(updatedTags);
-  // };
-
   return (
     <div className='container'>
       <h1>Add a Question</h1>
-      <form className='create-question-form needs-validation' onSubmit={handleSaveClick} noValidate>
+      <form className='create-question-form needs-validation' onSubmit={handleSaveClick} >
         <div className='form-floating mb-3'>
-          <input type='text' className='form-control' id='createQuestionTitle' placeholder='title' onChange={handleTitleValueChange} required />
+          <input type='text' className='form-control' id='createQuestionTitle' placeholder='title' onChange={handleTitleValueChange} />
           <label htmlFor='createQuestionTitle'>Title</label>
         </div>
         <div className='form-floating mb-3'>
-          <select className='form-select mb-3' id='createQuestitonComplexity' defaultValue='' onChange={handleComplexityValueChange} required>
+          <select className='form-select mb-3' id='createQuestitonComplexity' defaultValue='' onChange={handleComplexityValueChange} >
             <option disabled value=''>
               Select a complexity...
             </option>
@@ -97,20 +90,15 @@ const CreateQuestion = () => {
             addKeys={[9, 13, 188]} // Tab, Enter, Comma
           />
         </div>
-        <div className='form-floating mb-3'>
-          <textarea className='form-control' id='createQuestionDescription' placeholder='description' onChange={handleDescriptionValueChange} required />
-          <label htmlFor='createQuestionTitle'>Description</label>
+        <div className="form-floating mb-3">
+          <TextEditor value={newDescriptionValue} onChange={handleDescriptionValueChange} />
         </div>
         <div className='d-flex justify-content-between'>
-          <button type='button' className='btn btn-secondary' onClick={handleBackClick}>
-            Back
-          </button>
-          <button type='submit' className='btn btn-success'>
-            Save
-          </button>
+          <button type='button' className='btn btn-secondary' onClick={handleBackClick}>Back</button>
+          <button type='submit' className='btn btn-success'>Save</button>
         </div>
       </form>
-    </div>
+    </div >
   );
 };
 
