@@ -4,7 +4,7 @@ import { Form, Button } from 'react-bootstrap';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import { createQuestion } from '../../api/QuestionApi.js';
-import { showServerErrorToast, showSuccessToast, showValidationErrorToast } from '../../utils/toast.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
 import './CreateQuestion.css';
 
 const CreateQuestion = () => {
@@ -59,6 +59,10 @@ const CreateQuestion = () => {
   };
 
   const handleInputChange = (input) => {
+    if (input.length > 40) {
+      showFailureToast('Tag cannot be longer than 40 characters');
+      return;
+    }
     setTagInput(input);
   };
 
