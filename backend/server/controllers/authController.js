@@ -5,7 +5,6 @@ const signup = async (req, res) => {
   try {
     const { email, password, confirmPassword } = req.body;
     await userService.createUser(email, password, confirmPassword);
-
     res.json({ message: 'User registered successfully' });
   } catch (err) {
     res
@@ -14,6 +13,7 @@ const signup = async (req, res) => {
   }
 };
 
+// TODO: test code
 // Define a controller function for handling login requests
 const login = async (req, res) => {
   try {
@@ -29,7 +29,48 @@ const login = async (req, res) => {
   }
 };
 
+const getUserInfo = async (req, res) => {
+  try {
+    const { id, email } = req.body;
+    const info = await userService.getUserInfo(id, email);
+    res.json({ info });
+  } catch (err) {
+    res
+      .status(err?.status || 400)
+      .json({ error: err?.message || err });
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    const { id, username, password } = req.body;
+    await userService.updateUser(id, username, password);
+    res.json({ message: "User info updated" });
+  } catch (err) {
+    res
+      .status(err?.status || 400)
+      .json({ error: err?.message || err });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.body;
+    await userService.deleteUser(id);
+    res.json({ message: 'User deleted' });
+  } catch (err) {
+    res
+      .status(err?.status || 400)
+      .json({ error: err?.message || err });
+  }
+};
+
 module.exports = {
   signup,
   login,
+
+  // Still in testing
+  getUserInfo,
+  updateUser,
+  deleteUser, 
 };
