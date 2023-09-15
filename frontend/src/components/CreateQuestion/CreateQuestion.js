@@ -4,7 +4,7 @@ import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import { createQuestion } from '../../api/QuestionApi.js';
 import { EditWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast, showDuplicateQuestionErrorToast } from '../../utils/toast.js';
 import TextEditor from '../TextEditor/TextEditor.js';
 import './CreateQuestion.css';
 import '../../css/Tags.css';
@@ -43,6 +43,8 @@ const CreateQuestion = () => {
     } catch (error) {
       if (error.response.status === 400) {
         showValidationErrorToast(error);
+      } else if (error.response.status === 409) {
+        showDuplicateQuestionErrorToast(error);
       } else {
         showServerErrorToast(error);
       }

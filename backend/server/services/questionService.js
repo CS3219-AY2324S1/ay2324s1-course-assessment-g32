@@ -9,6 +9,12 @@ const createQuestion = async (title, complexity, description, tags) => {
       throw { status: 400, message: 'Missing inputs' };
     }
 
+    // Check for existing duplicate titles
+    const isDuplicateTitle = await questionRepository.findByTitle(title);
+    if (isDuplicateTitle) {
+      throw { status: 409, message: 'Question title already exist' };
+    }
+
     const question = await questionRepository.createQuestion(title, complexity, description, tags);
     return question;
   } catch (err) {
@@ -48,6 +54,12 @@ const editQuestion = async (id, title, complexity, description, tags) => {
 
     const innerText = description.replace(/<[^>]+>|\s+/g, '');
 
+    // Check for duplicate titles
+    const isDuplicateTitle = await questionRepository.findByTitle(title);
+    if (isDuplicateTitle) {
+      throw { status: 409, message: 'Question title already exist' };
+    }
+
     // Check for missing inputs
     if (!title || !complexity || !innerText) {
       throw { status: 400, message: 'Missing inputs' };
@@ -56,7 +68,7 @@ const editQuestion = async (id, title, complexity, description, tags) => {
     const question = await questionRepository.editQuestion(id, title, complexity, description, tags);
     return question;
   } catch (err) {
-    throw { status: 400, message: err.message };
+    throw err;
   }
 };
 
