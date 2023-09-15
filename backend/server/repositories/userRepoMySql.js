@@ -104,20 +104,25 @@ const getUserInfoById = async (userId) => {
   return _userInfo;
 };
 
-// TODO : test code
-const updateUser = async (userId, pkg) => {
+const updateUser = async (userId, username, password) => {
   var _success = Boolean();
   var _placeholders = [];
   var _sql = "UPDATE users SET ";
   
-  //TODO - how to implement this? hmmm....
-  if (pkg.password) {
+  if (username) {
+    _sql = _sql.concat("username=?");
+    _placeholders.push(username);
+  }
+
+  if (username && password)
+    _sql = _sql.concat(", ");
+
+  if (password) {
     _sql = _sql.concat("password=?");
-    _placeholders.push(pkg.password);
+    _placeholders.push(password);
   }
   
-
-  _sql = _sql.concat("WHERE id = ?;");
+  _sql = _sql.concat(" WHERE id = ?;");
   _placeholders.push(userId);
 
   const query = conn.promise()
