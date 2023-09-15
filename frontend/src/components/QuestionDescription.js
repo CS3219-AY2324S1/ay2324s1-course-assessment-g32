@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { getQuestionDetails, deleteQuestion } from '../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
-import { DeletionWindow } from './ConfirmationWindows.js';
+import { DeletionWindow } from './ConfirmationWindow/ConfirmationWindows.js';
 
 const QuestionDescription = () => {
 

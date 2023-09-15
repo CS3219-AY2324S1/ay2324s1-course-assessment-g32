@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import { editQuestion, getQuestionDetails } from '../../api/QuestionApi.js';
-import { EditWindow } from '../ConfirmationWindows.js';
+import { EditWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
 import './EditQuestion.css';
 
