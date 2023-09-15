@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
+import { DeletionWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
 import './QuestionDescription.css';
 import '../../css/Tags.css';
 
@@ -12,6 +13,7 @@ const QuestionDescription = () => {
   const [complexityValue, setComplexityValue] = useState('');
   const [tagsValue, setTagsValue] = useState([]);
   const [descriptionValue, setDescriptionValue] = useState('');
+  const [isDeletionWindowOpen, setDeletionWindowOpen] = useState(false);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -46,7 +48,12 @@ const QuestionDescription = () => {
     navigate('../edit/' + id);
   };
 
-  const handleDeleteClick = async () => {
+  const handleDeleteClick = () => {
+    setDeletionWindowOpen(true);
+  };
+
+  const handleConfirmDeletion = async () => {
+    setDeletionWindowOpen(false);
     try {
       await deleteQuestion(id);
       showSuccessToast('Successfully Deleted!');
@@ -54,6 +61,10 @@ const QuestionDescription = () => {
     } catch (error) {
       showServerErrorToast(error);
     }
+  };
+
+  const handleDeletionWindowClose = () => {
+    setDeletionWindowOpen(false);
   };
 
   const getComplexityColor = (complexity) => {
@@ -104,6 +115,7 @@ const QuestionDescription = () => {
           </div>
         </div>
       </div>
+      {isDeletionWindowOpen && <DeletionWindow onConfirm={handleConfirmDeletion} onClose={handleDeletionWindowClose} />}
     </div>
   );
 };

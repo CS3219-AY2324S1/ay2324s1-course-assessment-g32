@@ -2,8 +2,10 @@ const questionRepository = require('../repositories/questionRepository');
 
 const createQuestion = async (title, complexity, description, tags) => {
   try {
+  
+    const innerText = description.replace(/<[^>]+>|\s+/g, '');
     // Check for missing inputs
-    if (!title || !complexity || !description) {
+    if (!title || !complexity || !innerText) {
       throw { status: 400, message: 'Missing inputs' };
     }
 
@@ -19,7 +21,6 @@ const getQuestions = async () => {
     const questions = await questionRepository.getQuestions();
     return questions;
   } catch (err) {
-    console.error(err);
     throw err;
   }
 };
@@ -45,15 +46,17 @@ const editQuestion = async (id, title, complexity, description, tags) => {
       throw { status: 400, message: 'Question does not exist' };
     }
 
+    const innerText = description.replace(/<[^>]+>|\s+/g, '');
+
     // Check for missing inputs
-    if (!title || !complexity || !description) {
+    if (!title || !complexity || !innerText) {
       throw { status: 400, message: 'Missing inputs' };
     }
 
     const question = await questionRepository.editQuestion(id, title, complexity, description, tags);
     return question;
   } catch (err) {
-    throw { status: 400, message: 'Question does not exist' };
+    throw { status: 400, message: err.message };
   }
 };
 
