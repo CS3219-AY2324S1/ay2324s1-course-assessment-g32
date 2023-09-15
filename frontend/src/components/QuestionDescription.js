@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 import { getQuestionDetails, deleteQuestion } from '../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
 
 const QuestionDescription = () => {
 
-  const [question, setQuestion] = useState([]);
+  const [titleValue, setTitleValue] = useState('');
+  const [complexityValue, setComplexityValue] = useState('');
+  const [tagsValue, setTagsValue] = useState([]);
+  const [descriptionValue, setDescriptionValue] = useState('');
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -13,8 +17,12 @@ const QuestionDescription = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const questions = await getQuestionDetails(id);
-        setQuestion(questions);
+        const question = await getQuestionDetails(id);
+        setTitleValue(question.title);
+        setComplexityValue(question.complexity);
+        setTagsValue(question.tags);
+        const sanitizedDescription = DOMPurify.sanitize(question.description);
+        setDescriptionValue(sanitizedDescription);
       } catch (error) {
         navigate('../');
         if (error.response.status === 400) {
@@ -60,7 +68,7 @@ const QuestionDescription = () => {
   };
 
   const RenderTags = () => {
-    return question?.tags?.map((tag) => {
+    return tagsValue?.map((tag) => {
       return <span class="badge bg-secondary">{tag}</span>
     });
   };
@@ -78,15 +86,15 @@ const QuestionDescription = () => {
           </div>
         </div>
         <div class="card-body">
-          <h1 class="card-title">{question?.title}</h1>
-          <p>{question?.description}</p>
+          <h1 class="card-title">{titleValue}</h1>
+          <div dangerouslySetInnerHTML={{ __html: descriptionValue }}></div>
         </div>
         <div class="card-footer d-flex">
           <div class="d-flex flex-wrap gap-1">
             {RenderTags()}
           </div>
           <div class="ms-auto">
-            <span class={`badge ${getComplexityColor(question?.complexity)}`}>{question?.complexity}</span>
+            <span class={`badge ${getComplexityColor(complexityValue)}`}>{complexityValue}</span>
           </div>
         </div>
       </div>
