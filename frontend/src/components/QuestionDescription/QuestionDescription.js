@@ -92,9 +92,9 @@ const QuestionDescription = () => {
             </div>
           </div>
         </div>
-        <div className='card-body'>
-          <h1 className='card-title'>{titleValue}</h1>
-          <p>{descriptionValue}</p>
+        <div class="card-body">
+          <h1 class="card-title">{titleValue}</h1>
+          <div class="scrollable-div" dangerouslySetInnerHTML={{ __html: descriptionValue }}></div>
         </div>
         <div className='card-footer d-flex'>
           <div className='d-flex flex-wrap gap-1'>{RenderTags()}</div>
