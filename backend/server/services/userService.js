@@ -11,9 +11,8 @@ const loginUser = async (email, password) => {
     }
 
     // Check if a user with the given email exists
-    await userDatabase.findByEmail(email)
-      .then(id => userId = id);
-  
+    await userDatabase.findByEmail(email).then((id) => (userId = id));
+
     if (!userId) {
       throw { status: 400, message: 'Email not registered with any user' };
     }
@@ -40,11 +39,9 @@ const createUser = async (email, password, confirmPassword) => {
     }
 
     // Check if a user with the given email already exists
-    const existingUserCheck = userDatabase
-      .findByEmail(email)
-      .then(userId => { 
-        passExistingUserCheck = userId == null;
-      });
+    const existingUserCheck = userDatabase.findByEmail(email).then((userId) => {
+      passExistingUserCheck = userId == null;
+    });
 
     // Check if the password is at least 8 characters long
     if (password.length < 8) {
@@ -59,14 +56,22 @@ const createUser = async (email, password, confirmPassword) => {
     // Check results of existingUserCheck
     await existingUserCheck;
     if (passExistingUserCheck === undefined) {
-      console.error("No results from existingUserCheck");
+      console.error('No results from existingUserCheck');
     }
     if (!passExistingUserCheck) {
       throw { status: 400, message: 'User already exists' };
     }
-    
+
     // Create using with email and hashed password
     userDatabase.createUser(email, bcrypt.hash(password, 10));
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getAllUserInfo = async () => {
+  try {
+    return userDatabase.getAllUserInfo();
   } catch (err) {
     throw err;
   }
@@ -78,8 +83,7 @@ const getUserInfo = async (userId, email) => {
       throw { status: 400, message: 'Need at least id or email' };
     }
 
-    if (userId != null)
-         return userDatabase.getUserInfoById(userId);
+    if (userId != null) return userDatabase.getUserInfoById(userId);
     else return userDatabase.getUserInfoByEmail(email);
   } catch (err) {
     throw err;
@@ -89,12 +93,12 @@ const getUserInfo = async (userId, email) => {
 /**
  * Update user info of speficied userId.
  * Only supports changing of username and password.
- * 
+ *
  * @param {int|string} userId ID of user in DB. Read-only.
  * @param {string} username New Username
  * @param {string} password New password
  */
-const updateUser = async (userId, username, password) =>{
+const updateUser = async (userId, username, password) => {
   try {
     if (!userId) {
       throw { status: 400, message: 'Missing userId' };
@@ -109,7 +113,6 @@ const updateUser = async (userId, username, password) =>{
     }
 
     return userDatabase.updateUser(userId, username, password);
-    
   } catch (err) {
     throw err;
   }
@@ -124,19 +127,19 @@ const deleteUser = async (id) => {
       throw { status: 400, message: 'Missing id' };
     }
 
-    await userDatabase.deleteUser(id).then(x => _success = x);
+    await userDatabase.deleteUser(id).then((x) => (_success = x));
 
     if (!_success) {
-      throw { status: 400, message: 'Failed to delete user. Does user exists?' }; 
+      throw { status: 400, message: 'Failed to delete user. Does user exists?' };
     }
-
-    } catch (err) {
-      throw err;
-    }
+  } catch (err) {
+    throw err;
+  }
 };
 
 module.exports = {
   createUser, // Create
+  getAllUserInfo, // Read all
   getUserInfo, // Read
   updateUser, // Update
   deleteUser, // Delete
