@@ -6,6 +6,7 @@ import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from
 const QuestionDescription = () => {
 
   const [question, setQuestion] = useState([]);
+  const tags = ['tag1', 'tag2', 'tag3'];
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -59,6 +60,12 @@ const QuestionDescription = () => {
     }
   };
 
+  const RenderTags = () => {
+    return question?.tags?.map((tag) => {
+      return <span class="badge bg-secondary me-1">{tag}</span>
+    });
+  }
+
   return (
     <div class="container">
       <div class="card text-center">
@@ -71,12 +78,15 @@ const QuestionDescription = () => {
             </div>
           </div>
         </div>
-        <div class="card-header d-flex justify-content-end">
-          <span class={`badge ${getComplexityColor(question?.complexity)}`}>{question?.complexity}</span>
-        </div>
         <div class="card-body">
           <h1 class="card-title">{question?.title}</h1>
           <p>{question?.description}</p>
+        </div>
+        <div class="card-footer d-flex">
+          {RenderTags()}
+          <div class="ms-auto">
+            <span class={`badge ${getComplexityColor(question?.complexity)}`}>{question?.complexity}</span>
+          </div>
         </div>
       </div>
     </div>
