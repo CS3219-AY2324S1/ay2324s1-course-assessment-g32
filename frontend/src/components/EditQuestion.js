@@ -31,7 +31,7 @@ const EditQuestion = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id, navigate]);
 
   const handleBackClick = () => {
     navigate(-1);

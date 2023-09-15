@@ -25,7 +25,7 @@ const QuestionDescription = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id, navigate]);
 
   const handleBackClick = () => {
     navigate('../');
