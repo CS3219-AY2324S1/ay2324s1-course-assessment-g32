@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
-import { editQuestion, getQuestionDetails } from '../../api/QuestionApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
-import TextEditor from '../TextEditor/TextEditor.js';
-import './EditQuestion.css';
+import { editQuestion, getQuestionDetails } from '../api/QuestionApi.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../utils/toast.js';
+import TextEditor from './TextEditor/TextEditor.js';
 
 const EditQuestion = () => {
 
@@ -70,7 +69,6 @@ const EditQuestion = () => {
   };
 
   const handleTagsChange = (tags) => {
-    console.log(tags);
     setTags(tags);
   };
 

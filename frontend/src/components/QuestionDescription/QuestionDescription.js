@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
-import { getQuestionDetails, deleteQuestion } from '../api/QuestionApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
+import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
+import './QuestionDescription.css';
 
 const QuestionDescription = () => {
 
@@ -87,7 +88,7 @@ const QuestionDescription = () => {
         </div>
         <div class="card-body">
           <h1 class="card-title">{titleValue}</h1>
-          <div dangerouslySetInnerHTML={{ __html: descriptionValue }}></div>
+          <div class="scrollable-div" dangerouslySetInnerHTML={{ __html: descriptionValue }}></div>
         </div>
         <div class="card-footer d-flex">
           <div class="d-flex flex-wrap gap-1">

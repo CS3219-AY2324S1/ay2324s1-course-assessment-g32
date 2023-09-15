@@ -21,7 +21,6 @@ const CreateQuestion = () => {
   };
 
   const handleSaveClick = async (e) => {
-
     e.preventDefault();
 
     try {
@@ -35,7 +34,6 @@ const CreateQuestion = () => {
         showServerErrorToast(error);
       }
     }
-
   };
 
   const handleTitleValueChange = (event) => {
@@ -62,12 +60,7 @@ const CreateQuestion = () => {
     }
     setTagInput(input);
   };
-
-  const handleRemoveTag = (tagIndex) => {
-    const updatedTags = newTags.filter((_, index) => index !== tagIndex);
-    setTags(updatedTags);
-  };
-
+  
   return (
     <div class="container">
       <h1>Add a Question</h1>
