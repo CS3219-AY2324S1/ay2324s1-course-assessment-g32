@@ -87,6 +87,35 @@ const getUserInfo = async (userId, email) => {
   }
 };
 
+/**
+ * Update user info of speficied userId.
+ * Only supports changing of username and password.
+ * 
+ * @param {int|string} userId ID of user in DB. Read-only.
+ * @param {string} username New Username
+ * @param {string} password New password
+ */
+const updateUser = async (userId, username, password) =>{
+  try {
+    if (!userId) {
+      throw { status: 400, message: 'Missing userId' };
+    }
+
+    if (!username && !password) {
+      throw { status: 400, message: 'WARN: Nothing given, not doing update' };
+    }
+
+    if (password) {
+      password = bcrypt.hashSync(password, 10);
+    }
+
+    return userDatabase.updateUser(userId, username, password);
+    
+  } catch (err) {
+    throw err;
+  }
+};
+
 const deleteUser = async (id) => {
   try {
     var _success = Boolean();
@@ -110,7 +139,7 @@ const deleteUser = async (id) => {
 module.exports = {
   createUser, // Create
   getUserInfo, // Read
-  // TODO: Update
+  updateUser, // Update
   deleteUser, // Delete
 
   loginUser,

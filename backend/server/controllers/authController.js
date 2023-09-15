@@ -41,6 +41,18 @@ const getUserInfo = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  try {
+    const { id, username, password } = req.body;
+    await userService.updateUser(id, username, password);
+    res.json({ message: "User info updated" });
+  } catch (err) {
+    res
+      .status(err?.status || 400)
+      .json({ error: err?.message || err });
+  }
+};
+
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.body;
@@ -59,5 +71,6 @@ module.exports = {
 
   // Still in testing
   getUserInfo,
+  updateUser,
   deleteUser, 
 };
