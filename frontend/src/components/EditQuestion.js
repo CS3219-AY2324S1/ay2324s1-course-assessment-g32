@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { editQuestion, getQuestionDetails } from '../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
 
 const EditQuestion = () => {
-
   const [newTitleValue, setTitleValue] = useState([]);
   const [newDescriptionValue, setDescriptionValue] = useState([]);
   const [newComplexityValue, setComplexityValue] = useState([]);
@@ -66,40 +65,44 @@ const EditQuestion = () => {
     setComplexityValue(event.target.value);
   };
 
-  return (
-    isLoading
-      ? <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-      : (
-        <div class="container">
-          <h1>Edit</h1>
-          <form class="create-question-form needs-validation" onSubmit={handleSaveClick} noValidate>
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="createQuestionTitle" placeholder="title" value={newTitleValue} onChange={handleTitleValueChange} required />
-              <label for="createQuestionTitle">Title</label>
-            </div>
-            <div class="form-floating mb-3">
-              <select class="form-select mb-3" id="createQuestitonComplexity" value={newComplexityValue} onChange={handleComplexityValueChange} required>
-                <option disabled value="">Select a complexity...</option>
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Hard">Hard</option>
-              </select>
-              <label for="createQuestitonComplexity">Complexity</label>
-            </div>
-            <div class="form-floating mb-3">
-              <textarea class="form-control" id="createQuestionDescription" placeholder="description" value={newDescriptionValue} onChange={handleDescriptionValueChange} required />
-              <label for="createQuestionTitle">Description</label>
-            </div>
-            <div class="d-flex justify-content-between">
-              <button type="button" class="btn btn-secondary" onClick={handleBackClick}>Back</button>
-              <button type="submit" class="btn btn-success">Save</button>
-            </div>
-          </form>
+  return isLoading ? (
+    <div className='spinner-border text-primary' role='status'>
+      <span className='visually-hidden'>Loading...</span>
+    </div>
+  ) : (
+    <div className='container'>
+      <h1>Edit</h1>
+      <form className='create-question-form needs-validation' onSubmit={handleSaveClick} noValidate>
+        <div className='form-floating mb-3'>
+          <input type='text' className='form-control' id='createQuestionTitle' placeholder='title' value={newTitleValue} onChange={handleTitleValueChange} required />
+          <label htmlFor='createQuestionTitle'>Title</label>
         </div>
-      )
-  )
+        <div className='form-floating mb-3'>
+          <select className='form-select mb-3' id='createQuestitonComplexity' value={newComplexityValue} onChange={handleComplexityValueChange} required>
+            <option disabled value=''>
+              Select a complexity...
+            </option>
+            <option value='Easy'>Easy</option>
+            <option value='Medium'>Medium</option>
+            <option value='Hard'>Hard</option>
+          </select>
+          <label htmlFor='createQuestitonComplexity'>Complexity</label>
+        </div>
+        <div className='form-floating mb-3'>
+          <textarea className='form-control' id='createQuestionDescription' placeholder='description' value={newDescriptionValue} onChange={handleDescriptionValueChange} required />
+          <label htmlFor='createQuestionTitle'>Description</label>
+        </div>
+        <div className='d-flex justify-content-between'>
+          <button type='button' className='btn btn-secondary' onClick={handleBackClick}>
+            Back
+          </button>
+          <button type='submit' className='btn btn-success'>
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default EditQuestion;

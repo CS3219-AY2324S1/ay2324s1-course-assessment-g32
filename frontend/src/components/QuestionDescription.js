@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getQuestionDetails, deleteQuestion } from '../api/QuestionApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
 
 const QuestionDescription = () => {
-
   const [question, setQuestion] = useState([]);
 
   const { id } = useParams();
@@ -60,27 +59,33 @@ const QuestionDescription = () => {
   };
 
   return (
-    <div class="container">
-      <div class="card text-center">
-        <div class="card-header">
-          <div class="d-flex justify-content-between">
-            <button type="button" class="btn btn-secondary" onClick={handleBackClick}>Back</button>
+    <div className='container'>
+      <div className='card text-center'>
+        <div className='card-header'>
+          <div className='d-flex justify-content-between'>
+            <button type='button' className='btn btn-secondary' onClick={handleBackClick}>
+              Back
+            </button>
             <div>
-              <button type="button" class="btn btn-primary me-2" onClick={handleEditClick}>Edit</button>
-              <button type="button" class="btn btn-danger" onClick={handleDeleteClick}>Delete</button>
+              <button type='button' className='btn btn-primary me-2' onClick={handleEditClick}>
+                Edit
+              </button>
+              <button type='button' className='btn btn-danger' onClick={handleDeleteClick}>
+                Delete
+              </button>
             </div>
           </div>
         </div>
-        <div class="card-header d-flex justify-content-end">
-          <span class={`badge ${getComplexityColor(question?.complexity)}`}>{question?.complexity}</span>
+        <div className='card-header d-flex justify-content-end'>
+          <span className={`badge ${getComplexityColor(question?.complexity)}`}>{question?.complexity}</span>
         </div>
-        <div class="card-body">
-          <h1 class="card-title">{question?.title}</h1>
+        <div className='card-body'>
+          <h1 className='card-title'>{question?.title}</h1>
           <p>{question?.description}</p>
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default QuestionDescription;
