@@ -1,11 +1,12 @@
 const Question = require('../models/question');
 
-const createQuestion = async (title, complexity, description) => {
+const createQuestion = async (title, complexity, description, tags) => {
   try {
     const question = new Question({
       title: title,
       complexity: complexity,
-      description: description
+      description: description,
+      tags: tags
     });
 
     // Save the question to the database
@@ -50,12 +51,13 @@ const findByTitle = async (title) => {
   }
 };
 
-const editQuestion = async (id, title, complexity, description) => {
+const editQuestion = async (id, title, complexity, description, tags) => {
   try {
     const fields = {
       title: title,
       complexity: complexity,
-      description: description
+      description: description,
+      tags: tags
     };
     return Question.updateOne({ _id: id }, { $set: fields });
   } catch (err) {

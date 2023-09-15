@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
-import { editQuestion, getQuestionDetails } from '../api/QuestionApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
+import TagsInput from 'react-tagsinput';
+import 'react-tagsinput/react-tagsinput.css';
+import { editQuestion, getQuestionDetails } from '../../api/QuestionApi.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
+import './EditQuestion.css';
 
 const EditQuestion = () => {
 
   const [newTitleValue, setTitleValue] = useState([]);
   const [newDescriptionValue, setDescriptionValue] = useState([]);
   const [newComplexityValue, setComplexityValue] = useState([]);
+  const [newTags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   const { id } = useParams();
@@ -20,6 +25,7 @@ const EditQuestion = () => {
         setTitleValue(question.title);
         setComplexityValue(question.complexity);
         setDescriptionValue(question.description);
+        setTags(question.tags);
         setIsLoading(false);
       } catch (error) {
         navigate('../');
@@ -42,7 +48,7 @@ const EditQuestion = () => {
     e.preventDefault();
 
     try {
-      await editQuestion(id, newTitleValue, newComplexityValue, newDescriptionValue);
+      await editQuestion(id, newTitleValue, newComplexityValue, newDescriptionValue, newTags);
       navigate(-1);
       showSuccessToast('Question Edited Successfully!');
     } catch (error) {
@@ -66,6 +72,19 @@ const EditQuestion = () => {
     setComplexityValue(event.target.value);
   };
 
+  const handleTagsChange = (tags) => {
+    console.log(tags);
+    setTags(tags);
+  };
+
+  const handleInputChange = (input) => {
+    if (input.length > 40) {
+      showFailureToast('Tag cannot be longer than 40 characters');
+      return;
+    }
+    setTagInput(input);
+  };
+
   return (
     isLoading
       ? <div class="spinner-border text-primary" role="status">
@@ -87,6 +106,16 @@ const EditQuestion = () => {
                 <option value="Hard">Hard</option>
               </select>
               <label for="createQuestitonComplexity">Complexity</label>
+            </div>
+            <div class="form-floating mb-3">
+              <TagsInput
+                value={newTags}
+                onChange={handleTagsChange}
+                inputValue={tagInput}
+                onChangeInput={handleInputChange}
+                addOnBlur={true}
+                addKeys={[9, 13, 188]} // Tab, Enter, Comma
+              />
             </div>
             <div class="form-floating mb-3">
               <textarea class="form-control" id="createQuestionDescription" placeholder="description" value={newDescriptionValue} onChange={handleDescriptionValueChange} required />

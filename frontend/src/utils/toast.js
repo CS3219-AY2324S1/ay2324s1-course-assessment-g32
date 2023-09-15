@@ -7,6 +7,12 @@ export const showSuccessToast = (message) => {
   });
 };
 
+export const showFailureToast = (message) => {
+  toast.error(message, {
+    position: toast.POSITION.BOTTOM_RIGHT
+  });
+}
+
 export const showValidationErrorToast = (error) => {
   toast.error('Validation Error: ' + error.response.data.error, {
     position: toast.POSITION.BOTTOM_RIGHT

@@ -1,12 +1,3 @@
-.create-question-form {
-    width: 80%;
-    margin: 0 auto;
-}
-
-#createQuestionDescription {
-    height: 200px;
-}
-
 .react-tagsinput--focused {
   border-color: #86b7fe;
   box-shadow: 0 0 2px 3px rgba(194,219,254,255);

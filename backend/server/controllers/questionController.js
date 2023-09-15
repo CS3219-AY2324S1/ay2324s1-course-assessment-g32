@@ -3,8 +3,8 @@ const questionService = require('../services/questionService');
 // Define a controller function for creating questions
 const create = async (req, res) => {
   try {
-    const { title, complexity, description } = req.body;
-    const question = await questionService.createQuestion(title, complexity, description);
+    const { title, complexity, description, tags } = req.body;
+    const question = await questionService.createQuestion(title, complexity, description, tags);
     res.json({ message: 'Question created successfully', question });
   } catch (err) {
     res
@@ -41,8 +41,8 @@ const getQuestionDetails = async (req, res) => {
 // Define a controller function for editing a question
 const edit = async (req, res) => {
   try {
-    const { id, title, complexity, description } = req.body;
-    const question = await questionService.editQuestion(id, title, complexity, description);
+    const { id, title, complexity, description, tags } = req.body;
+    const question = await questionService.editQuestion(id, title, complexity, description, tags);
     res.json({ message: 'Question edited successfully', question });
   } catch (err) {
     res

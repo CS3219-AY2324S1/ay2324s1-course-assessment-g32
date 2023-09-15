@@ -59,6 +59,12 @@ const QuestionDescription = () => {
     }
   };
 
+  const RenderTags = () => {
+    return question?.tags?.map((tag) => {
+      return <span class="badge bg-secondary">{tag}</span>
+    });
+  };
+
   return (
     <div class="container">
       <div class="card text-center">
@@ -71,12 +77,17 @@ const QuestionDescription = () => {
             </div>
           </div>
         </div>
-        <div class="card-header d-flex justify-content-end">
-          <span class={`badge ${getComplexityColor(question?.complexity)}`}>{question?.complexity}</span>
-        </div>
         <div class="card-body">
           <h1 class="card-title">{question?.title}</h1>
           <p>{question?.description}</p>
+        </div>
+        <div class="card-footer d-flex">
+          <div class="d-flex flex-wrap gap-1">
+            {RenderTags()}
+          </div>
+          <div class="ms-auto">
+            <span class={`badge ${getComplexityColor(question?.complexity)}`}>{question?.complexity}</span>
+          </div>
         </div>
       </div>
     </div>

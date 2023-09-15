@@ -16,6 +16,10 @@ const QuestionSchema = new Schema({
   description: {
     type: String,
     required: true
+  },
+  tags: {
+    type: [String],
+    required: false
   }
 });
 
