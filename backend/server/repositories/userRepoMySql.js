@@ -70,27 +70,25 @@ const getUserInfoByEmail = async (email) => {
 const getUserInfoById = async (userId) => {
   var _userInfo = {};
 
-  const selectStmt = `
-    SELECT id, username, email, created_at, updated_at 
-    FROM users WHERE id=?;`;
+  const selectStmt = `SELECT * FROM users WHERE id=?;`;
 
-  const query = conn.promise()
+  const query = conn
+    .promise()
     .query(selectStmt, [userId])
-    .then( ([rows, fields]) => {
+    .then(([rows, fields]) => {
       const userInfo = rows[0];
 
-      if (rows.length === 0)
-        throw "getUserInfo: No user with id " + userId;
+      if (rows.length === 0) throw "getUserInfo: No user with id " + userId;
 
       if (rows.length > 1)
         throw "getUserInfo: Only one user should be retrieved";
 
-      if (userInfo.id != userId)
-        throw "getUserInfo: Wrong user info retrieved";
+      if (userInfo.id != userId) throw "getUserInfo: Wrong user info retrieved";
 
       _userInfo["id"] = userId;
       _userInfo["username"] = userInfo.username;
       _userInfo["email"] = userInfo.email;
+      _userInfo["password"] = userInfo.password;
       _userInfo["created_at"] = userInfo.created_at;
       _userInfo["updated_at"] = userInfo.updated_at;
     })
