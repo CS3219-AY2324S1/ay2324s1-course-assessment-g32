@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
 import { getUser, updateUsername } from '../../api/UserApi.js';
 
@@ -7,6 +7,7 @@ const EditUser = ({ user = null }) => {
   const [newUsername, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
+  // Used when routing from UserList
   const { id } = useParams();
 
   const navigate = useNavigate();

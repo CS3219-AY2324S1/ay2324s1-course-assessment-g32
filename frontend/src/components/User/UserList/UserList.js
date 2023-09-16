@@ -51,8 +51,9 @@ const UserList = () => {
     }
   }, [tableData]); // Initialize whenever tableData changes
 
-  const handleEditClick = (id) => {
-    navigate('/user-management/edit/' + id);
+  const handleEditClick = (id, username) => {
+    // navigate('/user-management/edit/' + id);
+    navigate('/user-management/edit', { state: { id: id, username: username } });
   };
 
   const handleDeleteClick = (id) => {
@@ -78,7 +79,7 @@ const UserList = () => {
       <td>{parseDatetime(user.created_at)}</td>
       <td>{parseDatetime(user.updated_at)}</td>
       <td>
-        <Button variant='contained' onClick={() => handleEditClick(user.id)}>
+        <Button variant='contained' onClick={() => handleEditClick(user.id, user.username)}>
           Edit
         </Button>
         <Button variant='contained' color='error' onClick={() => handleDeleteClick(user.id)}>
