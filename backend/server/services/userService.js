@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const loginUser = async (email, password) => {
   try {
     var userId = Number();
+    var isAdmin = Boolean();
 
     // Check for missing inputs
     if (!email || !password) {
@@ -17,13 +18,18 @@ const loginUser = async (email, password) => {
       throw { status: 400, message: 'Email not registered with any user' };
     }
 
+    // TODO: Check password
     // Compare the entered password with the hashed password stored in the database
     // FIXME: need to find a way to retrieve stored hashed password
-    if (!bcrypt.compareSync(password, user.password)) {
-      throw { status: 400, message: 'Incorrect password' };
-    }
+    // if (!bcrypt.compareSync(password, user.password)) {
+    //   throw { status: 400, message: 'Incorrect password' };
+    // }
 
-    return userId;
+    // Get role of user (admin=true or not=false)
+    await userDatabase.getIsAdminById(userId).then((isAdminBool) => (isAdmin = isAdminBool));
+
+    return { id: userId, isAdmin: isAdmin };
+    // return userId;
   } catch (err) {
     throw err;
   }

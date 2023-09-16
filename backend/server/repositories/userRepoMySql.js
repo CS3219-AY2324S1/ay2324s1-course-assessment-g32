@@ -37,6 +37,27 @@ const findByEmail = async (email) => {
   return _userId;
 };
 
+const getIsAdminById = async (id) => {
+  var _isAdmin = Boolean();
+
+  const query = conn
+    .promise()
+    .query('SELECT isAdmin FROM users WHERE id=?;', [id])
+    .then(([rows, fields]) => {
+      if (rows.length) {
+        if (rows[0].isAdmin == 1) {
+          _isAdmin = true;
+        }
+      } else {
+        _isAdmin = false;
+      }
+    })
+    .catch(console.error);
+
+  await query;
+  return _isAdmin;
+};
+
 const createUser = async (email, password) => {
   var _userId = Number();
   var _password = String();
@@ -179,6 +200,7 @@ const getUsernameFromEmail = (email) => {
 
 module.exports = {
   findByEmail,
+  getIsAdminById,
   createUser,
   updateUser,
   deleteUser,
