@@ -18,9 +18,10 @@ const loginUser = async (email, password) => {
       throw { status: 400, message: 'Email not registered with any user' };
     }
 
+    const storedPassword = (await userDatabase.getUserInfoById(userId)).password;
+
     // Compare the entered password with the hashed password stored in the database
-    // FIXME: need to find a way to retrieve stored hashed password
-    if (!bcrypt.compareSync(password, user.password)) {
+    if (!bcrypt.compareSync(password, storedPassword)) {
       throw { status: 400, message: 'Incorrect password' };
     }
 
