@@ -1,17 +1,18 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Context } from '../Context';
 
 function Header() {
-  const { setIsUserLoggedIn } = useContext(Context);
   const navigate = useNavigate();
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   const handleSignOut = () => {
-    setIsUserLoggedIn(null);
+    // TODO: Update state (i.e. isAuthenticated, isAdmin, id) to initial state using a better way
+    localStorage.removeItem('user');
     navigate('/');
   };
 
@@ -24,7 +25,7 @@ function Header() {
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='me-auto'>
               <NavDropdown title='User Settings' id='basic-nav-dropdown'>
-                <NavDropdown.Item href='/user-management'>View and edit user</NavDropdown.Item>
+                {user && user.isAdmin ? <NavDropdown.Item href='/user-management'>All users management</NavDropdown.Item> : <NavDropdown.Item href='/user-profile'>Your profile</NavDropdown.Item>}
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={handleSignOut}>Sign out</NavDropdown.Item>
               </NavDropdown>

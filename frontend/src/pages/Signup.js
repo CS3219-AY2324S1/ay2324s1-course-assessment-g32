@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
-import axios from 'axios';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
+import { signup } from '../api/UserApi';
 
 function Signup() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
@@ -22,81 +23,65 @@ function Signup() {
   };
 
   const handleLoginPageChange = () => {
-    navigate("/login");
+    navigate('/login');
   };
 
-  const handleSignupSubmit = (e) => {
+  const handleSignupSubmit = async (e) => {
     e.preventDefault();
 
     const userData = {
       email: email,
       password: password,
-      confirmPassword: confirmPassword
+      confirmPassword: confirmPassword,
     };
 
-    axios.post("http://localhost:3000/auth/signup", userData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then((response) => {
-      console.log(response);
-      navigate("/login");
-    }).catch((error) => {
+    try {
+      await signup(userData);
+      navigate('/login');
+      showSuccessToast('User created successfully!');
+    } catch (error) {
       if (error.response.status === 400) {
         console.error('Validation Error:', error.response.data.error);
+        showValidationErrorToast(error);
       } else {
         console.error('Server Error:', error.message);
+        showServerErrorToast(error);
       }
-    });
+    }
   };
 
   return (
-    <div className="Auth-form-container">
-      <form className="Auth-form">
-        <div className="Auth-form-content">
-          <h3 className="Auth-form-title">Sign Up</h3>
-          <div className="text-center">
-            Already registered?{" "}
-            <span className="link-primary" onClick={handleLoginPageChange}>
+    <div className='Auth-form-container'>
+      <form className='Auth-form'>
+        <div className='Auth-form-content'>
+          <h3 className='Auth-form-title'>Sign Up</h3>
+          <div className='text-center'>
+            Already registered?{' '}
+            <span className='link-primary' onClick={handleLoginPageChange}>
               Sign In
             </span>
           </div>
-          <div className="form-group mt-3">
+          <div className='form-group mt-3'>
             <label>Email address</label>
-            <input
-              type="email"
-              className="form-control mt-1"
-              placeholder="Enter email"
-              onChange={handleEmailChange}
-            />
+            <input type='email' className='form-control mt-1' placeholder='Enter email' onChange={handleEmailChange} />
           </div>
-          <div className="form-group mt-3">
+          <div className='form-group mt-3'>
             <label>Password</label>
-            <input
-              type="password"
-              className="form-control mt-1"
-              placeholder="Enter password"
-              onChange={handlePasswordChange}
-            />
+            <input type='password' className='form-control mt-1' placeholder='Enter password' onChange={handlePasswordChange} />
           </div>
-          <div className="form-group mt-3">
+          <div className='form-group mt-3'>
             <label>Confirm Password</label>
-            <input
-              type="password"
-              className="form-control mt-1"
-              placeholder="Enter password"
-              onChange={handleConfirmPasswordChange}
-            />
+            <input type='password' className='form-control mt-1' placeholder='Enter password' onChange={handleConfirmPasswordChange} />
           </div>
-          <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary" onClick={handleSignupSubmit}>
+          <div className='d-grid gap-2 mt-3'>
+            <button type='submit' className='btn btn-primary' onClick={handleSignupSubmit}>
               Submit
             </button>
           </div>
         </div>
       </form>
     </div>
-  )
+  );
 }
 
 export default Signup;
