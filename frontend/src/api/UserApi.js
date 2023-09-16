@@ -51,21 +51,16 @@ export const updateUsername = async (id, newUsername) => {
   return res;
 };
 
-export const updatePassword = async (id, oldPassword, newPassword, confirmNewPassword) => {
-  // TODO: Check newPassword == confirmNewPassword
-  // TODO: Check oldPassword is correct
-  console.log(id);
-  console.log(newPassword);
-  const res = await axios.post(
-    'http://localhost:3000/user/update',
-    { id: id, password: newPassword },
+export const updatePassword = (id, currentPassword, newPassword, confirmPassword) => {
+  return axios.post(
+    'http://localhost:3000/user/change-password',
+    { id: id, currentPassword: currentPassword, newPassword: newPassword, confirmPassword: confirmPassword },
     {
       headers: {
         'Content-Type': 'application/json',
       },
     }
   );
-  return res;
 };
 
 export const deleteUser = (id) => {

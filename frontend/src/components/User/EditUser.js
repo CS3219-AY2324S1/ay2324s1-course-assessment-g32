@@ -1,54 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { updateUsername } from '../../api/UserApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
-import { getUser, updateUsername } from '../../api/UserApi.js';
 
 const EditUser = ({ user = null }) => {
+  const [id, setId] = useState(null);
   const [newUsername, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Used when routing from UserList
-  const { id } = useParams();
-
-  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userFetched = await getUser(id);
-        setUsername(userFetched.username);
-        setIsLoading(false);
-      } catch (error) {
-        navigate('../');
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      }
-    };
-
     if (user) {
+      // Used when routing from UserProfile
+      setId(user.id);
       setUsername(user.username);
-      setIsLoading(false);
     } else {
-      fetchData();
+      // Used when routing from UserManagement
+      setId(location.state.id);
+      setUsername(location.state.username);
     }
-  }, [id, navigate, user]);
+    setIsLoading(false);
+  }, [location.state, user]);
 
-  const handleBackClick = () => {
-    navigate(-1);
-  };
+  const navigate = useNavigate();
 
   const handleUpdateClick = async (e) => {
     e.preventDefault();
 
     try {
-      if (id) {
-        updateUsername(id, newUsername);
-      } else {
-        updateUsername(user.id, newUsername);
-      }
+      updateUsername(id, newUsername);
       navigate(-1);
       showSuccessToast('Username updated successfully!');
     } catch (error) {
@@ -70,16 +51,29 @@ const EditUser = ({ user = null }) => {
     </div>
   ) : (
     <div className='container'>
-      <h1>Edit User Information</h1>
+      <div class='row' style={{ marginTop: '10px' }}>
+        <div class='col'>
+          <nav aria-label='breadcrumb' class='bg-light rounded-3 p-3 mb-4'>
+            <ol class='breadcrumb mb-0'>
+              {!user ? (
+                <li class='breadcrumb-item'>
+                  <a href='/user-management'>User Management</a>
+                </li>
+              ) : null}
+              <li class='breadcrumb-item active' aria-current='page' style={{ fontWeight: 'bold' }}>
+                Edit User Information
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+
       <form className='edit-username needs-validation' onSubmit={handleUpdateClick} noValidate>
         <div className='form-floating mb-3'>
           <input type='text' className='form-control' id='editUsername' placeholder='username' value={newUsername} onChange={handleUsernameChange} required />
           <label htmlFor='editUsername'>Username</label>
         </div>
-        <div className='d-flex justify-content-between'>
-          <button type='button' className='btn btn-secondary' onClick={handleBackClick}>
-            Back
-          </button>
+        <div className='d-flex justify-content-end'>
           <button type='submit' className='btn btn-success'>
             Update
           </button>

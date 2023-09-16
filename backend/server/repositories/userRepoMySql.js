@@ -37,26 +37,27 @@ const findByEmail = async (email) => {
   return _userId;
 };
 
-const getIsAdminById = async (id) => {
-  var _isAdmin = Boolean();
+// TODO: Required for Assignment 3. Can be improved
+// const getIsAdminById = async (id) => {
+//   var _isAdmin = Boolean();
 
-  const query = conn
-    .promise()
-    .query('SELECT isAdmin FROM users WHERE id=?;', [id])
-    .then(([rows, fields]) => {
-      if (rows.length) {
-        if (rows[0].isAdmin == 1) {
-          _isAdmin = true;
-        }
-      } else {
-        _isAdmin = false;
-      }
-    })
-    .catch(console.error);
+//   const query = conn
+//     .promise()
+//     .query('SELECT isAdmin FROM users WHERE id=?;', [id])
+//     .then(([rows, fields]) => {
+//       if (rows.length) {
+//         if (rows[0].isAdmin == 1) {
+//           _isAdmin = true;
+//         }
+//       } else {
+//         _isAdmin = false;
+//       }
+//     })
+//     .catch(console.error);
 
-  await query;
-  return _isAdmin;
-};
+//   await query;
+//   return _isAdmin;
+// };
 
 const createUser = async (email, password) => {
   var _userId = Number();
@@ -110,9 +111,7 @@ const getAllUserInfo = async () => {
 const getUserInfoById = async (userId) => {
   var _userInfo = {};
 
-  const selectStmt = `
-    SELECT id, username, email, created_at, updated_at 
-    FROM users WHERE id=?;`;
+  const selectStmt = `SELECT * FROM users WHERE id=?;`;
 
   const query = conn
     .promise()
@@ -129,6 +128,7 @@ const getUserInfoById = async (userId) => {
       _userInfo['id'] = userId;
       _userInfo['username'] = userInfo.username;
       _userInfo['email'] = userInfo.email;
+      _userInfo['password'] = userInfo.password;
       _userInfo['created_at'] = userInfo.created_at;
       _userInfo['updated_at'] = userInfo.updated_at;
     })

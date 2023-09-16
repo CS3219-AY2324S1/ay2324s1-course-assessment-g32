@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import Landing from './pages/Landing/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Landing from './pages/Landing/Landing';
 import UserManagement from './pages/UserManagement/UserManagement';
 import UserProfile from './pages/UserProfile/UserProfile';
 import './App.css';

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Grid, Card, Box, Typography, Button } from '@mui/material';
-import { deleteUser } from '../../api/UserApi.js';
 import { showSuccessToast, showValidationErrorToast, showServerErrorToast } from '../../utils/toast.js';
+import { deleteUser } from '../../api/UserApi.js';
 
 export const ViewUserTopPane = ({ user }) => {
   const navigate = useNavigate();
@@ -18,7 +18,8 @@ export const ViewUserTopPane = ({ user }) => {
     try {
       deleteUser(user.id);
       showSuccessToast('User has been deleted successfully!');
-      // TODO: logout user (clear session) using a better method
+      // TODO: Implement better session management for assignment 3
+      localStorage.removeItem('user');
       navigate('/login');
     } catch (error) {
       navigate('../');

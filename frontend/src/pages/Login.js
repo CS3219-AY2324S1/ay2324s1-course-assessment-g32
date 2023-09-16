@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
 import { login } from '../api/UserApi';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -30,12 +30,11 @@ function Login() {
     };
 
     try {
-      // TODO: Update state using a better method
       const res = await login(userData);
       const data = {
-        isAdmin: res.data.user.isAdmin,
-        id: res.data.user.id,
+        id: res.data.id,
       };
+      // TODO: Implement better session management for assignment 3
       localStorage.setItem('user', JSON.stringify(data));
       navigate('/landing');
       showSuccessToast('User logged in successfully!');
@@ -74,9 +73,10 @@ function Login() {
               Submit
             </button>
           </div>
-          <p className='text-center mt-2'>
+          {/* To be used when we have forgot password feature */}
+          {/* <p className='text-center mt-2'>
             Forgot <a href='#'>password?</a>
-          </p>
+          </p> */}
         </div>
       </form>
     </div>

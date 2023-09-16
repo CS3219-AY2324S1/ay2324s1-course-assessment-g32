@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
 import { signup } from '../api/UserApi';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
 
 function Signup() {
   const [email, setEmail] = useState('');

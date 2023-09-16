@@ -9,7 +9,6 @@ function Header() {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    // TODO: Update state (i.e. isAuthenticated, isAdmin, id) to initial state using a better way
     localStorage.removeItem('user');
     navigate('/');
   };
