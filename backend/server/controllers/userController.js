@@ -44,10 +44,22 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  try {
+    const { id, currentPassword, newPassword, confirmPassword } = req.body;
+    await userService.changeUserPassword(id, currentPassword, newPassword, confirmPassword);
+    res.json({ message: 'SUCCESS: Password changed' });
+  } catch (err) {
+    res.status(err?.status || 400)
+       .json({ error: err?.message || err });
+  }
+};
+
 module.exports = {
   createUser,
   getUserInfo,
   updateUser,
-  deleteUser, 
+  deleteUser,
+  changePassword, 
 };
   

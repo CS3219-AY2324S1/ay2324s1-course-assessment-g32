@@ -1,6 +1,11 @@
 const userDatabase = require('../repositories/userRepoMySql');
 const bcrypt = require('bcrypt');
 
+const verifyPassword = async (userId, givenPassword) => {
+  const storedPassword = (await userDatabase.getUserInfoById(userId)).password;
+  return bcrypt.compare(givenPassword, storedPassword);
+};
+
 const loginUser = async (email, password) => {
   try {
     var userId = Number();
@@ -18,10 +23,8 @@ const loginUser = async (email, password) => {
       throw { status: 400, message: 'Email not registered with any user' };
     }
 
-    const storedPassword = (await userDatabase.getUserInfoById(userId)).password;
-
     // Compare the entered password with the hashed password stored in the database
-    if (!bcrypt.compareSync(password, storedPassword)) {
+    if (!(await verifyPassword(userId, password))) {
       throw { status: 400, message: 'Incorrect password' };
     }
 
@@ -136,6 +139,51 @@ const deleteUser = async (id) => {
     }
 };
 
+/**
+ * Changes password of user. Throws error if invalid parameters.
+ * @param {string | number} id User ID
+ * @param {string} curPassword Current Password
+ * @param {string} newPasssword New Password
+ * @param {string} confirmPassword Confirm New Password
+ */
+const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword) => {
+  try {
+    var _correctPassword = Boolean();
+
+    // Check for missing inputs
+    if (!id || !curPassword || !newPasssword || !confirmPassword) {
+      throw { status: 400, message: 'Missing inputs' };
+    }
+
+    const passwordTest = verifyPassword(id, curPassword)
+      .then(x => _correctPassword = x);
+
+    // Check that new password is not old password
+    if (curPassword === newPasssword) {
+      throw { status: 400, message: 'New password cannot be old password' };
+    }
+
+    // Confirm no typo in new password
+    if (newPasssword !== confirmPassword) {
+      throw { status: 400, message: 'Confirm password not matching' };
+    }
+
+    // Verify current password is correct
+    await passwordTest;
+    if (!_correctPassword) {
+      throw { status: 400, message: 'Incorrect password' };
+    }
+
+    // Change the password
+    if (!(await updateUser(id, null, newPasssword))) {
+      throw { status: 500, message: 'Failed to update password' };
+    }
+
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   createUser, // Create
   getUserInfo, // Read
@@ -143,4 +191,5 @@ module.exports = {
   deleteUser, // Delete
 
   loginUser,
+  changeUserPassword,
 };
