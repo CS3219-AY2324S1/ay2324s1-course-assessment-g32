@@ -41,12 +41,15 @@ const CreateQuestion = () => {
       navigate('../question/' + response.data.question._id);
       showSuccessToast('Question Created Successfully!');
     } catch (error) {
-      if (error.response.status === 400) {
-        showValidationErrorToast(error);
-      } else if (error.response.status === 409) {
-        showDuplicateQuestionErrorToast(error);
-      } else {
-        showServerErrorToast(error);
+      switch (error.response.status) {
+        case 400: 
+          showValidationErrorToast(error);
+          break;
+        case 409:
+          showDuplicateQuestionErrorToast(error);
+          break;
+        default:
+          showServerErrorToast(error);
       }
     }
   };

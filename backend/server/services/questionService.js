@@ -2,7 +2,6 @@ const questionRepository = require('../repositories/questionRepository');
 
 const createQuestion = async (title, complexity, description, tags) => {
   try {
-  
     const innerText = description.replace(/<[^>]+>|\s+/g, '');
     // Check for missing inputs
     if (!title || !complexity || !innerText) {
@@ -52,19 +51,19 @@ const editQuestion = async (id, title, complexity, description, tags) => {
       throw { status: 400, message: 'Question does not exist' };
     }
 
-    const innerText = description.replace(/<[^>]+>|\s+/g, '');
-
-    // Check for duplicate titles
+    // Check for duplicate titles - not current
+    const isCurrent = await questionRepository.findByIdAndTitle(id, title);
     const isDuplicateTitle = await questionRepository.findByTitle(title);
-    if (isDuplicateTitle) {
-      throw { status: 409, message: 'Question title already exist' };
+    if (!isCurrent && isDuplicateTitle) {
+      throw { status: 409, message: `Question title already exist` };
     }
 
     // Check for missing inputs
+    const innerText = description.replace(/<[^>]+>|\s+/g, '');
     if (!title || !complexity || !innerText) {
       throw { status: 400, message: 'Missing inputs' };
     }
-
+    
     const question = await questionRepository.editQuestion(id, title, complexity, description, tags);
     return question;
   } catch (err) {
