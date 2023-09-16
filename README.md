@@ -60,3 +60,4 @@ Or start them indvidually:
 |`/user/read`| Used to get user info | `id` or `email` |
 |`/user/update`| Used to update user info (username, password) | `id` <br> `username` or `password` |
 |`/user/delete`| Used to delete user | `id` |
+|`/user/change-password`|Used to change user password|`id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` |
