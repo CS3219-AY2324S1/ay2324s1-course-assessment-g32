@@ -23,8 +23,8 @@ function Header() {
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='me-auto'>
               <NavDropdown title='User Setting' id='basic-nav-dropdown'>
-                <NavDropdown.Item href='/user-management'>User management</NavDropdown.Item>
-                <NavDropdown.Item href='/user-profile'>Your profile</NavDropdown.Item>
+                <NavDropdown.Item href='/users-management'>Manage User Profiles</NavDropdown.Item>
+                <NavDropdown.Item href='/user-profile'>Manage Your Profile</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={handleSignOut}>Sign out</NavDropdown.Item>
               </NavDropdown>

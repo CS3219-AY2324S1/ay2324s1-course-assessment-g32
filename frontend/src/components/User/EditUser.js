@@ -16,7 +16,7 @@ const EditUser = ({ user = null }) => {
       setId(user.id);
       setUsername(user.username);
     } else {
-      // Used when routing from UserManagement
+      // Used when routing from ManageUserProfiles
       setId(location.state.id);
       setUsername(location.state.username);
     }
@@ -57,7 +57,7 @@ const EditUser = ({ user = null }) => {
             <ol className='breadcrumb mb-0'>
               {!user ? (
                 <li className='breadcrumb-item'>
-                  <a href='/user-management'>User Management</a>
+                  <a href='/users-management'>Manage User Profiles</a>
                 </li>
               ) : null}
               <li className='breadcrumb-item active' aria-current='page' style={{ fontWeight: 'bold' }}>

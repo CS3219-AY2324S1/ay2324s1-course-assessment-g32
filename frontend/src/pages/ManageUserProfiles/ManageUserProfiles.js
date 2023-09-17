@@ -4,11 +4,11 @@ import { ToastContainer } from 'react-toastify';
 import Header from '../../components/Header';
 import EditUser from '../../components/User/EditUser';
 import UserList from '../../components/User/UserList/UserList';
-import './UserManagement.css';
+import './ManageUserProfiles.css';
 
-function UserManagement() {
+function ManageUserProfiles() {
   return (
-    <div className='user-management'>
+    <div className='users-management'>
       <Header />
       <div className='body'>
         <Routes>
@@ -21,4 +21,4 @@ function UserManagement() {
   );
 }
 
-export default UserManagement;
+export default ManageUserProfiles;
