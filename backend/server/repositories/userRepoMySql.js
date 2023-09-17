@@ -199,7 +199,7 @@ const getUsernameFromEmail = (email) => {
 
 module.exports = {
   findByEmail,
-  getIsAdminById,
+  // getIsAdminById,
   createUser,
   updateUser,
   deleteUser,
