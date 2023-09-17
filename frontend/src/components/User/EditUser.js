@@ -27,18 +27,18 @@ const EditUser = ({ user = null }) => {
 
   const handleUpdateClick = async (e) => {
     e.preventDefault();
-
-    try {
-      updateUsername(id, newUsername);
-      navigate(-1);
-      showSuccessToast('Username updated successfully!');
-    } catch (error) {
-      if (error.response.status === 400) {
-        showValidationErrorToast(error);
-      } else {
-        showServerErrorToast(error);
-      }
-    }
+    updateUsername(id, newUsername)
+      .then(() => {
+        navigate(-1);
+        showSuccessToast('Username updated successfully!');
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
+      });
   };
 
   const handleUsernameChange = (event) => {
@@ -51,16 +51,16 @@ const EditUser = ({ user = null }) => {
     </div>
   ) : (
     <div className='container'>
-      <div class='row' style={{ marginTop: '10px' }}>
-        <div class='col'>
-          <nav aria-label='breadcrumb' class='bg-light rounded-3 p-3 mb-4'>
-            <ol class='breadcrumb mb-0'>
+      <div className='row' style={{ marginTop: '10px' }}>
+        <div className='col'>
+          <nav aria-label='breadcrumb' className='bg-light rounded-3 p-3 mb-4'>
+            <ol className='breadcrumb mb-0'>
               {!user ? (
-                <li class='breadcrumb-item'>
+                <li className='breadcrumb-item'>
                   <a href='/user-management'>User Management</a>
                 </li>
               ) : null}
-              <li class='breadcrumb-item active' aria-current='page' style={{ fontWeight: 'bold' }}>
+              <li className='breadcrumb-item active' aria-current='page' style={{ fontWeight: 'bold' }}>
                 Edit User Information
               </li>
             </ol>

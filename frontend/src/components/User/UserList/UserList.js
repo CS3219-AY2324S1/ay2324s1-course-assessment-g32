@@ -19,23 +19,30 @@ const UserList = () => {
 
   const navigate = useNavigate();
 
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const users = await getAllUsers();
-        setTableData(users);
-        setFetchUsers(false);
-      } catch (error) {
-        navigate('../');
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      }
+      getAllUsers()
+        .then((res) => {
+          setTableData(res);
+          setFetchUsers(false);
+        })
+        .catch((error) => {
+          navigate('../');
+          if (error.response.status === 400) {
+            showValidationErrorToast(error);
+          } else {
+            showServerErrorToast(error);
+          }
+        });
     };
-    fetchData();
-  }, [setTableData, navigate, fetchUsers]);
+    if (storedUser) {
+      fetchData();
+    } else {
+      navigate('/login');
+    }
+  }, [setTableData, navigate, fetchUsers, storedUser]);
 
   useEffect(() => {
     // Initialize DataTables after the data has been set and the table is rendered
@@ -56,18 +63,18 @@ const UserList = () => {
   };
 
   const handleDeleteClick = (id) => {
-    try {
-      deleteUser(id);
-      setFetchUsers(true);
-      showSuccessToast('User has been deleted successfully!');
-    } catch (error) {
-      navigate('../');
-      if (error.response.status === 400) {
-        showValidationErrorToast(error);
-      } else {
-        showServerErrorToast(error);
-      }
-    }
+    deleteUser(id)
+      .then(() => {
+        setFetchUsers(true);
+        showSuccessToast('User has been deleted successfully!');
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
+      });
   };
 
   const userList = tableData.map((user, index) => (
@@ -77,14 +84,18 @@ const UserList = () => {
       <td>{user.email}</td>
       <td>{parseDatetime(user.created_at)}</td>
       <td>{parseDatetime(user.updated_at)}</td>
-      <td>
-        <Button variant='contained' onClick={() => handleEditClick(user.id, user.username)}>
-          Edit
-        </Button>
-        <Button variant='contained' color='error' onClick={() => handleDeleteClick(user.id)}>
-          Deregister
-        </Button>
-      </td>
+      {user.id === storedUser.id ? (
+        <td />
+      ) : (
+        <td>
+          <Button variant='contained' onClick={() => handleEditClick(user.id, user.username)}>
+            Edit
+          </Button>
+          <Button variant='contained' color='error' onClick={() => handleDeleteClick(user.id)}>
+            Deregister
+          </Button>
+        </td>
+      )}
     </tr>
   ));
 

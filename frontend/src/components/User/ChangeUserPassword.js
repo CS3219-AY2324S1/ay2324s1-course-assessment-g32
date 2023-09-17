@@ -13,7 +13,7 @@ const ChangeUserPassword = ({ user }) => {
   const handleUpdateClick = async (e) => {
     e.preventDefault();
     updatePassword(user.id, currentPassword, newPassword, confirmPassword)
-      .then((response) => {
+      .then(() => {
         navigate(-1);
         showSuccessToast('Password updated successfully!');
       })
@@ -40,11 +40,11 @@ const ChangeUserPassword = ({ user }) => {
 
   return (
     <div className='container'>
-      <div class='row' style={{ marginTop: '10px' }}>
-        <div class='col'>
-          <nav aria-label='breadcrumb' class='bg-light rounded-3 p-3 mb-4'>
-            <ol class='breadcrumb mb-0'>
-              <li class='breadcrumb-item active' aria-current='page' style={{ fontWeight: 'bold' }}>
+      <div className='row' style={{ marginTop: '10px' }}>
+        <div className='col'>
+          <nav aria-label='breadcrumb' className='bg-light rounded-3 p-3 mb-4'>
+            <ol className='breadcrumb mb-0'>
+              <li className='breadcrumb-item active' aria-current='page' style={{ fontWeight: 'bold' }}>
                 Change Password
               </li>
             </ol>

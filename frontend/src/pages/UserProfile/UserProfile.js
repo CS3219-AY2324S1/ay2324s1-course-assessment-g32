@@ -17,18 +17,26 @@ function UserProfile() {
     // TODO: Implement better session management for assignment 3
     const storedUser = JSON.parse(localStorage.getItem('user'));
     const fetchData = async () => {
-      try {
-        setUser(await getUser(storedUser.id));
-      } catch (error) {
-        navigate('../');
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      }
+      getUser(storedUser.id)
+        .then((res) => {
+          setUser(res);
+        })
+        .catch((error) => {
+          navigate('../');
+          if (error.response.status === 400) {
+            showValidationErrorToast(error);
+          } else {
+            showServerErrorToast(error);
+          }
+        });
     };
-    fetchData();
+
+    if (storedUser) {
+      fetchData();
+    } else {
+      // No user session
+      navigate('/login');
+    }
   }, [navigate, setUser]);
 
   return (

@@ -15,20 +15,21 @@ export const ViewUserTopPane = ({ user }) => {
   };
 
   const handleDeregisterClick = () => {
-    try {
-      deleteUser(user.id);
-      showSuccessToast('User has been deleted successfully!');
-      // TODO: Implement better session management for assignment 3
-      localStorage.removeItem('user');
-      navigate('/login');
-    } catch (error) {
-      navigate('../');
-      if (error.response.status === 400) {
-        showValidationErrorToast(error);
-      } else {
-        showServerErrorToast(error);
-      }
-    }
+    deleteUser(user.id)
+      .then(() => {
+        showSuccessToast('User has been deleted successfully!');
+        // TODO: Implement better session management for assignment 3
+        localStorage.removeItem('user');
+        navigate('/login');
+      })
+      .catch((error) => {
+        navigate('../');
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
+      });
   };
 
   return (
