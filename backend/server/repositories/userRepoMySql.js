@@ -91,9 +91,7 @@ const getUserInfoByEmail = async (email) => {
 const getAllUserInfo = async () => {
   var _userInfo = [];
 
-  const selectStmt = `
-    SELECT *
-    FROM users;`;
+  const selectStmt = `SELECT * FROM users;`;
 
   const query = conn
     .promise()

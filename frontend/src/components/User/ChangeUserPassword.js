@@ -14,6 +14,7 @@ const ChangeUserPassword = ({ user }) => {
     e.preventDefault();
     updatePassword(user.id, currentPassword, newPassword, confirmPassword)
       .then(() => {
+        // Redirect user back to the previous page (user-profile) if password is updated successfully
         navigate(-1);
         showSuccessToast('Password updated successfully!');
       })

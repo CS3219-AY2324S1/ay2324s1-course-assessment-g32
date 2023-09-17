@@ -14,4 +14,4 @@ CREATE TABLE users (
 );
 
 -- use this to change normal user to admin manually
-UPDATE users SET isAdmin = TRUE WHERE id = <>;
+-- UPDATE users SET isAdmin = TRUE WHERE id = ?;
