@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import UserList from '../../components/User/UserList/UserList';
 import Header from '../../components/Header';
-import './UserManagement.css';
 import EditUser from '../../components/User/EditUser';
+import UserList from '../../components/User/UserList/UserList';
+import './UserManagement.css';
 
-function UserManagement() {
+function ManageUserProfiles() {
   return (
-    <div className='user-management'>
+    <div className='users-management'>
       <Header />
       <div className='body'>
         <Routes>
@@ -21,4 +21,4 @@ function UserManagement() {
   );
 }
 
-export default UserManagement;
+export default ManageUserProfiles;

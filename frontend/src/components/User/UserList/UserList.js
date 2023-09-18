@@ -59,8 +59,7 @@ const UserList = () => {
   }, [tableData]); // Initialize whenever tableData changes
 
   const handleEditClick = (id, username) => {
-    // navigate('/user-management/edit/' + id);
-    navigate('/user-management/edit', { state: { id: id, username: username } });
+    navigate('/users-management/edit', { state: { id: id, username: username } });
   };
 
   const handleDeleteClick = (id) => {
@@ -102,7 +101,7 @@ const UserList = () => {
 
   return (
     <div className='container'>
-      <h1>User Management</h1>
+      <h1>Manage User Profiles</h1>
       <table ref={dataTableRef} className='table table-hover table-striped'>
         <thead className='table-dark'>
           <tr>

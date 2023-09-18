@@ -1,44 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { updateUsername } from '../../api/UserApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
-import { getUser, updateUsername } from '../../api/UserApi.js';
 
 const EditUser = ({ user = null }) => {
+  const [id, setId] = useState(null);
   const [newUsername, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Used when routing from UserList
-  const { id } = useParams();
-
-  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userFetched = await getUser(id);
-        setUsername(userFetched.username);
-        setIsLoading(false);
-      } catch (error) {
-        navigate('../');
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      }
-    };
-
     if (user) {
+      // Used when routing from UserProfile
+      setId(user.id);
       setUsername(user.username);
-      setIsLoading(false);
     } else {
-      fetchData();
+      // Used when routing from ManageUserProfiles
+      setId(location.state.id);
+      setUsername(location.state.username);
     }
-  }, [id, navigate, user]);
+    setIsLoading(false);
+  }, [location.state, user]);
 
-  const handleBackClick = () => {
-    navigate(-1);
-  };
+  const navigate = useNavigate();
 
   const handleUpdateClick = async (e) => {
     e.preventDefault();
@@ -72,7 +57,7 @@ const EditUser = ({ user = null }) => {
             <ol className='breadcrumb mb-0'>
               {!user ? (
                 <li className='breadcrumb-item'>
-                  <a href='/user-management'>User Management</a>
+                  <a href='/users-management'>Manage User Profiles</a>
                 </li>
               ) : null}
               <li className='breadcrumb-item active' aria-current='page' style={{ fontWeight: 'bold' }}>
