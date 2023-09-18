@@ -22,7 +22,7 @@ function UserProfile() {
           setUser(res);
         })
         .catch((error) => {
-          navigate('../');
+          navigate(-1);
           if (error.response.status === 400) {
             showValidationErrorToast(error);
           } else {
