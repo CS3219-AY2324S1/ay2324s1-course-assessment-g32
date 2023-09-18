@@ -5,7 +5,7 @@ const missingInputsThrowsValidationError = (title, complexity, description) => {
   if (!title || !complexity || !innerText) {
     throw { status: 400, message: 'Missing inputs' };
   }
-}
+};
 
 const duplicateTitleThrowsDuplicateError = async (id, title) => {
   // id == null then simply check if title exist, else cross-check id
@@ -20,7 +20,7 @@ const duplicateTitleThrowsDuplicateError = async (id, title) => {
       throw { status: 409, message: `Question title already exist` };
     }
   }
-}
+};
 
 const createQuestion = async (title, complexity, description, tags) => {
   try {
