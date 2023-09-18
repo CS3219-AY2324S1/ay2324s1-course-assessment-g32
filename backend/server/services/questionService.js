@@ -1,24 +1,24 @@
 const questionRepository = require('../repositories/questionRepository');
 
-function missingInputsThrowsValidationError(title, complexity, description) {
+const missingInputsThrowsValidationError = (title, complexity, description) => {
   const innerText = description.replace(/<[^>]+>|\s+/g, '');
   if (!title || !complexity || !innerText) {
     throw { status: 400, message: 'Missing inputs' };
   }
 }
 
-async function duplicateTitleThrowsDuplicateError(id, title) {
+const duplicateTitleThrowsDuplicateError = async (id, title) => {
   // id == null then simply check if title exist, else cross-check id
   const isDuplicateTitle = await questionRepository.findByTitle(title);
-  if (isDuplicateTitle) {
-    if (id == null) {
-      throw { status: 409, message: `Question title already exist` };
-    } 
+  if (!isDuplicateTitle) return;
 
-    const isCurrent = await questionRepository.findByIdAndTitle(id, title);
-    if (!isCurrent) {
-      throw { status: 409, message: `Question title already exist` };
-    }
+  if (id == null) {
+    throw { status: 409, message: `Question title already exist` };
+  }
+
+  const isCurrent = await questionRepository.findByIdAndTitle(id, title);
+  if (!isCurrent) {
+    throw { status: 409, message: `Question title already exist` };
   }
 }
 
@@ -36,8 +36,7 @@ const createQuestion = async (title, complexity, description, tags) => {
 
 const getQuestions = async () => {
   try {
-    const questions = await questionRepository.getQuestions();
-    return questions;
+    return await questionRepository.getQuestions();
   } catch (err) {
     throw err;
   }
@@ -60,7 +59,7 @@ const editQuestion = async (id, title, complexity, description, tags) => {
   try {
     missingInputsThrowsValidationError(title, complexity, description);
     await duplicateTitleThrowsDuplicateError(id, title);
-    
+
     const question = await questionRepository.editQuestion(id, title, complexity, description, tags);
     return question;
   } catch (err) {

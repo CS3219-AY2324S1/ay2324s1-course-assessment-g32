@@ -37,7 +37,7 @@ const getQuestionDetails = async (id) => {
 
 const findById = async (id) => {
   try {
-    return await Question.find({ _id: id });
+    return await Question.findOne({ _id: id });
   } catch (err) {
     throw err;
   }
