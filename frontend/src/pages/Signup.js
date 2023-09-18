@@ -35,19 +35,18 @@ function Signup() {
       confirmPassword: confirmPassword,
     };
 
-    try {
-      await signup(userData);
-      navigate('/login');
-      showSuccessToast('User created successfully!');
-    } catch (error) {
-      if (error.response.status === 400) {
-        console.error('Validation Error:', error.response.data.error);
-        showValidationErrorToast(error);
-      } else {
-        console.error('Server Error:', error.message);
-        showServerErrorToast(error);
-      }
-    }
+    signup(userData)
+      .then(() => {
+        navigate('/login');
+        showSuccessToast('User created successfully!');
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
+      });
   };
 
   return (

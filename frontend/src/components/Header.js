@@ -9,7 +9,7 @@ function Header() {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    // TODO: Update state (i.e. isAuthenticated, isAdmin, id) to initial state using a better way
+    // TODO: Implement better session management for assignment 3
     localStorage.removeItem('user');
     navigate('/');
   };

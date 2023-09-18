@@ -42,22 +42,18 @@ const EditUser = ({ user = null }) => {
 
   const handleUpdateClick = async (e) => {
     e.preventDefault();
-
-    try {
-      if (id) {
-        updateUsername(id, newUsername);
-      } else {
-        updateUsername(user.id, newUsername);
-      }
-      navigate(-1);
-      showSuccessToast('Username updated successfully!');
-    } catch (error) {
-      if (error.response.status === 400) {
-        showValidationErrorToast(error);
-      } else {
-        showServerErrorToast(error);
-      }
-    }
+    updateUsername(id, newUsername)
+      .then(() => {
+        navigate(-1);
+        showSuccessToast('Username updated successfully!');
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
+      });
   };
 
   const handleUsernameChange = (event) => {
@@ -70,7 +66,23 @@ const EditUser = ({ user = null }) => {
     </div>
   ) : (
     <div className='container'>
-      <h1>Edit User Information</h1>
+      <div className='row' style={{ marginTop: '10px' }}>
+        <div className='col'>
+          <nav aria-label='breadcrumb' className='bg-light rounded-3 p-3 mb-4'>
+            <ol className='breadcrumb mb-0'>
+              {!user ? (
+                <li className='breadcrumb-item'>
+                  <a href='/user-management'>User Management</a>
+                </li>
+              ) : null}
+              <li className='breadcrumb-item active' aria-current='page' style={{ fontWeight: 'bold' }}>
+                Edit User Information
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+
       <form className='edit-username needs-validation' onSubmit={handleUpdateClick} noValidate>
         <div className='form-floating mb-3'>
           <input type='text' className='form-control' id='editUsername' placeholder='username' value={newUsername} onChange={handleUsernameChange} required />

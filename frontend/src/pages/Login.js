@@ -29,25 +29,23 @@ function Login() {
       password: password,
     };
 
-    try {
-      // TODO: Update state using a better method
-      const res = await login(userData);
-      const data = {
-        isAdmin: res.data.user.isAdmin,
-        id: res.data.user.id,
-      };
-      localStorage.setItem('user', JSON.stringify(data));
-      navigate('/landing');
-      showSuccessToast('User logged in successfully!');
-    } catch (error) {
-      if (error.response.status === 400) {
-        console.error('Validation Error:', error.response.data.error);
-        showValidationErrorToast(error);
-      } else {
-        console.error('Server Error:', error.message);
-        showServerErrorToast(error);
-      }
-    }
+    login(userData)
+      .then((res) => {
+        const data = {
+          id: res.data.id,
+        };
+        // TODO: Implement better session management for assignment 3
+        localStorage.setItem('user', JSON.stringify(data));
+        navigate('/landing');
+        showSuccessToast('User logged in successfully!');
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
+      });
   };
 
   return (
