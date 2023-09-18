@@ -59,6 +59,7 @@ const loginUser = async (email, password) => {
       .then(userId => { 
         noSuchUser = userId == null; 
       });
+    await existingUserCheck;
     if (noSuchUser) {
       throw { status: 400, message: 'User not found' };
     }
@@ -75,7 +76,24 @@ const loginUser = async (email, password) => {
   }
 };
 
+const getUserInfo = async (userId, email) => {
+  try {
+    if (!userId && !email) {
+      throw { status: 400, message: 'Need at least id or email' };
+    }
+
+    if (userId != null)
+         return userDatabase.getUserInfoById(userId);
+    else return userDatabase.getUserInfoByEmail(email);
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   createUser,
-  loginUser
+  loginUser,
+
+  // still in testing
+  getUserInfo,
 };

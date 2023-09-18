@@ -14,6 +14,7 @@ const signup = async (req, res) => {
   }
 };
 
+// TODO: test code
 // Define a controller function for handling login requests
 const login = async (req, res) => {
   try {
@@ -29,7 +30,22 @@ const login = async (req, res) => {
   }
 };
 
+const getUserInfo = async (req, res) => {
+  try {
+    const { id, email } = req.body;
+    const info = await userService.getUserInfo(id, email);
+    res.json({ info });
+  } catch (err) {
+    res
+      .status(err?.status || 400)
+      .json({ error: err?.message || err });
+  }
+};
+
 module.exports = {
   signup,
   login,
+
+  // Still in testing
+  getUserInfo,
 };
