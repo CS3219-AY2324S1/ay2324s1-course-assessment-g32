@@ -7,9 +7,15 @@ const authRoutes = require('./server/routes/auth');
 const questionRoutes = require('./server/routes/question');
 require('dotenv').config();
 
-const app = express();
+// Retrieve environment variables
 const PORT = process.env.PORT || 3000;
 const MONGOCLIENT = process.env.ATLAS_URI || '';
+const mysqlHost = process.env.MY_SQL_HOST || "localhost";
+const mysqlUser = process.env.MY_SQL_USER || "root";
+const mysqlPassword = process.env.MY_SQL_PWD || "";
+const mysqlDbName = process.env.MY_SQL_DB_NAME || "";
+
+console.log("Starting server ...");
 
 // start the Express (web) server
 app.use(cors());
@@ -38,12 +44,17 @@ mongoDb.on('error', (error) => {
 const mysqlDb = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'password', // to update to your own password
-  database: 'assignmentdb', // to match the database name
+  password: mysqlPassword,
+  database: mysqlDbName,
 });
 mysqlDb.connect((error) => {
-  if (error) {
-    console.error('MySQL database connection error:', error);
-  }
-  console.log('Connected to the MySQL database');
+	if (error)
+		console.error("MySQL database connection error:", error);
+	else
+		console.log("Connected to the MySQL database");
+});
+
+// start the Express (web) server
+app.listen(PORT, () => {
+	console.log(`Server is running on port: ${PORT}`);
 });
