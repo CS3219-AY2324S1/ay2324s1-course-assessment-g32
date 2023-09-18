@@ -1,13 +1,31 @@
 const questionRepository = require('../repositories/questionRepository');
 
+function missingInputsThrowsValidationError(title, complexity, description) {
+  const innerText = description.replace(/<[^>]+>|\s+/g, '');
+  if (!title || !complexity || !innerText) {
+    throw { status: 400, message: 'Missing inputs' };
+  }
+}
+
+async function duplicateTitleThrowsDuplicateError(id, title) {
+  // id == null then simply check if title exist, else cross-check id
+  const isDuplicateTitle = await questionRepository.findByTitle(title);
+  if (isDuplicateTitle) {
+    if (id == null) {
+      throw { status: 409, message: `Question title already exist` };
+    } 
+
+    const isCurrent = await questionRepository.findByIdAndTitle(id, title);
+    if (!isCurrent) {
+      throw { status: 409, message: `Question title already exist` };
+    }
+  }
+}
+
 const createQuestion = async (title, complexity, description, tags) => {
   try {
-  
-    const innerText = description.replace(/<[^>]+>|\s+/g, '');
-    // Check for missing inputs
-    if (!title || !complexity || !innerText) {
-      throw { status: 400, message: 'Missing inputs' };
-    }
+    missingInputsThrowsValidationError(title, complexity, description);
+    await duplicateTitleThrowsDuplicateError(null, title);
 
     const question = await questionRepository.createQuestion(title, complexity, description, tags);
     return question;
@@ -40,23 +58,13 @@ const getQuestionDetails = async (id) => {
 
 const editQuestion = async (id, title, complexity, description, tags) => {
   try {
-    // Check if id does not exist in database
-    const existingQuestion = await questionRepository.findById(id);
-    if (!existingQuestion) {
-      throw { status: 400, message: 'Question does not exist' };
-    }
-
-    const innerText = description.replace(/<[^>]+>|\s+/g, '');
-
-    // Check for missing inputs
-    if (!title || !complexity || !innerText) {
-      throw { status: 400, message: 'Missing inputs' };
-    }
-
+    missingInputsThrowsValidationError(title, complexity, description);
+    await duplicateTitleThrowsDuplicateError(id, title);
+    
     const question = await questionRepository.editQuestion(id, title, complexity, description, tags);
     return question;
   } catch (err) {
-    throw { status: 400, message: err.message };
+    throw err;
   }
 };
 

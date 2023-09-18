@@ -24,3 +24,9 @@ export const showServerErrorToast = (error) => {
     position: toast.POSITION.BOTTOM_RIGHT
   });
 };
+
+export const showDuplicateQuestionErrorToast = (error) => {
+  toast.error('Duplicate Question Error: ' + error.response.data.error, {
+    position: toast.POSITION.BOTTOM_RIGHT
+  });
+};

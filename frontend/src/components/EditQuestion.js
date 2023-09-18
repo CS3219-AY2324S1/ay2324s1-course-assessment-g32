@@ -4,7 +4,7 @@ import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import { editQuestion, getQuestionDetails } from '../api/QuestionApi.js';
 import { EditWindow } from './ConfirmationWindow/ConfirmationWindows.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../utils/toast.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast, showDuplicateQuestionErrorToast } from '../utils/toast.js';
 import TextEditor from './TextEditor/TextEditor.js';
 import '../css/Tags.css';
 
@@ -64,10 +64,15 @@ const EditQuestion = () => {
       navigate(-1);
       showSuccessToast('Question Edited Successfully!');
     } catch (error) {
-      if (error.response.status === 400) {
-        showValidationErrorToast(error);
-      } else {
-        showServerErrorToast(error);
+      switch (error.response.status) {
+        case 400: 
+          showValidationErrorToast(error);
+          break;
+        case 409:
+          showDuplicateQuestionErrorToast(error);
+          break;
+        default:
+          showServerErrorToast(error);
       }
     }
   };
