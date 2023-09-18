@@ -3,8 +3,8 @@ const userService = require('../services/userService');
 // Define a controller function for handling signup requests
 const signup = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await userService.createUser(email, password);
+    const { email, password, confirmPassword } = req.body;
+    const user = await userService.createUser(email, password, confirmPassword);
     res.json({ message: 'User registered successfully', user });
   } catch (err) {
     res
