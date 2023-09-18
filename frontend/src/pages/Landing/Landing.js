@@ -7,9 +7,9 @@ import EditQuestion from '../components/EditQuestion';
 import CreateQuestion from '../components/CreateQuestion/CreateQuestion';
 import './LandingPage.css';
 
-function LandingPage() {
+function Landing() {
   return (
-    <div className="landing-page">
+    <div className="landing">
       <Routes>
         <Route path="/" element={<QuestionList />} />
         <Route path="/question/:id" element={<QuestionDescription />} />
@@ -21,4 +21,4 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
+export default Landing;
