@@ -19,6 +19,7 @@ export const showValidationErrorToast = (error) => {
   });
 };
 
+
 export const showServerErrorToast = (error) => {
   toast.error('Server Error: ' + error.message, {
     position: toast.POSITION.BOTTOM_RIGHT

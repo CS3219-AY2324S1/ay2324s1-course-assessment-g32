@@ -9,14 +9,17 @@ import './LandingPage.css';
 
 function Landing() {
   return (
-    <div className="landing">
-      <Routes>
-        <Route path="/" element={<QuestionList />} />
-        <Route path="/question/:id" element={<QuestionDescription />} />
-        <Route path="/edit/:id" element={<EditQuestion />} />
-        <Route path="/new" element={<CreateQuestion />} />
-      </Routes>
-      <ToastContainer />
+    <div className='landing'>
+      <Header />
+      <div className='body'>
+        <Routes>
+          <Route path='/' element={<QuestionList />} />
+          <Route path='/question/:id' element={<QuestionDescription />} />
+          <Route path='/edit/:id' element={<EditQuestion />} />
+          <Route path='/new' element={<CreateQuestion />} />
+        </Routes>
+        <ToastContainer />
+      </div>
     </div>
   );
 }
