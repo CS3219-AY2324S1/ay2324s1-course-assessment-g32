@@ -110,9 +110,7 @@ const getAllUserInfo = async () => {
 const getUserInfoById = async (userId) => {
   var _userInfo = {};
 
-  const selectStmt = `
-    SELECT id, username, email, created_at, updated_at 
-    FROM users WHERE id=?;`;
+  const selectStmt = `SELECT * FROM users WHERE id=?;`;
 
   const query = conn
     .promise()
@@ -129,6 +127,7 @@ const getUserInfoById = async (userId) => {
       _userInfo['id'] = userId;
       _userInfo['username'] = userInfo.username;
       _userInfo['email'] = userInfo.email;
+      _userInfo['password'] = userInfo.password;
       _userInfo['created_at'] = userInfo.created_at;
       _userInfo['updated_at'] = userInfo.updated_at;
     })
