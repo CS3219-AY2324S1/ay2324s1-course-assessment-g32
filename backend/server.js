@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -6,17 +5,8 @@ const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const authRoutes = require('./server/routes/auth');
 const questionRoutes = require('./server/routes/question');
-require('dotenv').config();
-=======
-const cors = require("cors");
-const express = require("express");
-const mongoose = require("mongoose");
-const mysql = require("mysql2");
-const bodyParser = require("body-parser");
-const authRoutes = require("./server/routes/auth");
 const testRoutes = require("./server/routes/test");
-require("dotenv").config();
->>>>>>> 1cda386 (Implement getUserInfo)
+require('dotenv').config();
 
 // Retrieve environment variables
 const PORT = process.env.PORT || 3000;
@@ -35,6 +25,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/auth', authRoutes);
 app.use('/question', questionRoutes);
+app.use("/test", testRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });
