@@ -39,11 +39,11 @@ const QuestionList = () => {
 
   const navigate = useNavigate();
   const handleRowClick = (id) => {
-    navigate('/question/' + id);
+    navigate('/landing/question/' + id);
   };
 
   const handleNewQuestionClick = () => {
-    navigate('/new');
+    navigate('/landing/new');
   };
 
   const getComplexityColor = (complexity) => {

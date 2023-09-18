@@ -73,10 +73,7 @@ const EditUser = ({ user = null }) => {
           <input type='text' className='form-control' id='editUsername' placeholder='username' value={newUsername} onChange={handleUsernameChange} required />
           <label htmlFor='editUsername'>Username</label>
         </div>
-        <div className='d-flex justify-content-between'>
-          <button type='button' className='btn btn-secondary' onClick={handleBackClick}>
-            Back
-          </button>
+        <div className='d-flex justify-content-end'>
           <button type='submit' className='btn btn-success'>
             Update
           </button>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
 import { login } from '../api/UserApi';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -72,9 +72,10 @@ function Login() {
               Submit
             </button>
           </div>
-          <p className='text-center mt-2'>
+          {/* To be used when we have forgot password feature */}
+          {/* <p className='text-center mt-2'>
             Forgot <a href='#'>password?</a>
-          </p>
+          </p> */}
         </div>
       </form>
     </div>

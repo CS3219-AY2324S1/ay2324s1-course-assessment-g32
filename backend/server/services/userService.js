@@ -9,7 +9,7 @@ const verifyPassword = async (userId, givenPassword) => {
 const loginUser = async (email, password) => {
   try {
     var userId = Number();
-    var isAdmin = Boolean();
+    // var isAdmin = Boolean();
 
     // Check for missing inputs
     if (!email || !password) {
@@ -28,11 +28,10 @@ const loginUser = async (email, password) => {
       throw { status: 400, message: 'Incorrect password' };
     }
 
-    // Get role of user (admin=true or not=false)
-    await userDatabase.getIsAdminById(userId).then((isAdminBool) => (isAdmin = isAdminBool));
+    // TODO: Get role of user (admin=true or not=false). Required for Assignment 3
+    // await userDatabase.getIsAdminById(userId).then((isAdminBool) => (isAdmin = isAdminBool));
 
-    return { id: userId, isAdmin: isAdmin };
-    // return userId;
+    return userId;
   } catch (err) {
     throw err;
   }
@@ -197,7 +196,6 @@ module.exports = {
   getUserInfo, // Read
   updateUser, // Update
   deleteUser, // Delete
-
   loginUser,
   changeUserPassword,
 };
