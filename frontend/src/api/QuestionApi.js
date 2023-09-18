@@ -2,6 +2,12 @@ import axios from 'axios';
 
 const rootUrl = 'http://localhost:3000/question';
 
+const config = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
+
 export const createQuestion = (title, complexity, description, tags) => {
   const questionData = {
     title: title,
@@ -9,11 +15,7 @@ export const createQuestion = (title, complexity, description, tags) => {
     description: description,
     tags: tags
   };
-  return axios.post(rootUrl + "/create", questionData, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  return axios.post(rootUrl + "/create", questionData, config);
 };
 
 export const getQuestions = async () => {
@@ -38,11 +40,7 @@ export const editQuestion = (id, title, complexity, description, tags) => {
     description: description,
     tags: tags
   };
-  return axios.post(rootUrl + '/edit', questionData, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
+  return axios.post(rootUrl + '/edit', questionData, config);
 };
 
 export const deleteQuestion = (id) => {

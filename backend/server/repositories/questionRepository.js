@@ -37,7 +37,7 @@ const getQuestionDetails = async (id) => {
 
 const findById = async (id) => {
   try {
-    return await Question.find({ _id: id });
+    return await Question.findOne({ _id: id });
   } catch (err) {
     throw err;
   }
@@ -46,14 +46,6 @@ const findById = async (id) => {
 const findByTitle = async (title) => {
   try {
     return await Question.findOne({ title: title });
-  } catch (err) {
-    throw err;
-  }
-};
-
-const findByIdAndTitle = async (id, title) => {
-  try {
-    return await Question.findOne({ $and: [{_id: id, title: title }]});
   } catch (err) {
     throw err;
   }
@@ -87,7 +79,6 @@ module.exports = {
   getQuestionDetails,
   findById,
   findByTitle,
-  findByIdAndTitle,
   editQuestion,
   deleteQuestion
 };
