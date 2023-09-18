@@ -29,48 +29,7 @@ const login = async (req, res) => {
   }
 };
 
-const getUserInfo = async (req, res) => {
-  try {
-    const { id, email } = req.body;
-    const info = await userService.getUserInfo(id, email);
-    res.json({ info });
-  } catch (err) {
-    res
-      .status(err?.status || 400)
-      .json({ error: err?.message || err });
-  }
-};
-
-const updateUser = async (req, res) => {
-  try {
-    const { id, username, password } = req.body;
-    await userService.updateUser(id, username, password);
-    res.json({ message: "User info updated" });
-  } catch (err) {
-    res
-      .status(err?.status || 400)
-      .json({ error: err?.message || err });
-  }
-};
-
-const deleteUser = async (req, res) => {
-  try {
-    const { id } = req.body;
-    await userService.deleteUser(id);
-    res.json({ message: 'User deleted' });
-  } catch (err) {
-    res
-      .status(err?.status || 400)
-      .json({ error: err?.message || err });
-  }
-};
-
 module.exports = {
-  signup,
   login,
-
-  // Still in testing
-  getUserInfo,
-  updateUser,
-  deleteUser, 
+  signup, 
 };

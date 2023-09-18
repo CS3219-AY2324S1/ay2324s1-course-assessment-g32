@@ -4,32 +4,30 @@ const mongoose = require('mongoose');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const authRoutes = require('./server/routes/auth');
+const userRoutes = require('./server/routes/user');
 const questionRoutes = require('./server/routes/question');
-const testRoutes = require("./server/routes/test");
 require('dotenv').config();
 
 // Retrieve environment variables
 const PORT = process.env.SERVER_PORT || 3000;
-const MONGOCLIENT = process.env.ATLAS_URI || "";
-const mysqlHost = process.env.MY_SQL_HOST || "localhost";
-const mysqlUser = process.env.MY_SQL_USER || "root";
-const mysqlPassword = process.env.MY_SQL_PWD || "";
-const mysqlDbName = process.env.MY_SQL_DB_NAME || "";
+const MONGOCLIENT = process.env.ATLAS_URI || '';
+const mysqlHost = process.env.MY_SQL_HOST || 'localhost';
+const mysqlUser = process.env.MY_SQL_USER || 'root';
+const mysqlPassword = process.env.MY_SQL_PWD || '';
+const mysqlDbName = process.env.MY_SQL_DB_NAME || '';
 
-console.log("Starting server ...");
-
+console.log('Starting server ...');
 
 // start the Express (web) server
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 app.use('/question', questionRoutes);
-app.use("/test", testRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });
-
 
 // MongoDB
 mongoose.connect(MONGOCLIENT, {
@@ -45,7 +43,6 @@ mongoDb.on('error', (error) => {
   console.error('MongoDB database connection error:', error);
 });
 
-
 // MySQL
 const mysqlDb = mysql.createConnection({
   host: mysqlHost,
@@ -54,8 +51,8 @@ const mysqlDb = mysql.createConnection({
   database: mysqlDbName,
 });
 mysqlDb.connect((error) => {
-	if (error)
-		console.error("MySQL database connection error:", error);
-	else
-		console.log("SUCCESS: Connected to the MySQL database");
+  if (error) 
+    console.error('MySQL database connection error:', error);
+  else 
+    console.log('SUCCESS: Connected to the MySQL database');
 });
