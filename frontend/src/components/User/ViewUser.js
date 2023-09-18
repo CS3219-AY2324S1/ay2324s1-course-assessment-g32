@@ -23,7 +23,7 @@ export const ViewUserTopPane = ({ user }) => {
         navigate('/login');
       })
       .catch((error) => {
-        navigate('../');
+        navigate(-1);
         if (error.response.status === 400) {
           showValidationErrorToast(error);
         } else {
