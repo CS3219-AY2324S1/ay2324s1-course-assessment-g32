@@ -12,12 +12,8 @@ const duplicateTitleThrowsDuplicateError = async (id, title) => {
   const isDuplicateTitle = await questionRepository.findByTitle(title);
   if (!isDuplicateTitle) return;
 
-  if (id == null) {
-    throw { status: 409, message: `Question title already exist` };
-  }
-
-  const isCurrent = await questionRepository.findByIdAndTitle(id, title);
-  if (!isCurrent) {
+  // Duplicate found, check if it is the same question
+  if (!isDuplicateTitle._id.equals(id)) {
     throw { status: 409, message: `Question title already exist` };
   }
 }
@@ -51,7 +47,7 @@ const getQuestionDetails = async (id) => {
 
     return question;
   } catch (err) {
-    throw { status: 400, message: 'Question does not exist' };
+    throw err;
   }
 };
 
