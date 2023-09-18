@@ -1,36 +1,45 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import { Box } from '@mui/material'
-import Button from '@mui/material/Button';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './QuestionDescription.css'
+import DOMPurify from 'dompurify';
+import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
+import { DeletionWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
+import './QuestionDescription.css';
+import '../../css/Tags.css';
 
 const QuestionDescription = () => {
 
-  const [question, setQuestion] = useState([]);
+  const [titleValue, setTitleValue] = useState('');
+  const [complexityValue, setComplexityValue] = useState('');
+  const [tagsValue, setTagsValue] = useState([]);
+  const [descriptionValue, setDescriptionValue] = useState('');
+  const [isDeletionWindowOpen, setDeletionWindowOpen] = useState(false);
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const cookieData = Cookies.get('questions');
-
-    if (cookieData) {
+    const fetchData = async () => {
       try {
-        const parsedData = JSON.parse(cookieData);
-        setQuestion(parsedData.filter((question) => question.id === id)[0]);
-        console.log(parsedData.filter((question) => question.id === id));
+        const question = await getQuestionDetails(id);
+        setTitleValue(question.title);
+        setComplexityValue(question.complexity);
+        setTagsValue(question.tags);
+        const sanitizedDescription = DOMPurify.sanitize(question.description);
+        setDescriptionValue(sanitizedDescription);
       } catch (error) {
-        console.error('Error parsing cookie data:', error);
+        navigate('../');
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
       }
-    }
-  }, []);
+    };
 
-  const navigate = useNavigate();
+    fetchData();
+  }, [id, navigate]);
+
   const handleBackClick = () => {
     navigate('../');
   };
@@ -40,44 +49,75 @@ const QuestionDescription = () => {
   };
 
   const handleDeleteClick = () => {
-    const cookieData = Cookies.get('questions');
-    const parsedData = JSON.parse(cookieData);
-    const indexToDelete = parsedData.findIndex(item => item.id === id);
-    if (indexToDelete !== -1) {
-      parsedData.splice(indexToDelete, 1);
+    setDeletionWindowOpen(true);
+  };
+
+  const handleConfirmDeletion = async () => {
+    setDeletionWindowOpen(false);
+    try {
+      await deleteQuestion(id);
+      showSuccessToast('Successfully Deleted!');
+      navigate('../');
+    } catch (error) {
+      showServerErrorToast(error);
     }
-    Cookies.set('questions', JSON.stringify(parsedData));
-    toast.success('Successfully Deleted!', {
-      position: toast.POSITION.BOTTOM_RIGHT
+  };
+
+  const handleDeletionWindowClose = () => {
+    setDeletionWindowOpen(false);
+  };
+
+  const getComplexityColor = (complexity) => {
+    switch (complexity) {
+      case 'Easy':
+        return 'bg-success';
+      case 'Medium':
+        return 'bg-warning';
+      case 'Hard':
+        return 'bg-danger';
+      default:
+        return 'bg-primary';
+    }
+  };
+
+  const RenderTags = () => {
+    return tagsValue?.map((tag, index) => {
+      return <span key={index} className="badge bg-secondary">{tag}</span>
     });
-    navigate('../');
   };
 
   return (
-    <Box bgcolor="#2d2d2d" sx={{ height: '90vh', width: '80%', borderRadius: '25px', p: 3, boxShadow: 2, border: 2 }}>
-
-      <div className="question-description">
-        <div className="horizontal-row">
-          <Button variant="outlined"
-            onClick={handleBackClick} startIcon={<ArrowBackIosIcon />}>
-            Back
-          </Button>
-          <Button style={{ maxWidth: '110px', minWidth: '110px', float: 'right' }} color="error" variant="contained"
-            onClick={handleDeleteClick} startIcon={<DeleteIcon />}>
-            Delete
-          </Button>
-          <Button style={{ maxWidth: '110px', minWidth: '110px', float: 'right' }} variant="contained"
-            sx={{ mr: 2 }} onClick={handleEditClick} startIcon={<EditIcon />}>
-            Edit
-          </Button>
+    <div className='container'>
+      <div className='card text-center'>
+        <div className='card-header'>
+          <div className='d-flex justify-content-between'>
+            <button type='button' className='btn btn-secondary' onClick={handleBackClick}>
+              Back
+            </button>
+            <div>
+              <button type='button' className='btn btn-primary me-2' onClick={handleEditClick}>
+                Edit
+              </button>
+              <button type='button' className='btn btn-danger' onClick={handleDeleteClick}>
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
-        <h1>{question?.title}</h1>
-        <h3>Difficulty: {question?.difficulty}</h3>
-        <p>{question?.description}</p>
+        <div className="card-body">
+          <h1 className="card-title">{titleValue}</h1>
+          <div className="scrollable-div" dangerouslySetInnerHTML={{ __html: descriptionValue }}></div>
+        </div>
+        <div className='card-footer d-flex'>
+          <div className='d-flex flex-wrap gap-1'>{RenderTags()}</div>
+          <div className='ms-auto'>
+            <span className={`badge ${getComplexityColor(complexityValue)}`}>{complexityValue}</span>
+          </div>
+        </div>
       </div>
-    </Box>
-
-  )
-}
+      {isDeletionWindowOpen && <DeletionWindow onConfirm={handleConfirmDeletion} onClose={handleDeletionWindowClose} />}
+    </div>
+  );
+};
 
 export default QuestionDescription;
