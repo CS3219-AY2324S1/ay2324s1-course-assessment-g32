@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import axios from 'axios';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
+import { login } from '../api/UserApi';
 
 function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
@@ -17,69 +18,64 @@ function Login() {
   };
 
   const handleSignupPageChange = () => {
-    navigate("/signup");
+    navigate('/signup');
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
     const userData = {
       email: email,
-      password: password
+      password: password,
     };
 
-    axios.post("http://localhost:3000/auth/login", userData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then((response) => {
-      console.log(response);
-      navigate("/landing");
-    }).catch((error) => {
+    try {
+      // TODO: Update state using a better method
+      const res = await login(userData);
+      const data = {
+        isAdmin: res.data.user.isAdmin,
+        id: res.data.user.id,
+      };
+      localStorage.setItem('user', JSON.stringify(data));
+      navigate('/landing');
+      showSuccessToast('User logged in successfully!');
+    } catch (error) {
       if (error.response.status === 400) {
         console.error('Validation Error:', error.response.data.error);
+        showValidationErrorToast(error);
       } else {
         console.error('Server Error:', error.message);
+        showServerErrorToast(error);
       }
-    });
+    }
   };
 
   return (
-    <div className="Auth-form-container">
-      <form className="Auth-form">
-        <div className="Auth-form-content">
-          <h3 className="Auth-form-title">Sign In</h3>
-          <div className="text-center">
-            Not registered yet?{" "}
-            <span className="link-primary" onClick={handleSignupPageChange}>
+    <div className='Auth-form-container'>
+      <form className='Auth-form'>
+        <div className='Auth-form-content'>
+          <h3 className='Auth-form-title'>Sign In</h3>
+          <div className='text-center'>
+            Not registered yet?{' '}
+            <span className='link-primary' onClick={handleSignupPageChange}>
               Sign Up
             </span>
           </div>
-          <div className="form-group mt-3">
+          <div className='form-group mt-3'>
             <label>Email address</label>
-            <input
-              type="email"
-              className="form-control mt-1"
-              placeholder="Enter email"
-              onChange={handleEmailChange}
-            />
+            <input type='email' className='form-control mt-1' placeholder='Enter email' onChange={handleEmailChange} />
           </div>
-          <div className="form-group mt-3">
+          <div className='form-group mt-3'>
             <label>Password</label>
-            <input
-              type="password"
-              className="form-control mt-1"
-              placeholder="Enter password"
-              onChange={handlePasswordChange}
-            />
+            <input type='password' className='form-control mt-1' placeholder='Enter password' onChange={handlePasswordChange} />
           </div>
-          <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary" onClick={handleLoginSubmit}>
+          <div className='d-grid gap-2 mt-3'>
+            <button type='submit' className='btn btn-primary' onClick={handleLoginSubmit}>
               Submit
             </button>
           </div>
-          <p className="text-center mt-2">
-            Forgot <a href="#">password?</a>
+          <p className='text-center mt-2'>
+            Forgot <a href='#'>password?</a>
           </p>
         </div>
       </form>
