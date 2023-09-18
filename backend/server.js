@@ -18,6 +18,7 @@ const mysqlDbName = process.env.MY_SQL_DB_NAME || "";
 console.log("Starting server ...");
 
 // start the Express (web) server
+const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/auth', authRoutes);
@@ -34,11 +35,12 @@ mongoose.connect(MONGOCLIENT, {
 
 const mongoDb = mongoose.connection;
 mongoDb.once('open', () => {
-  console.log('Connected to the MongoDB database');
+  console.log('SUCCESS: Connected to the MongoDB database');
 });
 mongoDb.on('error', (error) => {
   console.error('MongoDB database connection error:', error);
 });
+
 
 // MySQL
 const mysqlDb = mysql.createConnection({
@@ -51,10 +53,5 @@ mysqlDb.connect((error) => {
 	if (error)
 		console.error("MySQL database connection error:", error);
 	else
-		console.log("Connected to the MySQL database");
-});
-
-// start the Express (web) server
-app.listen(PORT, () => {
-	console.log(`Server is running on port: ${PORT}`);
+		console.log("SUCCESS: Connected to the MySQL database");
 });
