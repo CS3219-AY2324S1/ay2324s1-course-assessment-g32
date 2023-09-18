@@ -1,13 +1,13 @@
 const questionRepository = require('../repositories/questionRepository');
 
-function missingInputsThrowsValidationError(title, complexity, description) {
+const missingInputsThrowsValidationError = (title, complexity, description) => {
   const innerText = description.replace(/<[^>]+>|\s+/g, '');
   if (!title || !complexity || !innerText) {
     throw { status: 400, message: 'Missing inputs' };
   }
 }
 
-async function duplicateTitleThrowsDuplicateError(id, title) {
+const duplicateTitleThrowsDuplicateError = async (id, title) => {
   // id == null then simply check if title exist, else cross-check id
   const isDuplicateTitle = await questionRepository.findByTitle(title);
   if (isDuplicateTitle) {
