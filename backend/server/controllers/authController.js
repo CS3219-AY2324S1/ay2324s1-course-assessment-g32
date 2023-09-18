@@ -7,9 +7,7 @@ const signup = async (req, res) => {
     await userService.createUser(email, password, confirmPassword);
     res.json({ message: 'User registered successfully' });
   } catch (err) {
-    res
-      .status(err?.status || 500)
-      .json({ error: err?.message || err });
+    res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };
 
@@ -23,13 +21,11 @@ const login = async (req, res) => {
 
     res.json({ message: 'User logged in successfully', id: user });
   } catch (err) {
-    res
-      .status(err?.status || 400)
-      .json({ error: err?.message || err });
+    res.status(err?.status || 400).json({ error: err?.message || err });
   }
 };
 
 module.exports = {
   login,
-  signup, 
+  signup,
 };

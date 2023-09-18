@@ -1,33 +1,34 @@
-const mysql = require("mysql2");
-require("dotenv").config();
+const mysql = require('mysql2');
+require('dotenv').config();
 
-const mysqlHost = process.env.MY_SQL_HOST || "localhost";
-const mysqlUser = process.env.MY_SQL_USER || "root";
-const mysqlPassword = process.env.MY_SQL_PWD || "";
-const mysqlDbName = process.env.MY_SQL_DB_NAME || "";
+const mysqlHost = process.env.MY_SQL_HOST || 'localhost';
+const mysqlUser = process.env.MY_SQL_USER || 'root';
+const mysqlPassword = process.env.MY_SQL_PWD || '';
+const mysqlDbName = process.env.MY_SQL_DB_NAME || '';
 
 const conn = mysql.createConnection({
-	host: mysqlHost,
-	user: mysqlUser,
-	password: mysqlPassword,
-	database: mysqlDbName,
+  host: mysqlHost,
+  user: mysqlUser,
+  password: mysqlPassword,
+  database: mysqlDbName,
 });
 
 /**
  * Finds and returns userId of user with email.
- * 
+ *
  * userId is undefined -> Error with SQL query;
  * userId is null -> Cannot find user with email;
- * 
- * @param {string} email 
+ *
+ * @param {string} email
  * @returns userId
  */
 const findByEmail = async (email) => {
   var _userId = Number();
 
-  const query = conn.promise()
-    .query("SELECT id FROM users WHERE email=?;", [email])
-    .then( ([rows, fields]) => {
+  const query = conn
+    .promise()
+    .query('SELECT id FROM users WHERE email=?;', [email])
+    .then(([rows, fields]) => {
       _userId = rows.length ? rows[0].id : null;
     })
     .catch(console.error);
@@ -35,20 +36,41 @@ const findByEmail = async (email) => {
   await query; // Wait for uid to be updated
   return _userId;
 };
-  
+
+// TODO: Required for Assignment 3. Can be improved
+// const getIsAdminById = async (id) => {
+//   var _isAdmin = Boolean();
+
+//   const query = conn
+//     .promise()
+//     .query('SELECT isAdmin FROM users WHERE id=?;', [id])
+//     .then(([rows, fields]) => {
+//       if (rows.length) {
+//         if (rows[0].isAdmin == 1) {
+//           _isAdmin = true;
+//         }
+//       } else {
+//         _isAdmin = false;
+//       }
+//     })
+//     .catch(console.error);
+
+//   await query;
+//   return _isAdmin;
+// };
+
 const createUser = async (email, password) => {
   var _userId = Number();
   var _password = String();
   const _username = getUsernameFromEmail(email);
 
-  await password.then(x => _password = x);
+  await password.then((x) => (_password = x));
 
   // Add new user to database
-  const query = conn.promise()
-    .query("INSERT INTO users(username, email, password) VALUES (?, ?, ?);", 
-      [_username, email, _password]
-    )
-    .then( ([result, fields]) => {
+  const query = conn
+    .promise()
+    .query('INSERT INTO users(username, email, password) VALUES (?, ?, ?);', [_username, email, _password])
+    .then(([result, fields]) => {
       _userId = result.insertId;
     })
     .catch(console.error);
@@ -59,12 +81,29 @@ const createUser = async (email, password) => {
 
 const getUserInfoByEmail = async (email) => {
   var _userId = Number();
-  await findByEmail(email).then(id => _userId = id);
+  await findByEmail(email).then((id) => (_userId = id));
 
-  if (!_userId)
-    throw "No user is using " + email; 
+  if (!_userId) throw 'No user is using ' + email;
 
   return getUserInfoById(_userId);
+};
+
+const getAllUserInfo = async () => {
+  var _userInfo = [];
+
+  const selectStmt = `SELECT * FROM users;`;
+
+  const query = conn
+    .promise()
+    .query(selectStmt)
+    .then(([rows, fields]) => {
+      _userInfo = rows.map(({ password, ...rest }) => rest);
+    })
+    .catch(console.error);
+
+  await query;
+
+  return _userInfo;
 };
 
 const getUserInfoById = async (userId) => {
@@ -78,26 +117,24 @@ const getUserInfoById = async (userId) => {
     .then(([rows, fields]) => {
       const userInfo = rows[0];
 
-      if (rows.length === 0) throw "getUserInfo: No user with id " + userId;
+      if (rows.length === 0) throw 'getUserInfo: No user with id ' + userId;
 
-      if (rows.length > 1)
-        throw "getUserInfo: Only one user should be retrieved";
+      if (rows.length > 1) throw 'getUserInfo: Only one user should be retrieved';
 
-      if (userInfo.id != userId) throw "getUserInfo: Wrong user info retrieved";
+      if (userInfo.id != userId) throw 'getUserInfo: Wrong user info retrieved';
 
-      _userInfo["id"] = userId;
-      _userInfo["username"] = userInfo.username;
-      _userInfo["email"] = userInfo.email;
-      _userInfo["password"] = userInfo.password;
-      _userInfo["created_at"] = userInfo.created_at;
-      _userInfo["updated_at"] = userInfo.updated_at;
+      _userInfo['id'] = userId;
+      _userInfo['username'] = userInfo.username;
+      _userInfo['email'] = userInfo.email;
+      _userInfo['password'] = userInfo.password;
+      _userInfo['created_at'] = userInfo.created_at;
+      _userInfo['updated_at'] = userInfo.updated_at;
     })
     .catch(console.error);
 
   await query; // Wait for new user to be inserted
 
-  if (Object.keys(_userInfo).length === 0)
-    throw "User info cannot be retrieved";
+  if (Object.keys(_userInfo).length === 0) throw 'User info cannot be retrieved';
 
   return _userInfo;
 };
@@ -105,27 +142,27 @@ const getUserInfoById = async (userId) => {
 const updateUser = async (userId, username, password) => {
   var _success = Boolean();
   var _placeholders = [];
-  var _sql = "UPDATE users SET ";
-  
+  var _sql = 'UPDATE users SET ';
+
   if (username) {
-    _sql = _sql.concat("username=?");
+    _sql = _sql.concat('username=?');
     _placeholders.push(username);
   }
 
-  if (username && password)
-    _sql = _sql.concat(", ");
+  if (username && password) _sql = _sql.concat(', ');
 
   if (password) {
-    _sql = _sql.concat("password=?");
+    _sql = _sql.concat('password=?');
     _placeholders.push(password);
   }
-  
-  _sql = _sql.concat(" WHERE id = ?;");
+
+  _sql = _sql.concat(' WHERE id = ?;');
   _placeholders.push(userId);
 
-  const query = conn.promise()
+  const query = conn
+    .promise()
     .query(_sql, _placeholders)
-    .then( ([result, fields]) => {
+    .then(([result, fields]) => {
       _success = result.affectedRows === 1;
     })
     .catch(console.error);
@@ -136,15 +173,16 @@ const updateUser = async (userId, username, password) => {
 
 /**
  * Delete user of given userId from the database.
- * @param {int|string} userId 
+ * @param {int|string} userId
  * @returns If the deletion was successful
  */
 const deleteUser = async (userId) => {
   var _success = Boolean();
 
-  const query = conn.promise()
-    .query("DELETE FROM users WHERE id=?;", [userId])
-    .then( ([result, fields]) => {
+  const query = conn
+    .promise()
+    .query('DELETE FROM users WHERE id=?;', [userId])
+    .then(([result, fields]) => {
       _success = result.affectedRows === 1;
     })
     .catch(console.error);
@@ -160,10 +198,11 @@ const getUsernameFromEmail = (email) => {
 
 module.exports = {
   findByEmail,
+  // getIsAdminById,
   createUser,
   updateUser,
   deleteUser,
+  getAllUserInfo,
   getUserInfoByEmail,
   getUserInfoById,
 };
-  
