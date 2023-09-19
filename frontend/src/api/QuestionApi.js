@@ -16,8 +16,7 @@ export const createQuestion = async (title, complexity, description, tags) => {
       description: description,
       tags: tags
     };
-    const response = await axios.post(rootUrl + "/create", questionData, config);
-    return response;
+    return await axios.post(rootUrl + "/create", questionData, config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw { response: { status: 408 }, message: 'Network Error' };
@@ -63,8 +62,7 @@ export const editQuestion = async (id, title, complexity, description, tags) => 
       description: description,
       tags: tags
     };
-    const response = await axios.post(rootUrl + '/edit', questionData, config);
-    return response;
+    return await axios.post(rootUrl + '/edit', questionData, config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw { response: { status: 408 }, message: 'Network Error' };
