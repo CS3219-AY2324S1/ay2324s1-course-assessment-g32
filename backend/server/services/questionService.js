@@ -11,7 +11,7 @@ const duplicateTitleThrowsDuplicateError = async (id, title) => {
   // id == null then simply check if title exist, else cross-check id
   const isDuplicateTitle = await questionRepository.findByTitle(title);
   if (isDuplicateTitle && !isDuplicateTitle._id.equals(id)) {
-    throw { status: 409, message: `Question title already exist` };
+    throw { status: 409, message: 'Question title already exist' };
   }
 };
 
@@ -65,7 +65,7 @@ const deleteQuestion = async (id) => {
   try {
     await questionRepository.deleteQuestion(id);
   } catch (err) {
-    throw { status: 400, message: 'Question does not exist' };
+    throw err;
   }
 };
 
