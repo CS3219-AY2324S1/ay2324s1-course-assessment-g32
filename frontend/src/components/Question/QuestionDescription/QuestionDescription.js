@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import { getQuestionDetails, deleteQuestion } from '../../../api/QuestionApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../../utils/toast.js';
+import { showServerErrorToast, showSuccessToast, showQuestionNotFoundErrorToast, showFailureToast } from '../../../utils/toast.js';
 import { DeletionWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
 import './QuestionDescription.css';
 import '../../../css/Tags.css';
@@ -14,6 +14,7 @@ const QuestionDescription = () => {
   const [tagsValue, setTagsValue] = useState([]);
   const [descriptionValue, setDescriptionValue] = useState('');
   const [isDeletionWindowOpen, setDeletionWindowOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -27,12 +28,18 @@ const QuestionDescription = () => {
         setTagsValue(question.tags);
         const sanitizedDescription = DOMPurify.sanitize(question.description);
         setDescriptionValue(sanitizedDescription);
+        setIsLoading(false);
       } catch (error) {
         navigate('../');
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
+        switch (error.response.status) {
+          case 410:
+            showQuestionNotFoundErrorToast(error);
+            break;
+          case 408:
+            showServerErrorToast(error);
+            break;
+          default:
+            showFailureToast(error);
         }
       }
     };
@@ -86,7 +93,11 @@ const QuestionDescription = () => {
     });
   };
 
-  return (
+  return isLoading ? (
+    <div className='spinner-border text-primary' role='status'>
+      <span className='visually-hidden'>Loading...</span>
+    </div>
+  ) : (
     <div className='container'>
       <div className='card text-center'>
         <div className='card-header'>
