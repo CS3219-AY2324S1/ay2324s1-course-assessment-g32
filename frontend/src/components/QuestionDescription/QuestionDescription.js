@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showQuestionNotFoundErrorToast } from '../../utils/toast.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showQuestionNotFoundErrorToast, showFailureToast } from '../../utils/toast.js';
 import { DeletionWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
 import './QuestionDescription.css';
 import '../../css/Tags.css';
@@ -33,8 +33,11 @@ const QuestionDescription = () => {
           case 410:
             showQuestionNotFoundErrorToast(error);
             break;
-          default:
+          case 408:
             showServerErrorToast(error);
+            break;
+          default:
+            showFailureToast(error);
         }
       }
     };

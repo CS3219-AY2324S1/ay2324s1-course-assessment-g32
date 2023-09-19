@@ -36,8 +36,11 @@ const EditQuestion = () => {
           case 410:
             showQuestionNotFoundErrorToast(error);
             break;
-          default:
+          case 408:
             showServerErrorToast(error);
+            break;
+          default:
+            showFailureToast(error);
         }
 
       }
