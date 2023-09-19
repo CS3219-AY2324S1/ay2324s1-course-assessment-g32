@@ -55,16 +55,16 @@ const ChangeUserPassword = ({ user }) => {
       <p>Password must be at least 8 characters long.</p>
       <form className='change-user-password needs-validation' onSubmit={handleUpdateClick} noValidate>
         <div className='form-floating mb-3'>
-          <input type='password' className='form-control' id='enterOldPassword' placeholder='Old Password' onChange={handleCurrentPasswordChange} required />
-          <label htmlFor='enterOldPassword'>Old Password</label>
+          <input type='password' className='form-control' id='enterCurrentPassword' placeholder='Current Password' onChange={handleCurrentPasswordChange} required />
+          <label htmlFor='enterCurrentPassword'>Current Password</label>
         </div>
         <div className='form-floating mb-3'>
           <input type='password' className='form-control' id='enterNewPassword' placeholder='New Password' onChange={handleNewPasswordChange} required />
           <label htmlFor='enterNewPassword'>New Password</label>
         </div>
         <div className='form-floating mb-3'>
-          <input type='password' className='form-control' id='confirmNewPassword' placeholder='Confirm New Password' onChange={handleConfirmPasswordChange} required />
-          <label htmlFor='confirmNewPassword'>Confirm New Password</label>
+          <input type='password' className='form-control' id='confirmPassword' placeholder='Confirm New Password' onChange={handleConfirmPasswordChange} required />
+          <label htmlFor='confirmPassword'>Confirm New Password</label>
         </div>
         <div className='d-flex justify-content-end'>
           <button type='submit' className='btn btn-success'>
