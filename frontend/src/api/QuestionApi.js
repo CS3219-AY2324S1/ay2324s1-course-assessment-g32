@@ -19,7 +19,7 @@ export const createQuestion = async (title, complexity, description, tags) => {
     return await axios.post(rootUrl + "/create", questionData, config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
-      throw { response: { status: 408 }, message: 'Network Error' };
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
     }
     throw err;
   }
@@ -31,7 +31,7 @@ export const getQuestions = async () => {
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
-      throw { response: { status: 408 }, message: 'Network Error' };
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
     }
     throw err;
   }
@@ -47,7 +47,7 @@ export const getQuestionDetails = async (questionId) => {
     return questionDetails.data.question;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
-      throw { response: { status: 408 }, message: 'Network Error' };
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
     }
     throw err;
   }
@@ -65,7 +65,7 @@ export const editQuestion = async (id, title, complexity, description, tags) => 
     return await axios.post(rootUrl + '/edit', questionData, config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
-      throw { response: { status: 408 }, message: 'Network Error' };
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
     }
     throw err;
   }
@@ -81,7 +81,7 @@ export const deleteQuestion = async (id) => {
     return response;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
-      throw { response: { status: 408 }, message: 'Network Error' };
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
     }
     throw err;
   }
