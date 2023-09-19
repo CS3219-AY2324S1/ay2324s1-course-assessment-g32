@@ -45,11 +45,14 @@ const CreateQuestion = () => {
         case 400: 
           showValidationErrorToast(error);
           break;
+        case 408:
+          showServerErrorToast(error);
+          break;
         case 409:
           showDuplicateQuestionErrorToast(error);
           break;
         default:
-          showServerErrorToast(error);
+          showFailureToast(error);
       }
     }
   };

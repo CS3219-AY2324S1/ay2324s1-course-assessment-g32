@@ -4,7 +4,7 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import { getQuestions } from '../api/QuestionApi.js';
-import { showServerErrorToast } from '../utils/toast.js';
+import { showServerErrorToast, showFailureToast } from '../utils/toast.js';
 
 const QuestionList = () => {
   const [tableData, setTableData] = useState([]);
@@ -17,7 +17,13 @@ const QuestionList = () => {
         const questions = await getQuestions();
         setTableData(questions);
       } catch (error) {
-        showServerErrorToast(error);
+        switch (error.response.status) {
+          case 408:
+            showServerErrorToast(error);
+            break;
+          default:
+            showFailureToast(error);
+        }
       }
     };
 
