@@ -13,7 +13,7 @@ function ManageUserProfiles() {
       <div className='body'>
         <Routes>
           <Route path='/' element={<UserList />} />
-          <Route path='/edit/:id' element={<EditUser />} />
+          <Route path='/edit/' element={<EditUser />} />
         </Routes>
         <ToastContainer />
       </div>
