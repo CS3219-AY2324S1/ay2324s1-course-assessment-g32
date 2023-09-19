@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import QuestionList from '../../components/Question/QuestionList';
 import QuestionDescription from '../../components/Question/QuestionDescription/QuestionDescription';
 import EditQuestion from '../../components/Question/EditQuestion';
@@ -19,7 +18,6 @@ function Landing() {
           <Route path='/edit/:id' element={<EditQuestion />} />
           <Route path='/new' element={<CreateQuestion />} />
         </Routes>
-        <ToastContainer />
       </div>
     </div>
   );

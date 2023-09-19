@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Route, Routes } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import Header from '../../components/Header';
 import EditUser from '../../components/User/EditUser';
 import ChangeUserPassword from '../../components/User/ChangeUserPassword';
@@ -50,7 +49,6 @@ function UserProfile() {
             <Route path='/edit' element={<EditUser user={user} />} />
             <Route path='/change-password' element={<ChangeUserPassword user={user} />} />
           </Routes>
-          <ToastContainer />
         </Grid>
       </Container>
     </div>

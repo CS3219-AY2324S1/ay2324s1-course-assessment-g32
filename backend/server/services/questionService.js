@@ -37,9 +37,8 @@ const getQuestionDetails = async (id) => {
   try {
     const question = await questionRepository.getQuestionDetails(id);
     if (!question) {
-      throw { status: 400, message: 'Question does not exist' };
+      throw { status: 410, message: 'Question does not exist' };
     }
-
     return question;
   } catch (err) {
     throw err;
@@ -50,6 +49,12 @@ const editQuestion = async (id, title, complexity, description, tags) => {
   try {
     missingInputsThrowsValidationError(title, complexity, description);
     await duplicateTitleThrowsDuplicateError(id, title);
+
+    const question = await questionRepository.findById(id);
+    if (!question) {
+      throw { status: 410, message: 'Question does not exist' };
+    }
+
     return await questionRepository.editQuestion(id, title, complexity, description, tags);
   } catch (err) {
     throw err;
