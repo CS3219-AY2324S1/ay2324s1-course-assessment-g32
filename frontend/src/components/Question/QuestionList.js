@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import { getQuestions } from '../api/QuestionApi.js';
-import { showServerErrorToast, showFailureToast } from '../utils/toast.js';
+import { getQuestions } from '../../api/QuestionApi.js';
+import { showServerErrorToast, showFailureToast } from '../../utils/toast.js';
 
 const QuestionList = () => {
   const [tableData, setTableData] = useState([]);
@@ -45,11 +45,11 @@ const QuestionList = () => {
 
   const navigate = useNavigate();
   const handleRowClick = (id) => {
-    navigate('/question/' + id);
+    navigate('/landing/question/' + id);
   };
 
   const handleNewQuestionClick = () => {
-    navigate('/new');
+    navigate('/landing/new');
   };
 
   const getComplexityColor = (complexity) => {
