@@ -14,6 +14,7 @@ const QuestionDescription = () => {
   const [tagsValue, setTagsValue] = useState([]);
   const [descriptionValue, setDescriptionValue] = useState('');
   const [isDeletionWindowOpen, setDeletionWindowOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const QuestionDescription = () => {
         setTagsValue(question.tags);
         const sanitizedDescription = DOMPurify.sanitize(question.description);
         setDescriptionValue(sanitizedDescription);
+        setIsLoading(false);
       } catch (error) {
         navigate('../');
         switch (error.response.status) {
@@ -91,7 +93,11 @@ const QuestionDescription = () => {
     });
   };
 
-  return (
+  return isLoading ? (
+    <div className='spinner-border text-primary' role='status'>
+      <span className='visually-hidden'>Loading...</span>
+    </div>
+  ) : (
     <div className='container'>
       <div className='card text-center'>
         <div className='card-header'>
