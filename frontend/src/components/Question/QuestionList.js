@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import { getQuestions } from '../api/QuestionApi.js';
-import { showServerErrorToast } from '../utils/toast.js';
+import { getQuestions } from '../../api/QuestionApi.js';
+import { showServerErrorToast } from '../../utils/toast.js';
 
 const QuestionList = () => {
   const [tableData, setTableData] = useState([]);

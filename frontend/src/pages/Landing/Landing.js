@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import QuestionList from '../../components/QuestionList';
-import QuestionDescription from '../../components/QuestionDescription/QuestionDescription';
-import EditQuestion from '../../components/EditQuestion';
-import CreateQuestion from '../../components/CreateQuestion/CreateQuestion';
+import QuestionList from '../../components/Question/QuestionList';
+import QuestionDescription from '../../components/Question/QuestionDescription/QuestionDescription';
+import EditQuestion from '../../components/Question/EditQuestion';
+import CreateQuestion from '../../components/Question/CreateQuestion/CreateQuestion';
 import Header from '../../components/Header';
 import './Landing.css';
 
