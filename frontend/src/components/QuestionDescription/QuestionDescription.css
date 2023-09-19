@@ -1,12 +1,4 @@
-.question-description {
-    color: #fff;
-    font: 400 1rem/1rem "Roboto", sans-serif;
-}
-
-.horizontal-row {}
-
-h1 {
-    text-align: center;
-    padding-bottom: 0.7em;
-    border-bottom: 1px solid #fff;
+.scrollable-div {
+    max-height: 400px; /* Adjust the maximum height as needed */
+    overflow-y: auto; /* This enables the vertical scrollbar when content overflows */
 }

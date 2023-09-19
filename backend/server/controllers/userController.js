@@ -65,5 +65,5 @@ module.exports = {
   getUserInfo,
   updateUser,
   deleteUser,
-  changePassword,
+  changePassword
 };

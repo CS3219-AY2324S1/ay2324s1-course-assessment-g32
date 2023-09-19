@@ -160,11 +160,15 @@ const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword
     if (!id || !curPassword || !newPasssword || !confirmPassword) {
       throw { status: 400, message: 'Missing inputs' };
     }
-    const passwordTest = verifyPassword(id, curPassword).then((x) => (_correctPassword = x));
+
+    const passwordTest = verifyPassword(id, curPassword)
+      .then(x => _correctPassword = x);
+
     // Check that new password is not old password
     if (curPassword === newPasssword) {
       throw { status: 400, message: 'New password cannot be old password' };
     }
+
     // Confirm no typo in new password
     if (newPasssword !== confirmPassword) {
       throw { status: 400, message: 'Confirm password not matching' };
@@ -180,6 +184,7 @@ const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword
     if (!(await updateUser(id, null, newPasssword))) {
       throw { status: 500, message: 'Failed to update password' };
     }
+
   } catch (err) {
     throw err;
   }
@@ -191,7 +196,6 @@ module.exports = {
   getUserInfo, // Read
   updateUser, // Update
   deleteUser, // Delete
-
   loginUser,
   changeUserPassword,
 };

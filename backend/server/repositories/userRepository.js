@@ -2,7 +2,7 @@ const User = require('../models/user');
 
 const findByEmail = async (email) => {
   return await User.findOne({ email });
-}
+};
 
 const createUser = async (email, hashedPassword) => {
   try {
@@ -18,7 +18,7 @@ const createUser = async (email, hashedPassword) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 module.exports = {
   findByEmail,

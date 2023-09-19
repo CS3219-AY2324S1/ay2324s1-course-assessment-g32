@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Grid, Card, Box, Typography, Button } from '@mui/material';
-import { showSuccessToast, showValidationErrorToast, showServerErrorToast } from '../../utils/toast.js';
 import { deleteUser } from '../../api/UserApi.js';
+import { showSuccessToast, showValidationErrorToast, showServerErrorToast } from '../../utils/toast.js';
 
 export const ViewUserTopPane = ({ user }) => {
   const navigate = useNavigate();
