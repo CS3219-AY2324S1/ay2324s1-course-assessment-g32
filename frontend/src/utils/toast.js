@@ -21,12 +21,19 @@ export const showValidationErrorToast = (error) => {
 
 export const showServerErrorToast = (error) => {
   toast.error('Server Error: ' + error.message, {
-    position: toast.POSITION.BOTTOM_RIGHT
+    position: toast.POSITION.BOTTOM_RIGHT,
+    toastId: 'serverError'
   });
 };
 
 export const showDuplicateQuestionErrorToast = (error) => {
   toast.error('Duplicate Question Error: ' + error.response.data.error, {
+    position: toast.POSITION.BOTTOM_RIGHT
+  });
+};
+
+export const showQuestionNotFoundErrorToast = (error) => {
+  toast.error('Question Not Found Error: ' + error.response.data.error, {
     position: toast.POSITION.BOTTOM_RIGHT
   });
 };
