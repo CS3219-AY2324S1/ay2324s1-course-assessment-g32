@@ -10,10 +10,7 @@ const missingInputsThrowsValidationError = (title, complexity, description) => {
 const duplicateTitleThrowsDuplicateError = async (id, title) => {
   // id == null then simply check if title exist, else cross-check id
   const isDuplicateTitle = await questionRepository.findByTitle(title);
-  if (!isDuplicateTitle) return;
-
-  // Duplicate found, check if it is the same question
-  if (!isDuplicateTitle._id.equals(id)) {
+  if (isDuplicateTitle && !isDuplicateTitle._id.equals(id)) {
     throw { status: 409, message: `Question title already exist` };
   }
 };
@@ -22,9 +19,7 @@ const createQuestion = async (title, complexity, description, tags) => {
   try {
     missingInputsThrowsValidationError(title, complexity, description);
     await duplicateTitleThrowsDuplicateError(null, title);
-
-    const question = await questionRepository.createQuestion(title, complexity, description, tags);
-    return question;
+    return await questionRepository.createQuestion(title, complexity, description, tags);
   } catch (err) {
     throw err;
   }
@@ -55,9 +50,7 @@ const editQuestion = async (id, title, complexity, description, tags) => {
   try {
     missingInputsThrowsValidationError(title, complexity, description);
     await duplicateTitleThrowsDuplicateError(id, title);
-
-    const question = await questionRepository.editQuestion(id, title, complexity, description, tags);
-    return question;
+    return await questionRepository.editQuestion(id, title, complexity, description, tags);
   } catch (err) {
     throw err;
   }
