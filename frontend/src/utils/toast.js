@@ -30,3 +30,9 @@ export const showDuplicateQuestionErrorToast = (error) => {
     position: toast.POSITION.BOTTOM_RIGHT
   });
 };
+
+export const showQuestionNotFoundErrorToast = (error) => {
+  toast.error('Question Not Found Error: ' + error.response.data.error, {
+    position: toast.POSITION.BOTTOM_RIGHT
+  });
+};

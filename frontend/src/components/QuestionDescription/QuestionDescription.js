@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showQuestionNotFoundErrorToast } from '../../utils/toast.js';
 import { DeletionWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
 import './QuestionDescription.css';
 import '../../css/Tags.css';
@@ -29,10 +29,12 @@ const QuestionDescription = () => {
         setDescriptionValue(sanitizedDescription);
       } catch (error) {
         navigate('../');
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
+        switch (error.response.status) {
+          case 410:
+            showQuestionNotFoundErrorToast(error);
+            break;
+          default:
+            showServerErrorToast(error);
         }
       }
     };
