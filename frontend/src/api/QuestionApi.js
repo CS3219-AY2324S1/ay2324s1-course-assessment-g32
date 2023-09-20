@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const rootUrl = 'http://localhost:3000/question';
+const rootUrl = 'http://localhost:5000/question';
 
 const config = {
   headers: {
