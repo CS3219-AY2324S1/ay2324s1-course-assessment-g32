@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./server/routes/auth');
 const userRoutes = require('./server/routes/user');
 const questionRoutes = require('./server/routes/question');
-const env = require('./loadEnvironment.js');
+const env = require('../loadEnvironment.js');
 
 console.log('Starting server ...');
 
