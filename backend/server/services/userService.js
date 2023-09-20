@@ -6,6 +6,8 @@ const verifyPassword = async (userId, givenPassword) => {
   return bcrypt.compare(givenPassword, storedPassword);
 };
 
+// const verifyPasswordMinLen = ()
+
 const loginUser = async (email, password) => {
   try {
     var userId = Number();
@@ -116,6 +118,11 @@ const updateUser = async (userId, username, password) => {
       throw { status: 400, message: 'WARN: Nothing given, not doing update' };
     }
 
+    // Check if the password is at least 8 characters long
+    if (password.length < 8) {
+      throw { status: 400, message: 'Password must be at least 8 characters long' };
+    }
+
     if (password) {
       password = bcrypt.hashSync(password, 10);
     }
@@ -172,6 +179,11 @@ const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword
     // Confirm no typo in new password
     if (newPasssword !== confirmPassword) {
       throw { status: 400, message: 'Confirm password not matching' };
+    }
+
+    // Check if the password is at least 8 characters long
+    if (newPasssword.length < 8 || confirmPassword.length < 8) {
+      throw { status: 400, message: 'Password must be at least 8 characters long' };
     }
 
     // Verify current password is correct
