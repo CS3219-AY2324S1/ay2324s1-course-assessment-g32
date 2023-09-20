@@ -10,24 +10,24 @@ const verifyPassword = async (userId, givenPassword) => {
 
 const loginUser = async (email, password) => {
   try {
-    var userId = Number();
+    let userId = Number();
     // var isAdmin = Boolean();
 
     // Check for missing inputs
     if (!email || !password) {
-      throw { status: 400, message: 'Missing inputs' };
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
 
     // Check if a user with the given email exists
     await userDatabase.findByEmail(email).then((id) => (userId = id));
 
     if (!userId) {
-      throw { status: 400, message: 'Email not registered with any user' };
+      throw Object.assign(new Error('Email not registered with any user'), { status: 400 });
     }
 
     // Compare the entered password with the hashed password stored in the database
     if (!(await verifyPassword(userId, password))) {
-      throw { status: 400, message: 'Incorrect password' };
+      throw Object.assign(new Error('Incorrect password'), { status: 400 });
     }
 
     // TODO: Get role of user (admin=true or not=false). Required for Assignment 3
@@ -41,11 +41,11 @@ const loginUser = async (email, password) => {
 
 const createUser = async (email, password, confirmPassword) => {
   try {
-    var passExistingUserCheck = undefined;
+    let passExistingUserCheck = undefined;
 
     // Check for missing inputs
     if (!email || !password || !confirmPassword) {
-      throw { status: 400, message: 'Missing inputs' };
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
 
     // Check if a user with the given email already exists
@@ -55,12 +55,12 @@ const createUser = async (email, password, confirmPassword) => {
 
     // Check if the password is at least 8 characters long
     if (password.length < 8) {
-      throw { status: 400, message: 'Password must be at least 8 characters long' };
+      throw Object.assign(new Error('Password must be at least 8 characters long'), { status: 400 })
     }
 
     // Check if the password and confirm password match
     if (password !== confirmPassword) {
-      throw { status: 400, message: 'Passwords do not match' };
+      throw Object.assign(new Error('Passwords do not match'), { status: 400 });
     }
 
     // Check results of existingUserCheck
@@ -69,7 +69,7 @@ const createUser = async (email, password, confirmPassword) => {
       console.error('No results from existingUserCheck');
     }
     if (!passExistingUserCheck) {
-      throw { status: 400, message: 'User already exists' };
+      throw Object.assign(new Error('User already exists'), { status: 400 });
     }
 
     // Create using with email and hashed password
@@ -90,7 +90,7 @@ const getAllUserInfo = async () => {
 const getUserInfo = async (userId, email) => {
   try {
     if (!userId && !email) {
-      throw { status: 400, message: 'Need at least id or email' };
+      throw Object.assign(new Error('Need at least id or email'), { status: 400 });
     }
 
     if (userId != null) return userDatabase.getUserInfoById(userId);
@@ -111,16 +111,11 @@ const getUserInfo = async (userId, email) => {
 const updateUser = async (userId, username, password) => {
   try {
     if (!userId) {
-      throw { status: 400, message: 'Missing userId' };
+      throw Object.assign(new Error('Missing userId'), { status: 400 });
     }
 
     if (!username && !password) {
-      throw { status: 400, message: 'WARN: Nothing given, not doing update' };
-    }
-
-    // Check if the password is at least 8 characters long
-    if (password.length < 8) {
-      throw { status: 400, message: 'Password must be at least 8 characters long' };
+      throw Object.assign(new Error('WARN: Nothing given, not doing update'), { status: 400 });
     }
 
     if (password) {
@@ -135,17 +130,18 @@ const updateUser = async (userId, username, password) => {
 
 const deleteUser = async (id) => {
   try {
-    var _success = Boolean();
+    let _success = Boolean();
 
     // Check for missing inputs
     if (!id) {
-      throw { status: 400, message: 'Missing id' };
+      throw Object.assign(new Error('Missing id'), { status: 400 });
     }
 
     await userDatabase.deleteUser(id).then((x) => (_success = x));
 
     if (!_success) {
-      throw { status: 400, message: 'Failed to delete user. Does user exists?' };
+      throw Object.assign(new Error('Failed to delete user. Does user exists?'), { status: 400 });
+      
     }
   } catch (err) {
     throw err;
@@ -161,11 +157,11 @@ const deleteUser = async (id) => {
  */
 const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword) => {
   try {
-    var _correctPassword = Boolean();
+    let _correctPassword = Boolean();
 
     // Check for missing inputs
     if (!id || !curPassword || !newPasssword || !confirmPassword) {
-      throw { status: 400, message: 'Missing inputs' };
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
 
     const passwordTest = verifyPassword(id, curPassword)
@@ -173,28 +169,29 @@ const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword
 
     // Check that new password is not old password
     if (curPassword === newPasssword) {
-      throw { status: 400, message: 'New password cannot be old password' };
+      throw Object.assign(new Error('New password cannot be old password'), { status: 400 });
     }
 
     // Confirm no typo in new password
     if (newPasssword !== confirmPassword) {
-      throw { status: 400, message: 'Confirm password not matching' };
+      throw Object.assign(new Error('Confirm password not matching'), { status: 400 });
+      
     }
 
     // Check if the password is at least 8 characters long
     if (newPasssword.length < 8 || confirmPassword.length < 8) {
-      throw { status: 400, message: 'Password must be at least 8 characters long' };
+      throw Object.assign(new Error('Password must be at least 8 characters long'), { status: 400 });
     }
 
     // Verify current password is correct
     await passwordTest;
     if (!_correctPassword) {
-      throw { status: 400, message: 'Incorrect password' };
+      throw Object.assign(new Error('Incorrect password'), { status: 400 });
     }
 
     // Change the password
     if (!(await updateUser(id, null, newPasssword))) {
-      throw { status: 500, message: 'Failed to update password' };
+      throw Object.assign(new Error('Failed to update password'), { status: 500 });
     }
 
   } catch (err) {
