@@ -6,8 +6,8 @@ import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
-import { parseDatetime } from '../../../utils/helpers.js';
 import { showSuccessToast, showServerErrorToast, showValidationErrorToast } from '../../../utils/toast.js';
+import { parseDatetime } from '../../../utils/helpers.js';
 import './UserList.css';
 
 const UserList = () => {

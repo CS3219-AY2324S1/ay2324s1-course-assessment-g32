@@ -204,5 +204,5 @@ module.exports = {
   deleteUser,
   getAllUserInfo,
   getUserInfoByEmail,
-  getUserInfoById,
+  getUserInfoById
 };

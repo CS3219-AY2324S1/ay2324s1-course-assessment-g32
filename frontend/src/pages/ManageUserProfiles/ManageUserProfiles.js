@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import Header from '../../components/Header';
 import EditUser from '../../components/User/EditUser';
 import UserList from '../../components/User/UserList/UserList';
@@ -15,7 +14,6 @@ function ManageUserProfiles() {
           <Route path='/' element={<UserList />} />
           <Route path='/edit/' element={<EditUser />} />
         </Routes>
-        <ToastContainer />
       </div>
     </div>
   );

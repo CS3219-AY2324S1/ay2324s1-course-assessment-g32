@@ -1,0 +1,4 @@
+.quill-container .ql-editor {
+    height: 200px;
+    overflow-y: auto; /* Add a vertical scrollbar when content exceeds the height */
+}
