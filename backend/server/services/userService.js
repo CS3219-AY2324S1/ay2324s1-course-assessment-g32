@@ -140,7 +140,7 @@ const deleteUser = async (id) => {
     await userDatabase.deleteUser(id).then((x) => (_success = x));
 
     if (!_success) {
-      throw Object.assign(new Error('Failed to delete user. Does user exists?'), { status: 400 });
+      throw Object.assign(new Error('Failed to delete user. Does user exists?'), { status: 500 });
       
     }
   } catch (err) {

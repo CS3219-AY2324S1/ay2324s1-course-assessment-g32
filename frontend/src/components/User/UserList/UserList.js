@@ -6,7 +6,7 @@ import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
-import { showSuccessToast, showServerErrorToast, showValidationErrorToast } from '../../../utils/toast.js';
+import { showSuccessToast, showServerErrorToast, showValidationErrorToast, showFailureToast } from '../../../utils/toast.js';
 import { parseDatetime } from '../../../utils/helpers.js';
 import './UserList.css';
 
@@ -23,20 +23,25 @@ const UserList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      getAllUsers()
-        .then((res) => {
-          setTableData(res);
-          setFetchUsers(false);
-        })
-        .catch((error) => {
-          navigate(-1);
-          if (error.response.status === 400) {
+      try {
+        const response = await getAllUsers();
+        setTableData(response);
+        setFetchUsers(false);
+      } catch (error) {
+        navigate(-1);
+        switch (error.response.status) {
+          case 400:
             showValidationErrorToast(error);
-          } else {
+            break;
+          case 500:
             showServerErrorToast(error);
-          }
-        });
+            break;
+          default:
+            showFailureToast(error);
+        }
+      }
     };
+
     if (storedUser) {
       fetchData();
     } else {
@@ -62,19 +67,23 @@ const UserList = () => {
     navigate('/users-management/edit', { state: { id: id, username: username } });
   };
 
-  const handleDeleteClick = (id) => {
-    deleteUser(id)
-      .then(() => {
-        setFetchUsers(true);
-        showSuccessToast('User has been deleted successfully!');
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
+  const handleDeleteClick = async (id) => {
+    try {
+      await deleteUser(id);
+      setFetchUsers(true);
+      showSuccessToast('User has been deleted successfully!');
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
           showValidationErrorToast(error);
-        } else {
+          break;
+        case 500:
           showServerErrorToast(error);
-        }
-      });
+          break;
+        default:
+          showFailureToast(error);
+      }
+    }
   };
 
   const userList = tableData.map((user, index) => (
