@@ -90,7 +90,7 @@ const getAllUserInfo = async () => {
 const getUserInfo = async (userId, email) => {
   try {
     if (!userId && !email) {
-      throw Object.assign(new Error('Need at least id or email'), { status: 410 });
+      throw Object.assign(new Error('Need at least id or email'), { status: 400 });
     }
 
     if (userId != null) return userDatabase.getUserInfoById(userId);
