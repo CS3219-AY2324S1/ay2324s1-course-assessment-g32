@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { signup, updateUsername } from '../../api/UserApi.js';
+import { signup } from '../../api/UserApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
 
 const AddUser = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  const navigate = useNavigate();
 
   const handleRegisterClick = async (e) => {
     e.preventDefault();
@@ -20,8 +17,6 @@ const AddUser = () => {
 
     signup(userData)
       .then(() => {
-        navigate(-1);
-        // navigate('/users-management');
         showSuccessToast('User registered successfully!');
       })
       .catch((error) => {
