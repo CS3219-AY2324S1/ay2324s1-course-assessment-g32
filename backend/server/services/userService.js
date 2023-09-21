@@ -186,7 +186,7 @@ const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword
     // Verify current password is correct
     await passwordTest;
     if (!_correctPassword) {
-      throw Object.assign(new Error('Incorrect password'), { status: 400 });
+      throw Object.assign(new Error('Incorrect password'), { status: 401 });
     }
 
     // Change the password
