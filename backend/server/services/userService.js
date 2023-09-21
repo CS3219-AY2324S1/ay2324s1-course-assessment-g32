@@ -22,12 +22,12 @@ const loginUser = async (email, password) => {
     await userDatabase.findByEmail(email).then((id) => (userId = id));
 
     if (!userId) {
-      throw Object.assign(new Error('Email not registered with any user'), { status: 400 });
+      throw Object.assign(new Error('Email not registered with any user'), { status: 410 });
     }
 
     // Compare the entered password with the hashed password stored in the database
     if (!(await verifyPassword(userId, password))) {
-      throw Object.assign(new Error('Incorrect password'), { status: 400 });
+      throw Object.assign(new Error('Incorrect password'), { status: 401 });
     }
 
     // TODO: Get role of user (admin=true or not=false). Required for Assignment 3
@@ -90,7 +90,7 @@ const getAllUserInfo = async () => {
 const getUserInfo = async (userId, email) => {
   try {
     if (!userId && !email) {
-      throw Object.assign(new Error('Need at least id or email'), { status: 400 });
+      throw Object.assign(new Error('Need at least id or email'), { status: 410 });
     }
 
     if (userId != null) return userDatabase.getUserInfoById(userId);
