@@ -113,6 +113,11 @@ const updateUser = async (userId, username, password) => {
     }
 
     if (password) {
+      // Check if the password is at least 8 characters long
+      if (password.length < 8) {
+        throw { status: 400, message: 'Password must be at least 8 characters long' };
+      }
+      
       password = bcrypt.hashSync(password, 10);
     }
 
