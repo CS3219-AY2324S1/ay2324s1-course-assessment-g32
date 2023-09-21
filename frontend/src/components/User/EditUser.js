@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { updateUsername } from '../../api/UserApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
+import { showValidationErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
 
 const EditUser = ({ user = null }) => {
   const [id, setId] = useState(null);

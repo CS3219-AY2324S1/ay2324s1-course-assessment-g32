@@ -11,6 +11,7 @@ import { parseDatetime } from '../../../utils/helpers.js';
 import './UserList.css';
 
 const UserList = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,6 +26,7 @@ const UserList = () => {
         const response = await getAllUsers();
         setTableData(response);
         setFetchUsers(false);
+        setIsLoading(false);
       } catch (error) {
         navigate(-1);
         switch (error.response.status) {
