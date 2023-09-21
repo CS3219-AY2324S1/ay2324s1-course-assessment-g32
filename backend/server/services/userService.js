@@ -69,7 +69,7 @@ const createUser = async (email, password, confirmPassword) => {
       console.error('No results from existingUserCheck');
     }
     if (!passExistingUserCheck) {
-      throw Object.assign(new Error('User already exists'), { status: 400 });
+      throw Object.assign(new Error('User already exists'), { status: 409 });
     }
 
     // Create using with email and hashed password
