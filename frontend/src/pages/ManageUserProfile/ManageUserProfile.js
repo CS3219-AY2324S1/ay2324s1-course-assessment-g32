@@ -11,6 +11,8 @@ import { Grid, Container } from '@mui/material';
 
 function ManageUserProfile() {
   const [user, setUser] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,13 +38,19 @@ function ManageUserProfile() {
       // No user session
       navigate('/login');
     }
+
+    setIsLoading(false);
   }, [navigate, setUser]);
 
-  return (
+  return isLoading ? (
+    <div className='spinner-border text-primary' role='status'>
+      <span className='visually-hidden'>Loading...</span>
+    </div>
+  ) : (
     <div>
       <Header />
       <Container sx={{ marginTop: '20px' }}>
-        <Grid spacing={2}>
+        <Grid>
           <ViewUserTopPane user={user} />
           <Routes>
             <Route path='/' element={<ViewUserBottomPane user={user} />} />

@@ -5,13 +5,15 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import { deleteUser, getAllUsers, signup } from '../../../api/UserApi.js';
-import { showSuccessToast, showServerErrorToast, showValidationErrorToast, showFailureToast } from '../../../utils/toast.js';
+import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
+import { showSuccessToast, showServerErrorToast, showValidationErrorToast } from '../../../utils/toast.js';
 import { parseDatetime } from '../../../utils/helpers.js';
 import './UserList.css';
 
 const UserList = () => {
   const [tableData, setTableData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
@@ -21,7 +23,7 @@ const UserList = () => {
     getAllUsers()
       .then((res) => {
         setTableData(res);
-        console.log(res)
+        setIsLoading(false);
       })
       .catch((error) => {
         if (error.response.status === 400) {
@@ -31,7 +33,6 @@ const UserList = () => {
         }
       });
   };
-
 
   useEffect(() => {
     if (storedUser) {
@@ -51,12 +52,11 @@ const UserList = () => {
 
       // Initialize DataTables
       dataTableRef.current = $(tableRef.current).DataTable();
-      // console.log(tableData)
     }
   }, [tableData]); // Initialize whenever tableData changes
 
   const navigate = useNavigate();
-  
+
   const handleNewUserClick = () => {
     navigate('/users-management/new');
   }
@@ -97,15 +97,16 @@ const UserList = () => {
           <Button variant='contained' color='error' onClick={() => handleDeleteClick(user.id)}>
             Deregister
           </Button>
-          <Button variant='contained' color='error' onClick={() => handleNewUserClick()}>
-            Add
-          </Button>
         </td>
       )}
     </tr>
   ));
 
-  return (
+  return isLoading ? (
+    <div className='spinner-border text-primary' role='status'>
+      <span className='visually-hidden'>Loading...</span>
+    </div>
+  ) : (
     <div className='container'>
       <h1>Manage User Profiles</h1>
       <table ref={tableRef} className='table table-hover table-striped'>
