@@ -5,49 +5,45 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
-import { showSuccessToast, showServerErrorToast, showValidationErrorToast } from '../../../utils/toast.js';
+import { deleteUser, getAllUsers, signup } from '../../../api/UserApi.js';
+import { showSuccessToast, showServerErrorToast, showValidationErrorToast, showFailureToast } from '../../../utils/toast.js';
 import { parseDatetime } from '../../../utils/helpers.js';
 import './UserList.css';
 
 const UserList = () => {
   const [tableData, setTableData] = useState([]);
-  // Used to trigger a re-fetch of the data when a user is deleted
-  const [fetchUsers, setFetchUsers] = useState(true);
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
-  const navigate = useNavigate();
-
   const storedUser = JSON.parse(localStorage.getItem('user'));
 
+  const fetchData = async () => {
+    getAllUsers()
+      .then((res) => {
+        setTableData(res);
+        console.log(res)
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
+      });
+  };
+
+
   useEffect(() => {
-    const fetchData = async () => {
-      getAllUsers()
-        .then((res) => {
-          setTableData(res);
-          setFetchUsers(false);
-        })
-        .catch((error) => {
-          navigate(-1);
-          if (error.response.status === 400) {
-            showValidationErrorToast(error);
-          } else {
-            showServerErrorToast(error);
-          }
-        });
-    };
     if (storedUser) {
       fetchData();
     } else {
       navigate('/login');
     }
-  }, [setTableData, navigate, fetchUsers, storedUser]);
+  }, []);
 
   useEffect(() => {
     // Initialize DataTables after the data has been set and the table is rendered
     if (tableRef.current && tableData.length > 0) {
-      console.log(tableData);
       // Destroy the existing DataTable instance if it exists
       if (dataTableRef.current) {
         dataTableRef.current.destroy();
@@ -55,8 +51,15 @@ const UserList = () => {
 
       // Initialize DataTables
       dataTableRef.current = $(tableRef.current).DataTable();
+      // console.log(tableData)
     }
   }, [tableData]); // Initialize whenever tableData changes
+
+  const navigate = useNavigate();
+  
+  const handleNewUserClick = () => {
+    navigate('/users-management/new');
+  }
 
   const handleEditClick = (id, username) => {
     navigate('/users-management/edit', { state: { id: id, username: username } });
@@ -65,7 +68,7 @@ const UserList = () => {
   const handleDeleteClick = (id) => {
     deleteUser(id)
       .then(() => {
-        setFetchUsers(true);
+        fetchData();
         showSuccessToast('User has been deleted successfully!');
       })
       .catch((error) => {
@@ -94,6 +97,9 @@ const UserList = () => {
           <Button variant='contained' color='error' onClick={() => handleDeleteClick(user.id)}>
             Deregister
           </Button>
+          <Button variant='contained' color='error' onClick={() => handleNewUserClick()}>
+            Add
+          </Button>
         </td>
       )}
     </tr>
@@ -102,7 +108,7 @@ const UserList = () => {
   return (
     <div className='container'>
       <h1>Manage User Profiles</h1>
-      <table ref={dataTableRef} className='table table-hover table-striped'>
+      <table ref={tableRef} className='table table-hover table-striped'>
         <thead className='table-dark'>
           <tr>
             <th scope='col' width='50'>
@@ -125,8 +131,13 @@ const UserList = () => {
             </th>
           </tr>
         </thead>
-        <tbody className='table-group-divider'>{userList}</tbody>
+        <tbody key={userList} className='table-group-divider'>{userList}</tbody>
       </table>
+      <div className='text-md-end'>
+        <button type='button' className='btn btn-success' onClick={handleNewUserClick}>
+          Add
+        </button>
+      </div>
     </div>
   );
 };
