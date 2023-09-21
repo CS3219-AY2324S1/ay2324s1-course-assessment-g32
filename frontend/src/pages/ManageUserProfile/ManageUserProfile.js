@@ -9,7 +9,7 @@ import { getUser } from '../../api/UserApi.js';
 import { showValidationErrorToast, showServerErrorToast } from '../../utils/toast.js';
 import { Grid, Container } from '@mui/material';
 
-function UserProfile() {
+function ManageUserProfile() {
   const [user, setUser] = useState({});
   const navigate = useNavigate();
 
@@ -55,4 +55,4 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
+export default ManageUserProfile;
