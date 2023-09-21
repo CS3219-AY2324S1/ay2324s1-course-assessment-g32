@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Grid, Card, Box, Typography, Button } from '@mui/material';
 import { deleteUser } from '../../api/UserApi.js';
-import { showSuccessToast, showValidationErrorToast, showServerErrorToast } from '../../utils/toast.js';
+import { showSuccessToast, showValidationErrorToast, showServerErrorToast, showFailureToast } from '../../utils/toast.js';
 
 export const ViewUserTopPane = ({ user }) => {
   const navigate = useNavigate();
@@ -14,22 +14,23 @@ export const ViewUserTopPane = ({ user }) => {
     navigate('/user-profile/change-password/');
   };
 
-  const handleDeregisterClick = () => {
-    deleteUser(user.id)
-      .then(() => {
-        showSuccessToast('User has been deleted successfully!');
-        // TODO: Implement better session management for assignment 3
-        localStorage.removeItem('user');
-        navigate('/login');
-      })
-      .catch((error) => {
-        navigate(-1);
-        if (error.response.status === 400) {
+  const handleDeregisterClick = async () => {
+    try {
+      await deleteUser(user.id);
+      showSuccessToast('User has been deleted successfully!');
+      // TODO: Implement better session management for assignment 3
+      localStorage.removeItem('user');
+      navigate('/login');
+    } catch (error) {
+      navigate(-1);
+      switch (error.response.status) {
+        case 400:
           showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      });
+          break;
+        default:
+          showFailureToast(error);
+      } 
+    }
   };
 
   return (
