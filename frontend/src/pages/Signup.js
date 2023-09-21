@@ -38,7 +38,7 @@ function Signup() {
     signup(userData)
       .then(() => {
         navigate('/login');
-        showSuccessToast('User created successfully!');
+        showSuccessToast('User registered successfully!');
       })
       .catch((error) => {
         if (error.response.status === 400) {
@@ -74,7 +74,7 @@ function Signup() {
           </div>
           <div className='d-grid gap-2 mt-3'>
             <button type='submit' className='btn btn-primary' onClick={handleSignupSubmit}>
-              Submit
+              Register
             </button>
           </div>
         </div>
