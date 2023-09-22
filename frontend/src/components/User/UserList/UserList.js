@@ -17,6 +17,8 @@ const UserList = () => {
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
+  const navigate = useNavigate();
+
   const storedUser = JSON.parse(localStorage.getItem('user'));
 
   const fetchData = async () => {
@@ -40,7 +42,7 @@ const UserList = () => {
     } else {
       navigate('/login');
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     // Initialize DataTables after the data has been set and the table is rendered
@@ -54,8 +56,6 @@ const UserList = () => {
       dataTableRef.current = $(tableRef.current).DataTable();
     }
   }, [tableData]); // Initialize whenever tableData changes
-
-  const navigate = useNavigate();
 
   const handleNewUserClick = () => {
     navigate('/users-management/new');

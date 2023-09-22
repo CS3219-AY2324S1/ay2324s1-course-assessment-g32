@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { signup } from '../../api/UserApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
 
@@ -6,6 +7,8 @@ const AddUser = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const navigate = useNavigate();
 
   const handleRegisterClick = async (e) => {
     e.preventDefault();
@@ -40,6 +43,10 @@ const AddUser = () => {
     setConfirmPassword(event.target.value);
   };
 
+  const handleBackClick = () => {
+    navigate(-1);
+  };
+
   return (
     <div className='container'>
       <div className='row' style={{ marginTop: '10px' }}>
@@ -69,11 +76,10 @@ const AddUser = () => {
           <input type='password' className='form-control' id='confirmPassword' placeholder='Confirm Password' onChange={handleConfirmPasswordChange} required />
           <label htmlFor='confirmPassword'>Confirm Password</label>
         </div>
-        <p style={{fontStyle:'italic'}}>Password must be at least 8 characters long.</p>
-        <div className='d-flex justify-content-end'>
-          <button type='submit' className='btn btn-success'>
-            Register
-          </button>
+        <p style={{ fontStyle: 'italic' }}>Password must be at least 8 characters long.</p>
+        <div className='d-flex justify-content-between'>
+          <button type='button' className='btn btn-secondary' onClick={handleBackClick}>Back</button>
+          <button type='submit' className='btn btn-success'>Register</button>
         </div>
       </form>
     </div>

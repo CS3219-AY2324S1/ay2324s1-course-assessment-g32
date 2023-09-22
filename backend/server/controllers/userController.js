@@ -1,15 +1,5 @@
 const userService = require('../services/userService');
 
-const createUser = async (req, res) => {
-  try {
-    const { email, password, confirmPassword } = req.body;
-    await userService.createUser(email, password, confirmPassword);
-    res.json({ message: 'SUCCESS: User created' });
-  } catch (err) {
-    res.status(err?.status || 500).json({ error: err?.message || err });
-  }
-};
-
 const getAllUserInfo = async (req, res) => {
   try {
     const info = await userService.getAllUserInfo();
@@ -60,7 +50,6 @@ const changePassword = async (req, res) => {
 };
 
 module.exports = {
-  createUser,
   getAllUserInfo,
   getUserInfo,
   updateUser,
