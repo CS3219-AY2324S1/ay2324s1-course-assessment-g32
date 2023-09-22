@@ -31,7 +31,6 @@ export const ViewUserTopPane = ({ user }) => {
       localStorage.removeItem('user');
       navigate('/login');
     } catch (error) {
-      navigate(-1);
       errorHandler(error);
     }
   };
