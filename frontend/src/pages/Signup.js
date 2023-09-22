@@ -36,15 +36,6 @@ function Signup() {
       confirmPassword: confirmPassword,
     };
 
-<<<<<<< HEAD
-    signup(userData)
-      .then(() => {
-        navigate('/login');
-        showSuccessToast('User registered successfully!');
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-=======
     try {
       await signup(userData);
       navigate('/login');
@@ -52,7 +43,6 @@ function Signup() {
     } catch (error) {
       switch (error.response.status) {
         case 400:
->>>>>>> ceb7c74 (Update Signup.js to async-await with more error codes)
           showValidationErrorToast(error);
           break;
         case 409:
