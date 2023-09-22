@@ -1,9 +1,14 @@
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Card, Box, Typography, Button } from '@mui/material';
 import { deleteUser } from '../../api/UserApi.js';
 import { showSuccessToast, showValidationErrorToast, showServerErrorToast } from '../../utils/toast.js';
+import { DeregisterWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
 
 export const ViewUserTopPane = ({ user }) => {
+
+  const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const handleViewProfileClick = () => {
@@ -15,6 +20,10 @@ export const ViewUserTopPane = ({ user }) => {
   };
 
   const handleDeregisterClick = () => {
+    setDeregisterWindowOpen(true);
+  };
+
+  const handleDeregisterConfirm = () => {
     deleteUser(user.id)
       .then(() => {
         showSuccessToast('User has been deleted successfully!');
@@ -28,7 +37,13 @@ export const ViewUserTopPane = ({ user }) => {
           showServerErrorToast(error);
         }
       });
-  };
+  }
+
+  const handleDeregisterCancel = () => {
+    setDeregisterWindowOpen(false);
+  }
+
+
 
   return (
     <Card sx={{ marginBottom: '10px' }}>
@@ -49,6 +64,7 @@ export const ViewUserTopPane = ({ user }) => {
           </Button>
         </Box>
       </Box>
+      {isDeregisterWindowOpen && <DeregisterWindow onConfirm={handleDeregisterConfirm} onClose={handleDeregisterCancel} />}
     </Card>
   );
 };
