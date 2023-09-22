@@ -6,9 +6,10 @@ import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
-import { showSuccessToast, showServerErrorToast, showValidationErrorToast, showFailureToast } from '../../../utils/toast.js';
+import { showSuccessToast } from '../../../utils/toast.js';
 import { parseDatetime } from '../../../utils/helpers.js';
 import { DeregisterWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
+import { errorHandler } from '../../../utils/errors.js';
 import './UserList.css';
 
 const UserList = () => {
@@ -30,16 +31,7 @@ const UserList = () => {
       setTableData(response);
       setIsLoading(false);
     } catch (error) {
-      switch (error.response.status) {
-        case 400:
-          showValidationErrorToast(error);
-          break;
-        case 500:
-          showServerErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      }
+      errorHandler(error);
     }
   };
 
@@ -84,16 +76,7 @@ const UserList = () => {
       fetchData();
       showSuccessToast('User has been deleted successfully!');
     } catch (error) {
-      switch (error.response.status) {
-        case 400:
-          showValidationErrorToast(error);
-          break;
-        case 500:
-          showServerErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      }
+      errorHandler(error);
     }
   };
 

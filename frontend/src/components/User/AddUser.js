@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '../../api/UserApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
+import { showSuccessToast } from '../../utils/toast.js';
+import { errorHandler } from '../../utils/errors.js';
 
 const AddUser = () => {
   const [email, setEmail] = useState('');
@@ -24,11 +25,7 @@ const AddUser = () => {
         navigate('../');
       })
       .catch((error) => {
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
+        errorHandler(error);
       });
   };
 

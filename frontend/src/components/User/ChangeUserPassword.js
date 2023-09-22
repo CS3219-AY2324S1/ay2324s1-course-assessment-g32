@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showUserNotAuthorizedErrorToast, showFailureToast } from '../../utils/toast.js';
+import { showSuccessToast } from '../../utils/toast.js';
 import { updatePassword } from '../../api/UserApi.js';
+import { errorHandler } from '../../utils/errors.js';
 
 const ChangeUserPassword = ({ user }) => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -19,19 +20,7 @@ const ChangeUserPassword = ({ user }) => {
       navigate(-1);
       showSuccessToast('Password updated successfully!');
     } catch (error) {
-      switch (error.response.status) {
-        case 400:
-          showValidationErrorToast(error);
-          break;
-        case 401:
-          showUserNotAuthorizedErrorToast(error);
-          break;
-        case 500:
-          showServerErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      }
+      errorHandler(error);
     }
   };
 

@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Card, Box, Typography, Button } from '@mui/material';
 import { deleteUser } from '../../api/UserApi.js';
-import { showSuccessToast, showValidationErrorToast, showFailureToast } from '../../utils/toast.js';
+import { showSuccessToast } from '../../utils/toast.js';
 import { DeregisterWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
+import { errorHandler } from '../../utils/errors.js';
 
 export const ViewUserTopPane = ({ user }) => {
   const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
@@ -31,13 +32,7 @@ export const ViewUserTopPane = ({ user }) => {
       navigate('/login');
     } catch (error) {
       navigate(-1);
-      switch (error.response.status) {
-        case 400:
-          showValidationErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      }
+      errorHandler(error);
     }
   };
 
