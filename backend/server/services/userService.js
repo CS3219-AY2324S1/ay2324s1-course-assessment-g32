@@ -67,7 +67,7 @@ const createUser = async (email, password, confirmPassword) => {
     }
 
     // Create using with email and hashed password
-    userDatabase.createUser(email, bcrypt.hash(password, 10));
+    await userDatabase.createUser(email, bcrypt.hash(password, 10));
   } catch (err) {
     throw err;
   }

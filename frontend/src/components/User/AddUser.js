@@ -21,6 +21,7 @@ const AddUser = () => {
     signup(userData)
       .then(() => {
         showSuccessToast('User registered successfully!');
+        navigate('../');
       })
       .catch((error) => {
         if (error.response.status === 400) {
