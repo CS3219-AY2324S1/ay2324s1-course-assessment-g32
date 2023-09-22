@@ -47,6 +47,10 @@ const ChangeUserPassword = ({ user }) => {
     setConfirmPassword(event.target.value);
   };
 
+  const handleBackClick = () => {
+    navigate('../');
+  };
+
   return (
     <div className='container'>
       <div className='row' style={{ marginTop: '10px' }}>
@@ -74,7 +78,10 @@ const ChangeUserPassword = ({ user }) => {
           <input type='password' className='form-control' id='confirmPassword' placeholder='Confirm New Password' onChange={handleConfirmPasswordChange} required />
           <label htmlFor='confirmPassword'>Confirm New Password</label>
         </div>
-        <div className='d-flex justify-content-end'>
+        <div className='d-flex justify-content-between'>
+          <button type="button" className="btn btn-secondary" onClick={handleBackClick}>
+            Back
+          </button>
           <button type='submit' className='btn btn-success'>
             Update
           </button>
