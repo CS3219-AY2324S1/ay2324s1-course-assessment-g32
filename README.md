@@ -31,9 +31,7 @@ For development, you may also want to install:
 ## Install NodeJS packages
 
 ```
-cd frontend && start npm install && cd ..
-cd backend && start npm install && cd ..
-
+npm run install-all
 ```
 
 # Start Application
@@ -42,8 +40,7 @@ Start local MySQL Server (Windows Service), if necessary.
 
 Start all services by: 
 ```
-cd frontend && start npm start && cd ..
-cd backend && start npm start && cd ..
+npm run start-all
 
 ```
 Or start them indvidually:  
