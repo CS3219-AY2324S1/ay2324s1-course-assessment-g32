@@ -22,8 +22,8 @@ For development, you may also want to install:
 ## Setup environment variables
 
 1. Enter the following command
-```cd backend && cp template.env .env```
-1. Open `./backend/.env` file
+```cp template.env .env```
+1. Open `.env` file
 1. Enter root password (previously configured when installing MySQL)  
    Example: if your root password is "password1234", 
    `MY_SQL_PWD=password1234`
