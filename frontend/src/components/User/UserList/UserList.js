@@ -8,11 +8,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
 import { showSuccessToast, showServerErrorToast, showValidationErrorToast } from '../../../utils/toast.js';
 import { parseDatetime } from '../../../utils/helpers.js';
+import { DeregisterWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
 import './UserList.css';
 
 const UserList = () => {
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
+  const [deregisterId, setDeregisterId] = useState(null);
 
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
@@ -80,6 +83,32 @@ const UserList = () => {
       });
   };
 
+
+  const handleDeregisterClick = (id) => {
+    setDeregisterId(id);
+    setDeregisterWindowOpen(true);
+  };
+
+  const handleDeregisterConfirm = () => {
+    setDeregisterWindowOpen(false);
+    deleteUser(deregisterId)
+      .then(() => {
+        fetchData();
+        showSuccessToast('User has been deregistered successfully!');
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
+      });
+  }
+
+  const handleDeregisterCancel = () => {
+    setDeregisterWindowOpen(false);
+  }
+
   const userList = tableData.map((user, index) => (
     <tr key={user.id}>
       <th scope='row'>{index + 1}</th>
@@ -94,7 +123,7 @@ const UserList = () => {
           <Button variant='contained' onClick={() => handleEditClick(user.id, user.username)}>
             Edit
           </Button>
-          <Button variant='contained' color='error' onClick={() => handleDeleteClick(user.id)}>
+          <Button variant='contained' color='error' onClick={() => handleDeregisterClick(user.id)}>
             Deregister
           </Button>
         </td>
@@ -139,6 +168,7 @@ const UserList = () => {
           Add
         </button>
       </div>
+      {isDeregisterWindowOpen && <DeregisterWindow onConfirm={handleDeregisterConfirm} onClose={handleDeregisterCancel} />}
     </div>
   );
 };

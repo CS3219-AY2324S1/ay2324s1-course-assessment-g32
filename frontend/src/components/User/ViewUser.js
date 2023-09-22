@@ -24,6 +24,7 @@ export const ViewUserTopPane = ({ user }) => {
   };
 
   const handleDeregisterConfirm = () => {
+    setDeregisterWindowOpen(false);
     deleteUser(user.id)
       .then(() => {
         showSuccessToast('User has been deleted successfully!');
