@@ -1,4 +1,4 @@
-import { showServerErrorToast, showValidationErrorToast, showFailureToast, showUserNotAuthorizedErrorToast, showDuplicateQuestionErrorToast, showQuestionNotFoundErrorToast } from './toast.js';
+import { showServerErrorToast, showValidationErrorToast, showFailureToast, showUserNotAuthorizedErrorToast, showDuplicateRecordErrorToast, showRecordNotFoundErrorToast } from './toast.js';
 
 export const errorHandler = (error) => {
   switch (error.response.status) {
@@ -12,10 +12,10 @@ export const errorHandler = (error) => {
       showServerErrorToast(error);
       break;
     case 409:
-      showDuplicateQuestionErrorToast(error);
+      showDuplicateRecordErrorToast(error);
       break;
     case 410:
-      showQuestionNotFoundErrorToast(error);
+      showRecordNotFoundErrorToast(error);
       break;
     case 500:
       showServerErrorToast(error);

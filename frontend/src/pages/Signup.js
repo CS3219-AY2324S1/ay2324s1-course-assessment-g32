@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '../api/UserApi';
-import { showValidationErrorToast, showDuplicateUserErrorToast, 
-  showSuccessToast, showFailureToast } from '../utils/toast.js';
+import { showSuccessToast } from '../utils/toast.js';
+import { errorHandler } from '../utils/errors.js';
 
 function Signup() {
   const [email, setEmail] = useState('');
@@ -41,16 +41,7 @@ function Signup() {
       navigate('/login');
       showSuccessToast('User created successfully!');
     } catch (error) {
-      switch (error.response.status) {
-        case 400:
-          showValidationErrorToast(error);
-          break;
-        case 409:
-          showDuplicateUserErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      }
+      errorHandler(error);
     }
   };
 
