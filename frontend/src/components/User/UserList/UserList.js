@@ -13,35 +13,32 @@ import './UserList.css';
 const UserList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
   const storedUser = JSON.parse(localStorage.getItem('user'));
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllUsers();
-        setTableData(response);
-        setFetchUsers(false);
-        setIsLoading(false);
-      } catch (error) {
-        navigate(-1);
-        switch (error.response.status) {
-          case 400:
-            showValidationErrorToast(error);
-            break;
-          case 500:
-            showServerErrorToast(error);
-            break;
-          default:
-            showFailureToast(error);
-        }
+  const fetchData = async () => {
+    try {
+      const response = await getAllUsers();
+      setTableData(response);
+      setIsLoading(false);
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
+          showValidationErrorToast(error);
+          break;
+        case 500:
+          showServerErrorToast(error);
+          break;
+        default:
+          showFailureToast(error);
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     if (storedUser) {
       fetchData();
     } else {
@@ -75,7 +72,7 @@ const UserList = () => {
   const handleDeleteClick = async (id) => {
     try {
       await deleteUser(id);
-      setFetchUsers(true);
+      fetchData();
       showSuccessToast('User has been deleted successfully!');
     } catch (error) {
       switch (error.response.status) {

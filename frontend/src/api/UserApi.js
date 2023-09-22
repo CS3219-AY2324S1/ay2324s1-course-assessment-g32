@@ -4,12 +4,6 @@ const env = require("../loadEnvironment");
 const authRootUrl = env.SERVER_URL + '/auth';
 const userRootUrl = env.SERVER_URL + '/user';
 
-const config = {
-  headers: {
-    'Content-Type': 'application/json'
-  }
-};
-
 export const signup = async (userData) => {
   try {
     return await axios.post(authRootUrl + '/signup', 
