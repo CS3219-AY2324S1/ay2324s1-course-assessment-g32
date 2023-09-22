@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../api/UserApi';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
+import { showValidationErrorToast, showSuccessToast, 
+  showUserNotFoundErrorToast, showUserNotAuthorizedErrorToast, 
+  showFailureToast } from '../utils/toast.js';
 
-function Login() {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -29,22 +31,32 @@ function Login() {
       password: password,
     };
 
-    login(userData)
-      .then((res) => {
-        const data = {
-          id: res.data.id,
-        };
-        localStorage.setItem('user', JSON.stringify(data));
-        navigate('/landing');
-        showSuccessToast('User logged in successfully!');
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
+    try {
+      const response = await login(userData);
+
+      const data = {
+        id: response.data.id
+      };
+
+      // TODO: Implement better session management for assignment 3
+      localStorage.setItem('user', JSON.stringify(data));
+      navigate('/landing');
+      showSuccessToast('User logged in successfully!');
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
           showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      });
+          break;
+        case 401:
+          showUserNotAuthorizedErrorToast(error);
+          break;
+        case 410:
+          showUserNotFoundErrorToast(error);
+          break;
+        default:
+          showFailureToast(error);
+      }
+    }
   };
 
   return (
