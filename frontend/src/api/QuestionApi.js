@@ -1,7 +1,7 @@
 import axios from 'axios';
 const env = require("../loadEnvironment");
 
-const rootUrl = 'http://localhost:' + env.SERVER_PORT + '/question';
+const rootUrl = env.SERVER_URL + '/question';
 
 const config = {
   headers: {
