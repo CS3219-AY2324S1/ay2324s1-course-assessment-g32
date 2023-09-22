@@ -21,7 +21,6 @@ app.listen(env.SERVER_PORT, () => {
   console.log(`Server is running on port: ${env.SERVER_PORT}`);
 });
 
-
 try {
   // MongoDB
   mongoose.connect(env.MONGO_CLIENT, {

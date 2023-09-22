@@ -50,7 +50,7 @@ const AddUser = () => {
                 <a href='/users-management'>Manage User Profiles</a>
               </li>
               <li className='breadcrumb-item active' aria-current='page' style={{ fontWeight: 'bold' }}>
-                Add User
+                Register New User
               </li>
             </ol>
           </nav>
