@@ -9,7 +9,6 @@ const verifyPassword = async (userId, givenPassword) => {
 const loginUser = async (email, password) => {
   try {
     var userId = Number();
-    // var isAdmin = Boolean();
 
     // Check for missing inputs
     if (!email || !password) {
@@ -27,9 +26,6 @@ const loginUser = async (email, password) => {
     if (!(await verifyPassword(userId, password))) {
       throw { status: 400, message: 'Incorrect password' };
     }
-
-    // TODO: Get role of user (admin=true or not=false). Required for Assignment 3
-    // await userDatabase.getIsAdminById(userId).then((isAdminBool) => (isAdmin = isAdminBool));
 
     return userId;
   } catch (err) {
@@ -117,6 +113,11 @@ const updateUser = async (userId, username, password) => {
     }
 
     if (password) {
+      // Check if the password is at least 8 characters long
+      if (password.length < 8) {
+        throw { status: 400, message: 'Password must be at least 8 characters long' };
+      }
+      
       password = bcrypt.hashSync(password, 10);
     }
 
@@ -192,10 +193,10 @@ const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword
 
 module.exports = {
   createUser, // Create
-  getAllUserInfo, // Read all
+  getAllUserInfo, // Read
   getUserInfo, // Read
   updateUser, // Update
   deleteUser, // Delete
   loginUser,
-  changeUserPassword,
+  changeUserPassword, // Update
 };

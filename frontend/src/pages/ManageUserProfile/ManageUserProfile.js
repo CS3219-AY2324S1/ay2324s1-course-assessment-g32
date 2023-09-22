@@ -9,8 +9,10 @@ import { getUser } from '../../api/UserApi.js';
 import { showValidationErrorToast, showServerErrorToast } from '../../utils/toast.js';
 import { Grid, Container } from '@mui/material';
 
-function UserProfile() {
+function ManageUserProfile() {
   const [user, setUser] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,13 +38,19 @@ function UserProfile() {
       // No user session
       navigate('/login');
     }
+
+    setIsLoading(false);
   }, [navigate, setUser]);
 
-  return (
+  return isLoading ? (
+    <div className='spinner-border text-primary' role='status'>
+      <span className='visually-hidden'>Loading...</span>
+    </div>
+  ) : (
     <div>
       <Header />
       <Container sx={{ marginTop: '20px' }}>
-        <Grid spacing={2}>
+        <Grid>
           <ViewUserTopPane user={user} />
           <Routes>
             <Route path='/' element={<ViewUserBottomPane user={user} />} />
@@ -55,4 +63,4 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
+export default ManageUserProfile;

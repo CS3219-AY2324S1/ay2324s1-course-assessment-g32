@@ -52,7 +52,7 @@ const ChangeUserPassword = ({ user }) => {
           </nav>
         </div>
       </div>
-      <p>Password must be at least 8 characters long.</p>
+      <p style={{ fontStyle: 'italic' }}>Password must be at least 8 characters long.</p>
       <form className='change-user-password needs-validation' onSubmit={handleUpdateClick} noValidate>
         <div className='form-floating mb-3'>
           <input type='password' className='form-control' id='enterCurrentPassword' placeholder='Current Password' onChange={handleCurrentPasswordChange} required />

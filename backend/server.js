@@ -9,7 +9,7 @@ const questionRoutes = require('./server/routes/question');
 require('dotenv').config();
 
 // Retrieve environment variables
-const PORT = process.env.SERVER_PORT || 3000;
+const PORT = process.env.SERVER_PORT || 5000;
 const MONGOCLIENT = process.env.ATLAS_URI || '';
 const mysqlHost = process.env.MY_SQL_HOST || 'localhost';
 const mysqlUser = process.env.MY_SQL_USER || 'root';

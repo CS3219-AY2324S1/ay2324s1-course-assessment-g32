@@ -9,10 +9,9 @@ const EditUser = ({ user = null }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const location = useLocation();
-
   useEffect(() => {
     if (user) {
-      // Used when routing from UserProfile
+      // Used when routing from ManageUserProfile
       setId(user.id);
       setUsername(user.username);
     } else {
@@ -27,6 +26,7 @@ const EditUser = ({ user = null }) => {
 
   const handleUpdateClick = async (e) => {
     e.preventDefault();
+    
     updateUsername(id, newUsername)
       .then(() => {
         navigate(-1);
