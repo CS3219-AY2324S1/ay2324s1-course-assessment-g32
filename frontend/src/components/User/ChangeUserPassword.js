@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showUserNotAuthorizedErrorToast, showFailureToast } from '../../utils/toast.js';
 import { updatePassword } from '../../api/UserApi.js';
 
 const ChangeUserPassword = ({ user }) => {
@@ -12,19 +12,27 @@ const ChangeUserPassword = ({ user }) => {
 
   const handleUpdateClick = async (e) => {
     e.preventDefault();
-    updatePassword(user.id, currentPassword, newPassword, confirmPassword)
-      .then(() => {
-        // Redirect user back to the previous page (user-profile) if password is updated successfully
-        navigate(-1);
-        showSuccessToast('Password updated successfully!');
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
+
+    try {
+      await updatePassword(user.id, currentPassword, newPassword, confirmPassword);
+      // Redirect user back to the previous page (user-profile) if password is updated successfully
+      navigate(-1);
+      showSuccessToast('Password updated successfully!');
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
           showValidationErrorToast(error);
-        } else {
+          break;
+        case 401:
+          showUserNotAuthorizedErrorToast(error);
+          break;
+        case 500:
           showServerErrorToast(error);
-        }
-      });
+          break;
+        default:
+          showFailureToast(error);
+      }
+    }
   };
 
   const handleCurrentPasswordChange = (event) => {

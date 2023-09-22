@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '../api/UserApi';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
+import { showValidationErrorToast, showDuplicateUserErrorToast, 
+  showSuccessToast, showFailureToast } from '../utils/toast.js';
 
 function Signup() {
   const [email, setEmail] = useState('');
@@ -35,18 +36,22 @@ function Signup() {
       confirmPassword: confirmPassword,
     };
 
-    signup(userData)
-      .then(() => {
-        navigate('/login');
-        showSuccessToast('User registered successfully!');
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
+    try {
+      await signup(userData);
+      navigate('/login');
+      showSuccessToast('User created successfully!');
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
           showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      });
+          break;
+        case 409:
+          showDuplicateUserErrorToast(error);
+          break;
+        default:
+          showFailureToast(error);
+      }
+    }
   };
 
   return (

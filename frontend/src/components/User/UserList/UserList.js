@@ -6,13 +6,13 @@ import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
-import { showSuccessToast, showServerErrorToast, showValidationErrorToast } from '../../../utils/toast.js';
+import { showSuccessToast, showServerErrorToast, showValidationErrorToast, showFailureToast } from '../../../utils/toast.js';
 import { parseDatetime } from '../../../utils/helpers.js';
 import './UserList.css';
 
 const UserList = () => {
-  const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [tableData, setTableData] = useState([]);
 
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
@@ -20,18 +20,22 @@ const UserList = () => {
   const storedUser = JSON.parse(localStorage.getItem('user'));
 
   const fetchData = async () => {
-    getAllUsers()
-      .then((res) => {
-        setTableData(res);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
+    try {
+      const response = await getAllUsers();
+      setTableData(response);
+      setIsLoading(false);
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
           showValidationErrorToast(error);
-        } else {
+          break;
+        case 500:
           showServerErrorToast(error);
-        }
-      });
+          break;
+        default:
+          showFailureToast(error);
+      }
+    }
   };
 
   useEffect(() => {
@@ -65,19 +69,23 @@ const UserList = () => {
     navigate('/users-management/edit', { state: { id: id, username: username } });
   };
 
-  const handleDeleteClick = (id) => {
-    deleteUser(id)
-      .then(() => {
-        fetchData();
-        showSuccessToast('User has been deleted successfully!');
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
+  const handleDeleteClick = async (id) => {
+    try {
+      await deleteUser(id);
+      fetchData();
+      showSuccessToast('User has been deleted successfully!');
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
           showValidationErrorToast(error);
-        } else {
+          break;
+        case 500:
           showServerErrorToast(error);
-        }
-      });
+          break;
+        default:
+          showFailureToast(error);
+      }
+    }
   };
 
   const userList = tableData.map((user, index) => (
