@@ -143,8 +143,8 @@ const UserList = () => {
         <tbody key={userList} className='table-group-divider'>{userList}</tbody>
       </table>
       <div className='text-md-end'>
-        <button type='button' className='btn btn-success' onClick={handleNewUserClick}>
-          Add
+        <button type='button' className='btn btn-success' style={{ margin: '5px' }} onClick={handleNewUserClick}>
+          Register New User
         </button>
       </div>
     </div>
