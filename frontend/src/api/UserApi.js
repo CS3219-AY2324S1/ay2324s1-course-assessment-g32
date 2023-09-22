@@ -1,79 +1,133 @@
 import axios from 'axios';
 const env = require("../loadEnvironment");
 
-const rootUrl = 'http://localhost:' + env.SERVER_PORT;
+const authRootUrl = 'http://localhost:' + env.SERVER_PORT + '/auth';
+const userRootUrl = 'http://localhost:' + env.SERVER_PORT + '/user';
 
 export const signup = async (userData) => {
-  return axios.post(rootUrl + '/auth/signup', userData, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    return await axios.post(authRootUrl + '/signup', 
+      userData, 
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
+    }
+    throw err;
+  }
 };
 
 export const login = async (userData) => {
-  return axios.post(rootUrl + '/auth/login', userData, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    return await axios.post(authRootUrl + '/login', 
+      userData, 
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
+    }
+    throw err;
+  }
 };
 
 export const getAllUsers = async () => {
-  const res = await axios.get(rootUrl + '/user/readAll', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return res.data.info;
+  try {
+    const res = await axios.get(userRootUrl + '/readAll', 
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return res.data.info;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
+    }
+    throw err;
+  }
 };
 
 export const getUser = async (id) => {
-  const res = await axios.post(
-    rootUrl + '/user/read',
-    { id },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+  try {
+    const res = await axios.post(userRootUrl + '/read',
+      { id },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return res.data.info;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
     }
-  );
-  return res.data.info;
+    throw err;
+  }
 };
 
 export const updateUsername = async (id, newUsername) => {
-  const res = await axios.post(
-    rootUrl + '/user/update',
-    { id: id, username: newUsername },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  try {
+    const res = await axios.post(userRootUrl + '/update',
+      { id: id, username: newUsername },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
   return res;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
+    }
+    throw err;
+  }
 };
 
-export const updatePassword = (id, currentPassword, newPassword, confirmPassword) => {
-  return axios.post(
-    rootUrl + '/user/change-password',
-    { id: id, currentPassword: currentPassword, newPassword: newPassword, confirmPassword: confirmPassword },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+export const updatePassword = async (id, currentPassword, newPassword, confirmPassword) => {
+  try {
+    return await axios.post(userRootUrl + '/change-password',
+      { id: id, currentPassword: currentPassword, newPassword: newPassword, confirmPassword: confirmPassword },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
     }
-  );
+    throw err;
+  }
 };
 
-export const deleteUser = (id) => {
-  return axios.post(
-    rootUrl + '/user/delete',
-    { id },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+export const deleteUser = async (id) => {
+  try {
+    return await axios.post(userRootUrl + '/delete',
+      { id },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
     }
-  );
+    throw err;
+  }
 };

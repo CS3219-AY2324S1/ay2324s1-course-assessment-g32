@@ -5,8 +5,6 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await userService.loginUser(email, password);
-    // TODO: Add authentication and token generation logic here
-
     res.json({ message: 'User logged in successfully', id: user });
   } catch (err) {
     res

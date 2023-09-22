@@ -9,7 +9,6 @@ function Header() {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    // TODO: Implement better session management for assignment 3
     localStorage.removeItem('user');
     navigate('/');
   };

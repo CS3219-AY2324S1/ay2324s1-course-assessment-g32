@@ -18,12 +18,10 @@ export const ViewUserTopPane = ({ user }) => {
     deleteUser(user.id)
       .then(() => {
         showSuccessToast('User has been deleted successfully!');
-        // TODO: Implement better session management for assignment 3
         localStorage.removeItem('user');
         navigate('/login');
       })
       .catch((error) => {
-        navigate(-1);
         if (error.response.status === 400) {
           showValidationErrorToast(error);
         } else {

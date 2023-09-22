@@ -12,42 +12,39 @@ import './UserList.css';
 
 const UserList = () => {
   const [tableData, setTableData] = useState([]);
-  // Used to trigger a re-fetch of the data when a user is deleted
-  const [fetchUsers, setFetchUsers] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
-  const navigate = useNavigate();
-
   const storedUser = JSON.parse(localStorage.getItem('user'));
 
+  const fetchData = async () => {
+    getAllUsers()
+      .then((res) => {
+        setTableData(res);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
+      });
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      getAllUsers()
-        .then((res) => {
-          setTableData(res);
-          setFetchUsers(false);
-        })
-        .catch((error) => {
-          navigate(-1);
-          if (error.response.status === 400) {
-            showValidationErrorToast(error);
-          } else {
-            showServerErrorToast(error);
-          }
-        });
-    };
     if (storedUser) {
       fetchData();
     } else {
       navigate('/login');
     }
-  }, [setTableData, navigate, fetchUsers, storedUser]);
+  }, []);
 
   useEffect(() => {
     // Initialize DataTables after the data has been set and the table is rendered
     if (tableRef.current && tableData.length > 0) {
-      console.log(tableData);
       // Destroy the existing DataTable instance if it exists
       if (dataTableRef.current) {
         dataTableRef.current.destroy();
@@ -58,6 +55,12 @@ const UserList = () => {
     }
   }, [tableData]); // Initialize whenever tableData changes
 
+  const navigate = useNavigate();
+
+  const handleNewUserClick = () => {
+    navigate('/users-management/new');
+  }
+
   const handleEditClick = (id, username) => {
     navigate('/users-management/edit', { state: { id: id, username: username } });
   };
@@ -65,7 +68,7 @@ const UserList = () => {
   const handleDeleteClick = (id) => {
     deleteUser(id)
       .then(() => {
-        setFetchUsers(true);
+        fetchData();
         showSuccessToast('User has been deleted successfully!');
       })
       .catch((error) => {
@@ -99,10 +102,14 @@ const UserList = () => {
     </tr>
   ));
 
-  return (
+  return isLoading ? (
+    <div className='spinner-border text-primary' role='status'>
+      <span className='visually-hidden'>Loading...</span>
+    </div>
+  ) : (
     <div className='container'>
       <h1>Manage User Profiles</h1>
-      <table ref={dataTableRef} className='table table-hover table-striped'>
+      <table ref={tableRef} className='table table-hover table-striped'>
         <thead className='table-dark'>
           <tr>
             <th scope='col' width='50'>
@@ -125,8 +132,13 @@ const UserList = () => {
             </th>
           </tr>
         </thead>
-        <tbody className='table-group-divider'>{userList}</tbody>
+        <tbody key={userList} className='table-group-divider'>{userList}</tbody>
       </table>
+      <div className='text-md-end'>
+        <button type='button' className='btn btn-success' onClick={handleNewUserClick}>
+          Add
+        </button>
+      </div>
     </div>
   );
 };
