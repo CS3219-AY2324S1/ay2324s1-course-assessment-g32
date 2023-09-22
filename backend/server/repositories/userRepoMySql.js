@@ -1,16 +1,9 @@
 const mysql = require('mysql2');
-require('dotenv').config();
-
-const mysqlHost = process.env.MY_SQL_HOST || 'localhost';
-const mysqlUser = process.env.MY_SQL_USER || 'root';
-const mysqlPassword = process.env.MY_SQL_PWD || '';
-const mysqlDbName = process.env.MY_SQL_DB_NAME || '';
+const env = require('../../loadEnvironment.js');
 
 const conn = mysql.createConnection({
-  host: mysqlHost,
-  user: mysqlUser,
-  password: mysqlPassword,
-  database: mysqlDbName,
+  ...env.mysqlCreds,
+  ...{database: env.mysqlDbName}
 });
 
 /**

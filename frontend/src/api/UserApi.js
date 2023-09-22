@@ -1,7 +1,8 @@
 import axios from 'axios';
+const env = require("../loadEnvironment");
 
-const authRootUrl = 'http://localhost:5000/auth';
-const userRootUrl = 'http://localhost:5000/user';
+const authRootUrl = 'http://localhost:' + env.SERVER_PORT + '/auth';
+const userRootUrl = 'http://localhost:' + env.SERVER_PORT + '/user';
 
 export const signup = async (userData) => {
   try {

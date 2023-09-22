@@ -6,15 +6,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./server/routes/auth');
 const userRoutes = require('./server/routes/user');
 const questionRoutes = require('./server/routes/question');
-require('dotenv').config();
-
-// Retrieve environment variables
-const PORT = process.env.SERVER_PORT || 5000;
-const MONGOCLIENT = process.env.ATLAS_URI || '';
-const mysqlHost = process.env.MY_SQL_HOST || 'localhost';
-const mysqlUser = process.env.MY_SQL_USER || 'root';
-const mysqlPassword = process.env.MY_SQL_PWD || '';
-const mysqlDbName = process.env.MY_SQL_DB_NAME || '';
+const env = require('./loadEnvironment');
 
 console.log('Starting server ...');
 
@@ -25,34 +17,39 @@ app.use(bodyParser.json());
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/question', questionRoutes);
-app.listen(PORT, () => {
-  console.log(`Server is running on port: ${PORT}`);
+app.listen(env.SERVER_PORT, () => {
+  console.log(`Server is running on port: ${env.SERVER_PORT}`);
 });
 
-// MongoDB
-mongoose.connect(MONGOCLIENT, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
-const mongoDb = mongoose.connection;
-mongoDb.once('open', () => {
-  console.log('SUCCESS: Connected to the MongoDB database');
-});
-mongoDb.on('error', (error) => {
-  console.error('MongoDB database connection error:', error);
-});
+try {
+  // MongoDB
+  mongoose.connect(env.MONGO_CLIENT, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 
-// MySQL
-const mysqlDb = mysql.createConnection({
-  host: mysqlHost,
-  user: mysqlUser,
-  password: mysqlPassword,
-  database: mysqlDbName,
-});
-mysqlDb.connect((error) => {
-  if (error) 
-    console.error('MySQL database connection error:', error);
-  else 
+  const mongoDb = mongoose.connection;
+  mongoDb.once('open', () => {
+    console.log('SUCCESS: Connected to the MongoDB database');
+  });
+  mongoDb.on('error', (error) => {
+    console.error('MongoDB database connection error:', error);
+  });
+
+  
+  // MySQL
+  const mysqlDb = mysql.createConnection({
+    ...env.mysqlCreds,
+    ...{database: env.mysqlDbName}
+  });
+
+  mysqlDb.connect((error) => {
+    if (error) 
+      throw new Error('MySQL database connection error:' + error.message);
     console.log('SUCCESS: Connected to the MySQL database');
-});
+  });
+}
+catch(err) {
+  console.error(err);
+}
