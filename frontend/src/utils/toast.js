@@ -32,8 +32,26 @@ export const showDuplicateQuestionErrorToast = (error) => {
   });
 };
 
+export const showDuplicateUserErrorToast = (error) => {
+  toast.error('Duplicate User Error: ' + error.response.data.error, {
+    position: toast.POSITION.BOTTOM_RIGHT
+  });
+};
+
 export const showQuestionNotFoundErrorToast = (error) => {
   toast.error('Question Not Found Error: ' + error.response.data.error, {
+    position: toast.POSITION.BOTTOM_RIGHT
+  });
+};
+
+export const showUserNotFoundErrorToast = (error) => {
+  toast.error('User Not Found Error: ' + error.response.data.error, {
+    position: toast.POSITION.BOTTOM_RIGHT
+  });
+};
+
+export const showUserNotAuthorizedErrorToast = (error) => {
+  toast.error('Authorization Error: ' + error.response.data.error, {
     position: toast.POSITION.BOTTOM_RIGHT
   });
 };

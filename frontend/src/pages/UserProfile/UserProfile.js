@@ -6,7 +6,7 @@ import EditUser from '../../components/User/EditUser';
 import ChangeUserPassword from '../../components/User/ChangeUserPassword';
 import { ViewUserTopPane, ViewUserBottomPane } from '../../components/User/ViewUser';
 import { getUser } from '../../api/UserApi.js';
-import { showValidationErrorToast, showServerErrorToast } from '../../utils/toast.js';
+import { showValidationErrorToast, showFailureToast } from '../../utils/toast.js';
 import { Grid, Container } from '@mui/material';
 
 function UserProfile() {
@@ -15,19 +15,22 @@ function UserProfile() {
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
+
     const fetchData = async () => {
-      getUser(storedUser.id)
-        .then((res) => {
-          setUser(res);
-        })
-        .catch((error) => {
-          navigate(-1);
-          if (error.response.status === 400) {
+      try {
+        const response = await getUser(storedUser.id);
+        setUser(response);
+
+      } catch (error) {
+        navigate(-1);
+        switch (error.response.status) {
+          case 400:
             showValidationErrorToast(error);
-          } else {
-            showServerErrorToast(error);
-          }
-        });
+            break;
+          default:
+            showFailureToast(error);
+        }
+      }
     };
 
     if (storedUser) {
