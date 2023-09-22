@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { updateUsername } from '../../api/UserApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
 
 const EditUser = ({ user = null }) => {
   const [id, setId] = useState(null);
@@ -26,19 +26,20 @@ const EditUser = ({ user = null }) => {
 
   const handleUpdateClick = async (e) => {
     e.preventDefault();
-    
-    updateUsername(id, newUsername)
-      .then(() => {
-        navigate(-1);
-        showSuccessToast('Username updated successfully!');
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
+
+    try {
+      await updateUsername(id, newUsername);
+      navigate(-1);
+      showSuccessToast('Username updated successfully!');
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
           showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      });
+          break;
+        default:
+          showFailureToast(error);
+      }
+    }
   };
 
   const handleUsernameChange = (event) => {
