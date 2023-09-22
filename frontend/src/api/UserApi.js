@@ -1,7 +1,10 @@
 import axios from 'axios';
+const env = require("../loadEnvironment");
+
+const rootUrl = 'http://localhost:' + env.SERVER_PORT;
 
 export const signup = async (userData) => {
-  return axios.post('http://localhost:3000/auth/signup', userData, {
+  return axios.post(rootUrl + '/auth/signup', userData, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -9,7 +12,7 @@ export const signup = async (userData) => {
 };
 
 export const login = async (userData) => {
-  return axios.post('http://localhost:3000/auth/login', userData, {
+  return axios.post(rootUrl + '/auth/login', userData, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -17,7 +20,7 @@ export const login = async (userData) => {
 };
 
 export const getAllUsers = async () => {
-  const res = await axios.get('http://localhost:3000/user/readAll', {
+  const res = await axios.get(rootUrl + '/user/readAll', {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -27,7 +30,7 @@ export const getAllUsers = async () => {
 
 export const getUser = async (id) => {
   const res = await axios.post(
-    'http://localhost:3000/user/read',
+    rootUrl + '/user/read',
     { id },
     {
       headers: {
@@ -40,7 +43,7 @@ export const getUser = async (id) => {
 
 export const updateUsername = async (id, newUsername) => {
   const res = await axios.post(
-    'http://localhost:3000/user/update',
+    rootUrl + '/user/update',
     { id: id, username: newUsername },
     {
       headers: {
@@ -53,7 +56,7 @@ export const updateUsername = async (id, newUsername) => {
 
 export const updatePassword = (id, currentPassword, newPassword, confirmPassword) => {
   return axios.post(
-    'http://localhost:3000/user/change-password',
+    rootUrl + '/user/change-password',
     { id: id, currentPassword: currentPassword, newPassword: newPassword, confirmPassword: confirmPassword },
     {
       headers: {
@@ -65,7 +68,7 @@ export const updatePassword = (id, currentPassword, newPassword, confirmPassword
 
 export const deleteUser = (id) => {
   return axios.post(
-    'http://localhost:3000/user/delete',
+    rootUrl + '/user/delete',
     { id },
     {
       headers: {

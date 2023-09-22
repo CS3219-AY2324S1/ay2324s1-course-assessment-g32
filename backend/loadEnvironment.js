@@ -1,4 +1,4 @@
-require('dotenv').config({path:`${__dirname}/.env`});
+require('dotenv').config({path:`${__dirname}/../.env`});
 
 const WEB_PORT = process.env.WEB_PORT || 3000;
 const SERVER_PORT = process.env.SERVER_PORT || 5000;
