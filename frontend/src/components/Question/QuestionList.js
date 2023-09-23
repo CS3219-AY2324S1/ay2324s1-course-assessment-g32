@@ -4,9 +4,10 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import { getQuestions } from '../../api/QuestionApi.js';
-import { showServerErrorToast, showFailureToast } from '../../utils/toast.js';
+import { errorHandler } from '../../utils/errors.js';
 
 const QuestionList = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
@@ -16,14 +17,9 @@ const QuestionList = () => {
       try {
         const questions = await getQuestions();
         setTableData(questions);
+        setIsLoading(false);
       } catch (error) {
-        switch (error.response.status) {
-          case 408:
-            showServerErrorToast(error);
-            break;
-          default:
-            showFailureToast(error);
-        }
+        errorHandler(error);
       }
     };
 
@@ -75,7 +71,11 @@ const QuestionList = () => {
     </tr>
   ));
 
-  return (
+  return isLoading ? (
+    <div className='spinner-border text-primary' role='status'>
+      <span className='visually-hidden'>Loading...</span>
+    </div>
+  ) : (
     <div className='container'>
       <h1>Question List</h1>
       <table ref={tableRef} className='table table-hover table-striped'>

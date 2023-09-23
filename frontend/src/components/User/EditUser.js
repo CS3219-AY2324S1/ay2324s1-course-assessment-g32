@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { updateUsername } from '../../api/UserApi.js';
-import { showValidationErrorToast, showSuccessToast, showFailureToast } from '../../utils/toast.js';
+import { showSuccessToast } from '../../utils/toast.js';
+import { errorHandler } from '../../utils/errors.js';
 
 const EditUser = ({ user = null }) => {
   const [id, setId] = useState(null);
@@ -32,18 +33,16 @@ const EditUser = ({ user = null }) => {
       navigate(-1);
       showSuccessToast('Username updated successfully!');
     } catch (error) {
-      switch (error.response.status) {
-        case 400:
-          showValidationErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      }
+      errorHandler(error);
     }
   };
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
+  };
+
+  const handleBackClick = () => {
+    navigate('../');
   };
 
   return isLoading ? (
@@ -74,7 +73,10 @@ const EditUser = ({ user = null }) => {
           <input type='text' className='form-control' id='editUsername' placeholder='username' value={newUsername} onChange={handleUsernameChange} required />
           <label htmlFor='editUsername'>Username</label>
         </div>
-        <div className='d-flex justify-content-end'>
+        <div className='d-flex justify-content-between'>
+          <button type="button" className="btn btn-secondary" onClick={handleBackClick}>
+            Back
+          </button>
           <button type='submit' className='btn btn-success'>
             Update
           </button>

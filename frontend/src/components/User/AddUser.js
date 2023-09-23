@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { signup } from '../../api/UserApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
+import { showSuccessToast } from '../../utils/toast.js';
+import { errorHandler } from '../../utils/errors.js';
 
 const AddUser = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const navigate = useNavigate();
 
   const handleRegisterClick = async (e) => {
     e.preventDefault();
@@ -18,13 +22,10 @@ const AddUser = () => {
     signup(userData)
       .then(() => {
         showSuccessToast('User registered successfully!');
+        navigate('../');
       })
       .catch((error) => {
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
+        errorHandler(error);
       });
   };
 
@@ -38,6 +39,10 @@ const AddUser = () => {
 
   const handleConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
+  };
+
+  const handleBackClick = () => {
+    navigate('../');
   };
 
   return (
@@ -70,7 +75,10 @@ const AddUser = () => {
           <label htmlFor='confirmPassword'>Confirm Password</label>
         </div>
         <p style={{fontStyle:'italic'}}>Password must be at least 8 characters long.</p>
-        <div className='d-flex justify-content-end'>
+        <div className='d-flex justify-content-between'>
+          <button type="button" className="btn btn-secondary" onClick={handleBackClick}>
+            Back
+          </button>
           <button type='submit' className='btn btn-success'>
             Register
           </button>

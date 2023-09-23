@@ -39,3 +39,22 @@ export function EditWindow({ onClose, onConfirm }) {
     </div>
   );
 };
+
+export function DeregisterWindow({ onClose, onConfirm }) {
+
+  return (
+    <div className='overlay'>
+      <Alert variant='danger'>
+        <Alert.Heading>Are you sure you want to deregister the account?</Alert.Heading>
+        <p>
+          This account will be deleted from the database permanently.
+        </p>
+        <hr />
+        <div className='d-flex justify-content-end'>
+          <button type='button' className='btn btn-outline-danger me-2' onClick={onClose}>No</button>
+          <button type='button' className='btn btn-danger' onClick={onConfirm}>Yes</button>
+        </div>
+      </Alert>
+    </div>
+  );
+};
