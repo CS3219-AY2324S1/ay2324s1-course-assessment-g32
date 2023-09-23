@@ -1,9 +1,14 @@
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Card, Box, Typography, Button } from '@mui/material';
 import { deleteUser } from '../../api/UserApi.js';
-import { showSuccessToast, showValidationErrorToast, showFailureToast } from '../../utils/toast.js';
+import { showSuccessToast } from '../../utils/toast.js';
+import { DeregisterWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
+import { errorHandler } from '../../utils/errors.js';
 
 export const ViewUserTopPane = ({ user }) => {
+  const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const handleViewProfileClick = () => {
@@ -14,22 +19,24 @@ export const ViewUserTopPane = ({ user }) => {
     navigate('/user-profile/change-password/');
   };
 
-  const handleDeregisterClick = async () => {
+  const handleDeregisterClick = () => {
+    setDeregisterWindowOpen(true);
+  };
+
+  const handleDeregisterConfirm = async () => {
+    setDeregisterWindowOpen(false);
     try {
       await deleteUser(user.id);
       showSuccessToast('User has been deleted successfully!');
       localStorage.removeItem('user');
       navigate('/login');
     } catch (error) {
-      navigate(-1);
-      switch (error.response.status) {
-        case 400:
-          showValidationErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      } 
+      errorHandler(error);
     }
+  };
+
+  const handleDeregisterCancel = () => {
+    setDeregisterWindowOpen(false);
   };
 
   return (
@@ -51,6 +58,7 @@ export const ViewUserTopPane = ({ user }) => {
           </Button>
         </Box>
       </Box>
+      {isDeregisterWindowOpen && <DeregisterWindow onConfirm={handleDeregisterConfirm} onClose={handleDeregisterCancel} />}
     </Card>
   );
 };

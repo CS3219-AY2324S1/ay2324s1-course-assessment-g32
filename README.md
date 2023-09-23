@@ -13,6 +13,28 @@ For development, you may also want to install:
 
 # Setup
 
+## Temporary Setup for Assignment 5
+
+1. Download and install [Erlang](https://www.erlang.org/downloads)
+2. Download and install [RabbitMQ](https://www.rabbitmq.com/download.html)
+3. npm install and run backend and frontend as per normal
+4. In another terminal, `cd backend\server\services` and run `nodemon matchService`
+5. Use postman to send a POST request to `http://localhost:3001/queue/join` with the following JSON body:
+```
+{
+  "complexityType": "Easy",
+  "id": "1"
+}
+
+--Note: complexityType can be "Easy", "Medium" or "Hard" and id can be any number
+```
+6. In the terminal running matchService, you should see console messages indicating that a match has been found
+
+*Optional: To view and clear the status of queues during debugging, you can run
+ `rabbitmq-plugins enable rabbitmq_management` in RabbitMQ Command Prompt (sbin dir).
+Go to `http://localhost:15672/` in your browser, login with default user `guest` and password `guest`*
+
+
 ## Setup MySQL locally
 
 1. Search for **MySQL 8.1 Command Line Client** on your computer. Execute it to open up the terminal.

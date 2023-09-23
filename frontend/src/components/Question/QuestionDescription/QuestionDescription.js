@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import { getQuestionDetails, deleteQuestion } from '../../../api/QuestionApi.js';
-import { showServerErrorToast, showSuccessToast, showQuestionNotFoundErrorToast, showFailureToast } from '../../../utils/toast.js';
+import { showSuccessToast } from '../../../utils/toast.js';
 import { DeletionWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
+import { errorHandler } from '../../../utils/errors.js';
 import './QuestionDescription.css';
 import '../../../css/Tags.css';
 
@@ -31,16 +32,7 @@ const QuestionDescription = () => {
         setIsLoading(false);
       } catch (error) {
         navigate('../');
-        switch (error.response.status) {
-          case 410:
-            showQuestionNotFoundErrorToast(error);
-            break;
-          case 408:
-            showServerErrorToast(error);
-            break;
-          default:
-            showFailureToast(error);
-        }
+        errorHandler(error);
       }
     };
 
@@ -66,7 +58,7 @@ const QuestionDescription = () => {
       showSuccessToast('Successfully Deleted!');
       navigate('../');
     } catch (error) {
-      showServerErrorToast(error);
+      errorHandler(error);
     }
   };
 

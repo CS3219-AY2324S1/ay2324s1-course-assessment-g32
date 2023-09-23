@@ -6,18 +6,24 @@ import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
-import { showSuccessToast, showServerErrorToast, showValidationErrorToast, showFailureToast } from '../../../utils/toast.js';
+import { showSuccessToast } from '../../../utils/toast.js';
 import { parseDatetime } from '../../../utils/helpers.js';
+import { DeregisterWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
+import { errorHandler } from '../../../utils/errors.js';
 import './UserList.css';
 
 const UserList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
+  const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
+  const [deregisterId, setDeregisterId] = useState(null);
 
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
   const storedUser = JSON.parse(localStorage.getItem('user'));
+
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -25,16 +31,7 @@ const UserList = () => {
       setTableData(response);
       setIsLoading(false);
     } catch (error) {
-      switch (error.response.status) {
-        case 400:
-          showValidationErrorToast(error);
-          break;
-        case 500:
-          showServerErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      }
+      errorHandler(error);
     }
   };
 
@@ -59,33 +56,32 @@ const UserList = () => {
     }
   }, [tableData]); // Initialize whenever tableData changes
 
-  const navigate = useNavigate();
-
   const handleNewUserClick = () => {
     navigate('/users-management/new');
-  }
+  };
 
   const handleEditClick = (id, username) => {
     navigate('/users-management/edit', { state: { id: id, username: username } });
   };
 
-  const handleDeleteClick = async (id) => {
+  const handleDeregisterClick = (id) => {
+    setDeregisterId(id);
+    setDeregisterWindowOpen(true);
+  };
+
+  const handleDeregisterConfirm = async () => {
+    setDeregisterWindowOpen(false);
     try {
-      await deleteUser(id);
+      await deleteUser(deregisterId);
       fetchData();
       showSuccessToast('User has been deleted successfully!');
     } catch (error) {
-      switch (error.response.status) {
-        case 400:
-          showValidationErrorToast(error);
-          break;
-        case 500:
-          showServerErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      }
+      errorHandler(error);
     }
+  };
+
+  const handleDeregisterCancel = () => {
+    setDeregisterWindowOpen(false);
   };
 
   const userList = tableData.map((user, index) => (
@@ -102,7 +98,7 @@ const UserList = () => {
           <Button variant='contained' onClick={() => handleEditClick(user.id, user.username)}>
             Edit
           </Button>
-          <Button variant='contained' color='error' onClick={() => handleDeleteClick(user.id)}>
+          <Button variant='contained' color='error' onClick={() => handleDeregisterClick(user.id)}>
             Deregister
           </Button>
         </td>
@@ -147,6 +143,7 @@ const UserList = () => {
           Register New User
         </button>
       </div>
+      {isDeregisterWindowOpen && <DeregisterWindow onConfirm={handleDeregisterConfirm} onClose={handleDeregisterCancel} />}
     </div>
   );
 };

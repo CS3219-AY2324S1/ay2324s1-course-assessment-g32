@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./server/routes/auth');
 const userRoutes = require('./server/routes/user');
 const questionRoutes = require('./server/routes/question');
+const queueRoutes = require('./server/routes/queue');
 const env = require('./loadEnvironment');
 
 console.log('Starting server ...');
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/question', questionRoutes);
+app.use('/queue', queueRoutes);
 app.listen(env.SERVER_PORT, () => {
   console.log(`Server is running on port: ${env.SERVER_PORT}`);
 });

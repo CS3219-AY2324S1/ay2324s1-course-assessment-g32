@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../api/UserApi';
-import { showValidationErrorToast, showSuccessToast, 
-  showUserNotFoundErrorToast, showUserNotAuthorizedErrorToast, 
-  showFailureToast } from '../utils/toast.js';
+import { showSuccessToast } from '../utils/toast.js';
+import { errorHandler } from '../utils/errors.js';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -42,19 +41,7 @@ const Login = () => {
       navigate('/landing');
       showSuccessToast('User logged in successfully!');
     } catch (error) {
-      switch (error.response.status) {
-        case 400:
-          showValidationErrorToast(error);
-          break;
-        case 401:
-          showUserNotAuthorizedErrorToast(error);
-          break;
-        case 410:
-          showUserNotFoundErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      }
+      errorHandler(error);
     }
   };
 

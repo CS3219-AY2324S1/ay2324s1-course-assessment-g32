@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showUserNotAuthorizedErrorToast, showFailureToast } from '../../utils/toast.js';
+import { showSuccessToast } from '../../utils/toast.js';
 import { updatePassword } from '../../api/UserApi.js';
+import { errorHandler } from '../../utils/errors.js';
 
 const ChangeUserPassword = ({ user }) => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -19,19 +20,7 @@ const ChangeUserPassword = ({ user }) => {
       navigate(-1);
       showSuccessToast('Password updated successfully!');
     } catch (error) {
-      switch (error.response.status) {
-        case 400:
-          showValidationErrorToast(error);
-          break;
-        case 401:
-          showUserNotAuthorizedErrorToast(error);
-          break;
-        case 500:
-          showServerErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      }
+      errorHandler(error);
     }
   };
 
@@ -45,6 +34,10 @@ const ChangeUserPassword = ({ user }) => {
 
   const handleConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
+  };
+
+  const handleBackClick = () => {
+    navigate('../');
   };
 
   return (
@@ -74,7 +67,10 @@ const ChangeUserPassword = ({ user }) => {
           <input type='password' className='form-control' id='confirmPassword' placeholder='Confirm New Password' onChange={handleConfirmPasswordChange} required />
           <label htmlFor='confirmPassword'>Confirm New Password</label>
         </div>
-        <div className='d-flex justify-content-end'>
+        <div className='d-flex justify-content-between'>
+          <button type="button" className="btn btn-secondary" onClick={handleBackClick}>
+            Back
+          </button>
           <button type='submit' className='btn btn-success'>
             Update
           </button>
