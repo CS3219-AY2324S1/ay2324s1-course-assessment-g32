@@ -107,7 +107,7 @@ const consume = async (queueName, channel, waitingHost) => {
 
             waitingHost = undefined;
           }
-        }, TIMEOUT - waitingDuration(request.timestamp));
+        }, 30000);
       }
     }
   });
@@ -117,18 +117,22 @@ const main = async () => {
   const connection = await amqp.connect('amqp://localhost');
   const channel = await connection.createChannel();
 
-  await channel.assertQueue('easy', { durable: false });
-  await channel.assertQueue('medium', { durable: false });
-  await channel.assertQueue('hard', { durable: false });
-  await channel.assertQueue('easyResponseQueue', { durable: false });
-  await channel.assertQueue('mediumResponseQueue', { durable: false });
-  await channel.assertQueue('hardResponseQueue', { durable: false });
+  await channel.deleteQueue('Easy');
+  await channel.deleteQueue('Medium');
+  await channel.deleteQueue('Hard');
+
+  await channel.assertQueue('Easy', { durable: false });
+  await channel.assertQueue('Medium', { durable: false });
+  await channel.assertQueue('Hard', { durable: false });
+  await channel.assertQueue('EasyResponseQueue', { durable: false });
+  await channel.assertQueue('MediumResponseQueue', { durable: false });
+  await channel.assertQueue('HardResponseQueue', { durable: false });
 
   console.log('Queueing service is running...');
 
-  consume('easy', channel, easyWaitingHost);
-  consume('medium', channel, mediumWaitingHost);
-  consume('hard', channel, hardWaitingHost);
+  consume('Easy', channel, easyWaitingHost);
+  consume('Medium', channel, mediumWaitingHost);
+  consume('Hard', channel, hardWaitingHost);
 };
 
 main().catch(console.error);

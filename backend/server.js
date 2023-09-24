@@ -40,20 +40,20 @@ try {
     console.error('MongoDB database connection error:', error);
   });
 
-  
+
   // MySQL
   const mysqlDb = mysql.createConnection({
     ...env.mysqlCreds,
-    ...{database: env.mysqlDbName}
+    ...{ database: env.mysqlDbName }
   });
 
   mysqlDb.connect((error) => {
-    if (error) 
+    if (error)
       throw new Error('MySQL database connection error:' + error.message);
     console.log('SUCCESS: Connected to the MySQL database');
   });
 
-  
+
   // Collaboration
   const httpServer = http.createServer();
   const io = socketIo(httpServer, {
@@ -63,7 +63,7 @@ try {
     }
   });
 
-  io.on('connection', (socket) => {  
+  io.on('connection', (socket) => {
     socket.on('joinRoom', (room) => {
       socket.join(room);
       console.log(`User joined room: ${room}`);
@@ -75,7 +75,7 @@ try {
     socket.on('leaveRoom', (room) => {
       socket.leave(room); // Leave the specified room
       console.log(`User left room: ${room}`);
-  
+
       // Broadcast a message to the room when someone leaves
       io.to(room).emit('message', `User left room: ${room}`);
     });
@@ -89,11 +89,11 @@ try {
       console.log('A user disconnected');
     });
   });
-  
+
   httpServer.listen(3002, () => {
     console.log('Socket.io server is running on http://localhost:3002');
   });
 }
-catch(err) {
+catch (err) {
   console.error(err);
 }

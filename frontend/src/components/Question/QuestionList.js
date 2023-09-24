@@ -3,11 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import MatchingModal from '../MatchMaking/MatchingModal.js';
 import { getQuestions } from '../../api/QuestionApi.js';
 import { errorHandler } from '../../utils/errors.js';
 
 const QuestionList = () => {
+
   const [isLoading, setIsLoading] = useState(true);
+  const [isMatchingModalOpen, setMatchingModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
@@ -48,8 +51,8 @@ const QuestionList = () => {
     navigate('/landing/new');
   };
 
-  const handleInitiateMatchClick = () => {
-    navigate('/match-making');
+  const handleToggleModal = () => {
+    setMatchingModalOpen(!isMatchingModalOpen);
   };
 
   const getComplexityColor = (complexity) => {
@@ -103,11 +106,12 @@ const QuestionList = () => {
           Add
         </button>
       </div>
-      <div className='text-md-end' HEIG>
-        <button type='button' className='btn btn-danger' onClick={handleInitiateMatchClick}>
+      <div className='text-md-end'>
+        <button type="button" className="btn btn-primary" onClick={handleToggleModal}>
           Match
         </button>
       </div>
+      {isMatchingModalOpen && <MatchingModal isOpen={isMatchingModalOpen} onClose={handleToggleModal} />}
     </div>
   );
 };
