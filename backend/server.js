@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const http = require("http"); // for collaboration
+const socketIo = require('socket.io'); // for collaboration
 const authRoutes = require('./server/routes/auth');
 const userRoutes = require('./server/routes/user');
 const questionRoutes = require('./server/routes/question');
@@ -49,6 +51,47 @@ try {
     if (error) 
       throw new Error('MySQL database connection error:' + error.message);
     console.log('SUCCESS: Connected to the MySQL database');
+  });
+
+  
+  // Collaboration
+  const httpServer = http.createServer();
+  const io = socketIo(httpServer, {
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"]
+    }
+  });
+
+  io.on('connection', (socket) => {  
+    socket.on('joinRoom', (room) => {
+      socket.join(room);
+      console.log(`User joined room: ${room}`);
+
+      // Broadcast a message to the room when someone joins
+      io.to(room).emit('message', `User joined room: ${room}`);
+    });
+
+    socket.on('leaveRoom', (room) => {
+      socket.leave(room); // Leave the specified room
+      console.log(`User left room: ${room}`);
+  
+      // Broadcast a message to the room when someone leaves
+      io.to(room).emit('message', `User left room: ${room}`);
+    });
+
+    // Handle chat messages
+    socket.on('chatMessage', (data) => {
+      io.to(data.room).emit('message', data.message); // Broadcast message to everyone in the room
+    });
+
+    socket.on('disconnect', () => {
+      console.log('A user disconnected');
+    });
+  });
+  
+  httpServer.listen(3002, () => {
+    console.log('Socket.io server is running on http://localhost:3002');
   });
 }
 catch(err) {

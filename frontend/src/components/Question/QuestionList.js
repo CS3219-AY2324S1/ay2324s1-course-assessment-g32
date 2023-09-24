@@ -48,6 +48,10 @@ const QuestionList = () => {
     navigate('/landing/new');
   };
 
+  const handleInitiateMatchClick = () => {
+    navigate('/match-making');
+  };
+
   const getComplexityColor = (complexity) => {
     switch (complexity) {
       case 'Easy':
@@ -97,6 +101,11 @@ const QuestionList = () => {
       <div className='text-md-end'>
         <button type='button' className='btn btn-success' onClick={handleNewQuestionClick}>
           Add
+        </button>
+      </div>
+      <div className='text-md-end' HEIG>
+        <button type='button' className='btn btn-danger' onClick={handleInitiateMatchClick}>
+          Match
         </button>
       </div>
     </div>

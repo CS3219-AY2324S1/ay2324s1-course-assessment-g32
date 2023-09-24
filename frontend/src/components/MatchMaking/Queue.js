@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { joinQueue, exitQueue } from '../../api/QueueApi.js';
 import { errorHandler } from '../../utils/errors.js';
 
@@ -9,18 +9,26 @@ const Queue = ({ user }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const { difficulty } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-   const fetchData = async () => {
-     try {
-       const reply = await joinQueue(user, difficulty);
-       setStatus(reply.data.response.message);
-       setIsLoading(false);
-     } catch (error) {
-       errorHandler(error);
-     }
-   };
-   fetchData();
+    const fetchData = async () => {
+      try {
+        const reply = await joinQueue(user, difficulty);
+        setStatus(reply.data.response.message);
+        setIsLoading(false);
+
+        // navigate to collaboration page when match is found
+        if (reply.data.response.isMatch) {
+          const roomId = reply.data.response.roomId;
+          console.log(`Match found! RoomId: ${roomId}`)
+          navigate('/collaboration', { state: { roomId } });
+        }
+      } catch (error) {
+        errorHandler(error);
+      }
+    };
+    fetchData();
   }, [user, difficulty]);
 
   const handleCancelClick = () => {

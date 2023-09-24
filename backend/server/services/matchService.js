@@ -12,6 +12,11 @@ const waitingDuration = (timestamp) => {
   return Date.now() - timestamp;
 }
 
+// Generate a unique room id
+const generateUniqueRoomId = () => {
+  return "id" + Math.random().toString(16).slice(2);
+};
+
 const consume = async (queueName, channel, waitingHost) => {
   channel.consume(queueName, async (message) => {
     if (message !== null) {
@@ -22,7 +27,7 @@ const consume = async (queueName, channel, waitingHost) => {
         if (waitingHost !== undefined) {
           const waitingHostRequest = JSON.parse(waitingHost.content.toString());
           if (waitingHostRequest.id === request.id) {
-            const response = { message: `You have exited ${queueName} room!`};
+            const response = { message: `You have exited ${queueName} room!` };
             console.log(`Host ${waitingHostRequest.id} has exited ${queueName} room!`);
             channel.sendToQueue(waitingHostRequest.replyTo, Buffer.from(JSON.stringify(response)), {
               correlationId: waitingHostRequest.correlationId,
@@ -50,14 +55,24 @@ const consume = async (queueName, channel, waitingHost) => {
 
         console.log(`Host ${request.id} is matched with host ${waitingHostRequest.id} in ${queueName} room!`);
 
-        const waitingHostResponse = { message: `You have been matched with host ${request.id} in ${queueName} room!` };
+        // TODO: Add a unique room id to the response
+        const roomId = generateUniqueRoomId();
 
+        const waitingHostResponse = {
+          message: `You have been matched with host ${request.id} in ${queueName} room!`,
+          isMatch: true,
+          roomId: roomId
+        };
         // Send the response back to reply queue
         channel.sendToQueue(waitingHostRequest.replyTo, Buffer.from(JSON.stringify(waitingHostResponse)), {
           correlationId: waitingHostRequest.correlationId,
         });
 
-        const incomingHostResponse = { message: `You have been matched with host ${waitingHostRequest.id} in ${queueName} room!` };
+        const incomingHostResponse = {
+          message: `You have been matched with host ${waitingHostRequest.id} in ${queueName} room!`,
+          isMatch: true,
+          roomId: roomId
+        };
         channel.sendToQueue(request.replyTo, Buffer.from(JSON.stringify(incomingHostResponse)), {
           correlationId: request.correlationId,
         });
