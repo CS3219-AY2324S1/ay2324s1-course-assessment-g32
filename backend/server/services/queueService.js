@@ -22,6 +22,7 @@ const joinQueue = async (complexityType, id) => {
     id: id,
     replyTo: responseQueue,
     correlationId: correlationId,
+    timestamp: Date.now()
   })));
 
   // Variable to check if the connection is closed

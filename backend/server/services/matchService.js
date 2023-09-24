@@ -4,10 +4,28 @@ var easyWaitingHost = undefined;
 var mediumWaitingHost = undefined;
 var hardWaitingHost = undefined;
 
+// Change timeout value here, 30000ms = 30 seconds
+const TIMEOUT = 10000;
+
+// Calculates how long the host has been waiting
+const waitingDuration = (timestamp) => {
+  return Date.now() - timestamp;
+}
+
 const consume = async (queueName, channel, waitingHost) => {
   channel.consume(queueName, async (message) => {
     if (message !== null) {
       const request = JSON.parse(message.content.toString());
+
+      if (waitingDuration(request.timestamp) > TIMEOUT) {
+        const response = { message: `Host ${request.id} has timed out in ${queueName} room!` };
+        console.log(response.message);
+        channel.sendToQueue(request.replyTo, Buffer.from(JSON.stringify(response)), {
+          correlationId: request.correlationId,
+        });
+        channel.ack(message);
+        return;
+      }
 
       if (waitingHost !== undefined) {
         const waitingHostRequest = JSON.parse(waitingHost.content.toString());
@@ -35,7 +53,7 @@ const consume = async (queueName, channel, waitingHost) => {
         console.log(`Host ${request.id} is waiting for a ${queueName} match...`);
         waitingHost = message;
 
-        // Set timeout for waiting host, 30 seconds maximum
+        // Set timeout for waiting host
         setTimeout(() => {
           if (waitingHost === undefined) return;
 
@@ -53,7 +71,7 @@ const consume = async (queueName, channel, waitingHost) => {
 
             waitingHost = undefined;
           }
-        }, 30000);
+        }, TIMEOUT - waitingDuration(request.timestamp));
       }
     }
   });
