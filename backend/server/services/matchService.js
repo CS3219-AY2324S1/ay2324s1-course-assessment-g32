@@ -22,8 +22,8 @@ const consume = async (queueName, channel, waitingHost) => {
         if (waitingHost !== undefined) {
           const waitingHostRequest = JSON.parse(waitingHost.content.toString());
           if (waitingHostRequest.id === request.id) {
-            const response = { message: `Host ${waitingHostRequest.id} has exited ${queueName} room!` };
-            console.log(response.message);
+            const response = { message: `You have exited ${queueName} room!`};
+            console.log(`Host ${waitingHostRequest.id} has exited ${queueName} room!`);
             channel.sendToQueue(waitingHostRequest.replyTo, Buffer.from(JSON.stringify(response)), {
               correlationId: waitingHostRequest.correlationId,
             });
@@ -36,8 +36,8 @@ const consume = async (queueName, channel, waitingHost) => {
       }
 
       if (waitingDuration(request.timestamp) > TIMEOUT) {
-        const response = { message: `Host ${request.id} has timed out in ${queueName} room!` };
-        console.log(response.message);
+        const response = { message: `You have timed out in ${queueName} room!` };
+        console.log(`Host ${request.id} has timed out in ${queueName} room!`);
         channel.sendToQueue(request.replyTo, Buffer.from(JSON.stringify(response)), {
           correlationId: request.correlationId,
         });
@@ -48,15 +48,17 @@ const consume = async (queueName, channel, waitingHost) => {
       if (waitingHost !== undefined) {
         const waitingHostRequest = JSON.parse(waitingHost.content.toString());
 
-        const response = { message: `Host ${request.id} is matched with host ${waitingHostRequest.id} in ${queueName} room!` };
-        console.log(response.message);
+        console.log(`Host ${request.id} is matched with host ${waitingHostRequest.id} in ${queueName} room!`);
+
+        const waitingHostResponse = { message: `You have been matched with host ${request.id} in ${queueName} room!` };
 
         // Send the response back to reply queue
-        channel.sendToQueue(waitingHostRequest.replyTo, Buffer.from(JSON.stringify(response)), {
+        channel.sendToQueue(waitingHostRequest.replyTo, Buffer.from(JSON.stringify(waitingHostResponse)), {
           correlationId: waitingHostRequest.correlationId,
         });
 
-        channel.sendToQueue(request.replyTo, Buffer.from(JSON.stringify(response)), {
+        const incomingHostResponse = { message: `You have been matched with host ${waitingHostRequest.id} in ${queueName} room!` };
+        channel.sendToQueue(request.replyTo, Buffer.from(JSON.stringify(incomingHostResponse)), {
           correlationId: request.correlationId,
         });
 
@@ -78,8 +80,9 @@ const consume = async (queueName, channel, waitingHost) => {
           const waitingHostRequest = JSON.parse(waitingHost.content.toString());
 
           if (waitingHostRequest.correlationId === request.correlationId) {
-            const response = { message: `Host ${request.id} has timed out in ${queueName} room!` };
-            console.log(response.message);
+            const response = { message: `You have timed out in ${queueName} room!` };
+
+            console.log(`Host ${request.id} has timed out in ${queueName} room!`);
 
             channel.sendToQueue(request.replyTo, Buffer.from(JSON.stringify(response)), {
               correlationId: request.correlationId,
@@ -99,18 +102,18 @@ const main = async () => {
   const connection = await amqp.connect('amqp://localhost');
   const channel = await connection.createChannel();
 
-  await channel.assertQueue('Easy', { durable: false });
-  await channel.assertQueue('Medium', { durable: false });
-  await channel.assertQueue('Hard', { durable: false });
-  await channel.assertQueue('EasyResponseQueue', { durable: false });
-  await channel.assertQueue('MediumResponseQueue', { durable: false });
-  await channel.assertQueue('HardResponseQueue', { durable: false });
+  await channel.assertQueue('easy', { durable: false });
+  await channel.assertQueue('medium', { durable: false });
+  await channel.assertQueue('hard', { durable: false });
+  await channel.assertQueue('easyResponseQueue', { durable: false });
+  await channel.assertQueue('mediumResponseQueue', { durable: false });
+  await channel.assertQueue('hardResponseQueue', { durable: false });
 
   console.log('Queueing service is running...');
 
-  consume('Easy', channel, easyWaitingHost);
-  consume('Medium', channel, mediumWaitingHost);
-  consume('Hard', channel, hardWaitingHost);
+  consume('easy', channel, easyWaitingHost);
+  consume('medium', channel, mediumWaitingHost);
+  consume('hard', channel, hardWaitingHost);
 };
 
 main().catch(console.error);
