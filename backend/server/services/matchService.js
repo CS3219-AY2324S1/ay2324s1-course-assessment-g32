@@ -5,7 +5,7 @@ var mediumWaitingHost = undefined;
 var hardWaitingHost = undefined;
 
 // Change timeout value here, 30000ms = 30 seconds
-const TIMEOUT = 10000;
+const TIMEOUT = 30000;
 
 // Calculates how long the host has been waiting
 const waitingDuration = (timestamp) => {
@@ -16,6 +16,24 @@ const consume = async (queueName, channel, waitingHost) => {
   channel.consume(queueName, async (message) => {
     if (message !== null) {
       const request = JSON.parse(message.content.toString());
+
+      // If the request is an exit request
+      if (request.isExit) {
+        if (waitingHost !== undefined) {
+          const waitingHostRequest = JSON.parse(waitingHost.content.toString());
+          if (waitingHostRequest.id === request.id) {
+            const response = { message: `Host ${waitingHostRequest.id} has exited ${queueName} room!` };
+            console.log(response.message);
+            channel.sendToQueue(waitingHostRequest.replyTo, Buffer.from(JSON.stringify(response)), {
+              correlationId: waitingHostRequest.correlationId,
+            });
+            channel.ack(waitingHost);
+            waitingHost = undefined;
+          }
+        }
+        channel.ack(message);
+        return;
+      }
 
       if (waitingDuration(request.timestamp) > TIMEOUT) {
         const response = { message: `Host ${request.id} has timed out in ${queueName} room!` };

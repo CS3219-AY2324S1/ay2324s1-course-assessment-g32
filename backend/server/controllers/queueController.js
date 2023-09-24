@@ -12,6 +12,19 @@ const joinQueue = async (req, res) => {
   }
 };
 
+const exitQueue = async (req, res) => {
+  try {
+    const { complexityType, id } = req.body;
+    await queueService.exitQueue(complexityType, id);
+    res.json({ message: 'Exited queue successfully' })
+  } catch (err) {
+    res
+      .status(err?.status || 500)
+      .json({ error: err?.message || err });
+  }
+};
+
 module.exports = {
-  joinQueue
+  joinQueue,
+  exitQueue
 };
