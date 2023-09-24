@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { joinQueue, exitQueue } from '../../api/QueueApi.js';
-import { showSuccessToast } from '../../utils/toast.js';
 import { errorHandler } from '../../utils/errors.js';
 
 const Queue = ({ user }) => {
@@ -10,7 +8,6 @@ const Queue = ({ user }) => {
   const [status, setStatus] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  const navigate = useNavigate();
   const { difficulty } = useParams();
 
   useEffect(() => {
