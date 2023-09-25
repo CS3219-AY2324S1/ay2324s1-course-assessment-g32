@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CountdownTimer from '../CountdownTimer/CountdownTimer.js';
 import { joinQueue, exitQueue } from '../../api/QueueApi.js';
 import { errorHandler } from '../../utils/errors.js';
+import { showFailureToast } from '../../utils/toast.js';
 
 const Queue = ({ user, complexity, onCancel }) => {
 
@@ -31,6 +32,18 @@ const Queue = ({ user, complexity, onCancel }) => {
     fetchData();
   }, [user, complexity, navigate]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      // To get the latest value of isLoading
+      setIsLoading((isLoading) => {
+        if (isLoading) {
+          showFailureToast('Server is not responding. Please try again later.');
+          onCancel();
+        }
+      });
+    }, 32000);
+  });
+
   const handleCancelClick = () => {
     try {
       exitQueue(user, complexity);
@@ -53,8 +66,8 @@ const Queue = ({ user, complexity, onCancel }) => {
     </div>
   ) : (
     <div className='container'>
-      <div className='row' style={{ marginTop: '10px' }}>
-        <h1>{status}</h1>
+      <div className='row text-center'>
+        <p>{status}</p>
         <button className='btn btn-secondary' onClick={handleBackClick} >Back</button>
       </div>
     </div>
