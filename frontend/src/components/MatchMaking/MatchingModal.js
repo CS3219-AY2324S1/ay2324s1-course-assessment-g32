@@ -23,7 +23,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
       if (isFindingMatch) {
         await exitQueue(storedUser, complexityValue);
       }
-    }
+    };
 
     // Add event listeners for closing the tab
     window.addEventListener('beforeunload', handleExitTab);
