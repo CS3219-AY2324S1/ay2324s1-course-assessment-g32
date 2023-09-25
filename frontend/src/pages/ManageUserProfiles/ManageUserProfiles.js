@@ -4,6 +4,7 @@ import Header from '../../components/Header';
 import AddUser from '../../components/User/AddUser';
 import EditUser from '../../components/User/EditUser';
 import UserList from '../../components/User/UserList/UserList';
+import PageNotFound from '../PageNotFound/PageNotFound';
 import './ManageUserProfiles.css';
 
 function ManageUserProfiles() {
@@ -32,6 +33,7 @@ function ManageUserProfiles() {
           <Route path='/' element={<UserList />} />
           <Route path='/new/' element={<AddUser />} />
           <Route path='/edit/' element={<EditUser />} />
+          <Route path='*' element={<PageNotFound />} />
         </Routes>
       </div>
     </div>
