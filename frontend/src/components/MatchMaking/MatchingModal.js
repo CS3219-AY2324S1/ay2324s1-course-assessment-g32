@@ -67,7 +67,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
                 <div className="modal-body">
                   <form className='create-question-form needs-validation' >
                     <div className='form-floating mb-3'>
-                      <select className='form-select mb-3' id='matchingQuestitonComplexity' defaultValue='Easy' onChange={handleComplexityValueChange} >
+                      <select className='form-select mb-3' id='matchingQuestitonComplexity' defaultValue={complexityValue} onChange={handleComplexityValueChange} >
                         <option value='Easy'>Easy</option>
                         <option value='Medium'>Medium</option>
                         <option value='Hard'>Hard</option>
