@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { exitQueue } from '../../api/QueueApi.js';
 import Queue from './Queue';
 import '../../css/Modal.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,6 +28,14 @@ const MatchingModal = ({ isOpen, onClose }) => {
     setIsFindingMatch(!isFindingMatch);
   };
 
+  const handleClosingModal = () => {
+    if (isFindingMatch) {
+      exitQueue(storedUser, complexityValue);
+    }
+    onClose();
+    setIsFindingMatch(false);
+  };
+
   return (
     <div>
       <div className="modal-backdrop fade show"></div>
@@ -35,7 +44,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Match with other users to collaborate!</h5>
-              <button type="button" className="btn-close" onClick={onClose}></button>
+              <button type="button" className="btn-close" onClick={handleClosingModal}></button>
             </div>
             {isFindingMatch ? (
               <div className="modal-body">
