@@ -18,6 +18,18 @@ const MatchingModal = ({ isOpen, onClose }) => {
     if (!storedUser) {
       navigate('/login');
     }
+
+    const handleExitTab = async () => {
+      if (isFindingMatch) {
+        await exitQueue(storedUser, complexityValue);
+      }
+    }
+
+    // Add event listeners for closing the tab
+    window.addEventListener('beforeunload', handleExitTab);
+    return () => {
+      window.removeEventListener('beforeunload', handleExitTab);
+    };
   }, [navigate, storedUser]);
 
   const handleComplexityValueChange = (event) => {
