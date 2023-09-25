@@ -107,7 +107,7 @@ const consume = async (queueName, channel, waitingHost) => {
 
             waitingHost = undefined;
           }
-        }, 30000);
+        }, TIMEOUT - waitingDuration(request.timestamp));
       }
     }
   });
