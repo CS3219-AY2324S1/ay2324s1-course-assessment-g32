@@ -5,6 +5,7 @@ import QuestionDescription from '../../components/Question/QuestionDescription/Q
 import EditQuestion from '../../components/Question/EditQuestion';
 import CreateQuestion from '../../components/Question/CreateQuestion/CreateQuestion';
 import Header from '../../components/Header';
+import PageNotFound from '../PageNotFound/PageNotFound';
 import './Landing.css';
 
 function Landing() {
@@ -33,6 +34,7 @@ function Landing() {
           <Route path='/question/:id' element={<QuestionDescription />} />
           <Route path='/edit/:id' element={<EditQuestion />} />
           <Route path='/new' element={<CreateQuestion />} />
+          <Route path='*' element={<PageNotFound />} />
         </Routes>
       </div>
     </div>
