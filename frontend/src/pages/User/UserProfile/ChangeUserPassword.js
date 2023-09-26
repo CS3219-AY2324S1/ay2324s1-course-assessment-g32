@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { showSuccessToast } from '../../utils/toast.js';
-import { updatePassword } from '../../api/UserApi.js';
-import { errorHandler } from '../../utils/errors.js';
-import Header from '../../components/Header.js';
+import { showSuccessToast } from '../../../utils/toast.js';
+import { updatePassword } from '../../../api/UserApi.js';
+import { errorHandler } from '../../../utils/errors.js';
+import Header from '../../../components/Header.js';
 import { Container, Grid } from '@mui/material';
-import { ViewUserTopPane } from '../../components/User/ViewUser.js';
+import { ViewUserTopPane } from '../../../components/User/ViewUser.js';
 
 const ChangeUserPassword = () => {
   const [user, setUser] = useState({});

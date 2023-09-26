@@ -9,21 +9,23 @@ import {
   CreateQuestion,
   EditQuestion,
   QuestionDescription,
-} from './components/Question/Question';
+} from './pages/Question/Question';
 // Normal user pages
 import {
   ChangeUserPassword,
   ManageUserProfile,
   NormalEditUser,
-} from './pages/UserProfile/UserProfile';
+} from './pages/User/UserProfile/UserProfile';
 // Maintainer pages
 import {
   AddUser,
   MaintainerEditUser,
   ManageUserProfiles,
-} from './pages/UsersManagement/UsersManagement';
+} from './pages/User/UsersManagement/UsersManagement';
 // Unauthorised page
 import UnauthorisedPage from './pages/UnauthorisedPage/UnauthorisedPage';
+// Page not found page
+import PageNotFound from './pages/PageNotFound/PageNotFound';
 // Special routes
 import ProtectedRoute from './utils/ProtectedRoute';
 import MaintainerRoute from './utils/MaintainerRoute';
@@ -78,6 +80,9 @@ function App() {
 
         {/* Display UnauthorisedPage component if user is not authorised */}
         <Route path='/unauthorised' element={<UnauthorisedPage />} />
+
+        {/* Display UnauthorisedPage component if user is not authorised */}
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
       <ToastContainer />
     </div>

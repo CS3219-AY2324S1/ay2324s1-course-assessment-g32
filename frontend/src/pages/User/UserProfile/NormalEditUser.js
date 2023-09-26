@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../../components/Header.js';
+import Header from '../../../components/Header.js';
 import { Container, Grid } from '@mui/material';
-import { ViewUserTopPane } from '../../components/User/ViewUser.js';
-import EditUser from '../../components/User/EditUser.js';
+import { ViewUserTopPane } from '../../../components/User/ViewUser.js';
+import EditUser from '../../../components/User/EditUser.js';
 import { useLocation } from 'react-router-dom';
 
 const NormalEditUser = () => {

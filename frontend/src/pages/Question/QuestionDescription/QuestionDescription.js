@@ -6,11 +6,11 @@ import {
   deleteQuestion,
 } from '../../../api/QuestionApi.js';
 import { showSuccessToast } from '../../../utils/toast.js';
-import { DeletionWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
+import { DeletionWindow } from '../../../components/ConfirmationWindow/ConfirmationWindows.js';
 import { errorHandler } from '../../../utils/errors.js';
 import './QuestionDescription.css';
 import '../../../css/Tags.css';
-import Header from '../../Header.js';
+import Header from '../../../components/Header.js';
 import Cookies from 'js-cookie';
 import decode from 'jwt-decode';
 

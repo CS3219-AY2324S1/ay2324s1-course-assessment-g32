@@ -1,44 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
-import { editQuestion, getQuestionDetails } from '../../api/QuestionApi.js';
-import { EditWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
-import { showSuccessToast, showFailureToast } from '../../utils/toast.js';
-import { errorHandler } from '../../utils/errors.js';
-import TextEditor from '../TextEditor/TextEditor.js';
-import '../../css/Tags.css';
-import Header from '../Header.js';
+import { createQuestion } from '../../../api/QuestionApi.js';
+import { EditWindow } from '../../../components/ConfirmationWindow/ConfirmationWindows.js';
+import { showSuccessToast, showFailureToast } from '../../../utils/toast.js';
+import { errorHandler } from '../../../utils/errors.js';
+import TextEditor from '../../../components/TextEditor/TextEditor.js';
+import './CreateQuestion.css';
+import '../../../css/Tags.css';
+import Header from '../../../components/Header.js';
 
-const EditQuestion = () => {
+const CreateQuestion = () => {
   const [newTitleValue, setTitleValue] = useState('');
   const [newComplexityValue, setComplexityValue] = useState('');
-  const [newDescriptionValue, setDescriptionValue] = useState('');
   const [newTags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   const [isEditWindowOpen, setEditWindowOpen] = useState(false);
+  const [newDescriptionValue, setDescriptionValue] = useState('');
 
-  const { id } = useParams();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const question = await getQuestionDetails(id);
-        setTitleValue(question.title);
-        setComplexityValue(question.complexity);
-        setDescriptionValue(question.description);
-        setTags(question.tags);
-        setIsLoading(false);
-      } catch (error) {
-        navigate('../');
-        errorHandler(error);
-      }
-    };
-
-    fetchData();
-  }, [id, navigate]);
 
   const handleBackClick = () => {
     setEditWindowOpen(true);
@@ -57,15 +38,14 @@ const EditQuestion = () => {
     e.preventDefault();
 
     try {
-      await editQuestion(
-        id,
+      const response = await createQuestion(
         newTitleValue,
         newComplexityValue,
         newDescriptionValue,
         newTags
       );
-      navigate(-1);
-      showSuccessToast('Question Edited Successfully!');
+      navigate('../question/' + response.data.question._id);
+      showSuccessToast('Question Created Successfully!');
     } catch (error) {
       errorHandler(error);
     }
@@ -77,6 +57,10 @@ const EditQuestion = () => {
 
   const handleComplexityValueChange = (event) => {
     setComplexityValue(event.target.value);
+  };
+
+  const handleDescriptionValueChange = (html) => {
+    setDescriptionValue(html);
   };
 
   const handleTagsChange = (tags) => {
@@ -91,33 +75,22 @@ const EditQuestion = () => {
     setTagInput(input);
   };
 
-  const handleDescriptionValueChange = (html) => {
-    setDescriptionValue(html);
-  };
-
-  return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
-    </div>
-  ) : (
+  return (
     <div className='landing'>
       <Header />
       <div className='body'>
         <div className='container'>
-          <h1>Edit</h1>
+          <h1>Add a Question</h1>
           <form
             className='create-question-form needs-validation'
-            onSubmit={handleSaveClick}
-            noValidate>
+            onSubmit={handleSaveClick}>
             <div className='form-floating mb-3'>
               <input
                 type='text'
                 className='form-control'
                 id='createQuestionTitle'
                 placeholder='title'
-                value={newTitleValue}
                 onChange={handleTitleValueChange}
-                required
               />
               <label htmlFor='createQuestionTitle'>Title</label>
             </div>
@@ -125,9 +98,8 @@ const EditQuestion = () => {
               <select
                 className='form-select mb-3'
                 id='createQuestitonComplexity'
-                value={newComplexityValue}
-                onChange={handleComplexityValueChange}
-                required>
+                defaultValue=''
+                onChange={handleComplexityValueChange}>
                 <option disabled value=''>
                   Select a complexity...
                 </option>
@@ -177,4 +149,4 @@ const EditQuestion = () => {
   );
 };
 
-export default EditQuestion;
+export default CreateQuestion;

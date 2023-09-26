@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import Header from '../../components/Header.js';
-import EditUser from '../../components/User/EditUser.js';
+import Header from '../../../components/Header.js';
+import EditUser from '../../../components/User/EditUser.js';
 
 const MaintainerEditUser = () => {
   const [user, setUser] = useState({});

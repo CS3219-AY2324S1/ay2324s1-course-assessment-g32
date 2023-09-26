@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import decode from 'jwt-decode';
-import Header from '../../../components/Header';
+import Header from '../../../../components/Header';
 import {
   ViewUserTopPane,
   ViewUserBottomPane,
-} from '../../../components/User/ViewUser';
-import { getUser } from '../../../api/UserApi.js';
-import { errorHandler } from '../../../utils/errors.js';
+} from '../../../../components/User/ViewUser';
+import { getUser } from '../../../../api/UserApi.js';
+import { errorHandler } from '../../../../utils/errors.js';
 import { Grid, Container } from '@mui/material';
 
 function ManageUserProfile() {
@@ -22,7 +22,6 @@ function ManageUserProfile() {
     const fetchData = async () => {
       try {
         const response = await getUser(token.userId);
-        console.log(response);
         setUser(response);
       } catch (error) {
         errorHandler(error);
