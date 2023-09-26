@@ -5,6 +5,7 @@ import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import { getQuestions } from '../../api/QuestionApi.js';
 import { errorHandler } from '../../utils/errors.js';
+import Header from '../Header.js';
 
 const QuestionList = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -66,7 +67,9 @@ const QuestionList = () => {
       <th scope='row'>{index + 1}</th>
       <td>{question.title}</td>
       <td>
-        <span className={`badge ${getComplexityColor(question?.complexity)}`}>{question.complexity} </span>
+        <span className={`badge ${getComplexityColor(question?.complexity)}`}>
+          {question.complexity}{' '}
+        </span>
       </td>
     </tr>
   ));
@@ -76,28 +79,36 @@ const QuestionList = () => {
       <span className='visually-hidden'>Loading...</span>
     </div>
   ) : (
-    <div className='container'>
-      <h1>Question List</h1>
-      <table ref={tableRef} className='table table-hover table-striped'>
-        <thead className='table-dark'>
-          <tr>
-            <th scope='col' width='100'>
-              No.
-            </th>
-            <th scope='col' width='800'>
-              Title
-            </th>
-            <th scope='col' width='200'>
-              Complexity
-            </th>
-          </tr>
-        </thead>
-        <tbody className='table-group-divider'>{questionList}</tbody>
-      </table>
-      <div className='text-md-end'>
-        <button type='button' className='btn btn-success' onClick={handleNewQuestionClick}>
-          Add
-        </button>
+    <div className='landing'>
+      <Header />
+      <div className='body'>
+        <div className='container'>
+          <h1>Question List</h1>
+          <table ref={tableRef} className='table table-hover table-striped'>
+            <thead className='table-dark'>
+              <tr>
+                <th scope='col' width='100'>
+                  No.
+                </th>
+                <th scope='col' width='800'>
+                  Title
+                </th>
+                <th scope='col' width='200'>
+                  Complexity
+                </th>
+              </tr>
+            </thead>
+            <tbody className='table-group-divider'>{questionList}</tbody>
+          </table>
+          <div className='text-md-end'>
+            <button
+              type='button'
+              className='btn btn-success'
+              onClick={handleNewQuestionClick}>
+              Add
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -8,9 +8,9 @@ import { showSuccessToast, showFailureToast } from '../../utils/toast.js';
 import { errorHandler } from '../../utils/errors.js';
 import TextEditor from '../TextEditor/TextEditor.js';
 import '../../css/Tags.css';
+import Header from '../Header.js';
 
 const EditQuestion = () => {
-
   const [newTitleValue, setTitleValue] = useState('');
   const [newComplexityValue, setComplexityValue] = useState('');
   const [newDescriptionValue, setDescriptionValue] = useState('');
@@ -57,7 +57,13 @@ const EditQuestion = () => {
     e.preventDefault();
 
     try {
-      await editQuestion(id, newTitleValue, newComplexityValue, newDescriptionValue, newTags);
+      await editQuestion(
+        id,
+        newTitleValue,
+        newComplexityValue,
+        newDescriptionValue,
+        newTags
+      );
       navigate(-1);
       showSuccessToast('Question Edited Successfully!');
     } catch (error) {
@@ -94,43 +100,79 @@ const EditQuestion = () => {
       <span className='visually-hidden'>Loading...</span>
     </div>
   ) : (
-    <div className='container'>
-      <h1>Edit</h1>
-      <form className='create-question-form needs-validation' onSubmit={handleSaveClick} noValidate>
-        <div className='form-floating mb-3'>
-          <input type='text' className='form-control' id='createQuestionTitle' placeholder='title' value={newTitleValue} onChange={handleTitleValueChange} required />
-          <label htmlFor='createQuestionTitle'>Title</label>
+    <div className='landing'>
+      <Header />
+      <div className='body'>
+        <div className='container'>
+          <h1>Edit</h1>
+          <form
+            className='create-question-form needs-validation'
+            onSubmit={handleSaveClick}
+            noValidate>
+            <div className='form-floating mb-3'>
+              <input
+                type='text'
+                className='form-control'
+                id='createQuestionTitle'
+                placeholder='title'
+                value={newTitleValue}
+                onChange={handleTitleValueChange}
+                required
+              />
+              <label htmlFor='createQuestionTitle'>Title</label>
+            </div>
+            <div className='form-floating mb-3'>
+              <select
+                className='form-select mb-3'
+                id='createQuestitonComplexity'
+                value={newComplexityValue}
+                onChange={handleComplexityValueChange}
+                required>
+                <option disabled value=''>
+                  Select a complexity...
+                </option>
+                <option value='Easy'>Easy</option>
+                <option value='Medium'>Medium</option>
+                <option value='Hard'>Hard</option>
+              </select>
+              <label htmlFor='createQuestitonComplexity'>Complexity</label>
+            </div>
+            <div className='form-floating mb-3'>
+              <TagsInput
+                value={newTags}
+                onChange={handleTagsChange}
+                inputValue={tagInput}
+                onChangeInput={handleInputChange}
+                addOnBlur={true}
+                addKeys={[9, 13, 188]} // Tab, Enter, Comma
+              />
+            </div>
+            <div className='form-floating mb-3'>
+              <TextEditor
+                value={newDescriptionValue}
+                onChange={handleDescriptionValueChange}
+              />
+            </div>
+            <div className='d-flex justify-content-between'>
+              <button
+                type='button'
+                className='btn btn-secondary'
+                onClick={handleBackClick}>
+                Back
+              </button>
+              <button type='submit' className='btn btn-success'>
+                Save
+              </button>
+            </div>
+          </form>
+          {isEditWindowOpen && (
+            <EditWindow
+              onClose={handleEditWindowClose}
+              onConfirm={handleConfirmQuit}
+            />
+          )}
         </div>
-        <div className='form-floating mb-3'>
-          <select className='form-select mb-3' id='createQuestitonComplexity' value={newComplexityValue} onChange={handleComplexityValueChange} required>
-            <option disabled value=''>
-              Select a complexity...
-            </option>
-            <option value='Easy'>Easy</option>
-            <option value='Medium'>Medium</option>
-            <option value='Hard'>Hard</option>
-          </select>
-          <label htmlFor='createQuestitonComplexity'>Complexity</label>
-        </div>
-        <div className='form-floating mb-3'>
-          <TagsInput
-            value={newTags}
-            onChange={handleTagsChange}
-            inputValue={tagInput}
-            onChangeInput={handleInputChange}
-            addOnBlur={true}
-            addKeys={[9, 13, 188]} // Tab, Enter, Comma
-          />
-        </div>
-        <div className="form-floating mb-3">
-          <TextEditor value={newDescriptionValue} onChange={handleDescriptionValueChange} />
-        </div>
-        <div className="d-flex justify-content-between">
-          <button type="button" className="btn btn-secondary" onClick={handleBackClick}>Back</button>
-          <button type="submit" className="btn btn-success">Save</button>
-        </div>
-      </form>
-      {isEditWindowOpen && <EditWindow onClose={handleEditWindowClose} onConfirm={handleConfirmQuit} />}
+      </div>
     </div>
   );
 };

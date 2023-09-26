@@ -9,6 +9,7 @@ import { errorHandler } from '../../../utils/errors.js';
 import TextEditor from '../../TextEditor/TextEditor.js';
 import './CreateQuestion.css';
 import '../../../css/Tags.css';
+import Header from '../../Header.js';
 
 const CreateQuestion = () => {
 
@@ -71,6 +72,10 @@ const CreateQuestion = () => {
   };
 
   return (
+    <div className='landing'>
+      <Header />
+      <div className='body'>
+
     <div className='container'>
       <h1>Add a Question</h1>
       <form className='create-question-form needs-validation' onSubmit={handleSaveClick} >
@@ -108,6 +113,8 @@ const CreateQuestion = () => {
         </div>
       </form>
       {isEditWindowOpen && <EditWindow onClose={handleEditWindowClose} onConfirm={handleConfirmQuit} />}
+    </div>
+    </div>
     </div>
   );
 };
