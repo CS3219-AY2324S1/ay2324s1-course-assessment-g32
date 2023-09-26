@@ -107,7 +107,7 @@ const consume = async (queueName, channel, waitingHost) => {
 
             waitingHost = undefined;
           }
-        }, 30000);
+        }, TIMEOUT - waitingDuration(request.timestamp));
       }
     }
   });
@@ -117,9 +117,11 @@ const main = async () => {
   const connection = await amqp.connect('amqp://localhost');
   const channel = await connection.createChannel();
 
+  /* Not sure whether to delete the queues. If we delete the queues, we might accidentally delete users who are still waiting for a match in the queue.
   await channel.deleteQueue('Easy');
   await channel.deleteQueue('Medium');
   await channel.deleteQueue('Hard');
+  */
 
   await channel.assertQueue('Easy', { durable: false });
   await channel.assertQueue('Medium', { durable: false });

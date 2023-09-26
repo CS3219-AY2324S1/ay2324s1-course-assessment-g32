@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { exitQueue } from '../../api/QueueApi.js';
 import Queue from './Queue';
 import '../../css/Modal.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,6 +18,18 @@ const MatchingModal = ({ isOpen, onClose }) => {
     if (!storedUser) {
       navigate('/login');
     }
+
+    const handleExitTab = async () => {
+      if (isFindingMatch) {
+        await exitQueue(storedUser, complexityValue);
+      }
+    };
+
+    // Add event listeners for closing the tab
+    window.addEventListener('beforeunload', handleExitTab);
+    return () => {
+      window.removeEventListener('beforeunload', handleExitTab);
+    };
   }, [navigate, storedUser]);
 
   const handleComplexityValueChange = (event) => {
@@ -27,6 +40,14 @@ const MatchingModal = ({ isOpen, onClose }) => {
     setIsFindingMatch(!isFindingMatch);
   };
 
+  const handleClosingModal = () => {
+    if (isFindingMatch) {
+      exitQueue(storedUser, complexityValue);
+    }
+    onClose();
+    setIsFindingMatch(false);
+  };
+
   return (
     <div>
       <div className="modal-backdrop fade show"></div>
@@ -35,7 +56,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Match with other users to collaborate!</h5>
-              <button type="button" className="btn-close" onClick={onClose}></button>
+              <button type="button" className="btn-close" onClick={handleClosingModal}></button>
             </div>
             {isFindingMatch ? (
               <div className="modal-body">
@@ -46,7 +67,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
                 <div className="modal-body">
                   <form className='create-question-form needs-validation' >
                     <div className='form-floating mb-3'>
-                      <select className='form-select mb-3' id='matchingQuestitonComplexity' defaultValue='Easy' onChange={handleComplexityValueChange} >
+                      <select className='form-select mb-3' id='matchingQuestitonComplexity' defaultValue={complexityValue} onChange={handleComplexityValueChange} >
                         <option value='Easy'>Easy</option>
                         <option value='Medium'>Medium</option>
                         <option value='Hard'>Hard</option>
