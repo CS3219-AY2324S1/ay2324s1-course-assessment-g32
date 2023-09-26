@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import Cookies from 'js-cookie';
+import decode from 'jwt-decode';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
@@ -13,6 +15,7 @@ import { errorHandler } from '../../../utils/errors.js';
 import './UserList.css';
 
 const UserList = () => {
+  const [token, setToken] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
@@ -20,8 +23,6 @@ const UserList = () => {
 
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
-
-  const storedUser = JSON.parse(localStorage.getItem('user'));
 
   const navigate = useNavigate();
 
@@ -36,7 +37,13 @@ const UserList = () => {
   };
 
   useEffect(() => {
-    if (storedUser) {
+    try {
+      setToken(decode(Cookies.get('jwt'), 'password'));
+    } catch (err) {
+      console.error('Cookie not found');
+      navigate('/unauthorised');
+    }
+    if (token) {
       fetchData();
     } else {
       navigate('/login');
@@ -61,7 +68,9 @@ const UserList = () => {
   };
 
   const handleEditClick = (id, username) => {
-    navigate('/users-management/edit', { state: { id: id, username: username } });
+    navigate('/users-management/edit', {
+      state: { id: id, username: username },
+    });
   };
 
   const handleDeregisterClick = (id) => {
@@ -91,14 +100,19 @@ const UserList = () => {
       <td>{user.email}</td>
       <td>{parseDatetime(user.created_at)}</td>
       <td>{parseDatetime(user.updated_at)}</td>
-      {user.id === storedUser.id ? (
+      {user.id === token.userId ? (
         <td />
       ) : (
         <td>
-          <Button variant='contained' onClick={() => handleEditClick(user.id, user.username)}>
+          <Button
+            variant='contained'
+            onClick={() => handleEditClick(user.id, user.username)}>
             Edit
           </Button>
-          <Button variant='contained' color='error' onClick={() => handleDeregisterClick(user.id)}>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={() => handleDeregisterClick(user.id)}>
             Deregister
           </Button>
         </td>
@@ -136,14 +150,25 @@ const UserList = () => {
             </th>
           </tr>
         </thead>
-        <tbody key={userList} className='table-group-divider'>{userList}</tbody>
+        <tbody key={userList} className='table-group-divider'>
+          {userList}
+        </tbody>
       </table>
       <div className='text-md-end'>
-        <button type='button' className='btn btn-success' style={{ margin: '5px' }} onClick={handleNewUserClick}>
+        <button
+          type='button'
+          className='btn btn-success'
+          style={{ margin: '5px' }}
+          onClick={handleNewUserClick}>
           Register New User
         </button>
       </div>
-      {isDeregisterWindowOpen && <DeregisterWindow onConfirm={handleDeregisterConfirm} onClose={handleDeregisterCancel} />}
+      {isDeregisterWindowOpen && (
+        <DeregisterWindow
+          onConfirm={handleDeregisterConfirm}
+          onClose={handleDeregisterCancel}
+        />
+      )}
     </div>
   );
 };

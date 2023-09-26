@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Route, Routes } from 'react-router-dom';
-import Header from '../../components/Header';
-import EditUser from '../../components/User/EditUser';
-import ChangeUserPassword from '../../components/User/ChangeUserPassword';
-import { ViewUserTopPane, ViewUserBottomPane } from '../../components/User/ViewUser';
-import { getUser } from '../../api/UserApi.js';
-import { errorHandler } from '../../utils/errors.js';
+import Cookies from 'js-cookie';
+import decode from 'jwt-decode';
+import Header from '../../../components/Header';
+import {
+  ViewUserTopPane,
+  ViewUserBottomPane,
+} from '../../../components/User/ViewUser';
+import { getUser } from '../../../api/UserApi.js';
+import { errorHandler } from '../../../utils/errors.js';
 import { Grid, Container } from '@mui/material';
 
 function ManageUserProfile() {
@@ -16,19 +18,18 @@ function ManageUserProfile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-
+    const token = decode(Cookies.get('jwt'), 'password');
     const fetchData = async () => {
       try {
-        const response = await getUser(storedUser.id);
+        const response = await getUser(token.userId);
+        console.log(response);
         setUser(response);
-
       } catch (error) {
         errorHandler(error);
       }
     };
 
-    if (storedUser) {
+    if (token) {
       fetchData();
     } else {
       // No user session
@@ -48,11 +49,7 @@ function ManageUserProfile() {
       <Container sx={{ marginTop: '20px' }}>
         <Grid>
           <ViewUserTopPane user={user} />
-          <Routes>
-            <Route path='/' element={<ViewUserBottomPane user={user} />} />
-            <Route path='/edit' element={<EditUser user={user} />} />
-            <Route path='/change-password' element={<ChangeUserPassword user={user} />} />
-          </Routes>
+          <ViewUserBottomPane user={user} />
         </Grid>
       </Container>
     </div>

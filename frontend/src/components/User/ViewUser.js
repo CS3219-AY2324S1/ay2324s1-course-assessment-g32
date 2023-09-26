@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Card, Box, Typography, Button } from '@mui/material';
+import Cookies from 'js-cookie';
 import { deleteUser } from '../../api/UserApi.js';
 import { showSuccessToast } from '../../utils/toast.js';
 import { DeregisterWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
@@ -16,7 +17,7 @@ export const ViewUserTopPane = ({ user }) => {
   };
 
   const handleChangePasswordClick = () => {
-    navigate('/user-profile/change-password/');
+    navigate('/user-profile/change-password/', { state: { user: user } });
   };
 
   const handleDeregisterClick = () => {
@@ -28,8 +29,8 @@ export const ViewUserTopPane = ({ user }) => {
     try {
       await deleteUser(user.id);
       showSuccessToast('User has been deleted successfully!');
-      localStorage.removeItem('user');
-      navigate('/login');
+      Cookies.remove('jwt');
+      navigate('/');
     } catch (error) {
       errorHandler(error);
     }
@@ -41,7 +42,12 @@ export const ViewUserTopPane = ({ user }) => {
 
   return (
     <Card sx={{ marginBottom: '10px' }}>
-      <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center' padding={2}>
+      <Box
+        display='flex'
+        flexDirection='column'
+        alignItems='center'
+        justifyContent='center'
+        padding={2}>
         <Typography variant='h4' sx={{ fontWeight: 'bold' }}>
           {user.username}
         </Typography>
@@ -53,12 +59,20 @@ export const ViewUserTopPane = ({ user }) => {
           <Button variant='contained' onClick={handleChangePasswordClick}>
             Change Password
           </Button>
-          <Button variant='contained' color='error' onClick={handleDeregisterClick}>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={handleDeregisterClick}>
             Deregister
           </Button>
         </Box>
       </Box>
-      {isDeregisterWindowOpen && <DeregisterWindow onConfirm={handleDeregisterConfirm} onClose={handleDeregisterCancel} />}
+      {isDeregisterWindowOpen && (
+        <DeregisterWindow
+          onConfirm={handleDeregisterConfirm}
+          onClose={handleDeregisterCancel}
+        />
+      )}
     </Card>
   );
 };
@@ -67,7 +81,7 @@ export const ViewUserBottomPane = ({ user }) => {
   const navigate = useNavigate();
 
   const handleEditUsernameClick = () => {
-    navigate('/user-profile/edit/');
+    navigate('/user-profile/edit/', { state: { user: user } });
   };
 
   return (

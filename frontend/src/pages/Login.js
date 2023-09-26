@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import decode from 'jwt-decode';
 import { login } from '../api/UserApi';
 import { showSuccessToast } from '../utils/toast.js';
 import { errorHandler } from '../utils/errors.js';
@@ -32,12 +34,15 @@ const Login = () => {
 
     try {
       const response = await login(userData);
+      const token = response.data.token;
+      const decodedToken = decode(token);
 
-      const data = {
-        id: response.data.id
-      };
-      
-      localStorage.setItem('user', JSON.stringify(data));
+      Cookies.set('jwt', token, {
+        secure: true,
+        sameSite: 'strict',
+        expires: new Date(decodedToken.exp * 1000),
+      });
+
       navigate('/landing');
       showSuccessToast('User logged in successfully!');
     } catch (error) {
@@ -58,14 +63,27 @@ const Login = () => {
           </div>
           <div className='form-group mt-3'>
             <label>Email address</label>
-            <input type='email' className='form-control mt-1' placeholder='Enter email' onChange={handleEmailChange} />
+            <input
+              type='email'
+              className='form-control mt-1'
+              placeholder='Enter email'
+              onChange={handleEmailChange}
+            />
           </div>
           <div className='form-group mt-3'>
             <label>Password</label>
-            <input type='password' className='form-control mt-1' placeholder='Enter password' onChange={handlePasswordChange} />
+            <input
+              type='password'
+              className='form-control mt-1'
+              placeholder='Enter password'
+              onChange={handlePasswordChange}
+            />
           </div>
           <div className='d-grid gap-2 mt-3'>
-            <button type='submit' className='btn btn-primary' onClick={handleLoginSubmit}>
+            <button
+              type='submit'
+              className='btn btn-primary'
+              onClick={handleLoginSubmit}>
               Submit
             </button>
           </div>
@@ -77,6 +95,6 @@ const Login = () => {
       </form>
     </div>
   );
-}
+};
 
 export default Login;
