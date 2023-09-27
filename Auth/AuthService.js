@@ -8,9 +8,6 @@ const env = require('./loadEnvironment');
 
 console.log('Starting server ...');
 
-console.log(`${env.SERVER_PORT}`);
-console.log(`${env.AUTH_PORT}`);
-
 // start the Express (web) server
 const app = express();
 app.use(cors());
