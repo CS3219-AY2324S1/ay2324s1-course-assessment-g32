@@ -12,7 +12,6 @@ const loginUser = async (email, password) => {
   
       // Check if a user with the given email exists
       await authDatabase.findByEmail(email).then((info) => (userInfo = info));
-  
       if (!userInfo) {
         throw Object.assign(new Error('Email not registered with any user'), {
           status: 410,
