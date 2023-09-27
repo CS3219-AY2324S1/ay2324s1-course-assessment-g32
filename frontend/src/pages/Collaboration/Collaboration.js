@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Chat from '../../components/Collaboration/Chat';
+import LiveCode from '../../components/Collaboration/LiveCode';
 import io from 'socket.io-client';
 
 const Collaboration = () => {
@@ -12,13 +13,11 @@ const Collaboration = () => {
   const hostId = location.state?.hostId;
   const matchedHostId = location.state?.matchedHostId;
 
-
   const socket = io('http://localhost:3002');
 
   useEffect(() => {
     // Join the Socket.io room when the component mounts
     socket.emit('joinRoom', { room: roomId, host: hostId });
-
   }, []);
 
   const handleLeaveRoom = () => {
@@ -30,6 +29,7 @@ const Collaboration = () => {
     <div>
       <h1>RoomID: {roomId}</h1>
       <h2>You have been match with Host {matchedHostId}</h2>
+      <LiveCode socket={socket} roomId={roomId} />
       <Chat socket={socket} roomId={roomId} />
       <button onClick={handleLeaveRoom}>Leave Room</button>
     </div>
