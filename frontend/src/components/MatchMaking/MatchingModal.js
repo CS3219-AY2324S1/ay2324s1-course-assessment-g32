@@ -9,7 +9,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 const MatchingModal = ({ isOpen, onClose }) => {
 
   const [isFindingMatch, setIsFindingMatch] = useState(false);
-  const [complexityValue, setComplexityValue] = useState('Easy');
+  const [complexity, setComplexity] = useState('Easy');
+  const [programmingLanguage, setProgrammingLanguage] = useState('');
 
   const storedUser = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
@@ -21,7 +22,8 @@ const MatchingModal = ({ isOpen, onClose }) => {
 
     const handleExitTab = async () => {
       if (isFindingMatch) {
-        await exitQueue(storedUser, complexityValue);
+        const queueName = complexity + programmingLanguage;
+        await exitQueue(storedUser, queueName);
       }
     };
 
@@ -32,8 +34,12 @@ const MatchingModal = ({ isOpen, onClose }) => {
     };
   }, [navigate, storedUser]);
 
-  const handleComplexityValueChange = (event) => {
-    setComplexityValue(event.target.value);
+  const handleComplexityChange = (event) => {
+    setComplexity(event.target.value);
+  };
+
+  const handleLanguageChange = (event) => {
+    setProgrammingLanguage(event.target.value);
   };
 
   const handleMatchingToggle = async () => {
@@ -42,7 +48,8 @@ const MatchingModal = ({ isOpen, onClose }) => {
 
   const handleClosingModal = () => {
     if (isFindingMatch) {
-      exitQueue(storedUser, complexityValue);
+      const queueName = complexity + programmingLanguage;
+      exitQueue(storedUser, queueName);
     }
     onClose();
     setIsFindingMatch(false);
@@ -60,19 +67,32 @@ const MatchingModal = ({ isOpen, onClose }) => {
             </div>
             {isFindingMatch ? (
               <div className="modal-body">
-                <Queue user={storedUser} complexity={complexityValue} onCancel={handleMatchingToggle} />
+                <Queue
+                  user={storedUser}
+                  queueName={complexity + programmingLanguage}
+                  onCancel={handleMatchingToggle}
+                />
               </div>
             ) : (
               <div>
                 <div className="modal-body">
                   <form className='create-question-form needs-validation' >
                     <div className='form-floating mb-3'>
-                      <select className='form-select mb-3' id='matchingQuestitonComplexity' defaultValue={complexityValue} onChange={handleComplexityValueChange} >
+                      <select className='form-select mb-3' id='matchingQuestitonComplexity' defaultValue={complexity} onChange={handleComplexityChange} >
                         <option value='Easy'>Easy</option>
                         <option value='Medium'>Medium</option>
                         <option value='Hard'>Hard</option>
                       </select>
                       <label htmlFor='matchingQuestitonComplexity'>Complexity</label>
+                    </div>
+                    <div className='form-floating mb-3'>
+                      <select className='form-select mb-3' id='matchingQuestitonLanguage' defaultValue={programmingLanguage} onChange={handleLanguageChange} >
+                        <option value=''>Select a Programming Language</option>
+                        <option value='Python'>Python</option>
+                        <option value='Java'>Java</option>
+                        <option value='C++'>C++</option>
+                      </select>
+                      <label htmlFor='matchingQuestitonLanguage'>Programming Language</label>
                     </div>
                   </form>
                 </div>

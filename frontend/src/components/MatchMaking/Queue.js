@@ -5,7 +5,7 @@ import { joinQueue, exitQueue } from '../../api/QueueApi.js';
 import { errorHandler } from '../../utils/errors.js';
 import { showFailureToast } from '../../utils/toast.js';
 
-const Queue = ({ user, complexity, onCancel }) => {
+const Queue = ({ user, queueName, onCancel }) => {
 
   const [status, setStatus] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +15,7 @@ const Queue = ({ user, complexity, onCancel }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const reply = await joinQueue(user, complexity);
+        const reply = await joinQueue(user, queueName);
         setStatus(reply.data.response.message);
         setIsLoading(false);
 
@@ -23,14 +23,16 @@ const Queue = ({ user, complexity, onCancel }) => {
         const isMatch = reply.data.response.isMatch;
         if (isMatch) {
           const roomId = reply.data.response.roomId;
-          navigate('/collaboration', { state: { roomId } });
+          const hostId = reply.data.response.hostId;
+          const matchedHostId = reply.data.response.matchedHostId;
+          navigate('/collaboration', { state: { roomId, hostId, matchedHostId } });
         }
       } catch (error) {
         errorHandler(error);
       }
     };
     fetchData();
-  }, [user, complexity, navigate]);
+  }, [user, queueName, navigate]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -46,7 +48,7 @@ const Queue = ({ user, complexity, onCancel }) => {
 
   const handleCancelClick = () => {
     try {
-      exitQueue(user, complexity);
+      exitQueue(user, queueName);
       onCancel();
     } catch (error) {
       errorHandler(error);

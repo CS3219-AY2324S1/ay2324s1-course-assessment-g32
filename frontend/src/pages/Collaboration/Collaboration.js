@@ -6,7 +6,10 @@ const Collaboration = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+
   const roomId = location.state?.roomId;
+  const hostId = location.state?.hostId;
+  const matchedHostId = location.state?.matchedHostId;
 
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -14,12 +17,8 @@ const Collaboration = () => {
   const socket = io('http://localhost:3002');
 
   useEffect(() => {
-    // Replace with your Socket.io server URL
-
-    const roomName = roomId
-
     // Join the Socket.io room when the component mounts
-    socket.emit('joinRoom', roomName);
+    socket.emit('joinRoom', { room: roomId, host: hostId });
 
     // Listen for incoming messages from the server
 
@@ -37,13 +36,14 @@ const Collaboration = () => {
   };
 
   const handleLeaveRoom = () => {
-    socket.emit('leaveRoom', roomId);
-    navigate('/match-making');
+    socket.emit('leaveRoom', { room: roomId, host: hostId });
+    navigate('/landing');
   };
 
   return (
     <div>
       <h1>RoomID: {roomId}</h1>
+      <h2>You have been match with Host {matchedHostId}</h2>
       <div>
         <ul>
           {messages.map((msg, index) => (

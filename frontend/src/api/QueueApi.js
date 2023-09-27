@@ -9,11 +9,11 @@ const config = {
   }
 };
 
-export const joinQueue = async (user, complexityType) => {
+export const joinQueue = async (user, queueName) => {
   try {
     const data = {
       id: user.id,
-      complexityType: complexityType
+      queueName: queueName
     };
     return await axios.post(rootUrl + "/join", data, config);
   } catch (err) {
@@ -24,11 +24,11 @@ export const joinQueue = async (user, complexityType) => {
   }
 };
 
-export const exitQueue = async (user, complexityType) => {
+export const exitQueue = async (user, queueName) => {
   try {
     const data = {
       id: user.id,
-      complexityType: complexityType
+      queueName: queueName
     };
     return await axios.post(rootUrl + "/exit", data, config);
   } catch (err) {
