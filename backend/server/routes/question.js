@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const questionController = require('../controllers/questionController.js');
+const questionController = require('../../../backend/server/controllers/questionController.js');
 
 router.post('/create', questionController.create);
 router.get('/getAll', questionController.getAll);

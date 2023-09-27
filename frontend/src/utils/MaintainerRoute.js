@@ -7,14 +7,19 @@ const MaintainerRoute = () => {
   const isMaintainer = () => {
     try {
       const token = Cookies.get('jwt');
+      // console.log("token: " + token)
 
       if (!token) {
+        // console.log("no token found")
         return false;
       } else {
         const decodedToken = decode(token, 'password');
         if (decodedToken) {
+          console.log("decoded token, r u a maintainer? ...")
+          console.log("decoded token = " + decodedToken.isMaintainer)
           return decodedToken.isMaintainer !== 1 ? false : true;
         } else {
+          // console.log("unable to decode token")
           return false;
         }
       }
