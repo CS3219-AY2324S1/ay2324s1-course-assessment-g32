@@ -3,7 +3,7 @@ const env = require('../../loadEnvironment.js');
 
 const conn = mysql.createConnection({
   ...env.mysqlCreds,
-  ...{database: env.mysqlDbName}
+  ...{ database: env.mysqlDbName },
 });
 
 /**
@@ -17,17 +17,19 @@ const conn = mysql.createConnection({
  */
 const findByEmail = async (email) => {
   var _userId = Number();
+  var _isMaintainer = Boolean();
 
   const query = conn
     .promise()
-    .query('SELECT id FROM users WHERE email=?;', [email])
+    .query('SELECT id, isMaintainer FROM users WHERE email=?;', [email])
     .then(([rows, fields]) => {
       _userId = rows.length ? rows[0].id : null;
+      _isMaintainer = rows.length ? rows[0].isMaintainer : null;
     })
     .catch(console.error);
 
-  await query; // Wait for uid to be updated
-  return _userId;
+  await query; // Wait for uid and isMaintainer to be updated
+  return { _userId, _isMaintainer };
 };
 
 const createUser = async (email, password) => {
@@ -40,7 +42,11 @@ const createUser = async (email, password) => {
   // Add new user to database
   const query = conn
     .promise()
-    .query('INSERT INTO users(username, email, password) VALUES (?, ?, ?);', [_username, email, _password])
+    .query('INSERT INTO users(username, email, password) VALUES (?, ?, ?);', [
+      _username,
+      email,
+      _password,
+    ])
     .then(([result, fields]) => {
       _userId = result.insertId;
     })
@@ -52,7 +58,7 @@ const createUser = async (email, password) => {
 
 const getUserInfoByEmail = async (email) => {
   var _userId = Number();
-  await findByEmail(email).then((id) => (_userId = id));
+  await findByEmail(email).then((userInfo) => (_userId = userInfo._userId));
 
   if (!_userId) throw 'No user is using ' + email;
 
@@ -90,7 +96,8 @@ const getUserInfoById = async (userId) => {
 
       if (rows.length === 0) throw 'getUserInfo: No user with id ' + userId;
 
-      if (rows.length > 1) throw 'getUserInfo: Only one user should be retrieved';
+      if (rows.length > 1)
+        throw 'getUserInfo: Only one user should be retrieved';
 
       if (userInfo.id != userId) throw 'getUserInfo: Wrong user info retrieved';
 
@@ -105,9 +112,31 @@ const getUserInfoById = async (userId) => {
 
   await query; // Wait for new user to be inserted
 
-  if (Object.keys(_userInfo).length === 0) throw 'User info cannot be retrieved';
+  if (Object.keys(_userInfo).length === 0)
+    throw 'User info cannot be retrieved';
 
   return _userInfo;
+};
+
+const getIsMaintainerById = async (id) => {
+  var _isMaintainer = Boolean();
+
+  const query = conn
+    .promise()
+    .query('SELECT isMaintainer FROM users WHERE id=?;', [id])
+    .then(([rows, fields]) => {
+      if (rows.length) {
+        if (rows[0].isMaintainer == 1) {
+          _isMaintainer = true;
+        }
+      } else {
+        _isMaintainer = false;
+      }
+    })
+    .catch(console.error);
+
+  await query;
+  return _isMaintainer;
 };
 
 const updateUser = async (userId, username, password) => {
@@ -174,5 +203,5 @@ module.exports = {
   deleteUser,
   getAllUserInfo,
   getUserInfoByEmail,
-  getUserInfoById
+  getUserInfoById,
 };

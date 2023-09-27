@@ -4,12 +4,13 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Cookies from 'js-cookie';
 
 function Header() {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    localStorage.removeItem('user');
+    Cookies.remove('jwt');
     navigate('/');
   };
 
