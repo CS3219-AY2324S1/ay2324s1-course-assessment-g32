@@ -5,7 +5,6 @@ const authRootUrl = env.AUTH_URL + '/auth';
 
 const login = async (userData) => {
     try {
-      console.log("posting axios")
         return await axios.post(authRootUrl + '/login', 
             userData, 
             {
@@ -43,10 +42,8 @@ const signup = async (userData) => {
 export const handleAuth = async (userData, auth_type) => {
   try {
     if (auth_type === "login") {
-      console.log("logging in in authAPI")
       return await login(userData)
     } else if (auth_type === "signup") {
-      console.log("signin up in authAPI");
       return await signup(userData)
     } else {
       // update this error code next time

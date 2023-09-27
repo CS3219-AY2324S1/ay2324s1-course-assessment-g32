@@ -34,7 +34,6 @@ const Login = () => {
     };
 
     try {
-      console.log("attempting to log in");
       const response = await handleAuth(userData, "login");
       const token = response.data.token;
       const decodedToken = decode(token);

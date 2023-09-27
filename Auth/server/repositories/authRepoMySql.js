@@ -33,7 +33,6 @@ const findByEmail = async (email) => {
 };
 
 const createUser = async (email, password) => {
-  console.log("creating user");
   var _userId = Number();
   var _password = String();
   const _username = getUsernameFromEmail(email);

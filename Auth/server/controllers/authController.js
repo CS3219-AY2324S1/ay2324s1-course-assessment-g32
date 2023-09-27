@@ -4,7 +4,6 @@ const { getJwtToken } = require('../helpers/jwt.js');
 // Define a controller function for handling login requests
 const login = async (req, res) => {
   try {
-    console.log("in authcontroller");
     const { email, password, isMaintainer } = req.body;
     const user = await authService.loginUser(email, password, isMaintainer);
     const jwtToken = getJwtToken(user);
@@ -17,7 +16,6 @@ const login = async (req, res) => {
 // Define a controller function for handling signup requests
 const signup = async (req, res) => {
   try {
-    console.log("signing up in authController");
     const { email, password, confirmPassword } = req.body;
     await authService.createUser(email, password, confirmPassword);
     res.json({ message: 'User registered successfully' });

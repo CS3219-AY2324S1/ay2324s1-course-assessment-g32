@@ -37,7 +37,6 @@ function Signup() {
     };
 
     try {
-      console.log("in signup, attempting to signup");
       await handleAuth(userData, "signup");
       navigate('/login');
       showSuccessToast('User created successfully!');
