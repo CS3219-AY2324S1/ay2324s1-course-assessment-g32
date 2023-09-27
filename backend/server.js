@@ -85,6 +85,11 @@ try {
       io.to(data.room).emit('message', data.message); // Broadcast message to everyone in the room
     });
 
+    // Handle code changes
+    socket.on('codeChange', (data) => {
+      io.to(data.room).emit('codeUpdate', data.updatedCode); // Broadcast code to everyone in the room
+    });
+
     socket.on('disconnect', () => {
       console.log('A user disconnected');
     });
