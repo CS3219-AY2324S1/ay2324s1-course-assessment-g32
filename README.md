@@ -46,6 +46,7 @@ npm run start-all
 Or start them indvidually:  
 - Frontend: `cd frontend && npm start`  
 - Backend: `cd backend && npm start`  
+- Auth service: `cd Auth && npm run dev`
 
 # Developer Notes
 
