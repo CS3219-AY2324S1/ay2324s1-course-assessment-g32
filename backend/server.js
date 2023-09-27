@@ -64,20 +64,20 @@ try {
   });
 
   io.on('connection', (socket) => {
-    socket.on('joinRoom', (room) => {
-      socket.join(room);
-      console.log(`User joined room: ${room}`);
+    socket.on('joinRoom', (data) => {
+      socket.join(data.room);
+      console.log(`${data.host} joined room: ${data.room}`);
 
       // Broadcast a message to the room when someone joins
-      io.to(room).emit('message', `User joined room: ${room}`);
+      io.to(data.room).emit('message', `${data.host} joined room: ${data.room}`);
     });
 
-    socket.on('leaveRoom', (room) => {
-      socket.leave(room); // Leave the specified room
-      console.log(`User left room: ${room}`);
+    socket.on('leaveRoom', (data) => {
+      socket.leave(data.room); // Leave the specified room
+      console.log(`${data.host} joined room: ${data.room}`);
 
       // Broadcast a message to the room when someone leaves
-      io.to(room).emit('message', `User left room: ${room}`);
+      io.to(data.room).emit('message', `${data.host} joined room: ${data.room}`);
     });
 
     // Handle chat messages

@@ -1,10 +1,7 @@
 const amqp = require('amqplib');
+const { v4: uuidv4 } = require('uuid');
 
-var easyWaitingHost = undefined;
-var mediumWaitingHost = undefined;
-var hardWaitingHost = undefined;
-
-// Change timeout value here, 30000ms = 30 seconds
+// Timeout value; 30000ms = 30s
 const TIMEOUT = 30000;
 
 // Calculates how long the host has been waiting
@@ -12,18 +9,25 @@ const waitingDuration = (timestamp) => {
   return Date.now() - timestamp;
 }
 
+const isTimeOut = (timestamp) => {
+  return waitingDuration(timestamp) > TIMEOUT;
+}
+
 // Generate a unique room id
 const generateUniqueRoomId = () => {
-  return "id" + Math.random().toString(16).slice(2);
+  return uuidv4();
 };
 
-const consume = async (queueName, channel, waitingHost) => {
+const waitingHosts = new Map();
+
+const consume = async (queueName, channel) => {
   channel.consume(queueName, async (message) => {
     if (message !== null) {
       const request = JSON.parse(message.content.toString());
 
-      // If the request is an exit request
+      // Checks if the request is an exit request
       if (request.isExit) {
+        const waitingHost = waitingHosts.get(queueName);
         if (waitingHost !== undefined) {
           const waitingHostRequest = JSON.parse(waitingHost.content.toString());
           if (waitingHostRequest.id === request.id) {
@@ -33,14 +37,15 @@ const consume = async (queueName, channel, waitingHost) => {
               correlationId: waitingHostRequest.correlationId,
             });
             channel.ack(waitingHost);
-            waitingHost = undefined;
+            waitingHosts.set(queueName, undefined);
           }
         }
         channel.ack(message);
         return;
       }
 
-      if (waitingDuration(request.timestamp) > TIMEOUT) {
+      // Checks if the host has timed out by the time the request is received by the queue (server)
+      if (isTimeOut(request.timestamp)) {
         const response = { message: `You have timed out in ${queueName} room!` };
         console.log(`Host ${request.id} has timed out in ${queueName} room!`);
         channel.sendToQueue(request.replyTo, Buffer.from(JSON.stringify(response)), {
@@ -50,20 +55,21 @@ const consume = async (queueName, channel, waitingHost) => {
         return;
       }
 
+      // If there is another host waiting in the queue
+      const waitingHost = waitingHosts.get(queueName);
       if (waitingHost !== undefined) {
         const waitingHostRequest = JSON.parse(waitingHost.content.toString());
-
         console.log(`Host ${request.id} is matched with host ${waitingHostRequest.id} in ${queueName} room!`);
 
-        // TODO: Add a unique room id to the response
         const roomId = generateUniqueRoomId();
-
         const waitingHostResponse = {
           message: `You have been matched with host ${request.id} in ${queueName} room!`,
           isMatch: true,
-          roomId: roomId
+          roomId: roomId,
+          hostId: waitingHostRequest.id,
+          matchedHostId: request.id
         };
-        // Send the response back to reply queue
+        // Send the match response to the waiting host
         channel.sendToQueue(waitingHostRequest.replyTo, Buffer.from(JSON.stringify(waitingHostResponse)), {
           correlationId: waitingHostRequest.correlationId,
         });
@@ -71,8 +77,11 @@ const consume = async (queueName, channel, waitingHost) => {
         const incomingHostResponse = {
           message: `You have been matched with host ${waitingHostRequest.id} in ${queueName} room!`,
           isMatch: true,
-          roomId: roomId
+          roomId: roomId,
+          hostId: request.id,
+          matchedHostId: waitingHostRequest.id
         };
+        // Send the match response to the incoming host
         channel.sendToQueue(request.replyTo, Buffer.from(JSON.stringify(incomingHostResponse)), {
           correlationId: request.correlationId,
         });
@@ -80,23 +89,23 @@ const consume = async (queueName, channel, waitingHost) => {
         // Acknowledge requests
         channel.ack(waitingHost);
         channel.ack(message);
-
-        // Clear waiting host
-        waitingHost = undefined;
+        waitingHosts.set(queueName, undefined);
 
       } else {
+        // If there is no other host waiting in the queue
         console.log(`Host ${request.id} is waiting for a ${queueName} match...`);
-        waitingHost = message;
+        waitingHosts.set(queueName, message);
 
-        // Set timeout for waiting host
+        // Set a timeout for the host
         setTimeout(() => {
+          const waitingHost = waitingHosts.get(queueName);
           if (waitingHost === undefined) return;
 
           const waitingHostRequest = JSON.parse(waitingHost.content.toString());
 
+          // Ensure that there is no match before sending the timeout response
           if (waitingHostRequest.correlationId === request.correlationId) {
             const response = { message: `You have timed out in ${queueName} room!` };
-
             console.log(`Host ${request.id} has timed out in ${queueName} room!`);
 
             channel.sendToQueue(request.replyTo, Buffer.from(JSON.stringify(response)), {
@@ -104,8 +113,7 @@ const consume = async (queueName, channel, waitingHost) => {
             });
 
             channel.ack(waitingHost);
-
-            waitingHost = undefined;
+            waitingHosts.set(queueName, undefined);
           }
         }, TIMEOUT - waitingDuration(request.timestamp));
       }
@@ -117,24 +125,24 @@ const main = async () => {
   const connection = await amqp.connect('amqp://localhost');
   const channel = await connection.createChannel();
 
-  /* Not sure whether to delete the queues. If we delete the queues, we might accidentally delete users who are still waiting for a match in the queue.
-  await channel.deleteQueue('Easy');
-  await channel.deleteQueue('Medium');
-  await channel.deleteQueue('Hard');
-  */
-
-  await channel.assertQueue('Easy', { durable: false });
-  await channel.assertQueue('Medium', { durable: false });
-  await channel.assertQueue('Hard', { durable: false });
-  await channel.assertQueue('EasyResponseQueue', { durable: false });
-  await channel.assertQueue('MediumResponseQueue', { durable: false });
-  await channel.assertQueue('HardResponseQueue', { durable: false });
+  await channel.assertQueue('commonQueue', { durable: false });
 
   console.log('Queueing service is running...');
 
-  consume('Easy', channel, easyWaitingHost);
-  consume('Medium', channel, mediumWaitingHost);
-  consume('Hard', channel, hardWaitingHost);
+  // Consume from the common queue
+  channel.consume('commonQueue', async (message) => {
+    if (message !== null) {
+      const { requestQueue, responseQueue } = JSON.parse(message.content.toString());
+
+      // Create the request and response queues if they do not exist
+      await channel.assertQueue(requestQueue, { durable: false, autoDelete: true });
+      await channel.assertQueue(responseQueue, { durable: false, autoDelete: true });
+      channel.ack(message);
+
+      // Start consuming from the request queue
+      consume(requestQueue, channel);
+    }
+  });
 };
 
 main().catch(console.error);

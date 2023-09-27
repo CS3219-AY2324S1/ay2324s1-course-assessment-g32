@@ -21,7 +21,8 @@
         "mongoose": "^7.5.0",
         "mysql2": "^3.6.1",
         "save": "^2.9.0",
-        "socket.io": "^4.7.2"
+        "socket.io": "^4.7.2",
+        "uuid": "^9.0.1"
     },
     "devDependencies": {
         "nodemon": "^3.0.1"
