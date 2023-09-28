@@ -34,9 +34,9 @@ const Login = () => {
       const response = await login(userData);
 
       const data = {
-        id: response.data.id
+        id: response.data.id,
       };
-      
+
       localStorage.setItem('user', JSON.stringify(data));
       navigate('/landing');
       showSuccessToast('User logged in successfully!');
@@ -58,25 +58,34 @@ const Login = () => {
           </div>
           <div className='form-group mt-3'>
             <label>Email address</label>
-            <input type='email' className='form-control mt-1' placeholder='Enter email' onChange={handleEmailChange} />
+            <input
+              type='email'
+              className='form-control mt-1'
+              placeholder='Enter email'
+              onChange={handleEmailChange}
+            />
           </div>
           <div className='form-group mt-3'>
             <label>Password</label>
-            <input type='password' className='form-control mt-1' placeholder='Enter password' onChange={handlePasswordChange} />
+            <input
+              type='password'
+              className='form-control mt-1'
+              placeholder='Enter password'
+              onChange={handlePasswordChange}
+            />
           </div>
           <div className='d-grid gap-2 mt-3'>
-            <button type='submit' className='btn btn-primary' onClick={handleLoginSubmit}>
+            <button
+              type='submit'
+              className='btn btn-primary'
+              onClick={handleLoginSubmit}>
               Submit
             </button>
           </div>
-          {/* To be used when we have forgot password feature */}
-          {/* <p className='text-center mt-2'>
-            Forgot <a href='#'>password?</a>
-          </p> */}
         </div>
       </form>
     </div>
   );
-}
+};
 
 export default Login;
