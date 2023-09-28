@@ -20,19 +20,22 @@ const MatchingModal = ({ isOpen, onClose }) => {
       navigate('/login');
     }
 
+  }, [navigate, storedUser]);
+
+  useEffect(() => {
     const handleExitTab = async () => {
       if (isFindingMatch) {
         const queueName = complexity + programmingLanguage;
         await exitQueue(storedUser, queueName);
       }
     };
-
     // Add event listeners for closing the tab
     window.addEventListener('beforeunload', handleExitTab);
     return () => {
+      handleExitTab();
       window.removeEventListener('beforeunload', handleExitTab);
     };
-  }, [navigate, storedUser]);
+  });
 
   const handleComplexityChange = (event) => {
     setComplexity(event.target.value);
