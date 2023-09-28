@@ -29,6 +29,10 @@ For development, you may also want to install:
    `MY_SQL_PWD=password1234`
 
 ## Install NodeJS packages
+```
+npm install install-all
+```
+then
 
 ```
 npm run install-all
@@ -41,7 +45,6 @@ Start local MySQL Server (Windows Service), if necessary.
 Start all services by: 
 ```
 npm run start-all
-
 ```
 Or start them indvidually:  
 - Frontend: `cd frontend && npm start`  
