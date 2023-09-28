@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import decode from 'jwt-decode';
-import { login } from '../api/UserApi';
 import { showSuccessToast } from '../utils/toast.js';
 import { errorHandler } from '../utils/errors.js';
+import { handleAuth } from '../api/AuthApi.js'
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -30,10 +30,11 @@ const Login = () => {
     const userData = {
       email: email,
       password: password,
+      isMaintainer: true,
     };
 
     try {
-      const response = await login(userData);
+      const response = await handleAuth(userData, "login");
       const token = response.data.token;
       const decodedToken = decode(token);
 

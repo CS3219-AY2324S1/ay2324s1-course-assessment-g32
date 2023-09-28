@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signup } from '../../../api/UserApi.js';
+import { handleAuth } from '../../../api/AuthApi.js'
 import { showSuccessToast } from '../../../utils/toast.js';
 import { errorHandler } from '../../../utils/errors.js';
 
@@ -19,7 +19,7 @@ const AddUser = () => {
       confirmPassword: confirmPassword,
     };
 
-    signup(userData)
+    handleAuth(userData, "signup")
       .then(() => {
         showSuccessToast('User registered successfully!');
         navigate('../');

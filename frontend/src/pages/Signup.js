@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signup } from '../api/UserApi';
+import { handleAuth } from '../api/AuthApi.js'
 import { showSuccessToast } from '../utils/toast.js';
 import { errorHandler } from '../utils/errors.js';
 
@@ -37,7 +37,7 @@ function Signup() {
     };
 
     try {
-      await signup(userData);
+      await handleAuth(userData, "signup");
       navigate('/login');
       showSuccessToast('User created successfully!');
     } catch (error) {

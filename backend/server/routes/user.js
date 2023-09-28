@@ -1,7 +1,7 @@
 const express = require('express');
-const userController = require('../controllers/userController.js');
-
 const router = express.Router();
+
+const userController = require('../../../backend/server/controllers/userController.js');
 
 router.post('/create', userController.createUser);
 router.get('/readAll', userController.getAllUserInfo);
