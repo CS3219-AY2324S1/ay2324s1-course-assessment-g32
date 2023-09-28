@@ -15,8 +15,6 @@ const MaintainerRoute = () => {
       } else {
         const decodedToken = decode(token, 'password');
         if (decodedToken) {
-          console.log("decoded token, r u a maintainer? ...")
-          console.log("decoded token = " + decodedToken.isMaintainer)
           return decodedToken.isMaintainer !== 1 ? false : true;
         } else {
           // console.log("unable to decode token")

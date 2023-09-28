@@ -18,6 +18,7 @@ For development, you may also want to install:
 1. Search for **MySQL 8.1 Command Line Client** on your computer. Execute it to open up the terminal.
 2. Enter your root password.
 3. Run the SQL statements in `./backend/schema.sql` on the terminal.
+4. Run the SQL statements in `./Auth/schema.sql` on the terminal.
 
 ## Setup environment variables
 
