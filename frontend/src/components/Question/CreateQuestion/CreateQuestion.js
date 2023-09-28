@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
-import { createQuestion } from '../../api/QuestionApi.js';
-import { EditWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast, showDuplicateQuestionErrorToast } from '../../utils/toast.js';
-import TextEditor from '../TextEditor/TextEditor.js';
+import { createQuestion } from '../../../api/QuestionApi.js';
+import { EditWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
+import { showSuccessToast, showFailureToast } from '../../../utils/toast.js';
+import { errorHandler } from '../../../utils/errors.js';
+import TextEditor from '../../TextEditor/TextEditor.js';
 import './CreateQuestion.css';
-import '../../css/Tags.css';
+import '../../../css/Tags.css';
 
 const CreateQuestion = () => {
 
@@ -41,19 +42,7 @@ const CreateQuestion = () => {
       navigate('../question/' + response.data.question._id);
       showSuccessToast('Question Created Successfully!');
     } catch (error) {
-      switch (error.response.status) {
-        case 400: 
-          showValidationErrorToast(error);
-          break;
-        case 408:
-          showServerErrorToast(error);
-          break;
-        case 409:
-          showDuplicateQuestionErrorToast(error);
-          break;
-        default:
-          showFailureToast(error);
-      }
+      errorHandler(error);
     }
   };
 
@@ -118,7 +107,7 @@ const CreateQuestion = () => {
           <button type='submit' className='btn btn-success'>Save</button>
         </div>
       </form>
-      {isEditWindowOpen && <EditWindow onClose={handleEditWindowClose} onConfirm={handleConfirmQuit}/>}
+      {isEditWindowOpen && <EditWindow onClose={handleEditWindowClose} onConfirm={handleConfirmQuit} />}
     </div>
   );
 };

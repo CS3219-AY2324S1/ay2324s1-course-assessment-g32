@@ -51,7 +51,6 @@ const editQuestion = async (id, title, complexity, description, tags) => {
     await duplicateTitleThrowsDuplicateError(id, title);
 
     const question = await questionRepository.findById(id);
-
     if (!question) {
       throw { status: 410, message: 'Question does not exist' };
     }

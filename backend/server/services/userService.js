@@ -1,44 +1,217 @@
-const userRepository = require('../repositories/userRepository');
+const userDatabase = require('../repositories/userRepoMySql');
 const bcrypt = require('bcrypt');
 
-const createUser = async (email, password) => {
+const verifyPassword = async (userId, givenPassword) => {
+  const storedPassword = (await userDatabase.getUserInfoById(userId)).password;
+  return bcrypt.compare(givenPassword, storedPassword);
+};
+
+// const verifyPasswordMinLen = ()
+
+const loginUser = async (email, password) => {
   try {
-    // Check if a user with the given email already exists
-    const existingUser = await userRepository.findByEmail(email);
-    if (existingUser) {
-      throw new Error('User already exists');
+    let userId = Number();
+
+    // Check for missing inputs
+    if (!email || !password) {
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await userRepository.createUser(email, hashedPassword);
+    // Check if a user with the given email exists
+    await userDatabase.findByEmail(email).then((id) => (userId = id));
 
-    return user;
+    if (!userId) {
+      throw Object.assign(new Error('Email not registered with any user'), { status: 410 });
+    }
+
+    // Compare the entered password with the hashed password stored in the database
+    if (!(await verifyPassword(userId, password))) {
+      throw Object.assign(new Error('Incorrect password'), { status: 401 });
+    }
+
+    return userId;
   } catch (err) {
     throw err;
   }
 };
 
-const loginUser = async (email, password) => {
+const createUser = async (email, password, confirmPassword) => {
   try {
-    // Find the user with the given email from the database
-    const user = await userRepository.findByEmail(email);
-    if (!user) {
-      throw new Error('User not found');
+    let passExistingUserCheck = undefined;
+
+    // Check for missing inputs
+    if (!email || !password || !confirmPassword) {
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
 
-    // Compare the entered password with the hashed password stored in the database
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      throw new Error('Incorrect password');
+    // Check if email is valid
+    var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      throw Object.assign(new Error('Invalid email'), { status: 400 });
     }
 
-    return user;
+    // Check if a user with the given email already exists
+    const existingUserCheck = userDatabase.findByEmail(email).then((userId) => {
+      passExistingUserCheck = userId == null;
+    });
+
+    // Check if the password is at least 8 characters long
+    if (password.length < 8) {
+      throw Object.assign(new Error('Password must be at least 8 characters long'), { status: 400 })
+    }
+
+    // Check if the password and confirm password match
+    if (password !== confirmPassword) {
+      throw Object.assign(new Error('Passwords do not match'), { status: 400 });
+    }
+
+    // Check results of existingUserCheck
+    await existingUserCheck;
+    if (passExistingUserCheck === undefined) {
+      console.error('No results from existingUserCheck');
+    }
+    if (!passExistingUserCheck) {
+      throw Object.assign(new Error('User already exists'), { status: 409 });
+    }
+
+    // Create using with email and hashed password
+    await userDatabase.createUser(email, bcrypt.hash(password, 10));
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getAllUserInfo = async () => {
+  try {
+    return userDatabase.getAllUserInfo();
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getUserInfo = async (userId, email) => {
+  try {
+    if (!userId && !email) {
+      throw Object.assign(new Error('Need at least id or email'), { status: 400 });
+    }
+
+    if (userId != null) return userDatabase.getUserInfoById(userId);
+    else return userDatabase.getUserInfoByEmail(email);
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
+ * Update user info of speficied userId.
+ * Only supports changing of username and password.
+ *
+ * @param {int|string} userId ID of user in DB. Read-only.
+ * @param {string} username New Username
+ * @param {string} password New password
+ */
+const updateUser = async (userId, username, password) => {
+  try {
+    if (!userId) {
+      throw Object.assign(new Error('Missing userId'), { status: 400 });
+    }
+
+    if (!username && !password) {
+      throw Object.assign(new Error('WARN: Nothing given, not doing update'), { status: 400 });
+    }
+
+    if (password) {
+      // Check if the password is at least 8 characters long
+      if (password.length < 8) {
+        throw { status: 400, message: 'Password must be at least 8 characters long' };
+      }
+      
+      password = bcrypt.hashSync(password, 10);
+    }
+
+    return userDatabase.updateUser(userId, username, password);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const deleteUser = async (id) => {
+  try {
+    let _success = Boolean();
+
+    // Check for missing inputs
+    if (!id) {
+      throw Object.assign(new Error('Missing id'), { status: 400 });
+    }
+
+    await userDatabase.deleteUser(id).then((x) => (_success = x));
+
+    if (!_success) {
+      throw Object.assign(new Error('Failed to delete user. Does user exists?'), { status: 500 });
+      
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
+ * Changes password of user. Throws error if invalid parameters.
+ * @param {string | number} id User ID
+ * @param {string} curPassword Current Password
+ * @param {string} newPasssword New Password
+ * @param {string} confirmPassword Confirm New Password
+ */
+const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword) => {
+  try {
+    let _correctPassword = Boolean();
+
+    // Check for missing inputs
+    if (!id || !curPassword || !newPasssword || !confirmPassword) {
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+    }
+
+    const passwordTest = verifyPassword(id, curPassword)
+      .then(x => _correctPassword = x);
+
+    // Check that new password is not old password
+    if (curPassword === newPasssword) {
+      throw Object.assign(new Error('New password cannot be old password'), { status: 400 });
+    }
+
+    // Confirm no typo in new password
+    if (newPasssword !== confirmPassword) {
+      throw Object.assign(new Error('Confirm password not matching'), { status: 400 });
+      
+    }
+
+    // Check if the password is at least 8 characters long
+    if (newPasssword.length < 8 || confirmPassword.length < 8) {
+      throw Object.assign(new Error('Password must be at least 8 characters long'), { status: 400 });
+    }
+
+    // Verify current password is correct
+    await passwordTest;
+    if (!_correctPassword) {
+      throw Object.assign(new Error('Incorrect password'), { status: 401 });
+    }
+
+    // Change the password
+    if (!(await updateUser(id, null, newPasssword))) {
+      throw Object.assign(new Error('Failed to update password'), { status: 500 });
+    }
+
   } catch (err) {
     throw err;
   }
 };
 
 module.exports = {
-  createUser,
-  loginUser
+  createUser, // Create
+  getAllUserInfo, // Read
+  getUserInfo, // Read
+  updateUser, // Update
+  deleteUser, // Delete
+  loginUser,
+  changeUserPassword, // Update
 };

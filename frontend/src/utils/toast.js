@@ -26,14 +26,20 @@ export const showServerErrorToast = (error) => {
   });
 };
 
-export const showDuplicateQuestionErrorToast = (error) => {
-  toast.error('Duplicate Question Error: ' + error.response.data.error, {
+export const showDuplicateRecordErrorToast = (error) => {
+  toast.error('Duplicate Record Error: ' + error.response.data.error, {
     position: toast.POSITION.BOTTOM_RIGHT
   });
 };
 
-export const showQuestionNotFoundErrorToast = (error) => {
-  toast.error('Question Not Found Error: ' + error.response.data.error, {
+export const showUserNotAuthorizedErrorToast = (error) => {
+  toast.error('Authorization Error: ' + error.response.data.error, {
+    position: toast.POSITION.BOTTOM_RIGHT
+  });
+};
+
+export const showRecordNotFoundErrorToast = (error) => {
+  toast.error('Record Not Found Error: ' + error.response.data.error, {
     position: toast.POSITION.BOTTOM_RIGHT
   });
 };

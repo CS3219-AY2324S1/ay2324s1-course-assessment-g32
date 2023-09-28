@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
-import { editQuestion, getQuestionDetails } from '../api/QuestionApi.js';
-import { EditWindow } from './ConfirmationWindow/ConfirmationWindows.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast, showFailureToast, showDuplicateQuestionErrorToast, showQuestionNotFoundErrorToast } from '../utils/toast.js';
-import TextEditor from './TextEditor/TextEditor.js';
-import '../css/Tags.css';
+import { editQuestion, getQuestionDetails } from '../../api/QuestionApi.js';
+import { EditWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
+import { showSuccessToast, showFailureToast } from '../../utils/toast.js';
+import { errorHandler } from '../../utils/errors.js';
+import TextEditor from '../TextEditor/TextEditor.js';
+import '../../css/Tags.css';
 
 const EditQuestion = () => {
 
@@ -32,17 +33,7 @@ const EditQuestion = () => {
         setIsLoading(false);
       } catch (error) {
         navigate('../');
-        switch (error.response.status) {
-          case 410:
-            showQuestionNotFoundErrorToast(error);
-            break;
-          case 408:
-            showServerErrorToast(error);
-            break;
-          default:
-            showFailureToast(error);
-        }
-
+        errorHandler(error);
       }
     };
 
@@ -70,20 +61,7 @@ const EditQuestion = () => {
       navigate(-1);
       showSuccessToast('Question Edited Successfully!');
     } catch (error) {
-      switch (error.response.status) {
-        case 400: 
-          showValidationErrorToast(error);
-          break;
-        case 409:
-          showDuplicateQuestionErrorToast(error);
-          break;
-        case 410:
-          showQuestionNotFoundErrorToast(error);
-          navigate('../');
-          break;
-        default:
-          showServerErrorToast(error);
-      }
+      errorHandler(error);
     }
   };
 
@@ -152,7 +130,7 @@ const EditQuestion = () => {
           <button type="submit" className="btn btn-success">Save</button>
         </div>
       </form>
-      {isEditWindowOpen && <EditWindow onClose={handleEditWindowClose} onConfirm={handleConfirmQuit}/>}
+      {isEditWindowOpen && <EditWindow onClose={handleEditWindowClose} onConfirm={handleConfirmQuit} />}
     </div>
   );
 };
