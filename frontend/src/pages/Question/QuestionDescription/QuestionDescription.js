@@ -13,6 +13,7 @@ import '../../../css/Tags.css';
 import Header from '../../../components/Header.js';
 import Cookies from 'js-cookie';
 import decode from 'jwt-decode';
+import { getCookie } from '../../../utils/getCookie.js';
 
 const QuestionDescription = () => {
   const [titleValue, setTitleValue] = useState('');
@@ -29,7 +30,7 @@ const QuestionDescription = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const question = await getQuestionDetails(id);
+        const question = await getQuestionDetails(id, getCookie());
         setTitleValue(question.title);
         setComplexityValue(question.complexity);
         setTagsValue(question.tags);
@@ -46,6 +47,7 @@ const QuestionDescription = () => {
 
     // Get isMaintainer value
     try {
+      // TODO: Check authorisation rights with auth api instead of decoding token here; Need to somehow get isMaintainer value
       setDecodedToken(decode(Cookies.get('jwt'), 'password'));
     } catch (err) {
       console.error('Cookie not found');
@@ -68,7 +70,7 @@ const QuestionDescription = () => {
   const handleConfirmDeletion = async () => {
     setDeletionWindowOpen(false);
     try {
-      await deleteQuestion(id);
+      await deleteQuestion(id, getCookie());
       showSuccessToast('Successfully Deleted!');
       navigate('../');
     } catch (error) {

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const env = require('../../loadEnvironment.js');
 
 const getJwtToken = (userInfo) => {
   const payload = {
@@ -6,9 +7,8 @@ const getJwtToken = (userInfo) => {
     isMaintainer: userInfo._isMaintainer,
   };
 
-  // TODO: Replace JWT_SECRET with a proper secret key (process.env.JWT_SECRET?)
   // Issue JWT
-  return jwt.sign(payload, 'password', {
+  return jwt.sign(payload, env.JWT_SECRET_KEY, {
     expiresIn: '1h',
   });
 };

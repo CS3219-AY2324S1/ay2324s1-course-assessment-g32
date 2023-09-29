@@ -38,6 +38,7 @@ const UserList = () => {
 
   useEffect(() => {
     try {
+      // TODO: Check authorisation rights with auth api instead of decoding token here; need to somehow get userid
       setToken(decode(Cookies.get('jwt'), 'password'));
     } catch (err) {
       console.error('Cookie not found');
@@ -69,7 +70,7 @@ const UserList = () => {
 
   const handleEditClick = (id, username) => {
     navigate('/users-management/edit', {
-      state: { id: id, username: username },
+      state: { user: { id: id, username: username } },
     });
   };
 

@@ -6,8 +6,6 @@ const verifyPassword = async (userId, givenPassword) => {
   return bcrypt.compare(givenPassword, storedPassword);
 };
 
-// const verifyPasswordMinLen = ()
-
 const getAllUserInfo = async () => {
   try {
     return userDatabase.getAllUserInfo();

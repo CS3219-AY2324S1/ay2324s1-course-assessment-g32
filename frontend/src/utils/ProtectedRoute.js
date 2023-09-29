@@ -3,6 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import decode from 'jwt-decode';
 
+// TODO: Check authorisation rights with auth api instead of decoding token here
 const ProtectedRoute = () => {
   const isAuthenticated = () => {
     try {

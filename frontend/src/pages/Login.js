@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import decode from 'jwt-decode';
 import { showSuccessToast } from '../utils/toast.js';
 import { errorHandler } from '../utils/errors.js';
-import { handleAuth } from '../api/AuthApi.js'
+import { handleAuth } from '../api/AuthApi.js';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -34,7 +34,8 @@ const Login = () => {
     };
 
     try {
-      const response = await handleAuth(userData, "login");
+      // TODO: Get exp value from token without decoding here (decoding can only be done in auth api)
+      const response = await handleAuth(userData, 'login');
       const token = response.data.token;
       const decodedToken = decode(token);
 

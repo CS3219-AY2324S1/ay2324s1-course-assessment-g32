@@ -18,6 +18,7 @@ function ManageUserProfile() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // TODO: Check authorisation rights with auth api instead of decoding token here; Need to find a way to get userid
     const token = decode(Cookies.get('jwt'), 'password');
     const fetchData = async () => {
       try {
