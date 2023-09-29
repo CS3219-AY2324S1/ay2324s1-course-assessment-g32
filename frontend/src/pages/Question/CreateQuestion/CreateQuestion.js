@@ -10,6 +10,7 @@ import TextEditor from '../../../components/TextEditor/TextEditor.js';
 import './CreateQuestion.css';
 import '../../../css/Tags.css';
 import Header from '../../../components/Header.js';
+import { getCookie } from '../../../utils/getCookie.js';
 
 const CreateQuestion = () => {
   const [newTitleValue, setTitleValue] = useState('');
@@ -42,7 +43,8 @@ const CreateQuestion = () => {
         newTitleValue,
         newComplexityValue,
         newDescriptionValue,
-        newTags
+        newTags,
+        getCookie()
       );
       navigate('../question/' + response.data.question._id);
       showSuccessToast('Question Created Successfully!');

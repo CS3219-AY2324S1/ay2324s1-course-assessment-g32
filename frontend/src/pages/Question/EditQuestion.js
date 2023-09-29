@@ -9,6 +9,7 @@ import { errorHandler } from '../../utils/errors.js';
 import TextEditor from '../../components/TextEditor/TextEditor.js';
 import '../../css/Tags.css';
 import Header from '../../components/Header.js';
+import { getCookie } from '../../utils/getCookie.js';
 
 const EditQuestion = () => {
   const [newTitleValue, setTitleValue] = useState('');
@@ -25,7 +26,7 @@ const EditQuestion = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const question = await getQuestionDetails(id);
+        const question = await getQuestionDetails(id, getCookie());
         setTitleValue(question.title);
         setComplexityValue(question.complexity);
         setDescriptionValue(question.description);
@@ -62,7 +63,8 @@ const EditQuestion = () => {
         newTitleValue,
         newComplexityValue,
         newDescriptionValue,
-        newTags
+        newTags,
+        getCookie()
       );
       navigate(-1);
       showSuccessToast('Question Edited Successfully!');

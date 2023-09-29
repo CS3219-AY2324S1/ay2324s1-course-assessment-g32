@@ -2,33 +2,33 @@ const authDatabase = require('../repositories/authRepoMySql.js');
 const bcrypt = require('bcrypt');
 
 const loginUser = async (email, password) => {
-    try {
-      let userInfo = new Object();
-  
-      // Check for missing inputs
-      if (!email || !password) {
-        throw Object.assign(new Error('Missing inputs'), { status: 400 });
-      }
-  
-      // Check if a user with the given email exists
-      await authDatabase.findByEmail(email).then((info) => (userInfo = info));
-      if (!userInfo) {
-        throw Object.assign(new Error('Email not registered with any user'), {
-          status: 410,
-        });
-      }
-  
-      // Compare the entered password with the hashed password stored in the database
-      if (!(await authenticate(userInfo._userId, password))) {
-        throw Object.assign(new Error('Incorrect password'), { status: 401 });
-      }
-  
-      return userInfo;
-    } catch (err) {
-      throw err;
+  try {
+    let userInfo = new Object();
+
+    // Check for missing inputs
+    if (!email || !password) {
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
-  };
-  
+
+    // Check if a user with the given email exists
+    await authDatabase.findByEmail(email).then((info) => (userInfo = info));
+    if (!userInfo) {
+      throw Object.assign(new Error('Email not registered with any user'), {
+        status: 410,
+      });
+    }
+
+    // Compare the entered password with the hashed password stored in the database
+    if (!(await authenticate(userInfo._userId, password))) {
+      throw Object.assign(new Error('Incorrect password'), { status: 401 });
+    }
+
+    return userInfo;
+  } catch (err) {
+    throw err;
+  }
+};
+
 const createUser = async (email, password, confirmPassword) => {
   try {
     let passExistingUserCheck = undefined;
@@ -76,7 +76,7 @@ const createUser = async (email, password, confirmPassword) => {
     // Create using with email and hashed password
     await authDatabase.createUser(email, bcrypt.hash(password, 10));
   } catch (err) {
-      throw err;
+    throw err;
   }
 };
 
@@ -89,4 +89,4 @@ module.exports = {
   loginUser,
   createUser,
   authenticate,
-}
+};
