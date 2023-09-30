@@ -13,7 +13,7 @@ const generateUuid = () => {
   The responder (server) consumes and process the request, and sends a response to responseQueue.
   The requester (client) consumes the response to get the result.
 */
-const joinQueue = async (id, queueName) => {
+const joinQueue = async (id, queueName, sessionID) => {
   const connection = await amqp.connect(url);
   const channel = await connection.createChannel();
 
@@ -31,12 +31,14 @@ const joinQueue = async (id, queueName) => {
   })));
 
   const correlationId = generateUuid();
+
   const message = {
     id: id,
     replyTo: responseQueue,
     correlationId: correlationId,
     timestamp: Date.now(),
-    isExit: false
+    isExit: false,
+    sessionID: sessionID
   };
 
   // Send the message to the request queue with the queue name as a property
@@ -63,7 +65,7 @@ const joinQueue = async (id, queueName) => {
 };
 
 // Send an exit request to the request queue
-const exitQueue = async (id, queueName) => {
+const exitQueue = async (id, queueName, sessionID) => {
   const connection = await amqp.connect(url);
   const channel = await connection.createChannel();
 
@@ -72,7 +74,8 @@ const exitQueue = async (id, queueName) => {
 
   const message = {
     id: id,
-    isExit: true
+    isExit: true,
+    sessionID: sessionID
   };
 
   // Send the message to the request queue

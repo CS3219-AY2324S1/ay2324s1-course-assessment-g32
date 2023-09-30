@@ -30,7 +30,7 @@ const consume = async (queueName, channel) => {
         const waitingHost = waitingHosts.get(queueName);
         if (waitingHost !== undefined) {
           const waitingHostRequest = JSON.parse(waitingHost.content.toString());
-          if (waitingHostRequest.id === request.id) {
+          if (waitingHostRequest.sessionID === request.sessionID) {
             const response = { message: `You have exited ${queueName} room!` };
             console.log(`Host ${waitingHostRequest.id} has exited ${queueName} room!`);
             channel.sendToQueue(waitingHostRequest.replyTo, Buffer.from(JSON.stringify(response)), {
@@ -55,10 +55,27 @@ const consume = async (queueName, channel) => {
         return;
       }
 
-      // If there is another host waiting in the queue
-      const waitingHost = waitingHosts.get(queueName);
+      var waitingHost = waitingHosts.get(queueName);
+
+      // Checks if the waiting host is the same as incoming host (user opens multiple tabs)
+      if (waitingHost !== undefined && JSON.parse(waitingHost.content.toString()).id === request.id) {
+        const waitingHostRequest = JSON.parse(waitingHost.content.toString());
+
+        console.log(`Host ${waitingHostRequest.id} is already waiting in ${queueName} room!`);
+        const waitingHostResponse = {
+          message: `You are waiting in multiple tabs!`
+        };
+        // Send the response to waiting host
+        channel.sendToQueue(waitingHostRequest.replyTo, Buffer.from(JSON.stringify(waitingHostResponse)), {
+          correlationId: waitingHostRequest.correlationId,
+        });
+        channel.ack(waitingHost);
+        waitingHost = undefined
+      }
+
       if (waitingHost !== undefined) {
         const waitingHostRequest = JSON.parse(waitingHost.content.toString());
+
         console.log(`Host ${request.id} is matched with host ${waitingHostRequest.id} in ${queueName} room!`);
 
         const roomId = generateUniqueRoomId();
