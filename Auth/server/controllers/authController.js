@@ -48,7 +48,39 @@ const authorize = async (req, res) => {
       // decodedJwtToken contains { userId, isMaintainer, iat, exp }
       isMaintainer = decodedJwtToken['isMaintainer'];
 
-      // TODO: Either create a new api or change the message sent
+      res.json({ message: 'User is authorized' });
+    });
+  } catch (err) {
+    // throw Object.assign(new Error('Incorrect password'), { status: 401 });
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
+const authorizeMaintainer = async (req, res) => {
+  try {
+    let isMaintainer = null;
+
+    // Extract the token from the Authorization header
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    // No JWT token found
+    if (token == null) {
+      return res.status(401).json({ error: 'No JWT token found' });
+    }
+
+    // Verify and decode jwtToken
+    jwt.verify(token, env.JWT_SECRET_KEY, (err, decodedJwtToken) => {
+      if (err) {
+        return res.status(401).json({ error: 'Invalid JWT token' });
+      }
+
+      // decodedJwtToken contains { userId, isMaintainer, iat, exp }
+      isMaintainer = decodedJwtToken['isMaintainer'];
+
+      if (!isMaintainer) {
+        return res.status(401).json({ error: 'Not Maintainer' });
+      }
 
       res.json({ message: 'User is authorized' });
     });
@@ -58,19 +90,9 @@ const authorize = async (req, res) => {
   }
 };
 
-// const authenticate = async (req, res) => {
-//   try {
-//     const { id, curPassword } = req.body;
-//     const authRes = await authService.authenticate(id, curPassword);
-//     return authRes;
-//   } catch (error) {
-//     res.status(err?.status || 500).json({ error: err?.message || err });
-//   }
-// };
-
 module.exports = {
   login,
   signup,
   authorize,
-  // authenticate,
+  authorizeMaintainer,
 };

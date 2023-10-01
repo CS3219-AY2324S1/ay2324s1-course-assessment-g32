@@ -22,25 +22,26 @@ const authorize = async (token) => {
   }
 };
 
-// const authenticate = async (userData) => {
-//   try {
-//     return await axios.post(authRootUrl + '/authenticate',
-//       userData,
-//       {
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//       }
-//     );
-//   } catch (err) {
-//     if (err.code === 'ERR_NETWORK') {
-//       throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
-//     }
-//     throw err;
-//   }
-// };
+const authorizeMaintainer = async (token) => {
+  try {
+    return await axios.get(authRootUrl + '/authorizeMaintainer', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+    });
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
 
 module.exports = {
-  // authenticate,
   authorize,
+  authorizeMaintainer,
 };
