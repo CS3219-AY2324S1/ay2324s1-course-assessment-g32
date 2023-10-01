@@ -5,7 +5,7 @@ import { joinQueue, exitQueue } from '../../api/QueueApi.js';
 import { errorHandler } from '../../utils/errors.js';
 import { showFailureToast } from '../../utils/toast.js';
 
-const Queue = ({ user, queueName, onCancel }) => {
+const Queue = ({ user, queueName, onCancel, sessionID }) => {
 
   const [status, setStatus] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +15,7 @@ const Queue = ({ user, queueName, onCancel }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const reply = await joinQueue(user, queueName);
+        const reply = await joinQueue(user, queueName, sessionID);
         setStatus(reply.data.response.message);
         setIsLoading(false);
 
@@ -48,16 +48,13 @@ const Queue = ({ user, queueName, onCancel }) => {
 
   const handleCancelClick = () => {
     try {
-      exitQueue(user, queueName);
+      exitQueue(user, queueName, sessionID);
       onCancel();
     } catch (error) {
       errorHandler(error);
     }
   };
 
-  const handleBackClick = () => {
-    onCancel();
-  };
 
   return isLoading ? (
     <div className='container'>
@@ -70,7 +67,7 @@ const Queue = ({ user, queueName, onCancel }) => {
     <div className='container'>
       <div className='row text-center'>
         <p>{status}</p>
-        <button className='btn btn-secondary' onClick={handleBackClick} >Back</button>
+        <button className='btn btn-secondary' onClick={handleCancelClick} >Back</button>
       </div>
     </div>
   );

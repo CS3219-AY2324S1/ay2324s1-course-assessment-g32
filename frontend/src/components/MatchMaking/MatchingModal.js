@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { exitQueue } from '../../api/QueueApi.js';
 import Queue from './Queue';
 import '../../css/Modal.css'
@@ -11,6 +12,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
   const [isFindingMatch, setIsFindingMatch] = useState(false);
   const [complexity, setComplexity] = useState('Easy');
   const [programmingLanguage, setProgrammingLanguage] = useState('');
+  const [sessionID, setSessionID] = useState('');
 
   const storedUser = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
@@ -46,13 +48,14 @@ const MatchingModal = ({ isOpen, onClose }) => {
   };
 
   const handleMatchingToggle = async () => {
+    setSessionID(uuidv4);
     setIsFindingMatch(!isFindingMatch);
   };
 
   const handleClosingModal = () => {
     if (isFindingMatch) {
       const queueName = complexity + programmingLanguage;
-      exitQueue(storedUser, queueName);
+      exitQueue(storedUser, queueName, sessionID);
     }
     onClose();
     setIsFindingMatch(false);
@@ -74,6 +77,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
                   user={storedUser}
                   queueName={complexity + programmingLanguage}
                   onCancel={handleMatchingToggle}
+                  sessionID={sessionID}
                 />
               </div>
             ) : (

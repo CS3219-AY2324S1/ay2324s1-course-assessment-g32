@@ -9,11 +9,12 @@ const config = {
   }
 };
 
-export const joinQueue = async (user, queueName) => {
+export const joinQueue = async (user, queueName, sessionID) => {
   try {
     const data = {
       id: user.id,
-      queueName: queueName
+      queueName: queueName,
+      sessionID: sessionID
     };
     return await axios.post(rootUrl + "/join", data, config);
   } catch (err) {
@@ -24,11 +25,12 @@ export const joinQueue = async (user, queueName) => {
   }
 };
 
-export const exitQueue = async (user, queueName) => {
+export const exitQueue = async (user, queueName, sessionID) => {
   try {
     const data = {
       id: user.id,
-      queueName: queueName
+      queueName: queueName,
+      sessionID: sessionID
     };
     return await axios.post(rootUrl + "/exit", data, config);
   } catch (err) {
