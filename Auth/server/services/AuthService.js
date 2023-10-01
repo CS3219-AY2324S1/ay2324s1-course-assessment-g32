@@ -10,6 +10,12 @@ const loginUser = async (email, password) => {
       throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
 
+    // Check if email is valid
+    var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      throw Object.assign(new Error('Invalid email'), { status: 400 });
+    }
+
     // Check if a user with the given email exists
     await authDatabase.findByEmail(email).then((info) => (userInfo = info));
     if (!userInfo) {
