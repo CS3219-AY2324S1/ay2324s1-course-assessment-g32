@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import decode from 'jwt-decode';
 import { showSuccessToast } from '../utils/toast.js';
 import { errorHandler } from '../utils/errors.js';
-import { handleAuth } from '../api/AuthApi.js';
+import { login } from '../api/UserApi.js';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -35,15 +35,21 @@ const Login = () => {
 
     try {
       // TODO: Get exp value from token without decoding here (decoding can only be done in auth api)
-      const response = await handleAuth(userData, 'login');
-      const token = response.data.token;
-      const decodedToken = decode(token);
+      const response = await login(userData);
+      // const token = response.data.token;
+      // const decodedToken = decode(token);
 
-      Cookies.set('jwt', token, {
-        secure: true,
-        sameSite: 'strict',
-        expires: new Date(decodedToken.exp * 1000),
-      });
+      // Cookies.set('jwt', token, {
+      //   secure: true,
+      //   sameSite: 'strict',
+      //   expires: new Date(decodedToken.exp * 1000),
+      // });
+
+      const data = {
+        id: response.data.id,
+      };
+
+      localStorage.setItem('user', JSON.stringify(data));
 
       navigate('/landing');
       showSuccessToast('User logged in successfully!');
