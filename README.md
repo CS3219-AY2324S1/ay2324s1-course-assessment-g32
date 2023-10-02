@@ -22,7 +22,10 @@ For development, you may also want to install:
 ## Setup environment variables
 
 1. Enter the following command
-```cp template.env .env```
+   ```
+   cp template.env .env
+   ```
+
 1. Open `.env` file
 1. Enter root password (previously configured when installing MySQL)  
    Example: if your root password is "password1234", 
@@ -30,22 +33,22 @@ For development, you may also want to install:
 
 ## Install NodeJS packages
 
-```
-npm run install-all
-```
+```npm run install-all```
 
 # Start Application
 
 Start local MySQL Server (Windows Service), if necessary.
 
-Start all services by: 
-```
-npm run start-all
+Start all services by:
 
 ```
+npm run start-all
+```
+
 Or start them indvidually:  
-- Frontend: `cd frontend && npm start`  
-- Backend: `cd backend && npm start`  
+- Frontend: `npm run start:frontend`
+- Backend: `npm run start:backend`
+
 
 # Developer Notes
 
