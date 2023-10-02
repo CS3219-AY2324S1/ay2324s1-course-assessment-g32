@@ -1,5 +1,17 @@
 const userService = require('../services/userService');
 
+// Define a controller function for handling login requests
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const jwtToken = await userService.loginUser(email, password);
+    res.json({ message: 'User logged in successfully', token: jwtToken });
+  } catch (err) {
+    res.status(err?.status || 400).json({ error: err?.message || err });
+  }
+};
+
+
 const createUser = async (req, res) => {
   try {
     const { email, password, confirmPassword } = req.body;
@@ -65,6 +77,7 @@ const changePassword = async (req, res) => {
 };
 
 module.exports = {
+  loginUser,
   createUser,
   getAllUserInfo,
   getUserInfo,

@@ -1,24 +1,17 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import decode from 'jwt-decode';
+import { hasMaintainerRole } from '../api/AuthorisationApi.js';
+import { errorHandler } from './errors.js';
 
-export const isMaintainer = () => {
+export const isMaintainer = async () => {
   try {
     const token = Cookies.get('jwt');
 
-    if (!token) {
-      return false;
-    } else {
-      const decodedToken = decode(token, 'password');
-      if (decodedToken) {
-        return decodedToken.isMaintainer !== 1 ? false : true;
-      } else {
-        return false;
-      }
-    }
+    return await hasMaintainerRole(token);
+
   } catch (err) {
-    console.error('Cookie not found');
+    errorHandler(err);
     return false;
   }
 };

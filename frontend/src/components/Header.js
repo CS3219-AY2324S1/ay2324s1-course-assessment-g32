@@ -7,13 +7,22 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Cookies from 'js-cookie';
 import { isMaintainer } from '../utils/MaintainerRoute.js';
+import { errorHandler } from '../utils/errors.js';
 
 function Header() {
   const navigate = useNavigate();
   const [isMaintainerHeader, setIsMaintainerHeader] = React.useState(false);
 
   useEffect(() => {
-    setIsMaintainerHeader(isMaintainer());
+    const checkMaintainerRole = async () => {
+      try {
+        const response = await isMaintainer();
+        setIsMaintainerHeader(response);
+      } catch (error) {
+        errorHandler(error);
+      }
+    };
+    checkMaintainerRole();
   });
 
   const handleSignOut = () => {

@@ -1,5 +1,6 @@
 const userDatabase = require('../repositories/userRepoMySql');
 const bcrypt = require('bcrypt');
+const { generateJwtToken } = require('./authorisationService');
 
 const verifyPassword = async (userId, givenPassword) => {
   const storedPassword = (await userDatabase.getUserInfoById(userId)).password;
@@ -29,7 +30,9 @@ const loginUser = async (email, password) => {
       throw Object.assign(new Error('Incorrect password'), { status: 401 });
     }
 
-    return userInfo;
+    const jwtToken = generateJwtToken(userInfo);
+
+    return jwtToken;
   } catch (err) {
     throw err;
   }
