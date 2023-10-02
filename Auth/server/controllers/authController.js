@@ -1,4 +1,3 @@
-const authService = require('../services/AuthService.js');
 const { getJwtToken } = require('../helpers/jwt.js');
 const jwt = require('jsonwebtoken');
 const env = require('../../loadEnvironment.js');
