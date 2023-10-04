@@ -5,7 +5,7 @@ const authRootUrl = env.AUTH_URL + '/auth';
 
 export const generateJWT = async (userData) => {
   try {
-    return await axios.post(authRootUrl + '/generate', userData, {
+    return await axios.get(authRootUrl + '/generate', userData, {
       headers: {
         'Content-Type': 'application/json',
       },

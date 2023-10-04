@@ -7,7 +7,7 @@ const generate = async (req, res) => {
   try {
     const { email, isMaintainer } = req.body;
 
-    tokenData = {
+    const tokenData = {
       email: email,
       isMaintainer: isMaintainer,
     }

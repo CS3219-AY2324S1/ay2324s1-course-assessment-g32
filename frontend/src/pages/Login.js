@@ -52,12 +52,6 @@ const Login = () => {
         expires: new Date(decodedToken.exp * 1000),
       });
 
-      const data = {
-        id: response.data.id,
-      };
-
-      localStorage.setItem('user', JSON.stringify(data));
-
       navigate('/landing');
       showSuccessToast('User logged in successfully!');
     } catch (error) {
