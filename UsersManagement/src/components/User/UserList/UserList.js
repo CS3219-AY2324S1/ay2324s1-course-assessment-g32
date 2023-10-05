@@ -58,11 +58,11 @@ const UserList = () => {
   const navigate = useNavigate();
 
   const handleNewUserClick = () => {
-    navigate('/users-management/new');
+    navigate('/new');
   }
 
   const handleEditClick = (id, username) => {
-    navigate('/users-management/edit', { state: { id: id, username: username } });
+    navigate('/edit', { state: { id: id, username: username } });
   };
 
   const handleDeleteClick = (id) => {

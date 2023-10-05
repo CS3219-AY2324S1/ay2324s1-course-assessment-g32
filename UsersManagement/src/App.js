@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<ManageUserProfiles />} /> {/* Display Login component by default */}
+        <Route path='/*' element={<ManageUserProfiles />} /> {/* Display Login component by default */}
       </Routes>
       <ToastContainer />
     </div>
