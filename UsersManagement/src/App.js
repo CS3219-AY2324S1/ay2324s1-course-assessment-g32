@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import ManageUserProfiles from './pages/ManageUserProfiles';
-import './App.css';
+import 'css/App.css';
 
 function App() {
   return (

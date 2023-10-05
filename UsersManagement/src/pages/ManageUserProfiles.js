@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import AddUser from '../components/User/AddUser';
-import EditUser from '../components/User/EditUser';
-import UserList from '../components/User/UserList/UserList';
-import './ManageUserProfiles.css';
+import Header from 'components/Header';
+import AddUser from 'components/User/AddUser';
+import EditUser from 'components/User/EditUser';
+import UserList from 'components/User/UserList/UserList';
+import 'css/ManageUserProfiles.css';
 
 function ManageUserProfiles() {
   const [isLoading, setIsLoading] = useState(true);

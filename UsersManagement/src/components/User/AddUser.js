@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { signup } from '../../api/UserApi.js';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../../utils/toast.js';
+import { signup } from 'api/UserApi.js';
+import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from 'utils/toast.js';
 
 const AddUser = () => {
   const [email, setEmail] = useState('');
