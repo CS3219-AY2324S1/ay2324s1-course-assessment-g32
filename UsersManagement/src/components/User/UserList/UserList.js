@@ -17,8 +17,6 @@ const UserList = () => {
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
-  const storedUser = JSON.parse(localStorage.getItem('user'));
-
   const fetchData = async () => {
     getAllUsers()
       .then((res) => {
@@ -35,11 +33,7 @@ const UserList = () => {
   };
 
   useEffect(() => {
-    if (storedUser) {
       fetchData();
-    } else {
-      navigate('/login');
-    }
   }, []);
 
   useEffect(() => {
@@ -87,18 +81,14 @@ const UserList = () => {
       <td>{user.email}</td>
       <td>{parseDatetime(user.created_at)}</td>
       <td>{parseDatetime(user.updated_at)}</td>
-      {user.id === storedUser.id ? (
-        <td />
-      ) : (
-        <td>
+      <td>
           <Button variant='contained' onClick={() => handleEditClick(user.id, user.username)}>
             Edit
           </Button>
           <Button variant='contained' color='error' onClick={() => handleDeleteClick(user.id)}>
             Deregister
           </Button>
-        </td>
-      )}
+      </td>
     </tr>
   ));
 
@@ -108,7 +98,7 @@ const UserList = () => {
     </div>
   ) : (
     <div className='container'>
-      <h1>Manage User Profiles</h1>
+      <h1>User Profile Management</h1>
       <table ref={tableRef} className='table table-hover table-striped'>
         <thead className='table-dark'>
           <tr>
