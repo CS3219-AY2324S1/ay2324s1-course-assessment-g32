@@ -47,7 +47,7 @@ const AddUser = () => {
           <nav aria-label='breadcrumb' className='bg-light rounded-3 p-3 mb-4'>
             <ol className='breadcrumb mb-0'>
               <li className='breadcrumb-item'>
-                <a href='/users-management'>Manage User Profiles</a>
+                <a href='/'>Manage User Profiles</a>
               </li>
               <li className='breadcrumb-item active' aria-current='page' style={{ fontWeight: 'bold' }}>
                 Add User

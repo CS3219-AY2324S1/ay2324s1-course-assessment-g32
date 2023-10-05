@@ -57,7 +57,7 @@ const EditUser = ({ user = null }) => {
             <ol className='breadcrumb mb-0'>
               {!user ? (
                 <li className='breadcrumb-item'>
-                  <a href='/users-management'>Manage User Profiles</a>
+                  <a href='/'>Manage User Profiles</a>
                 </li>
               ) : null}
               <li className='breadcrumb-item active' aria-current='page' style={{ fontWeight: 'bold' }}>

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import AddUser from 'components/User/AddUser';
 import EditUser from 'components/User/EditUser';
 import UserList from 'components/User/UserList/UserList';
