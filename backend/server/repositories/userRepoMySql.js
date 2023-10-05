@@ -18,7 +18,6 @@ const conn = mysql.createConnection({
 const findByEmail = async (email) => {
   var _userId = Number();
   var _isMaintainer = Boolean();
-
   const query = conn
     .promise()
     .query('SELECT id, isMaintainer FROM users WHERE email=?;', [email])
@@ -84,8 +83,11 @@ const getAllUserInfo = async () => {
 };
 
 const getUserInfoById = async (userId) => {
-  var _userInfo = {};
 
+  // idk why this is needed but there was error in the SQL syntax here if i dont do this
+  userId = userId['_userId']
+
+  var _userInfo = {};
   const selectStmt = `SELECT * FROM users WHERE id=?;`;
 
   const query = conn

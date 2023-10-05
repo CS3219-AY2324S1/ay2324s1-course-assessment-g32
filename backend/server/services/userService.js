@@ -6,6 +6,85 @@ const verifyPassword = async (userId, givenPassword) => {
   return bcrypt.compare(givenPassword, storedPassword);
 };
 
+const loginUser = async (email, password) => {
+  try {
+    let userId = Number();
+
+    // Check for missing inputs
+    if (!email || !password) {
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+    }
+
+    // Check if email is valid
+    var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      throw Object.assign(new Error('Invalid email'), { status: 400 });
+    }
+
+    // Check if a user with the given email exists
+    await userDatabase.findByEmail(email).then((id) => (userId = id));
+
+    if (!userId) {
+      throw Object.assign(new Error('Email not registered with any user'), { status: 410 });
+    }
+
+    // Compare the entered password with the hashed password stored in the database
+    if (!(await verifyPassword(userId, password))) {
+      throw Object.assign(new Error('Incorrect password'), { status: 401 });
+    }
+
+    return userId;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const createUser = async (email, password, confirmPassword) => {
+  try {
+    let passExistingUserCheck = undefined;
+
+    // Check for missing inputs
+    if (!email || !password || !confirmPassword) {
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+    }
+
+    // Check if email is valid
+    var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      throw Object.assign(new Error('Invalid email'), { status: 400 });
+    }
+
+    // Check if a user with the given email already exists
+    const existingUserCheck = userDatabase.findByEmail(email).then((userId) => {
+      passExistingUserCheck = userId['_userId'] == null;
+    });
+
+    // Check if the password is at least 8 characters long
+    if (password.length < 8) {
+      throw Object.assign(new Error('Password must be at least 8 characters long'), { status: 400 })
+    }
+
+    // Check if the password and confirm password match
+    if (password !== confirmPassword) {
+      throw Object.assign(new Error('Passwords do not match'), { status: 400 });
+    }
+
+    // Check results of existingUserCheck
+    await existingUserCheck;
+    if (passExistingUserCheck === undefined) {
+      console.error('No results from existingUserCheck');
+    }
+    if (!passExistingUserCheck) {
+      throw Object.assign(new Error('User already exists'), { status: 409 });
+    }
+
+    // Create using with email and hashed password
+    await userDatabase.createUser(email, bcrypt.hash(password, 10));
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getAllUserInfo = async () => {
   try {
     return userDatabase.getAllUserInfo();
@@ -132,6 +211,8 @@ const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword
 };
 
 module.exports = {
+  loginUser,
+  createUser,
   getAllUserInfo, // Read
   getUserInfo, // Read
   updateUser, // Update

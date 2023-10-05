@@ -1,12 +1,12 @@
 import axios from 'axios';
 const env = require("../loadEnvironment");
 
-const authRootUrl = env.SERVER_URL + '/auth';
+// const authRootUrl = env.SERVER_URL + '/auth';
 const userRootUrl = env.SERVER_URL + '/user';
 
 export const signup = async (userData) => {
   try {
-    return await axios.post(authRootUrl + '/signup', 
+    return await axios.post(userRootUrl + '/signup', 
       userData, 
       {
         headers: {
@@ -24,7 +24,7 @@ export const signup = async (userData) => {
 
 export const login = async (userData) => {
   try {
-    return await axios.post(authRootUrl + '/login', 
+    return await axios.post(userRootUrl + '/login', 
       userData, 
       {
         headers: {
