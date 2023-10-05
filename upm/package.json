@@ -1,8 +1,7 @@
 {
-  "name": "usersmanagement",
+  "name": "upm",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "User Profile Management",
   "scripts": {
     "start": "env-cmd -f ../.env react-scripts start",
     "build": "env-cmd -f ../.env react-scripts build",
