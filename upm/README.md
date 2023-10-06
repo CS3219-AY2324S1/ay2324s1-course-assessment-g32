@@ -16,6 +16,9 @@ verification is being done. It is running is a "always-admin"
 mode, meaning that any/all actions done can potentially be
 dangerous.
 
+**Warning:** _UPM is in "god-mode"! It must not be used by the
+end-user directly!_
+
 Note: to make it harder "accidentially" start and abuse UPM,
 UPM _must_ be set up and start seperately. The parent package
 will not install/start UPM. UPM _must_ be started explicitly.
