@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "User Profile Management",
   "scripts": {
-    "start": "start /min node server/server.js && env-cmd -f ../.env react-scripts start",
+    "start": " start /min npm run start-server && npm run start-web-interface",
+    "start-server": "node server/server.js",
+    "start-web-interface": "env-cmd -f ../.env react-scripts start",
     "build": "env-cmd -f ../.env react-scripts build",
     "test": "env-cmd -f ../.env react-scripts test",
     "eject": "react-scripts eject"
@@ -19,6 +21,7 @@
     "@mui/x-data-grid": "^6.13.0",
     "axios": "^1.5.1",
     "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "datatables.net": "^1.13.6",
     "datatables.net-bs5": "^1.13.6",

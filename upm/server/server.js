@@ -1,12 +1,14 @@
 const cors = require('cors');
-const express = require("express");
 const mysql = require('mysql2');
+const express = require("express");
+const bodyParser = require('body-parser');
 const userRoutes = require('./userRoutes');
 const env = require('./loadEnvironment');
 
 // start the Express (web) server
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 app.use('/user', userRoutes);
 app.listen(env.SERVER_PORT, () => {
   console.log(`Server listening on ${env.SERVER_PORT}`);

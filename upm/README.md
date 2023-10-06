@@ -75,3 +75,5 @@ npm start
 
 This will open an additional terminal which runs the backend server,
 as well as start the web interface server.
+
+Note: When terminating, need to close the additional terminal separately.

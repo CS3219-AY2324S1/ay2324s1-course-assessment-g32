@@ -9,6 +9,7 @@ const AddUser = () => {
 
   const handleRegisterClick = async (e) => {
     e.preventDefault();
+    
     const userData = {
       email: email,
       password: password,
@@ -56,7 +57,7 @@ const AddUser = () => {
           </nav>
         </div>
       </div>
-      <form className='change-user-password needs-validation' onSubmit={handleRegisterClick} noValidate>
+      <form className='create-new-user needs-validation' onSubmit={handleRegisterClick} noValidate>
         <div className='form-floating mb-3'>
           <input type='text' className='form-control' id='enterEmail' placeholder='Email' onChange={handleEmailChange} required />
           <label htmlFor='enterEmail'>Email</label>
