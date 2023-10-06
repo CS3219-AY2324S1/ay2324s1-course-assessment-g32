@@ -52,7 +52,7 @@ Or start them indvidually:
 
 # Developer Notes
 
-| Backend API Path | Purpose | Parameters (JSON format) |
+| Backend API Endpoint | Purpose | Parameters (JSON format) |
 | --- | --- | --- |
 |`/auth/signup`| See `/user/create` | See `/user/create` |
 |`/auth/login`| Used to login | `email` <br> `password` |

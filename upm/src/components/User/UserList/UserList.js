@@ -77,6 +77,7 @@ const UserList = () => {
   const userList = tableData.map((user, index) => (
     <tr key={user.id}>
       <th scope='row'>{index + 1}</th>
+      <td>{user.id}</td>
       <td>{user.username}</td>
       <td>{user.email}</td>
       <td>{parseDatetime(user.created_at)}</td>
@@ -102,24 +103,13 @@ const UserList = () => {
       <table ref={tableRef} className='table table-hover table-striped'>
         <thead className='table-dark'>
           <tr>
-            <th scope='col' width='50'>
-              No.
-            </th>
-            <th scope='col' width='400'>
-              Username
-            </th>
-            <th scope='col' width='400'>
-              Email
-            </th>
-            <th scope='col' width='400'>
-              Created At
-            </th>
-            <th scope='col' width='400'>
-              Updated At
-            </th>
-            <th scope='col' width='300'>
-              Actions
-            </th>
+            <th scope='col' width='50'>No.</th>
+            <th scope='col' width='50'>ID</th>
+            <th scope='col' width='400'>Username</th>
+            <th scope='col' width='400'>Email</th>
+            <th scope='col' width='400'>Created At</th>
+            <th scope='col' width='400'>Updated At</th>
+            <th scope='col' width='300'>Actions</th>
           </tr>
         </thead>
         <tbody key={userList} className='table-group-divider'>{userList}</tbody>
