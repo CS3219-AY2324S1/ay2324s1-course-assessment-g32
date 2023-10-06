@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { updateUsername, updatePassword } from 'api/UserApi.js';
 import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from 'utils/toast.js';
 
@@ -12,6 +12,7 @@ const EditUser = ({ user = null }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const location = useLocation();
+
   useEffect(() => {
     if (user) {
       // Used when routing from ManageUserProfile
@@ -25,14 +26,11 @@ const EditUser = ({ user = null }) => {
     setIsLoading(false);
   }, [location.state, user]);
 
-  const navigate = useNavigate();
-
-  const handleUpdateClick = async (e) => {
+  const handleUpdateUsernameClick = async (e) => {
     e.preventDefault();
     
     updateUsername(id, newUsername)
       .then(() => {
-        navigate(-1);
         showSuccessToast('Username updated successfully!');
       })
       .catch((error) => {
@@ -42,21 +40,22 @@ const EditUser = ({ user = null }) => {
           showServerErrorToast(error);
         }
       });
-  
-    if (currentPassword && newPassword && confirmPassword) {
-      updatePassword(id, currentPassword, newPassword, confirmPassword)
-        .then(() => {
-          navigate(-1);
-          showSuccessToast('Username updated successfully!');
-        })
-        .catch((error) => {
-          if (error.response.status === 400) {
-            showValidationErrorToast(error);
-          } else {
-            showServerErrorToast(error);
-          }
-        });
-    }
+  };
+
+  const handleUpdatePasswordClick = async (e) => {
+    e.preventDefault();
+    
+    updatePassword(id, currentPassword, newPassword, confirmPassword)
+      .then(() => {
+        showSuccessToast('Username updated successfully!');
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          showValidationErrorToast(error);
+        } else {
+          showServerErrorToast(error);
+        }
+      });
   };
 
   const handleUsernameChange = (event) => { setUsername(event.target.value) };
@@ -87,34 +86,43 @@ const EditUser = ({ user = null }) => {
         </div>
       </div>
 
-      <form className='edit-username needs-validation' onSubmit={handleUpdateClick} noValidate>
+      <form className='edit-username needs-validation' onSubmit={handleUpdateUsernameClick} >
         Update Username:
         <div className='form-floating mb-3'>
           <input type='text' className='form-control' id='editUsername' placeholder='username' value={newUsername} onChange={handleUsernameChange} required />
           <label htmlFor='editUsername'>Username</label>
         </div>
-        Update Password: <br/>
-        Note: No change made if any fields below are empty
+        <div className='d-flex justify-content-end'>
+          <button type='submit' className='btn btn-success'>
+            Update Username
+          </button>
+        </div>
+      </form>
+
+      <form className='edit-password needs-validation' onSubmit={handleUpdatePasswordClick} >
+        Update Password:
         <div className='form-floating mb-3'>
-          <input type='text' className='form-control' id='current-password'  value={currentPassword} onChange={handleCurPasswordChange} />
+          <input type='text' className='form-control' id='current-password'  value={currentPassword} onChange={handleCurPasswordChange} required />
           <label htmlFor='current-password'>Current Password</label>
         </div>
         <div className='form-floating mb-3'>
-          <input type='text' className='form-control' id='new-password'  value={newPassword} onChange={handleNewPasswordChange} />
+          <input type='text' className='form-control' id='new-password'  value={newPassword} onChange={handleNewPasswordChange} required />
           <label htmlFor='new-password'>New Password</label>
         </div>
         <div className='form-floating mb-3'>
-          <input type='text' className='form-control' id='confirm-password' value={confirmPassword} onChange={handleCfmPasswordChange} />
+          <input type='text' className='form-control' id='confirm-password' value={confirmPassword} onChange={handleCfmPasswordChange} required />
           <label htmlFor='confirm-password'>Confirm New Password</label>
         </div>
         <div className='d-flex justify-content-end'>
           <button type='submit' className='btn btn-success'>
-            Update
+            Update Password
           </button>
         </div>
       </form>
+
     </div>
   );
+
 };
 
 export default EditUser;
