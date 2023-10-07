@@ -13,7 +13,7 @@ const conn = mysql.createConnection({
  * userId is null -> Cannot find user with email;
  *
  * @param {string} email
- * @returns userId
+ * @returns {userId, isMaintainer}
  */
 const findByEmail = async (email) => {
   var _userId = Number();
@@ -28,7 +28,7 @@ const findByEmail = async (email) => {
     .catch(console.error);
 
   await query; // Wait for uid and isMaintainer to be updated
-  return { _userId, _isMaintainer };
+  return { userId: _userId, isMaintainer: _isMaintainer };
 };
 
 const createUser = async (email, password) => {
@@ -83,9 +83,8 @@ const getAllUserInfo = async () => {
 };
 
 const getUserInfoById = async (userId) => {
-
   // idk why this is needed but there was error in the SQL syntax here if i dont do this
-  userId = userId['_userId']
+  // userId = userId['_userId'];
 
   var _userInfo = {};
   const selectStmt = `SELECT * FROM users WHERE id=?;`;

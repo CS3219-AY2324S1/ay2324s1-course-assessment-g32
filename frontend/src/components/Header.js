@@ -5,19 +5,22 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import Cookies from 'js-cookie';
-import { isMaintainer } from '../utils/MaintainerRoute.js';
+import { getIsMaintainer, removeCookie } from '../utils/helpers.js';
 
 function Header() {
   const navigate = useNavigate();
   const [isMaintainerHeader, setIsMaintainerHeader] = React.useState(false);
 
   useEffect(() => {
-    setIsMaintainerHeader(isMaintainer());
-  });
+    async function fetchData() {
+      const isMaintainer = await getIsMaintainer();
+      setIsMaintainerHeader(isMaintainer);
+    }
+    fetchData();
+  }, []);
 
   const handleSignOut = () => {
-    Cookies.remove('jwt');
+    removeCookie();
     navigate('/');
   };
 
@@ -30,10 +33,18 @@ function Header() {
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='me-auto'>
               <NavDropdown title='User Setting' id='basic-nav-dropdown'>
-                {isMaintainerHeader ? (<NavDropdown.Item href='/users-management'>Manage User Profiles</NavDropdown.Item>) : null}
-                <NavDropdown.Item href='/user-profile'>Manage Your Profile</NavDropdown.Item>
+                {isMaintainerHeader ? (
+                  <NavDropdown.Item href='/users-management'>
+                    Manage User Profiles
+                  </NavDropdown.Item>
+                ) : null}
+                <NavDropdown.Item href='/user-profile'>
+                  Manage Your Profile
+                </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item onClick={handleSignOut}>Sign out</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleSignOut}>
+                  Sign out
+                </NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>

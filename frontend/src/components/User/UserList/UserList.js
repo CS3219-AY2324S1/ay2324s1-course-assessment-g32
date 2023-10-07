@@ -1,21 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import Cookies from 'js-cookie';
-import decode from 'jwt-decode';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
 import { showSuccessToast } from '../../../utils/toast.js';
-import { parseDatetime } from '../../../utils/helpers.js';
+import { getCookie, getUserId, parseDatetime } from '../../../utils/helpers.js';
 import { DeregisterWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
 import { errorHandler } from '../../../utils/errors.js';
 import './UserList.css';
 
 const UserList = () => {
-  const [token, setToken] = useState({});
+  const [userId, setUserId] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
@@ -28,7 +26,7 @@ const UserList = () => {
 
   const fetchData = async () => {
     try {
-      const response = await getAllUsers();
+      const response = await getAllUsers(getCookie());
       setTableData(response);
       setIsLoading(false);
     } catch (error) {
@@ -37,18 +35,12 @@ const UserList = () => {
   };
 
   useEffect(() => {
-    try {
-      // TODO: Check authorisation rights with auth api instead of decoding token here; need to somehow get userid
-      setToken(decode(Cookies.get('jwt'), 'password'));
-    } catch (err) {
-      console.error('Cookie not found');
-      navigate('/unauthorised');
-    }
-    if (token) {
-      fetchData();
-    } else {
-      navigate('/login');
-    }
+    const fetchUserId = async () => {
+      const id = await getUserId();
+      setUserId(id);
+    };
+    fetchUserId();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -82,7 +74,7 @@ const UserList = () => {
   const handleDeregisterConfirm = async () => {
     setDeregisterWindowOpen(false);
     try {
-      await deleteUser(deregisterId);
+      await deleteUser(deregisterId, getCookie());
       fetchData();
       showSuccessToast('User has been deleted successfully!');
     } catch (error) {
@@ -101,7 +93,7 @@ const UserList = () => {
       <td>{user.email}</td>
       <td>{parseDatetime(user.created_at)}</td>
       <td>{parseDatetime(user.updated_at)}</td>
-      {user.id === token.userId ? (
+      {user.id === userId ? (
         <td />
       ) : (
         <td>

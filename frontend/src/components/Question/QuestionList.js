@@ -5,8 +5,7 @@ import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import { getQuestions } from '../../api/QuestionApi.js';
 import { errorHandler } from '../../utils/errors.js';
-import { getCookie } from '../../utils/getCookie.js';
-
+import { getCookie } from '../../utils/helpers.js';
 const QuestionList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);

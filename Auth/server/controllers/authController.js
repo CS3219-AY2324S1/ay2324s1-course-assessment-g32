@@ -2,33 +2,26 @@ const { getJwtToken } = require('../helpers/jwt.js');
 const jwt = require('jsonwebtoken');
 const env = require('../../loadEnvironment.js');
 
-// Define a controller function for handling login requests
+// Used by login requests
 const generate = async (req, res) => {
   try {
-    const { email, isMaintainer } = req.body;
-
-    const tokenData = {
-      email: email,
-      isMaintainer: isMaintainer,
-    }
-    
-    const jwtToken = getJwtToken(tokenData);
+    const userInfo = req.body;
+    const jwtToken = getJwtToken(userInfo);
     res.json({ message: 'Generated JWT successfully', token: jwtToken });
   } catch (err) {
     res.status(err?.status || 400).json({ error: err?.message || err });
   }
 };
 
+// Used to check if user is authorized by checking the validity of their JWT token
 const authorize = async (req, res) => {
   try {
-    let isMaintainer = null;
-
     // Extract the token from the Authorization header
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     // No JWT token found
-    if (token == null) {
+    if (token === 'undefined') {
       return res.status(401).json({ error: 'No JWT token found' });
     }
 
@@ -38,27 +31,27 @@ const authorize = async (req, res) => {
         return res.status(401).json({ error: 'Invalid JWT token' });
       }
 
-      // decodedJwtToken contains { userId, isMaintainer, iat, exp }
-      isMaintainer = decodedJwtToken['isMaintainer'];
-
-      res.json({ message: 'User is authorized' });
+      // Return userId and isMaintainer to user to use at frontend
+      const userInfo = {
+        userId: decodedJwtToken.userId,
+        isMaintainer: decodedJwtToken.isMaintainer,
+      };
+      res.json({ message: 'User is authorized', userInfo: userInfo });
     });
   } catch (err) {
-    // throw Object.assign(new Error('Incorrect password'), { status: 401 });
     res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };
 
+// Used to check if user is an authorized maintainer by checking the validity of their JWT token and isMaintainer value
 const authorizeMaintainer = async (req, res) => {
   try {
-    let isMaintainer = null;
-
     // Extract the token from the Authorization header
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     // No JWT token found
-    if (token == null) {
+    if (token === 'undefined') {
       return res.status(401).json({ error: 'No JWT token found' });
     }
 
@@ -68,17 +61,21 @@ const authorizeMaintainer = async (req, res) => {
         return res.status(401).json({ error: 'Invalid JWT token' });
       }
 
-      // decodedJwtToken contains { userId, isMaintainer, iat, exp }
-      isMaintainer = decodedJwtToken['isMaintainer'];
-
-      if (!isMaintainer) {
+      if (!decodedJwtToken.isMaintainer) {
         return res.status(401).json({ error: 'Not Maintainer' });
       }
 
-      res.json({ message: 'User is authorized' });
+      // Return userId and isMaintainer to user to use at frontend
+      const userInfo = {
+        userId: decodedJwtToken.userId,
+        isMaintainer: decodedJwtToken.isMaintainer,
+      };
+      res.json({
+        message: 'User is an authorized maintainer',
+        userInfo: userInfo,
+      });
     });
   } catch (err) {
-    // throw Object.assign(new Error('Incorrect password'), { status: 401 });
     res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };

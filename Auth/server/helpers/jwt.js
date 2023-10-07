@@ -3,14 +3,12 @@ const env = require('../../loadEnvironment.js');
 
 const getJwtToken = (userInfo) => {
   const payload = {
-    userId: userInfo._userId,
-    isMaintainer: userInfo._isMaintainer,
+    userId: userInfo.userId,
+    isMaintainer: userInfo.isMaintainer,
   };
 
   // Issue JWT
-  return jwt.sign(payload, env.JWT_SECRET_KEY, {
-    expiresIn: '1h',
-  });
+  return jwt.sign(payload, env.JWT_SECRET_KEY, { algorithm: 'HS256' });
 };
 
 module.exports = {

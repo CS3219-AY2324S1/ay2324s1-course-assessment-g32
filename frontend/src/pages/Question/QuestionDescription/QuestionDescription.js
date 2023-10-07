@@ -11,9 +11,7 @@ import { errorHandler } from '../../../utils/errors.js';
 import './QuestionDescription.css';
 import '../../../css/Tags.css';
 import Header from '../../../components/Header.js';
-import Cookies from 'js-cookie';
-import decode from 'jwt-decode';
-import { getCookie } from '../../../utils/getCookie.js';
+import { getCookie, getIsMaintainer } from '../../../utils/helpers.js';
 
 const QuestionDescription = () => {
   const [titleValue, setTitleValue] = useState('');
@@ -22,7 +20,7 @@ const QuestionDescription = () => {
   const [descriptionValue, setDescriptionValue] = useState('');
   const [isDeletionWindowOpen, setDeletionWindowOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [decodedToken, setDecodedToken] = useState({});
+  const [isMaintainer, setIsMaintainer] = useState({});
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -43,16 +41,13 @@ const QuestionDescription = () => {
       }
     };
 
-    fetchData();
+    const fetchIsMaintainer = async () => {
+      const isMaintainerValue = await getIsMaintainer();
+      setIsMaintainer(isMaintainerValue);
+    };
 
-    // Get isMaintainer value
-    try {
-      // TODO: Check authorisation rights with auth api instead of decoding token here; Need to somehow get isMaintainer value
-      setDecodedToken(decode(Cookies.get('jwt'), 'password'));
-    } catch (err) {
-      console.error('Cookie not found');
-      navigate('/unauthorised');
-    }
+    fetchData();
+    fetchIsMaintainer();
   }, [id, navigate]);
 
   const handleBackClick = () => {
@@ -123,7 +118,7 @@ const QuestionDescription = () => {
                   onClick={handleBackClick}>
                   Back
                 </button>
-                {decodedToken.isMaintainer === 1 ? (
+                {isMaintainer ? (
                   <div>
                     <button
                       type='button'
