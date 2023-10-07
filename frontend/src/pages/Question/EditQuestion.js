@@ -9,7 +9,7 @@ import { errorHandler } from '../../utils/errors.js';
 import TextEditor from '../../components/TextEditor/TextEditor.js';
 import '../../css/Tags.css';
 import Header from '../../components/Header.js';
-import { getCookie } from '../../utils/getCookie.js';
+import { getCookie } from '../../utils/helpers.js';
 
 const EditQuestion = () => {
   const [newTitleValue, setTitleValue] = useState('');

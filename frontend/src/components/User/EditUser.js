@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { updateUsername } from '../../api/UserApi.js';
 import { showSuccessToast } from '../../utils/toast.js';
 import { errorHandler } from '../../utils/errors.js';
+import { getCookie } from '../../utils/helpers.js';
 
 const EditUser = ({ user, isMaintainerPage }) => {
   const [id, setId] = useState('');
@@ -18,7 +19,7 @@ const EditUser = ({ user, isMaintainerPage }) => {
     e.preventDefault();
 
     try {
-      await updateUsername(id, newUsername);
+      await updateUsername(id, newUsername, getCookie());
       navigate(-1);
       showSuccessToast('Username updated successfully!');
     } catch (error) {

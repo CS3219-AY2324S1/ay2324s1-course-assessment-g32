@@ -6,6 +6,7 @@ import { errorHandler } from '../../../utils/errors.js';
 import Header from '../../../components/Header.js';
 import { Container, Grid } from '@mui/material';
 import { ViewUserTopPane } from '../../../components/User/ViewUser.js';
+import { getCookie } from '../../../utils/helpers.js';
 
 const ChangeUserPassword = () => {
   const [user, setUser] = useState({});
@@ -30,7 +31,8 @@ const ChangeUserPassword = () => {
         user.id,
         currentPassword,
         newPassword,
-        confirmPassword
+        confirmPassword,
+        getCookie()
       );
       // Redirect user back to the previous page (user-profile) if password is updated successfully
       navigate(-1);

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import decode from 'jwt-decode';
 import { showSuccessToast } from '../utils/toast.js';
 import { errorHandler } from '../utils/errors.js';
 import { login } from '../api/UserApi.js';
-import { generateJWT } from '../api/AuthApi.js';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -34,22 +32,12 @@ const Login = () => {
       isMaintainer: true,
     };
 
-    const tokenData = {
-      email: email,
-      isMaintainer: true,
-    };
-
     try {
-      // TODO: Get exp value from token without decoding here (decoding can only be done in auth api)
-      // also double check if decodedToken is correct
       const response = await login(userData);
-      const token = await generateJWT(tokenData);
-      const decodedToken = decode(token.data.token);
 
-      Cookies.set('jwt', token, {
+      Cookies.set('jwt', response.data.token, {
         secure: true,
         sameSite: 'strict',
-        expires: new Date(decodedToken.exp * 1000),
       });
 
       navigate('/landing');

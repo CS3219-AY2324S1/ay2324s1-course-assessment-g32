@@ -22,8 +22,8 @@ import {
   MaintainerEditUser,
   ManageUserProfiles,
 } from './pages/User/UsersManagement/UsersManagement';
-// Unauthorised page
-import UnauthorisedPage from './pages/UnauthorisedPage/UnauthorisedPage';
+// Unauthorized page
+import UnauthorizedPage from './pages/UnauthorizedPage/UnauthorizedPage';
 // Page not found page
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 // Special routes
@@ -78,10 +78,10 @@ function App() {
         {/* Display Login component by default */}
         <Route path='/' element={<Login />} />
 
-        {/* Display UnauthorisedPage component if user is not authorised */}
-        <Route path='/unauthorised' element={<UnauthorisedPage />} />
+        {/* Display UnauthorizedPage component if user is not authorized */}
+        <Route path='/unauthorized' element={<UnauthorizedPage />} />
 
-        {/* Display UnauthorisedPage component if user is not authorised */}
+        {/* Display UnauthorizedPage component if user is not authorized */}
         <Route path='*' element={<PageNotFound />} />
       </Routes>
       <ToastContainer />

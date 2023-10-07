@@ -10,7 +10,7 @@ import TextEditor from '../../../components/TextEditor/TextEditor.js';
 import './CreateQuestion.css';
 import '../../../css/Tags.css';
 import Header from '../../../components/Header.js';
-import { getCookie } from '../../../utils/getCookie.js';
+import { getCookie } from '../../../utils/helpers.js';
 
 const CreateQuestion = () => {
   const [newTitleValue, setTitleValue] = useState('');

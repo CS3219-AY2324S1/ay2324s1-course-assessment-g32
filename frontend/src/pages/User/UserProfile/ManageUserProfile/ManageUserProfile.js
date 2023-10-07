@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import decode from 'jwt-decode';
 import Header from '../../../../components/Header';
 import {
   ViewUserTopPane,
@@ -10,6 +8,7 @@ import {
 import { getUser } from '../../../../api/UserApi.js';
 import { errorHandler } from '../../../../utils/errors.js';
 import { Grid, Container } from '@mui/material';
+import { getCookie, getUserId } from '../../../../utils/helpers';
 
 function ManageUserProfile() {
   const [user, setUser] = useState({});
@@ -18,23 +17,17 @@ function ManageUserProfile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // TODO: Check authorisation rights with auth api instead of decoding token here; Need to find a way to get userid
-    const token = decode(Cookies.get('jwt'), 'password');
     const fetchData = async () => {
       try {
-        const response = await getUser(token.userId);
+        const userId = await getUserId();
+        const response = await getUser(userId, getCookie());
         setUser(response);
       } catch (error) {
         errorHandler(error);
       }
     };
 
-    if (token) {
-      fetchData();
-    } else {
-      // No user session
-      navigate('/login');
-    }
+    fetchData();
 
     setIsLoading(false);
   }, [navigate, setUser]);

@@ -6,6 +6,7 @@ import { deleteUser } from '../../api/UserApi.js';
 import { showSuccessToast } from '../../utils/toast.js';
 import { DeregisterWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
 import { errorHandler } from '../../utils/errors.js';
+import { getCookie } from '../../utils/helpers.js';
 
 export const ViewUserTopPane = ({ user }) => {
   const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
@@ -27,7 +28,7 @@ export const ViewUserTopPane = ({ user }) => {
   const handleDeregisterConfirm = async () => {
     setDeregisterWindowOpen(false);
     try {
-      await deleteUser(user.id);
+      await deleteUser(user.id, getCookie());
       showSuccessToast('User has been deleted successfully!');
       Cookies.remove('jwt');
       navigate('/');

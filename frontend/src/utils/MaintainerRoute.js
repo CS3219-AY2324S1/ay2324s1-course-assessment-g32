@@ -1,33 +1,49 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import decode from 'jwt-decode';
+// import React from 'react';
+// import { useNavigate, Outlet } from 'react-router-dom';
+// import { getIsMaintainer } from './helpers.js';
 
-/* TODO: Check authorisation rights with auth api instead of decoding token here */
-export const isMaintainer = () => {
-  try {
-    const token = Cookies.get('jwt');
+// const MaintainerRoute = () => {
+//   const navigate = useNavigate();
 
-    if (!token) {
-      return false;
-    } else {
-      const decodedToken = decode(token, 'password');
-      if (decodedToken) {
-        return decodedToken.isMaintainer !== 1 ? false : true;
-      } else {
-        return false;
+//   const checkAuth = async () => {
+//     const isAuthenticatedResult = await getIsMaintainer();
+//     if (!isAuthenticatedResult) {
+//       // If not authorized or not a maintainer, direct to unauthorized page
+//       navigate('/unauthorized');
+//     }
+//   };
+
+//   checkAuth();
+
+//   return <Outlet />;
+// };
+
+// export default MaintainerRoute;
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Outlet } from 'react-router-dom';
+import { getIsMaintainer } from '../utils/helpers.js';
+
+const ProtectedRoute = () => {
+  const navigate = useNavigate();
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const isMaintainer = await getIsMaintainer();
+      setIsAuthorized(isMaintainer);
+      if (!isMaintainer) {
+        navigate('/unauthorized');
       }
-    }
-  } catch (err) {
-    console.error('Cookie not found');
-    return false;
+    };
+    checkAuth();
+  }, [navigate]);
+
+  if (isAuthorized) {
+    return <Outlet />;
+  } else {
+    return null;
   }
 };
 
-const MaintainerRoute = () => {
-  // If authorized, return an outlet that will render child elements
-  // If not, return element that will navigate to login page
-  return isMaintainer() ? <Outlet /> : <Navigate to='/unauthorised' />;
-};
-
-export default MaintainerRoute;
+export default ProtectedRoute;
