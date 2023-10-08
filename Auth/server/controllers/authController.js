@@ -6,8 +6,16 @@ const env = require('../../loadEnvironment.js');
 const generate = async (req, res) => {
   try {
     const userInfo = req.body;
-    const jwtToken = getJwtToken(userInfo);
-    res.json({ message: 'Generated JWT successfully', token: jwtToken });
+    if (
+      Object.keys(userInfo).join(',') == ['userId', 'isMaintainer'].join(',')
+    ) {
+      const jwtToken = getJwtToken(userInfo);
+      res.json({ message: 'Generated JWT successfully', token: jwtToken });
+    } else {
+      return res
+        .status(400)
+        .json({ error: 'Invalid user information provided' });
+    }
   } catch (err) {
     res.status(err?.status || 400).json({ error: err?.message || err });
   }
@@ -30,7 +38,6 @@ const authorize = async (req, res) => {
       if (err) {
         return res.status(401).json({ error: 'Invalid JWT token' });
       }
-
       // Return userId and isMaintainer to user to use at frontend
       const userInfo = {
         userId: decodedJwtToken.userId,
