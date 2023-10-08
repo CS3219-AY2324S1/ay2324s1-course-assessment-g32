@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { handleAuth } from '../../../api/AuthApi.js'
 import { showSuccessToast } from '../../../utils/toast.js';
 import { errorHandler } from '../../../utils/errors.js';
-import { signup } from '../../../api/UserApi.js'
+import { signup } from '../../../api/UserApi.js';
 
 const AddUser = () => {
   const [email, setEmail] = useState('');
@@ -27,15 +26,6 @@ const AddUser = () => {
     } catch (error) {
       errorHandler(error);
     }
-
-    // handleAuth(userData, "signup")
-    //   .then(() => {
-    //     showSuccessToast('User registered successfully!');
-    //     navigate('../');
-    //   })
-    //   .catch((error) => {
-    //     errorHandler(error);
-    //   });
   };
 
   const handleEmailChange = (event) => {
