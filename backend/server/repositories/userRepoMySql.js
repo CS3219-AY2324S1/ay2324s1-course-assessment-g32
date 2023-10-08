@@ -119,28 +119,7 @@ const getUserInfoById = async (userId) => {
   return _userInfo;
 };
 
-const getIsMaintainerById = async (id) => {
-  var _isMaintainer = Boolean();
-
-  const query = conn
-    .promise()
-    .query('SELECT isMaintainer FROM users WHERE id=?;', [id])
-    .then(([rows, fields]) => {
-      if (rows.length) {
-        if (rows[0].isMaintainer == 1) {
-          _isMaintainer = true;
-        }
-      } else {
-        _isMaintainer = false;
-      }
-    })
-    .catch(console.error);
-
-  await query;
-  return _isMaintainer;
-};
-
-const updateUser = async (userId, username, password) => {
+const updateUser = async (userId, username) => {
   var _success = Boolean();
   var _placeholders = [];
   var _sql = 'UPDATE users SET ';
@@ -150,7 +129,25 @@ const updateUser = async (userId, username, password) => {
     _placeholders.push(username);
   }
 
-  if (username && password) _sql = _sql.concat(', ');
+  _sql = _sql.concat(' WHERE id = ?;');
+  _placeholders.push(userId);
+
+  const query = conn
+    .promise()
+    .query(_sql, _placeholders)
+    .then(([result, fields]) => {
+      _success = result.affectedRows === 1;
+    })
+    .catch(console.error);
+
+  await query; // Wait for user to be updated
+  return _success;
+};
+
+const updatePassword = async (userId, password) => {
+  var _success = Boolean();
+  var _placeholders = [];
+  var _sql = 'UPDATE users SET ';
 
   if (password) {
     _sql = _sql.concat('password=?');
@@ -201,6 +198,7 @@ module.exports = {
   findByEmail,
   createUser,
   updateUser,
+  updatePassword,
   deleteUser,
   getAllUserInfo,
   getUserInfoByEmail,

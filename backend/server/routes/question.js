@@ -5,6 +5,11 @@ const questionController = require('../../../backend/server/controllers/question
 const middleware = require('../middleware.js');
 
 // Only maintainer can access these routes
+router.post(
+  '/create',
+  middleware.checkTokenMaintainer,
+  questionController.create
+);
 router.post('/edit', middleware.checkTokenMaintainer, questionController.edit);
 router.delete(
   '/delete',
@@ -13,7 +18,6 @@ router.delete(
 );
 
 // User and maintainer can access the remaining routes
-router.post('/create', middleware.checkToken, questionController.create);
 router.get('/getAll', middleware.checkToken, questionController.getAll);
 router.get(
   '/getQuestionDetails',

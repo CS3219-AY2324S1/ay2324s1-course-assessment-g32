@@ -113,20 +113,7 @@ export const deleteQuestion = async (id, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { id: id };
-    const response = await axios.delete(
-      rootUrl + '/delete',
-      config
-    );
-
-//    const response = await axios.delete(
-//      rootUrl + '/delete',
-//      {
-//        params: {
-//          id: id,
-//        },
-//      },
-//      getConfig(jwtToken)
-//    );
+    const response = await axios.delete(rootUrl + '/delete', config);
     return response;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {

@@ -19,9 +19,13 @@ const ChangeUserPassword = () => {
   const location = useLocation();
 
   useEffect(() => {
-    setUser(location.state.user);
-    setIsLoading(false);
-  }, [location.state]);
+    if (location.state) {
+      setUser(location.state.user);
+      setIsLoading(false);
+    } else {
+      navigate(-1);
+    }
+  }, [location.state, navigate]);
 
   const handleUpdateClick = async (e) => {
     e.preventDefault();

@@ -8,9 +8,9 @@ const ProtectedRoute = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const isMaintainer = await getUserId();
-      setIsAuthorized(isMaintainer);
-      if (!isMaintainer) {
+      const userId = await getUserId();
+      setIsAuthorized(userId);
+      if (!userId) {
         navigate('/unauthorized');
       }
     };

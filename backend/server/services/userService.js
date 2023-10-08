@@ -119,33 +119,20 @@ const getUserInfo = async (userId, email) => {
  *
  * @param {int|string} userId ID of user in DB. Read-only.
  * @param {string} username New Username
- * @param {string} password New password
  */
-const updateUser = async (userId, username, password) => {
+const updateUser = async (userId, username) => {
   try {
     if (!userId) {
       throw Object.assign(new Error('Missing userId'), { status: 400 });
     }
 
-    if (!username && !password) {
+    if (!username) {
       throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
         status: 400,
       });
     }
 
-    if (password) {
-      // Check if the password is at least 8 characters long
-      if (password.length < 8) {
-        throw {
-          status: 400,
-          message: 'Password must be at least 8 characters long',
-        };
-      }
-
-      password = bcrypt.hashSync(password, 10);
-    }
-
-    return userDatabase.updateUser(userId, username, password);
+    return userDatabase.updateUser(userId, username);
   } catch (err) {
     throw err;
   }
@@ -183,14 +170,14 @@ const deleteUser = async (id) => {
 const changeUserPassword = async (
   id,
   curPassword,
-  newPasssword,
+  newPassword,
   confirmPassword
 ) => {
   try {
     let _correctPassword = Boolean();
 
     // Check for missing inputs
-    if (!id || !curPassword || !newPasssword || !confirmPassword) {
+    if (!id || !curPassword || !newPassword || !confirmPassword) {
       throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
 
@@ -199,21 +186,21 @@ const changeUserPassword = async (
     );
 
     // Check that new password is not old password
-    if (curPassword === newPasssword) {
+    if (curPassword === newPassword) {
       throw Object.assign(new Error('New password cannot be old password'), {
         status: 400,
       });
     }
 
     // Confirm no typo in new password
-    if (newPasssword !== confirmPassword) {
+    if (newPassword !== confirmPassword) {
       throw Object.assign(new Error('Confirm password not matching'), {
         status: 400,
       });
     }
 
     // Check if the password is at least 8 characters long
-    if (newPasssword.length < 8 || confirmPassword.length < 8) {
+    if (newPassword.length < 8 || confirmPassword.length < 8) {
       throw Object.assign(
         new Error('Password must be at least 8 characters long'),
         { status: 400 }
@@ -226,8 +213,8 @@ const changeUserPassword = async (
       throw Object.assign(new Error('Incorrect password'), { status: 401 });
     }
 
-    // Change the password
-    if (!(await updateUser(id, null, newPasssword))) {
+    const password = bcrypt.hashSync(newPassword, 10);
+    if (!userDatabase.updatePassword(id, password)) {
       throw Object.assign(new Error('Failed to update password'), {
         status: 500,
       });

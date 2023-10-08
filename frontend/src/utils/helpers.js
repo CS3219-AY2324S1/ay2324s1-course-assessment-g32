@@ -5,8 +5,6 @@ export const getCookie = () => {
   try {
     return Cookies.get('jwt');
   } catch (err) {
-    // TODO: Add toast?
-    console.error('Cookie not found');
     return null;
   }
 };

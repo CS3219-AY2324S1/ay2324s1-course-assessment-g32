@@ -3,7 +3,7 @@ require('dotenv').config({ path: `${__dirname}/../.env` });
 const REACT_APP_HOST = process.env.REACT_APP_HOST || 'http://localhost';
 
 const WEB_PORT = process.env.WEB_PORT || 3000;
-const SERVER_PORT = process.env.SERVER_PORT || 5000;
+const SERVER_PORT = process.env.SERVER_PORT || 3001;
 const AUTH_PORT = process.env.AUTH_PORT || 5001;
 
 const AUTH_URL = REACT_APP_HOST + ':' + AUTH_PORT;
