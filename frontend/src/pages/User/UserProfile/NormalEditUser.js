@@ -3,18 +3,23 @@ import Header from '../../../components/Header.js';
 import { Container, Grid } from '@mui/material';
 import { ViewUserTopPane } from '../../../components/User/ViewUser.js';
 import EditUser from '../../../components/User/EditUser.js';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const NormalEditUser = () => {
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
+  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    setUser(location.state.user);
-    setIsLoading(false);
-  }, [location.state]);
+    if (location.state) {
+      setUser(location.state.user);
+      setIsLoading(false);
+    } else {
+      navigate(-1);
+    }
+  }, [location.state, navigate]);
 
   return isLoading ? (
     <div className='spinner-border text-primary' role='status'>
