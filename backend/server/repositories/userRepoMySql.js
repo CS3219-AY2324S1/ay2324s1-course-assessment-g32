@@ -144,6 +144,31 @@ const updateUser = async (userId, username) => {
   return _success;
 };
 
+const updatePassword = async (userId, password) => {
+  var _success = Boolean();
+  var _placeholders = [];
+  var _sql = 'UPDATE users SET ';
+
+  if (password) {
+    _sql = _sql.concat('password=?');
+    _placeholders.push(password);
+  }
+
+  _sql = _sql.concat(' WHERE id = ?;');
+  _placeholders.push(userId);
+
+  const query = conn
+    .promise()
+    .query(_sql, _placeholders)
+    .then(([result, fields]) => {
+      _success = result.affectedRows === 1;
+    })
+    .catch(console.error);
+
+  await query; // Wait for user to be updated
+  return _success;
+};
+
 /**
  * Delete user of given userId from the database.
  * @param {int|string} userId
@@ -173,6 +198,7 @@ module.exports = {
   findByEmail,
   createUser,
   updateUser,
+  updatePassword,
   deleteUser,
   getAllUserInfo,
   getUserInfoByEmail,
