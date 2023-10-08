@@ -5,10 +5,12 @@ import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import { getQuestions } from '../../api/QuestionApi.js';
 import { errorHandler } from '../../utils/errors.js';
-import { getCookie } from '../../utils/helpers.js';
+import { getIsMaintainer, getCookie } from '../../utils/helpers.js';
+
 const QuestionList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
+  const [isMaintainer, setIsMaintainer] = React.useState(false);
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
@@ -16,6 +18,8 @@ const QuestionList = () => {
     const fetchDataAndInitializeTable = async () => {
       try {
         const questions = await getQuestions(getCookie());
+        const isMaintainerResponse = await getIsMaintainer();
+        setIsMaintainer(isMaintainerResponse);
         setTableData(questions);
         setIsLoading(false);
       } catch (error) {
@@ -97,12 +101,14 @@ const QuestionList = () => {
         <tbody className='table-group-divider'>{questionList}</tbody>
       </table>
       <div className='text-md-end'>
-        <button
-          type='button'
-          className='btn btn-success'
-          onClick={handleNewQuestionClick}>
-          Add
-        </button>
+        {isMaintainer ? (
+          <button
+            type='button'
+            className='btn btn-success'
+            onClick={handleNewQuestionClick}>
+            Add
+          </button>
+        ) : null}
       </div>
     </div>
   );

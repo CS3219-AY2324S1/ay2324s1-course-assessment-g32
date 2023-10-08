@@ -8,11 +8,6 @@ const middleware = require('../middleware.js');
 router.post('/login', userController.login, middleware.getToken);
 
 // Only maintainer can access these routes
-router.post(
-  '/create',
-  middleware.checkTokenMaintainer,
-  userController.createUser
-);
 router.get(
   '/readAll',
   middleware.checkTokenMaintainer,

@@ -58,7 +58,7 @@ const createUser = async (email, password, confirmPassword) => {
 
     // Check if a user with the given email already exists
     const existingUserCheck = userDatabase.findByEmail(email).then((userId) => {
-      passExistingUserCheck = userId['_userId'] == null;
+      passExistingUserCheck = userId['userId'] === null;
     });
 
     // Check if the password is at least 8 characters long

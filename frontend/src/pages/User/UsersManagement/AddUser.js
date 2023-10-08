@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 // import { handleAuth } from '../../../api/AuthApi.js'
 import { showSuccessToast } from '../../../utils/toast.js';
 import { errorHandler } from '../../../utils/errors.js';
+import { signup } from '../../../api/UserApi.js'
 
 const AddUser = () => {
   const [email, setEmail] = useState('');
@@ -18,6 +19,14 @@ const AddUser = () => {
       password: password,
       confirmPassword: confirmPassword,
     };
+
+    try {
+      await signup(userData);
+      navigate('../');
+      showSuccessToast('User created successfully!');
+    } catch (error) {
+      errorHandler(error);
+    }
 
     // handleAuth(userData, "signup")
     //   .then(() => {

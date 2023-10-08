@@ -47,10 +47,12 @@ function App() {
             path='/landing/question/:id'
             element={<QuestionDescription />}
           />
-          <Route path='/landing/new' element={<CreateQuestion />} />
         </Route>
 
         {/* Question management for maintainers only */}
+        <Route path='/landing' element={<MaintainerRoute />}>
+          <Route path='/landing/new' element={<CreateQuestion />} />
+        </Route>
         <Route path='/landing/edit' element={<MaintainerRoute />}>
           <Route path='/landing/edit/:id' element={<EditQuestion />} />
         </Route>
