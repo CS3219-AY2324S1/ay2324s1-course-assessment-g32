@@ -26,10 +26,13 @@ For development, you may also want to install:
 
 1. Enter the following command
    `cp template.env .env`
-1. Open `.env` file
-1. Enter root password (previously configured when installing MySQL)  
+2. Open `.env` file
+3. Enter root password (previously configured when installing MySQL)  
    Example: if your root password is "password1234",
    `MY_SQL_PWD=password1234`
+4. Enter JWT token password (for generating and decoding JWT tokens)  
+   Example: if your root password is "password",
+   `JWT_SECRET_KEY=password`
 
 ## Install NodeJS packages
 
