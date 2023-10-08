@@ -56,25 +56,25 @@ Or start them indvidually:
 
 # Developer Notes
 
-| Backend API Path               | Purpose                                             | Parameters (JSON format)                                              | Require JWT token to be in header? | Does user have to be maintainer? |
-| ------------------------------ | --------------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------- | -------------------------------- |
-| `/auth/authorize`              | Used to authorize all users                         | -                                                                     | Yes                                | No                               |
-| `/auth/authorizeMaintainer`    | Used to authorize maintainers                       | -                                                                     | Yes                                | Yes                              |
-| `/auth/generate`               | Used to generate JWT token after user has logged in | `userId` <br> `isMaintainer`                                          | No                                 | -                                |
-| `/question/create`             | Used to create new question                         | `title` <br> `complexity` <br> `description` <br> `tags`              | Yes                                | Yes                              |
-| `/question/delete`             | Used to delete question                             | `id`                                                                  | Yes                                | Yes                              |
-| `/question/edit`               | Used to edit question                               | `id` <br> `title` <br> `complexity` <br> `description` <br> `tags`    | Yes                                | Yes                              |
-| `/question/getAll`             | Used to get all the questions from the database     | -                                                                     | Yes                                | No                               |
-| `/question/getQuestionDetails` | Used to get the details of the specified question   | `id`                                                                  | Yes                                | No                               |
-| `/user/change-password`        | Used to change user password                        | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | Yes                                | No                               |
-| `/user/delete`                 | Used to delete user                                 | `id`                                                                  | Yes                                | No                               |
-| `/user/login`                  | Used to login                                       | `email` <br> `password`                                               | No                                 | -                                |
-| `/user/read`                   | Used to get user information                        | `id` or `email`                                                       | Yes                                | No                               |
-| `/user/readAll`                | Used to get all users information                   | -                                                                     | Yes                                | Yes                              |
-| `/user/signup`                 | Used to create new user                             | `email` <br> `password` <br> `confirmPassword`                        | No                                 | -                                |
-| `/user/update`                 | Used to update user information (username)          | `id` <br> `username`                                                  | Yes                                | No                               |
+| Backend API Path               | Method | Purpose                                             | Parameters (JSON format)                                              | Require JWT token to be in header? | Does user have to be maintainer? |
+| ------------------------------ | ------ | --------------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------- | -------------------------------- |
+| `/auth/authorize`              | GET    | Used to authorize all users                         | -                                                                     | Yes                                | No                               |
+| `/auth/authorizeMaintainer`    | GET    | Used to authorize maintainers                       | -                                                                     | Yes                                | Yes                              |
+| `/auth/generate`               | POST   | Used to generate JWT token after user has logged in | `userId` <br> `isMaintainer`                                          | No                                 | -                                |
+| `/question/create`             | POST   | Used to create new question                         | `title` <br> `complexity` <br> `description` <br> `tags`              | Yes                                | Yes                              |
+| `/question/delete`             | DELETE | Used to delete question                             | `id`                                                                  | Yes                                | Yes                              |
+| `/question/edit`               | POST   | Used to edit question                               | `id` <br> `title` <br> `complexity` <br> `description` <br> `tags`    | Yes                                | Yes                              |
+| `/question/getAll`             | GET    | Used to get all the questions from the database     | -                                                                     | Yes                                | No                               |
+| `/question/getQuestionDetails` | GET    | Used to get the details of the specified question   | `id`                                                                  | Yes                                | No                               |
+| `/user/change-password`        | POST   | Used to change user password                        | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | Yes                                | No                               |
+| `/user/delete`                 | POST   | Used to delete user                                 | `id`                                                                  | Yes                                | No                               |
+| `/user/login`                  | POST   | Used to login                                       | `email` <br> `password`                                               | No                                 | -                                |
+| `/user/read`                   | POST   | Used to get user information                        | `id` or `email`                                                       | Yes                                | No                               |
+| `/user/readAll`                | GET    | Used to get all users information                   | -                                                                     | Yes                                | Yes                              |
+| `/user/signup`                 | POST   | Used to create new user                             | `email` <br> `password` <br> `confirmPassword`                        | No                                 | -                                |
+| `/user/update`                 | POST   | Used to update user information (username)          | `id` <br> `username`                                                  | Yes                                | No                               |
 
-- `auth` API contains all the authorization related endpoints.
-- `question` API contains all the question data related endpoints.
-- `user` API contains all the user data related endpoints (including authentication).
+- `auth` API (port 5001) contains all the authorization related endpoints.
+- `question` (port 3001) API contains all the question data related endpoints.
+- `user` (port 3001) API contains all the user data related endpoints (including authentication).
 - Note that if the API path requires JWT token to be in the header, it means the user has to be logged in.
