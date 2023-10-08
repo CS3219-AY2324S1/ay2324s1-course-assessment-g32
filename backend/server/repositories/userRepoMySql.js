@@ -119,28 +119,7 @@ const getUserInfoById = async (userId) => {
   return _userInfo;
 };
 
-const getIsMaintainerById = async (id) => {
-  var _isMaintainer = Boolean();
-
-  const query = conn
-    .promise()
-    .query('SELECT isMaintainer FROM users WHERE id=?;', [id])
-    .then(([rows, fields]) => {
-      if (rows.length) {
-        if (rows[0].isMaintainer == 1) {
-          _isMaintainer = true;
-        }
-      } else {
-        _isMaintainer = false;
-      }
-    })
-    .catch(console.error);
-
-  await query;
-  return _isMaintainer;
-};
-
-const updateUser = async (userId, username, password) => {
+const updateUser = async (userId, username) => {
   var _success = Boolean();
   var _placeholders = [];
   var _sql = 'UPDATE users SET ';
@@ -148,13 +127,6 @@ const updateUser = async (userId, username, password) => {
   if (username) {
     _sql = _sql.concat('username=?');
     _placeholders.push(username);
-  }
-
-  if (username && password) _sql = _sql.concat(', ');
-
-  if (password) {
-    _sql = _sql.concat('password=?');
-    _placeholders.push(password);
   }
 
   _sql = _sql.concat(' WHERE id = ?;');

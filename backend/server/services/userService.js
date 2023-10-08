@@ -121,31 +121,19 @@ const getUserInfo = async (userId, email) => {
  * @param {string} username New Username
  * @param {string} password New password
  */
-const updateUser = async (userId, username, password) => {
+const updateUser = async (userId, username) => {
   try {
     if (!userId) {
       throw Object.assign(new Error('Missing userId'), { status: 400 });
     }
 
-    if (!username && !password) {
+    if (!username) {
       throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
         status: 400,
       });
     }
 
-    if (password) {
-      // Check if the password is at least 8 characters long
-      if (password.length < 8) {
-        throw {
-          status: 400,
-          message: 'Password must be at least 8 characters long',
-        };
-      }
-
-      password = bcrypt.hashSync(password, 10);
-    }
-
-    return userDatabase.updateUser(userId, username, password);
+    return userDatabase.updateUser(userId, username);
   } catch (err) {
     throw err;
   }
