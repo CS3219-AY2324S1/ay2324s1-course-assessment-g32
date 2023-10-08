@@ -1,30 +1,8 @@
-// import React from 'react';
-// import { useNavigate, Outlet } from 'react-router-dom';
-// import { getIsMaintainer } from './helpers.js';
-
-// const MaintainerRoute = () => {
-//   const navigate = useNavigate();
-
-//   const checkAuth = async () => {
-//     const isAuthenticatedResult = await getIsMaintainer();
-//     if (!isAuthenticatedResult) {
-//       // If not authorized or not a maintainer, direct to unauthorized page
-//       navigate('/unauthorized');
-//     }
-//   };
-
-//   checkAuth();
-
-//   return <Outlet />;
-// };
-
-// export default MaintainerRoute;
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import { getIsMaintainer } from '../utils/helpers.js';
 
-const ProtectedRoute = () => {
+const MaintainerRoute = () => {
   const navigate = useNavigate();
   const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -46,4 +24,4 @@ const ProtectedRoute = () => {
   }
 };
 
-export default ProtectedRoute;
+export default MaintainerRoute;
