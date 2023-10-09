@@ -5,7 +5,6 @@ const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const http = require("http"); // for collaboration
 const socketIo = require('socket.io'); // for collaboration
-const authRoutes = require('./server/routes/auth');
 const userRoutes = require('./server/routes/user');
 const questionRoutes = require('./server/routes/question');
 const queueRoutes = require('./server/routes/queue');
@@ -17,7 +16,6 @@ console.log('Starting server ...');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/question', questionRoutes);
 app.use('/queue', queueRoutes);
