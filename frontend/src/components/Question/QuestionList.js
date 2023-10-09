@@ -64,7 +64,9 @@ const QuestionList = () => {
   const questionList = tableData.map((question, index) => (
     <tr key={question._id} onClick={() => handleRowClick(question._id)}>
       <th scope='row'>{index + 1}</th>
-      <td>{question.title}</td>
+      <td style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
+        {question.title}
+      </td>
       <td>
         <span className={`badge ${getComplexityColor(question?.complexity)}`}>
           {question.complexity}{' '}
