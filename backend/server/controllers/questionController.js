@@ -4,12 +4,15 @@ const questionService = require('../services/questionService');
 const create = async (req, res) => {
   try {
     const { title, complexity, description, tags } = req.body;
-    const question = await questionService.createQuestion(title, complexity, description, tags);
+    const question = await questionService.createQuestion(
+      title,
+      complexity,
+      description,
+      tags
+    );
     res.json({ message: 'Question created successfully', question });
   } catch (err) {
-    res
-      .status(err?.status || 500)
-      .json({ error: err?.message || err });
+    res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };
 
@@ -19,9 +22,7 @@ const getAll = async (req, res) => {
     const questions = await questionService.getQuestions();
     res.json({ message: 'Questions retrieved successfully', questions });
   } catch (err) {
-    res
-      .status(err?.status || 500)
-      .json({ error: err?.message || err });
+    res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };
 
@@ -32,9 +33,7 @@ const getQuestionDetails = async (req, res) => {
     const question = await questionService.getQuestionDetails(id);
     res.json({ message: 'Question retrieved successfully', question });
   } catch (err) {
-    res
-      .status(err?.status || 500)
-      .json({ error: err?.message || err });
+    res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };
 
@@ -42,12 +41,16 @@ const getQuestionDetails = async (req, res) => {
 const edit = async (req, res) => {
   try {
     const { id, title, complexity, description, tags } = req.body;
-    const question = await questionService.editQuestion(id, title, complexity, description, tags);
+    const question = await questionService.editQuestion(
+      id,
+      title,
+      complexity,
+      description,
+      tags
+    );
     res.json({ message: 'Question edited successfully', question });
   } catch (err) {
-    res
-      .status(err?.status || 500)
-      .json({ error: err?.message || err });
+    res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };
 
@@ -58,9 +61,7 @@ const deleteQuestion = async (req, res) => {
     const question = await questionService.deleteQuestion(id);
     res.json({ message: 'Question deleted successfully', question });
   } catch (err) {
-    res
-      .status(err?.status || 500)
-      .json({ error: err?.message || err });
+    res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };
 
@@ -69,5 +70,5 @@ module.exports = {
   getAll,
   getQuestionDetails,
   edit,
-  deleteQuestion
+  deleteQuestion,
 };
