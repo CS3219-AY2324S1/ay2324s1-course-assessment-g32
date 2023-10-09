@@ -1,5 +1,6 @@
 const amqp = require('amqplib');
 const { v4: uuidv4 } = require('uuid');
+const authApi = require('../api/AuthApi.js');
 const url = 'amqp://localhost';
 
 // Generate a unique id
@@ -13,7 +14,7 @@ const generateUuid = () => {
   The responder (server) consumes and process the request, and sends a response to responseQueue.
   The requester (client) consumes the response to get the result.
 */
-const joinQueue = async (id, queueName, sessionID) => {
+const joinQueue = async (jwt, queueName, sessionID) => {
   const connection = await amqp.connect(url);
   const channel = await connection.createChannel();
 
@@ -32,8 +33,12 @@ const joinQueue = async (id, queueName, sessionID) => {
 
   const correlationId = generateUuid();
 
+  // Decrypt the userId from the jwt
+  const decryptedUser = await authApi.authorize(jwt);
+  const userId = decryptedUser.data.userInfo.userId;
+
   const message = {
-    id: id,
+    id: userId,
     replyTo: responseQueue,
     correlationId: correlationId,
     timestamp: Date.now(),
@@ -65,15 +70,19 @@ const joinQueue = async (id, queueName, sessionID) => {
 };
 
 // Send an exit request to the request queue
-const exitQueue = async (id, queueName, sessionID) => {
+const exitQueue = async (jwt, queueName, sessionID) => {
   const connection = await amqp.connect(url);
   const channel = await connection.createChannel();
 
   const requestQueue = queueName;
   await channel.assertQueue(requestQueue, { durable: false, autoDelete: true });
 
+  // Decrypt the userId from the jwt
+  const decryptedUser = await authApi.authorize(jwt);
+  const userId = decryptedUser.data.userInfo.userId;
+
   const message = {
-    id: id,
+    id: userId,
     isExit: true,
     sessionID: sessionID
   };
