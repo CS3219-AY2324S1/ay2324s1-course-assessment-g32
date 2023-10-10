@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Chat from '../../components/Collaboration/Chat';
 import LiveCode from '../../components/Collaboration/LiveCode';
 import io from 'socket.io-client';
 
 const Collaboration = () => {
-
   const location = useLocation();
   const navigate = useNavigate();
 

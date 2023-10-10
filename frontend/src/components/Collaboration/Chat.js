@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-const Chat = ( {socket, roomId} ) => {
-
+const Chat = ({ socket, roomId }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
 
-
   useEffect(() => {
     socket.on('message', (message) => {
-      console.log('message:', message)
+      console.log('message:', message);
       setMessages((prevMessages) => [...prevMessages, message]);
     });
   }, []);
@@ -21,7 +19,7 @@ const Chat = ( {socket, roomId} ) => {
   };
 
   return (
-    <div className='border p-5' style={{ width: '80%' }}>
+    <div className="border p-5" style={{ width: '80%' }}>
       <h1>Chat</h1>
       <div>
         <ul>
@@ -40,7 +38,7 @@ const Chat = ( {socket, roomId} ) => {
         <button onClick={sendMessage}>Send</button>
       </div>
     </div>
-  )
+  );
 };
 
 export default Chat;
