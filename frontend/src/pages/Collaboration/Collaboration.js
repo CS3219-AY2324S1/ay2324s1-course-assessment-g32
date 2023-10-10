@@ -29,7 +29,7 @@ const Collaboration = () => {
       <h1>RoomID: {roomId}</h1>
       <h2>You have been match with Host {matchedHostId}</h2>
       <LiveCode socket={socket} roomId={roomId} />
-      <Chat socket={socket} roomId={roomId} />
+      <Chat socket={socket} roomId={roomId} host={hostId} />
       <button onClick={handleLeaveRoom}>Leave Room</button>
     </div>
   );

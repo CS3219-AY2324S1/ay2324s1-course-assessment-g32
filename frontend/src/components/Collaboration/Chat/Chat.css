@@ -1,39 +1,65 @@
-/* Chat.css */
 .chat-container {
   display: flex;
   flex-direction: column;
+  max-height: 200px;
   max-width: 400px;
   margin: 0 auto;
 }
 
 .chat-messages {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
   min-height: 200px;
-  overflow-y: auto;
 }
 
 .message {
-  padding: 5px;
-  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 10px;
+  margin-bottom: 10px;
   border-radius: 5px;
+  max-width: 70%;
+  word-wrap: break-word;
 }
 
-.user {
-  background-color: #007bff;
-  color: white;
+.self {
   align-self: flex-end;
+  background-color: #87cefa;
+  color: black;
+}
+
+.other {
+  align-self: flex-start;
+  background-color: #ffffc2;
+  color: black;
+}
+
+.timestamp {
+  font-size: 0.6rem;
+  color: black;
+  position: relative;
+  bottom: 0;
+  padding: 2px;
+}
+
+.self .timestamp {
+  text-align: right;
+}
+
+.other .timestamp {
+  text-align: left;
 }
 
 .chat-input {
   display: flex;
 }
 
-input[type='text'] {
-  flex-grow: 1;
-  padding: 5px;
+input {
+  width: 100%;
 }
 
 button {

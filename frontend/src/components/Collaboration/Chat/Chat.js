@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Chat.css';
 
-const Chat = ({ socket, roomId }) => {
+const Chat = ({ socket, roomId, host }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
 
@@ -17,16 +17,36 @@ const Chat = ({ socket, roomId }) => {
 
   const handleSendMessage = () => {
     if (inputMessage) {
-      socket.emit('chatMessage', { room: roomId, message: inputMessage });
+      const newMessage = {
+        text: inputMessage,
+        sender: host,
+        timestamp: formatTimestamp(Date.now()),
+      };
+      socket.emit('chatMessage', { room: roomId, message: newMessage });
       setInputMessage('');
     }
+  };
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    const hours = date.getHours().toString().padStart(2, '0'); // Get hours and pad with leading zero
+    const minutes = date.getMinutes().toString().padStart(2, '0'); // Get minutes and pad with leading zero
+    return `${hours}:${minutes}`;
   };
 
   return (
     <div className="chat-container">
       <div className="chat-messages">
         {messages.map((msg, index) => (
-          <div key={index}>{msg}</div>
+          <div
+            key={index}
+            className={`message ${msg.sender === host ? 'self' : 'other'}`}
+          >
+            {msg.text}
+            {msg.timestamp && (
+              <small className="timestamp">{msg.timestamp}</small>
+            )}
+          </div>
         ))}
       </div>
       <div className="chat-input">
