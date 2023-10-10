@@ -1,7 +1,7 @@
 require('dotenv').config({ path: `${__dirname}/../.env` });
 
-const WEB_PORT = process.env.REACT_APP_WEB_PORT || 3000;
-const SERVER_PORT = process.env.REACT_APP_SERVER_PORT || 3001;
+const WEB_PORT = process.env.WEB_PORT || 3000;
+const SERVER_PORT = process.env.SERVER_PORT || 3001;
 
 const MONGO_CLIENT = process.env.ATLAS_URI || '';
 const mysqlDbName = process.env.MY_SQL_DB_NAME || '';
