@@ -11,27 +11,27 @@ const Chat = ({ socket, roomId, host }) => {
     });
   }, []);
 
+  const getTimestamp = () => {
+    const date = new Date();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
   const handleInputChange = (e) => {
     setInputMessage(e.target.value);
   };
 
   const handleSendMessage = () => {
     if (inputMessage) {
-      const newMessage = {
+      const message = {
         text: inputMessage,
         sender: host,
-        timestamp: formatTimestamp(Date.now()),
+        timestamp: getTimestamp(),
       };
-      socket.emit('chatMessage', { room: roomId, message: newMessage });
+      socket.emit('chatMessage', { room: roomId, message: message });
       setInputMessage('');
     }
-  };
-
-  const formatTimestamp = (timestamp) => {
-    const date = new Date(timestamp);
-    const hours = date.getHours().toString().padStart(2, '0'); // Get hours and pad with leading zero
-    const minutes = date.getMinutes().toString().padStart(2, '0'); // Get minutes and pad with leading zero
-    return `${hours}:${minutes}`;
   };
 
   return (
