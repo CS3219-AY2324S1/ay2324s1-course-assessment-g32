@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Chat from '../../components/Collaboration/Chat/Chat';
-import LiveCode from '../../components/Collaboration/LiveCode';
+import LiveCode from '../../components/Collaboration/CodeEditor/CodeEditor';
 import io from 'socket.io-client';
 
 const Collaboration = () => {

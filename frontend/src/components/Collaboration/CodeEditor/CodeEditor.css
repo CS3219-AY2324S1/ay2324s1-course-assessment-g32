@@ -1,0 +1,14 @@
+.code-editor {
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  width: 600px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.editor-container {
+  max-height: 300px;
+  overflow-y: scroll;
+}

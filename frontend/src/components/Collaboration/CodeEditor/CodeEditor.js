@@ -6,12 +6,13 @@ import { defaultKeymap, indentWithTab } from '@codemirror/commands';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
+import './CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId }) => {
   const editor = useRef(null);
   const viewRef = useRef(null);
   const [code, setCode] = useState('');
-  const [language, setLanguage] = useState('Python');
+  const [language, setLanguage] = useState(python());
 
   const onUpdate = EditorView.updateListener.of((update) => {
     if (update.docChanged) {
@@ -22,7 +23,13 @@ const CodeEditor = ({ socket, roomId }) => {
 
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
-    setLanguage(selectedLanguage);
+    setLanguage(getLanguageExtension(selectedLanguage));
+
+    // Send language changes to the server
+    socket.emit('languageChange', {
+      room: roomId,
+      updatedLanguage: selectedLanguage,
+    });
   };
 
   const getLanguageExtension = (selectedLanguage) => {
@@ -35,13 +42,6 @@ const CodeEditor = ({ socket, roomId }) => {
         return cpp();
       default:
         return python();
-    }
-  };
-
-  const changeSelectedOption = (selectedLanguage) => {
-    const languageSelect = document.getElementById('languageSelect');
-    if (languageSelect) {
-      languageSelect.value = selectedLanguage;
     }
   };
 
@@ -65,16 +65,14 @@ const CodeEditor = ({ socket, roomId }) => {
     });
   }, []);
 
-  // Send language changes to the server
-  useEffect(() => {
-    socket.emit('languageChange', { room: roomId, updatedLanguage: language });
-  }, [language, roomId, socket]);
-
   // Receive language changes from the server
   useEffect(() => {
     socket.on('languageUpdate', (updatedLanguage) => {
-      setLanguage(updatedLanguage);
-      changeSelectedOption(updatedLanguage);
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.value = updatedLanguage;
+      }
+      setLanguage(getLanguageExtension(updatedLanguage));
     });
   }, []);
 
@@ -85,7 +83,7 @@ const CodeEditor = ({ socket, roomId }) => {
         basicSetup,
         keymap.of([...defaultKeymap, indentWithTab]),
         onUpdate,
-        getLanguageExtension(language),
+        language,
       ],
     });
 
@@ -98,16 +96,25 @@ const CodeEditor = ({ socket, roomId }) => {
   }, [language]);
 
   return (
-    <div>
-      <div>
-        <label htmlFor="language">Language: </label>
-        <select id="languageSelect" defaultValue={language} onChange={handleLanguageChange}>
-          <option value="Python">Python</option>
-          <option value="Java">Java</option>
-          <option value="C++">C++</option>
-        </select>
+    <div className="code-editor">
+      <div className="row">
+        <label for="languageSelect" className="col-sm-2">Language:</label>
+        <div className="col-sm-2">
+          <select
+            className="form-select-sm"
+            id="languageSelect"
+            defaultValue={language}
+            onChange={handleLanguageChange}
+          >
+            <option selected value="Python">Python</option>
+            <option value="Java">Java</option>
+            <option value="C++">C++</option>
+          </select>
+        </div>
       </div>
-      <div ref={editor}></div>
+      <div className="editor-container">
+        <div ref={editor}></div>
+      </div>
     </div>
   );
 };
