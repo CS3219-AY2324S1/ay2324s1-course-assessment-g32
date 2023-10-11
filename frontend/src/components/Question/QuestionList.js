@@ -64,9 +64,13 @@ const QuestionList = () => {
   const questionList = tableData.map((question, index) => (
     <tr key={question._id} onClick={() => handleRowClick(question._id)}>
       <th scope='row'>{index + 1}</th>
-      <td>{question.title}</td>
+      <td style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
+        {question.title}
+      </td>
       <td>
-        <span className={`badge ${getComplexityColor(question?.complexity)}`}>{question.complexity} </span>
+        <span className={`badge ${getComplexityColor(question?.complexity)}`}>
+          {question.complexity}{' '}
+        </span>
       </td>
     </tr>
   ));
@@ -95,7 +99,10 @@ const QuestionList = () => {
         <tbody className='table-group-divider'>{questionList}</tbody>
       </table>
       <div className='text-md-end'>
-        <button type='button' className='btn btn-success' onClick={handleNewQuestionClick}>
+        <button
+          type='button'
+          className='btn btn-success'
+          onClick={handleNewQuestionClick}>
           Add
         </button>
       </div>

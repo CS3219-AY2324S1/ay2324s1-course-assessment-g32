@@ -6,8 +6,6 @@ const verifyPassword = async (userId, givenPassword) => {
   return bcrypt.compare(givenPassword, storedPassword);
 };
 
-// const verifyPasswordMinLen = ()
-
 const loginUser = async (email, password) => {
   try {
     let userId = Number();
@@ -21,7 +19,9 @@ const loginUser = async (email, password) => {
     await userDatabase.findByEmail(email).then((id) => (userId = id));
 
     if (!userId) {
-      throw Object.assign(new Error('Email not registered with any user'), { status: 410 });
+      throw Object.assign(new Error('Email not registered with any user'), {
+        status: 410,
+      });
     }
 
     // Compare the entered password with the hashed password stored in the database
@@ -57,7 +57,10 @@ const createUser = async (email, password, confirmPassword) => {
 
     // Check if the password is at least 8 characters long
     if (password.length < 8) {
-      throw Object.assign(new Error('Password must be at least 8 characters long'), { status: 400 })
+      throw Object.assign(
+        new Error('Password must be at least 8 characters long'),
+        { status: 400 }
+      );
     }
 
     // Check if the password and confirm password match
@@ -92,7 +95,9 @@ const getAllUserInfo = async () => {
 const getUserInfo = async (userId, email) => {
   try {
     if (!userId && !email) {
-      throw Object.assign(new Error('Need at least id or email'), { status: 400 });
+      throw Object.assign(new Error('Need at least id or email'), {
+        status: 400,
+      });
     }
 
     if (userId != null) return userDatabase.getUserInfoById(userId);
@@ -110,26 +115,19 @@ const getUserInfo = async (userId, email) => {
  * @param {string} username New Username
  * @param {string} password New password
  */
-const updateUser = async (userId, username, password) => {
+const updateUser = async (userId, username) => {
   try {
     if (!userId) {
       throw Object.assign(new Error('Missing userId'), { status: 400 });
     }
 
-    if (!username && !password) {
-      throw Object.assign(new Error('WARN: Nothing given, not doing update'), { status: 400 });
+    if (!username) {
+      throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
+        status: 400,
+      });
     }
 
-    if (password) {
-      // Check if the password is at least 8 characters long
-      if (password.length < 8) {
-        throw { status: 400, message: 'Password must be at least 8 characters long' };
-      }
-      
-      password = bcrypt.hashSync(password, 10);
-    }
-
-    return userDatabase.updateUser(userId, username, password);
+    return userDatabase.updateUser(userId, username);
   } catch (err) {
     throw err;
   }
@@ -147,8 +145,10 @@ const deleteUser = async (id) => {
     await userDatabase.deleteUser(id).then((x) => (_success = x));
 
     if (!_success) {
-      throw Object.assign(new Error('Failed to delete user. Does user exists?'), { status: 500 });
-      
+      throw Object.assign(
+        new Error('Failed to delete user. Does user exists?'),
+        { status: 500 }
+      );
     }
   } catch (err) {
     throw err;
@@ -159,35 +159,47 @@ const deleteUser = async (id) => {
  * Changes password of user. Throws error if invalid parameters.
  * @param {string | number} id User ID
  * @param {string} curPassword Current Password
- * @param {string} newPasssword New Password
+ * @param {string} newPassword New Password
  * @param {string} confirmPassword Confirm New Password
  */
-const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword) => {
+const changeUserPassword = async (
+  id,
+  curPassword,
+  newPassword,
+  confirmPassword
+) => {
   try {
     let _correctPassword = Boolean();
 
     // Check for missing inputs
-    if (!id || !curPassword || !newPasssword || !confirmPassword) {
+    if (!id || !curPassword || !newPassword || !confirmPassword) {
       throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
 
-    const passwordTest = verifyPassword(id, curPassword)
-      .then(x => _correctPassword = x);
+    const passwordTest = verifyPassword(id, curPassword).then(
+      (x) => (_correctPassword = x)
+    );
 
     // Check that new password is not old password
-    if (curPassword === newPasssword) {
-      throw Object.assign(new Error('New password cannot be old password'), { status: 400 });
+    if (curPassword === newPassword) {
+      throw Object.assign(new Error('New password cannot be old password'), {
+        status: 400,
+      });
     }
 
     // Confirm no typo in new password
-    if (newPasssword !== confirmPassword) {
-      throw Object.assign(new Error('Confirm password not matching'), { status: 400 });
-      
+    if (newPassword !== confirmPassword) {
+      throw Object.assign(new Error('Confirm password not matching'), {
+        status: 400,
+      });
     }
 
     // Check if the password is at least 8 characters long
-    if (newPasssword.length < 8 || confirmPassword.length < 8) {
-      throw Object.assign(new Error('Password must be at least 8 characters long'), { status: 400 });
+    if (newPassword.length < 8 || confirmPassword.length < 8) {
+      throw Object.assign(
+        new Error('Password must be at least 8 characters long'),
+        { status: 400 }
+      );
     }
 
     // Verify current password is correct
@@ -197,10 +209,12 @@ const changeUserPassword = async (id, curPassword, newPasssword, confirmPassword
     }
 
     // Change the password
-    if (!(await updateUser(id, null, newPasssword))) {
-      throw Object.assign(new Error('Failed to update password'), { status: 500 });
+    const password = bcrypt.hashSync(newPassword, 10);
+    if (!userDatabase.updatePassword(id, password)) {
+      throw Object.assign(new Error('Failed to update password'), {
+        status: 500,
+      });
     }
-
   } catch (err) {
     throw err;
   }
