@@ -61,8 +61,8 @@ const CodeEditor = ({ socket, roomId }) => {
             to: viewRef.current.state.doc.length,
             insert: updatedCode,
           },
-          // Preserve the user's cursor position
-          selection: viewRef.current.state.selection,
+          selection: viewRef.current.state.selection, // Preserve the user's cursor position
+          scrollIntoView: true, // Preserve the user's scroll position
         });
       }
     });
@@ -101,7 +101,7 @@ const CodeEditor = ({ socket, roomId }) => {
   return (
     <div className="code-editor">
       <div className="row">
-        <label for="languageSelect" className="col-sm-2">Language:</label>
+        <label htmlFor="languageSelect" className="col-sm-2">Language:</label>
         <div className="col-sm-2">
           <select
             className="form-select-sm"
@@ -109,7 +109,7 @@ const CodeEditor = ({ socket, roomId }) => {
             defaultValue={language}
             onChange={handleLanguageChange}
           >
-            <option selected value="Python">Python</option>
+            <option value="Python">Python</option>
             <option value="Java">Java</option>
             <option value="C++">C++</option>
           </select>

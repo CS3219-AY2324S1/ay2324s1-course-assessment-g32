@@ -9,6 +9,6 @@
 }
 
 .editor-container {
-  max-height: 300px;
+  flex-grow: 1;
   overflow-y: scroll;
 }
