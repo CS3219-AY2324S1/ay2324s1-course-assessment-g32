@@ -55,6 +55,12 @@ const QuestionList = () => {
     setMatchingModalOpen(!isMatchingModalOpen);
   };
 
+  const RenderTags = (tags) => {
+    return tags?.map((tag, index) => {
+      return <span key={index} className="badge bg-secondary">{tag}</span>
+    });
+  };
+
   const getComplexityColor = (complexity) => {
     switch (complexity) {
       case 'Easy':
@@ -72,6 +78,7 @@ const QuestionList = () => {
     <tr key={question._id} onClick={() => handleRowClick(question._id)}>
       <th scope='row'>{index + 1}</th>
       <td>{question.title}</td>
+      <td>{RenderTags(question.tags)}</td>
       <td>
         <span className={`badge ${getComplexityColor(question?.complexity)}`}>{question.complexity} </span>
       </td>
@@ -93,6 +100,9 @@ const QuestionList = () => {
             </th>
             <th scope='col' width='800'>
               Title
+            </th>
+            <th scope='col' width='200'>
+              Tag
             </th>
             <th scope='col' width='200'>
               Complexity
