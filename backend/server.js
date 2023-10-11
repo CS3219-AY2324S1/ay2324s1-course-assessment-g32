@@ -78,7 +78,7 @@ try {
       console.log(`${data.host} left room: ${data.room}`);
 
       // Broadcast a message to the room when someone leaves
-      const message = { text: `${data.host}` }
+      const message = { text: `${data.host} left room` }
       io.to(data.room).emit('message', message);
     });
 
@@ -90,6 +90,11 @@ try {
     // Handle code changes
     socket.on('codeChange', (data) => {
       io.to(data.room).emit('codeUpdate', data.updatedCode); // Broadcast code to everyone in the room
+    });
+
+    // Handle language changes
+    socket.on('languageChange', (data) => {
+      io.to(data.room).emit('languageUpdate', data.updatedLanguage); // Broadcast language to everyone in the room
     });
 
     socket.on('disconnect', () => {
