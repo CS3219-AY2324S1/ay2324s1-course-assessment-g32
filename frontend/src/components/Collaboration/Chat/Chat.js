@@ -5,12 +5,6 @@ const Chat = ({ socket, roomId, host }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
 
-  useEffect(() => {
-    socket.on('message', (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
-  }, []);
-
   const getTimestamp = () => {
     const date = new Date();
     const hours = date.getHours().toString().padStart(2, '0');
@@ -33,6 +27,12 @@ const Chat = ({ socket, roomId, host }) => {
       setInputMessage('');
     }
   };
+
+  useEffect(() => {
+    socket.on('message', (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+  }, []);
 
   return (
     <div className="chat-container">
