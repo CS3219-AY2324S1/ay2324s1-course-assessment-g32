@@ -67,7 +67,8 @@ try {
       console.log(`${data.host} joined room: ${data.room}`);
 
       // Broadcast a message to the room when someone joins
-      io.to(data.room).emit('message', `${data.host} joined room: ${data.room}`);
+      const message = { text: `${data.host} joined room` }
+      io.to(data.room).emit('message', message);
     });
 
     socket.on('leaveRoom', (data) => {
@@ -75,7 +76,8 @@ try {
       console.log(`${data.host} left room: ${data.room}`);
 
       // Broadcast a message to the room when someone leaves
-      io.to(data.room).emit('message', `${data.host} left room: ${data.room}`);
+      const message = { text: `${data.host}` }
+      io.to(data.room).emit('message', message);
     });
 
     // Handle chat messages
