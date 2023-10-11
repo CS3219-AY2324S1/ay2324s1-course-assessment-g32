@@ -55,11 +55,14 @@ const CodeEditor = ({ socket, roomId }) => {
     socket.on('codeUpdate', (updatedCode) => {
       if (viewRef.current) {
         viewRef.current.dispatch({
+          // Replace the entire document with the updated code
           changes: {
             from: 0,
             to: viewRef.current.state.doc.length,
             insert: updatedCode,
           },
+          // Preserve the user's cursor position
+          selection: viewRef.current.state.selection,
         });
       }
     });
