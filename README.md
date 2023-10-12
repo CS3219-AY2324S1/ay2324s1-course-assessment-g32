@@ -25,7 +25,9 @@ For development, you may also want to install:
 ## Setup environment variables
 
 1. Enter the following command
-   `cp template.env .env`
+   ```
+   cp template.env .env
+   ```
 2. Open `.env` file
 3. Enter root password (previously configured when installing MySQL)  
    Example: if your root password is "password1234",
@@ -37,18 +39,18 @@ For development, you may also want to install:
 ## Install NodeJS packages
 
 ```
-npm i install-all && npm run install-all && cd Auth && npm i
+npm i install-all && npm run install-all && cd Auth && npm i && cd ..
 ```
 
 # Start Application
 
 Start local MySQL Server (Windows Service), if necessary.
 
-Start all services by:
+Start all services using the following commands (run them in different terminals):
 
 ```
-npm run start-all && cd Auth && npm run dev
-
+npm run start-all
+cd Auth && npm run dev
 ```
 
 Or start them indvidually:
@@ -78,6 +80,6 @@ Or start them indvidually:
 | `/user/update`                 | POST   | Used to update user information (username)          | `id` <br> `username`                                                  | Yes                                | No                               |
 
 - `auth` API (port 5001) contains all the authorization related endpoints.
-- `question` (port 3001) API contains all the question data related endpoints.
-- `user` (port 3001) API contains all the user data related endpoints (including authentication).
+- `question` API (port 3001) contains all the question data related endpoints.
+- `user` API (port 3001) contains all the user data related endpoints (including authentication).
 - Note that if the API path requires JWT token to be in the header, it means the user has to be logged in.

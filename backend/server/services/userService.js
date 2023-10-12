@@ -164,7 +164,7 @@ const deleteUser = async (id) => {
  * Changes password of user. Throws error if invalid parameters.
  * @param {string | number} id User ID
  * @param {string} curPassword Current Password
- * @param {string} newPasssword New Password
+ * @param {string} newPassword New Password
  * @param {string} confirmPassword Confirm New Password
  */
 const changeUserPassword = async (
