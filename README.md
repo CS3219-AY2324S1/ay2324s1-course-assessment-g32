@@ -51,14 +51,14 @@ Start all services using the following commands (run them in different terminals
 
 ```
 npm run start-all
-cd Auth && npm run dev
+cd Auth && npm start
 ```
 
 Or start them indvidually:
 
 - Frontend: `cd frontend && npm start`
 - Backend: `cd backend && npm start`
-- Auth service: `cd Auth && npm run dev`
+- Auth service: `cd Auth && npm start`
 
 # Developer Notes
 
