@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../api/UserApi';
+import Cookies from 'js-cookie';
 import { showSuccessToast } from '../utils/toast.js';
 import { errorHandler } from '../utils/errors.js';
+import { login } from '../api/UserApi.js';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -28,16 +29,17 @@ const Login = () => {
     const userData = {
       email: email,
       password: password,
+      isMaintainer: true,
     };
 
     try {
       const response = await login(userData);
 
-      const data = {
-        id: response.data.id,
-      };
+      Cookies.set('jwt', response.data.token, {
+        secure: true,
+        sameSite: 'strict',
+      });
 
-      localStorage.setItem('user', JSON.stringify(data));
       navigate('/landing');
       showSuccessToast('User logged in successfully!');
     } catch (error) {

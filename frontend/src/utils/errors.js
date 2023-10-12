@@ -1,4 +1,11 @@
-import { showServerErrorToast, showValidationErrorToast, showFailureToast, showUserNotAuthorizedErrorToast, showDuplicateRecordErrorToast, showRecordNotFoundErrorToast } from './toast.js';
+import {
+  showServerErrorToast,
+  showValidationErrorToast,
+  showFailureToast,
+  showUserNotAuthorizedErrorToast,
+  showDuplicateRecordErrorToast,
+  showRecordNotFoundErrorToast,
+} from './toast.js';
 
 export const errorHandler = (error) => {
   switch (error.response.status) {

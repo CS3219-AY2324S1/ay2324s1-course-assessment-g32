@@ -3,7 +3,7 @@ const env = require('../../loadEnvironment.js');
 
 const conn = mysql.createConnection({
   ...env.mysqlCreds,
-  ...{database: env.mysqlDbName}
+  ...{ database: env.mysqlDbName },
 });
 
 /**
@@ -13,21 +13,22 @@ const conn = mysql.createConnection({
  * userId is null -> Cannot find user with email;
  *
  * @param {string} email
- * @returns userId
+ * @returns {userId, isMaintainer}
  */
 const findByEmail = async (email) => {
   var _userId = Number();
-
+  var _isMaintainer = Boolean();
   const query = conn
     .promise()
-    .query('SELECT id FROM users WHERE email=?;', [email])
+    .query('SELECT id, isMaintainer FROM users WHERE email=?;', [email])
     .then(([rows, fields]) => {
       _userId = rows.length ? rows[0].id : null;
+      _isMaintainer = rows.length ? rows[0].isMaintainer : null;
     })
     .catch(console.error);
 
-  await query; // Wait for uid to be updated
-  return _userId;
+  await query; // Wait for uid and isMaintainer to be updated
+  return { userId: _userId, isMaintainer: _isMaintainer };
 };
 
 const createUser = async (email, password) => {
@@ -40,7 +41,11 @@ const createUser = async (email, password) => {
   // Add new user to database
   const query = conn
     .promise()
-    .query('INSERT INTO users(username, email, password) VALUES (?, ?, ?);', [_username, email, _password])
+    .query('INSERT INTO users(username, email, password) VALUES (?, ?, ?);', [
+      _username,
+      email,
+      _password,
+    ])
     .then(([result, fields]) => {
       _userId = result.insertId;
     })
@@ -52,7 +57,7 @@ const createUser = async (email, password) => {
 
 const getUserInfoByEmail = async (email) => {
   var _userId = Number();
-  await findByEmail(email).then((id) => (_userId = id));
+  await findByEmail(email).then((userInfo) => (_userId = userInfo._userId));
 
   if (!_userId) throw 'No user is using ' + email;
 
@@ -78,8 +83,10 @@ const getAllUserInfo = async () => {
 };
 
 const getUserInfoById = async (userId) => {
-  var _userInfo = {};
+  // idk why this is needed but there was error in the SQL syntax here if i dont do this
+  // userId = userId['_userId'];
 
+  var _userInfo = {};
   const selectStmt = `SELECT * FROM users WHERE id=?;`;
 
   const query = conn
@@ -90,7 +97,8 @@ const getUserInfoById = async (userId) => {
 
       if (rows.length === 0) throw 'getUserInfo: No user with id ' + userId;
 
-      if (rows.length > 1) throw 'getUserInfo: Only one user should be retrieved';
+      if (rows.length > 1)
+        throw 'getUserInfo: Only one user should be retrieved';
 
       if (userInfo.id != userId) throw 'getUserInfo: Wrong user info retrieved';
 
@@ -105,12 +113,13 @@ const getUserInfoById = async (userId) => {
 
   await query; // Wait for new user to be inserted
 
-  if (Object.keys(_userInfo).length === 0) throw 'User info cannot be retrieved';
+  if (Object.keys(_userInfo).length === 0)
+    throw 'User info cannot be retrieved';
 
   return _userInfo;
 };
 
-const updateUser = async (userId, username, password) => {
+const updateUser = async (userId, username) => {
   var _success = Boolean();
   var _placeholders = [];
   var _sql = 'UPDATE users SET ';
@@ -120,7 +129,25 @@ const updateUser = async (userId, username, password) => {
     _placeholders.push(username);
   }
 
-  if (username && password) _sql = _sql.concat(', ');
+  _sql = _sql.concat(' WHERE id = ?;');
+  _placeholders.push(userId);
+
+  const query = conn
+    .promise()
+    .query(_sql, _placeholders)
+    .then(([result, fields]) => {
+      _success = result.affectedRows === 1;
+    })
+    .catch(console.error);
+
+  await query; // Wait for user to be updated
+  return _success;
+};
+
+const updatePassword = async (userId, password) => {
+  var _success = Boolean();
+  var _placeholders = [];
+  var _sql = 'UPDATE users SET ';
 
   if (password) {
     _sql = _sql.concat('password=?');
@@ -171,8 +198,9 @@ module.exports = {
   findByEmail,
   createUser,
   updateUser,
+  updatePassword,
   deleteUser,
   getAllUserInfo,
   getUserInfoByEmail,
-  getUserInfoById
+  getUserInfoById,
 };

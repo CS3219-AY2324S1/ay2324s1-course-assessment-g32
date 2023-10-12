@@ -7,12 +7,13 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
 import { showSuccessToast } from '../../../utils/toast.js';
-import { parseDatetime } from '../../../utils/helpers.js';
+import { getCookie, getUserId, parseDatetime } from '../../../utils/helpers.js';
 import { DeregisterWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
 import { errorHandler } from '../../../utils/errors.js';
 import './UserList.css';
 
 const UserList = () => {
+  const [userId, setUserId] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
@@ -21,13 +22,11 @@ const UserList = () => {
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
-  const storedUser = JSON.parse(localStorage.getItem('user'));
-
   const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
-      const response = await getAllUsers();
+      const response = await getAllUsers(getCookie());
       setTableData(response);
       setIsLoading(false);
     } catch (error) {
@@ -36,11 +35,12 @@ const UserList = () => {
   };
 
   useEffect(() => {
-    if (storedUser) {
-      fetchData();
-    } else {
-      navigate('/login');
-    }
+    const fetchUserId = async () => {
+      const id = await getUserId();
+      setUserId(id);
+    };
+    fetchUserId();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -61,7 +61,9 @@ const UserList = () => {
   };
 
   const handleEditClick = (id, username) => {
-    navigate('/users-management/edit', { state: { id: id, username: username } });
+    navigate('/users-management/edit', {
+      state: { user: { id: id, username: username } },
+    });
   };
 
   const handleDeregisterClick = (id) => {
@@ -72,7 +74,7 @@ const UserList = () => {
   const handleDeregisterConfirm = async () => {
     setDeregisterWindowOpen(false);
     try {
-      await deleteUser(deregisterId);
+      await deleteUser(deregisterId, getCookie());
       fetchData();
       showSuccessToast('User has been deleted successfully!');
     } catch (error) {
@@ -91,14 +93,19 @@ const UserList = () => {
       <td>{user.email}</td>
       <td>{parseDatetime(user.created_at)}</td>
       <td>{parseDatetime(user.updated_at)}</td>
-      {user.id === storedUser.id ? (
+      {user.id === userId ? (
         <td />
       ) : (
         <td>
-          <Button variant='contained' onClick={() => handleEditClick(user.id, user.username)}>
+          <Button
+            variant='contained'
+            onClick={() => handleEditClick(user.id, user.username)}>
             Edit
           </Button>
-          <Button variant='contained' color='error' onClick={() => handleDeregisterClick(user.id)}>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={() => handleDeregisterClick(user.id)}>
             Deregister
           </Button>
         </td>
@@ -136,14 +143,25 @@ const UserList = () => {
             </th>
           </tr>
         </thead>
-        <tbody key={userList} className='table-group-divider'>{userList}</tbody>
+        <tbody key={userList} className='table-group-divider'>
+          {userList}
+        </tbody>
       </table>
       <div className='text-md-end'>
-        <button type='button' className='btn btn-success' style={{ margin: '5px' }} onClick={handleNewUserClick}>
+        <button
+          type='button'
+          className='btn btn-success'
+          style={{ margin: '5px' }}
+          onClick={handleNewUserClick}>
           Register New User
         </button>
       </div>
-      {isDeregisterWindowOpen && <DeregisterWindow onConfirm={handleDeregisterConfirm} onClose={handleDeregisterCancel} />}
+      {isDeregisterWindowOpen && (
+        <DeregisterWindow
+          onConfirm={handleDeregisterConfirm}
+          onClose={handleDeregisterCancel}
+        />
+      )}
     </div>
   );
 };
