@@ -4,7 +4,8 @@
     "description": "",
     "main": "AuthService.js",
     "scripts": {
-        "dev": "nodemon AuthService.js"
+        "dev": "nodemon AuthService.js",
+        "start": "nodemon AuthService.js"
     },
     "keywords": [],
     "author": "",
