@@ -26,12 +26,19 @@ const Collaboration = () => {
   };
 
   return (
-    <div className="container">
-      <div className="left">
+    <div className="collaboration-container">
+      <div className="header">
+        <h1>Collaboration</h1>
       </div>
-      <div className="right">
-        <CodeEditor socket={socket} roomId={roomId} />
-        <Chat socket={socket} roomId={roomId} host={hostId} />
+      <div className="content">
+        <div className="left"></div>
+        <div className="right">
+          <CodeEditor socket={socket} roomId={roomId} />
+          <Chat socket={socket} roomId={roomId} host={hostId} />
+        </div>
+      </div>
+      <div>
+        <button onClick={handleLeaveRoom}>Leave Room</button>
       </div>
     </div>
   );

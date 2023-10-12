@@ -1,6 +1,13 @@
-.container {
+.collaboration-container {
   display: flex;
+  flex-direction: column;
   height: 100vh;
+  overflow: auto;
+}
+
+.content {
+  display: flex;
+  flex: 1;
 }
 
 .left {
