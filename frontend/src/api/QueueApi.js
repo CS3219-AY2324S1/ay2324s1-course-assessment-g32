@@ -1,7 +1,7 @@
 import axios from 'axios';
 const env = require("../loadEnvironment");
 
-const rootUrl = env.SERVER_URL + '/queue';
+const rootUrl = env.MATCH_URL + '/queue';
 
 const config = {
   headers: {
