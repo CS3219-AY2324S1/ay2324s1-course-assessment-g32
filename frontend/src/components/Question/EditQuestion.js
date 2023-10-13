@@ -10,11 +10,10 @@ import TextEditor from '../TextEditor/TextEditor.js';
 import '../../css/Tags.css';
 
 const EditQuestion = () => {
-
-  const [newTitleValue, setTitleValue] = useState('');
-  const [newComplexityValue, setComplexityValue] = useState('');
-  const [newDescriptionValue, setDescriptionValue] = useState('');
-  const [newTags, setTags] = useState([]);
+  const [title, setTitle] = useState('');
+  const [complexity, setComplexity] = useState('');
+  const [description, setDescription] = useState('');
+  const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isEditWindowOpen, setEditWindowOpen] = useState(false);
@@ -26,9 +25,9 @@ const EditQuestion = () => {
     const fetchData = async () => {
       try {
         const question = await getQuestionDetails(id);
-        setTitleValue(question.title);
-        setComplexityValue(question.complexity);
-        setDescriptionValue(question.description);
+        setTitle(question.title);
+        setComplexity(question.complexity);
+        setDescription(question.description);
         setTags(question.tags);
         setIsLoading(false);
       } catch (error) {
@@ -57,7 +56,7 @@ const EditQuestion = () => {
     e.preventDefault();
 
     try {
-      await editQuestion(id, newTitleValue, newComplexityValue, newDescriptionValue, newTags);
+      await editQuestion(id, title, complexity, description, tags);
       navigate(-1);
       showSuccessToast('Question Edited Successfully!');
     } catch (error) {
@@ -65,19 +64,19 @@ const EditQuestion = () => {
     }
   };
 
-  const handleTitleValueChange = (event) => {
-    setTitleValue(event.target.value);
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
   };
 
-  const handleComplexityValueChange = (event) => {
-    setComplexityValue(event.target.value);
+  const handleComplexityChange = (event) => {
+    setComplexity(event.target.value);
   };
 
   const handleTagsChange = (tags) => {
     setTags(tags);
   };
 
-  const handleInputChange = (input) => {
+  const handleTagInputChange = (input) => {
     if (input.length > 40) {
       showFailureToast('Tag cannot be longer than 40 characters');
       return;
@@ -85,52 +84,66 @@ const EditQuestion = () => {
     setTagInput(input);
   };
 
-  const handleDescriptionValueChange = (html) => {
-    setDescriptionValue(html);
+  const handleDescriptionChange = (html) => {
+    setDescription(html);
   };
 
   return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
+    <div className="spinner-border text-primary" role="status">
+      <span className="visually-hidden">Loading...</span>
     </div>
   ) : (
-    <div className='container'>
-      <h1>Edit</h1>
-      <form className='create-question-form needs-validation' onSubmit={handleSaveClick} noValidate>
-        <div className='form-floating mb-3'>
-          <input type='text' className='form-control' id='createQuestionTitle' placeholder='title' value={newTitleValue} onChange={handleTitleValueChange} required />
-          <label htmlFor='createQuestionTitle'>Title</label>
+    <div className="container">
+      <div className="card">
+        <div className="card-header text-center">
+          <h2>Edit</h2>
         </div>
-        <div className='form-floating mb-3'>
-          <select className='form-select mb-3' id='createQuestitonComplexity' value={newComplexityValue} onChange={handleComplexityValueChange} required>
-            <option disabled value=''>
-              Select a complexity...
-            </option>
-            <option value='Easy'>Easy</option>
-            <option value='Medium'>Medium</option>
-            <option value='Hard'>Hard</option>
-          </select>
-          <label htmlFor='createQuestitonComplexity'>Complexity</label>
+        <div className="card-body">
+          <form className="create-question-form needs-validation" id="editQuestionForm" onSubmit={handleSaveClick} noValidate>
+            <div className="form-floating mb-3">
+              <input type="text" className="form-control" id="createQuestionTitle" placeholder="title" value={title} onChange={handleTitleChange} required />
+              <label htmlFor="createQuestionTitle">Title</label>
+            </div>
+            <div className="form-floating mb-3">
+              <select className="form-select mb-3" id="createQuestitonComplexity" value={complexity} onChange={handleComplexityChange} required>
+                <option disabled value="">Select a complexity...</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+              <label htmlFor="createQuestitonComplexity">Complexity</label>
+            </div>
+            <div className="form-floating mb-3">
+              <TagsInput
+                value={tags}
+                onChange={handleTagsChange}
+                inputValue={tagInput}
+                onChangeInput={handleTagInputChange}
+                addOnBlur={true}
+                addKeys={[9, 13, 188]} // Tab, Enter, Comma
+              />
+            </div>
+            <div className="form-floating">
+              <TextEditor
+                value={description}
+                onChange={handleDescriptionChange}
+              />
+            </div>
+          </form>
         </div>
-        <div className='form-floating mb-3'>
-          <TagsInput
-            value={newTags}
-            onChange={handleTagsChange}
-            inputValue={tagInput}
-            onChangeInput={handleInputChange}
-            addOnBlur={true}
-            addKeys={[9, 13, 188]} // Tab, Enter, Comma
+        <div className="card-footer">
+          <div className="d-flex justify-content-between">
+            <button type="button" className="btn btn-secondary" onClick={handleBackClick}>Back</button>
+            <button type="submit" form="editQuestionForm" className="btn btn-success">Save</button>
+          </div>
+        </div>
+        {isEditWindowOpen && (
+          <EditWindow
+            onClose={handleEditWindowClose}
+            onConfirm={handleConfirmQuit}
           />
-        </div>
-        <div className="form-floating mb-3">
-          <TextEditor value={newDescriptionValue} onChange={handleDescriptionValueChange} />
-        </div>
-        <div className="d-flex justify-content-between">
-          <button type="button" className="btn btn-secondary" onClick={handleBackClick}>Back</button>
-          <button type="submit" className="btn btn-success">Save</button>
-        </div>
-      </form>
-      {isEditWindowOpen && <EditWindow onClose={handleEditWindowClose} onConfirm={handleConfirmQuit} />}
+        )}
+      </div>
     </div>
   );
 };

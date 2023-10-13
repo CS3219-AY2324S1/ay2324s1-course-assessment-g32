@@ -31,7 +31,7 @@ const QuestionContent = ({ title, description, tags, complexity }) => {
         <div
           className="scrollable-div"
           dangerouslySetInnerHTML={{ __html: description }}
-        ></div>
+        />
       </div>
       <div className="card-footer d-flex">
         <div className="d-flex flex-wrap gap-1">{renderTags()}</div>
