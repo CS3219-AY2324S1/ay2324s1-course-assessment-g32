@@ -19,7 +19,12 @@ const createQuestion = async (title, complexity, description, tags) => {
   try {
     missingInputsThrowsValidationError(title, complexity, description);
     await duplicateTitleThrowsDuplicateError(null, title);
-    return await questionRepository.createQuestion(title, complexity, description, tags);
+    return await questionRepository.createQuestion(
+      title,
+      complexity,
+      description,
+      tags
+    );
   } catch (err) {
     throw err;
   }
@@ -55,7 +60,13 @@ const editQuestion = async (id, title, complexity, description, tags) => {
       throw { status: 410, message: 'Question does not exist' };
     }
 
-    return await questionRepository.editQuestion(id, title, complexity, description, tags);
+    return await questionRepository.editQuestion(
+      id,
+      title,
+      complexity,
+      description,
+      tags
+    );
   } catch (err) {
     throw err;
   }
@@ -74,5 +85,5 @@ module.exports = {
   getQuestions,
   getQuestionDetails,
   editQuestion,
-  deleteQuestion
+  deleteQuestion,
 };

@@ -21,10 +21,14 @@ const loginUser = async (email, password) => {
       throw Object.assign(new Error('Invalid email'), { status: 400 });
     }
 
+<<<<<<< HEAD
     // Check if a user with the given email exists
     await userDatabase.findByEmail(email).then((info) => (userInfo = info));
 
     if (!userInfo.userId && !userInfo.isMaintainer) {
+=======
+    if (!userId) {
+>>>>>>> origin/master
       throw Object.assign(new Error('Email not registered with any user'), {
         status: 410,
       });
@@ -213,6 +217,10 @@ const changeUserPassword = async (
       throw Object.assign(new Error('Incorrect password'), { status: 401 });
     }
 
+<<<<<<< HEAD
+=======
+    // Change the password
+>>>>>>> origin/master
     const password = bcrypt.hashSync(newPassword, 10);
     if (!userDatabase.updatePassword(id, password)) {
       throw Object.assign(new Error('Failed to update password'), {
