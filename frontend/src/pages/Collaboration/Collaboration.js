@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
 import Chat from '../../components/Collaboration/Chat/Chat';
 import CodeEditor from '../../components/Collaboration/CodeEditor/CodeEditor';
 import io from 'socket.io-client';
@@ -12,6 +13,7 @@ const Collaboration = () => {
   const roomId = location.state?.roomId;
   const hostId = location.state?.hostId;
   const matchedHostId = location.state?.matchedHostId;
+  const question = location.state?.question;
 
   const socket = io('http://localhost:3002');
 
@@ -31,7 +33,9 @@ const Collaboration = () => {
         <h1>Collaboration</h1>
       </div>
       <div className="content">
-        <div className="left"></div>
+        <div className="left">
+          <QuestionContent question={question} />
+        </div>
         <div className="right">
           <CodeEditor socket={socket} roomId={roomId} />
           <Chat socket={socket} roomId={roomId} host={hostId} />

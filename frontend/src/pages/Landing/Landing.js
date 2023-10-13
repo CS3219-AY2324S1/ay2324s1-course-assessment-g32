@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import QuestionList from '../../components/Question/QuestionList';
-import Question from '../../components/Question/Question';
+import Question from '../../components/Question/Question/Question';
 import CreateQuestion from '../../components/Question/CreateQuestion';
 import EditQuestion from '../../components/Question/EditQuestion';
 import Header from '../../components/Header';

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import QuestionContent from './QuestionContent/QuestionContent';
-import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi';
-import { showSuccessToast } from '../../utils/toast';
-import { DeletionWindow } from '../ConfirmationWindow/ConfirmationWindows';
-import { errorHandler } from '../../utils/errors';
-import '../../css/Tags.css';
+import QuestionContent from '../QuestionContent/QuestionContent';
+import { getQuestionDetails, deleteQuestion } from '../../../api/QuestionApi';
+import { showSuccessToast } from '../../../utils/toast';
+import { DeletionWindow } from '../../ConfirmationWindow/ConfirmationWindows';
+import { errorHandler } from '../../../utils/errors';
+import './Question.css';
+import '../../../css/Tags.css';
 
 const Question = () => {
   const [question, setQuestion] = useState({});
@@ -62,7 +63,7 @@ const Question = () => {
       <span className="visually-hidden">Loading...</span>
     </div>
   ) : (
-    <div className="container">
+    <div className="container question-container">
       <div className="card text-center">
         <div className="card-header">
           <div className="d-flex justify-content-between">
@@ -73,7 +74,9 @@ const Question = () => {
             </div>
           </div>
         </div>
-        <QuestionContent question={question} />
+        <div className="qc-container">
+          <QuestionContent question={question} />
+        </div>
       </div>
       {isDeletionWindowOpen && (
         <DeletionWindow

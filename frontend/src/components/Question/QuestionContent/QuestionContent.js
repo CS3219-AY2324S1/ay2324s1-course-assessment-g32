@@ -32,7 +32,7 @@ const QuestionContent = ({ question }) => {
   };
 
   return (
-    <div>
+    <div className="question-content-container">
       <div className="card-body">
         <h1 className="card-title">{title}</h1>
         <div
