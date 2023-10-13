@@ -9,10 +9,10 @@ const config = {
   }
 };
 
-export const joinQueue = async (user, queueName, sessionID) => {
+export const joinQueue = async (jwt, queueName, sessionID) => {
   try {
     const data = {
-      id: user.id,
+      jwt: jwt,
       queueName: queueName,
       sessionID: sessionID
     };
@@ -25,10 +25,10 @@ export const joinQueue = async (user, queueName, sessionID) => {
   }
 };
 
-export const exitQueue = async (user, queueName, sessionID) => {
+export const exitQueue = async (jwt, queueName, sessionID) => {
   try {
     const data = {
-      id: user.id,
+      jwt: jwt,
       queueName: queueName,
       sessionID: sessionID
     };

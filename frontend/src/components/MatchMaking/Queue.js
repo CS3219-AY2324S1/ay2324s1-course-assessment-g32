@@ -5,7 +5,7 @@ import { joinQueue, exitQueue } from '../../api/QueueApi.js';
 import { errorHandler } from '../../utils/errors.js';
 import { showFailureToast } from '../../utils/toast.js';
 
-const Queue = ({ user, queueName, onCancel, sessionID }) => {
+const Queue = ({ jwt, queueName, onCancel, sessionID }) => {
 
   const [status, setStatus] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +15,7 @@ const Queue = ({ user, queueName, onCancel, sessionID }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const reply = await joinQueue(user, queueName, sessionID);
+        const reply = await joinQueue(jwt, queueName, sessionID);
         setStatus(reply.data.response.message);
         setIsLoading(false);
 
@@ -32,7 +32,7 @@ const Queue = ({ user, queueName, onCancel, sessionID }) => {
       }
     };
     fetchData();
-  }, [user, queueName, navigate]);
+  }, [jwt, queueName, navigate]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -48,7 +48,7 @@ const Queue = ({ user, queueName, onCancel, sessionID }) => {
 
   const handleCancelClick = () => {
     try {
-      exitQueue(user, queueName, sessionID);
+      exitQueue(jwt, queueName, sessionID);
       onCancel();
     } catch (error) {
       errorHandler(error);

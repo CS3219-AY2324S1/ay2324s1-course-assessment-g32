@@ -2,8 +2,8 @@ const queueService = require('../services/queueService');
 
 const joinQueue = async (req, res) => {
   try {
-    const { id, queueName, sessionID } = req.body;
-    const response = await queueService.joinQueue(id, queueName, sessionID);
+    const { jwt, queueName, sessionID } = req.body;
+    const response = await queueService.joinQueue(jwt, queueName, sessionID);
     res.json({ message: 'Joined queue successfully', response });
   } catch (err) {
     res
@@ -14,8 +14,8 @@ const joinQueue = async (req, res) => {
 
 const exitQueue = async (req, res) => {
   try {
-    const { id, queueName, sessionID } = req.body;
-    await queueService.exitQueue(id, queueName, sessionID);
+    const { jwt, queueName, sessionID } = req.body;
+    await queueService.exitQueue(jwt, queueName, sessionID);
     res.json({ message: 'Exited queue successfully' });
   } catch (err) {
     res
