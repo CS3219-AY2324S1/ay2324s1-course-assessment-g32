@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import 'react-tagsinput/react-tagsinput.css';
 import QuestionForm from './QuestionForm.js';
 import { createQuestion } from '../../api/QuestionApi.js';
 import { EditWindow } from '../ConfirmationWindow/ConfirmationWindows.js';

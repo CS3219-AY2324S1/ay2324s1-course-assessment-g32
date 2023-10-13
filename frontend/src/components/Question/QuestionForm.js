@@ -4,13 +4,13 @@ import 'react-tagsinput/react-tagsinput.css';
 import { showFailureToast } from '../../utils/toast.js';
 import TextEditor from '../TextEditor/TextEditor.js';
 
-const QuestionForm = ({ onFormSubmit }) => {
+const QuestionForm = ({ oldFormData = {}, onFormSubmit }) => {
   const [tagInput, setTagInput] = useState('');
   const [formData, setFormData] = useState({
-    title: '',
-    complexity: '',
-    description: '',
-    tags: [],
+    title: oldFormData.title || '',
+    complexity: oldFormData.complexity || '',
+    description: oldFormData.description || '',
+    tags: oldFormData.tags || [],
   });
 
   const handleFormChange = (event) => {
