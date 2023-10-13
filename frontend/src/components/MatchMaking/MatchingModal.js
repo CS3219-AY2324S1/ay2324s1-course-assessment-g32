@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { exitQueue } from '../../api/QueueApi.js';
 import Queue from './Queue';
+import { exitQueue } from '../../api/QueueApi.js';
 import '../../css/Modal.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const MatchingModal = ({ isOpen, onClose }) => {
-
   const [isFindingMatch, setIsFindingMatch] = useState(false);
   const [complexity, setComplexity] = useState('Easy');
   const [programmingLanguage, setProgrammingLanguage] = useState('');
@@ -21,7 +20,6 @@ const MatchingModal = ({ isOpen, onClose }) => {
     if (!storedUser) {
       navigate('/login');
     }
-
   }, [navigate, storedUser]);
 
   useEffect(() => {

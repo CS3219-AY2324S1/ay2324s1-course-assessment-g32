@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import DOMPurify from 'dompurify';
 import QuestionContent from './QuestionContent/QuestionContent';
 import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi';
 import { showSuccessToast } from '../../utils/toast';
@@ -9,10 +8,7 @@ import { errorHandler } from '../../utils/errors';
 import '../../css/Tags.css';
 
 const Question = () => {
-  const [title, setTitle] = useState('');
-  const [complexity, setComplexity] = useState('');
-  const [tags, setTags] = useState([]);
-  const [descripton, setDescription] = useState('');
+  const [question, setQuestion] = useState({});
   const [isDeletionWindowOpen, setDeletionWindowOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -23,11 +19,7 @@ const Question = () => {
     const fetchData = async () => {
       try {
         const question = await getQuestionDetails(id);
-        setTitle(question.title);
-        setComplexity(question.complexity);
-        setTags(question.tags);
-        const sanitizedDescription = DOMPurify.sanitize(question.description);
-        setDescription(sanitizedDescription);
+        setQuestion(question);
         setIsLoading(false);
       } catch (error) {
         navigate('../');
@@ -81,12 +73,7 @@ const Question = () => {
             </div>
           </div>
         </div>
-        <QuestionContent
-          title={title}
-          description={descripton}
-          tags={tags}
-          complexity={complexity}
-        />
+        <QuestionContent question={question} />
       </div>
       {isDeletionWindowOpen && (
         <DeletionWindow

@@ -1,7 +1,14 @@
+import DOMPurify from 'dompurify';
 import './QuestionContent.css';
 
-const QuestionContent = ({ title, description, tags, complexity }) => {
-  const renderTags = () => {
+const QuestionContent = ({ question }) => {
+  const { title, description, tags, complexity } = question;
+
+  const sanitizeHTML = (html) => {
+    return DOMPurify.sanitize(html);
+  };
+
+  const renderTags = (tags) => {
     return tags?.map((tag, index) => {
       return (
         <span key={index} className="badge bg-secondary">
@@ -30,14 +37,16 @@ const QuestionContent = ({ title, description, tags, complexity }) => {
         <h1 className="card-title">{title}</h1>
         <div
           className="scrollable-div"
-          dangerouslySetInnerHTML={{ __html: description }}
+          dangerouslySetInnerHTML={{
+            __html: sanitizeHTML(description),
+          }}
         />
       </div>
       <div className="card-footer d-flex">
-        <div className="d-flex flex-wrap gap-1">{renderTags()}</div>
+        <div className="d-flex flex-wrap gap-1">{renderTags(tags)}</div>
         <div className="ms-auto">
           <span className={`badge ${getComplexityColor(complexity)}`}>
-            {complexity}
+            {question.complexity}
           </span>
         </div>
       </div>
