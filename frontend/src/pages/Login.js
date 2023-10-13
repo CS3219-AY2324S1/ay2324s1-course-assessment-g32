@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../api/UserApi';
+import Cookies from 'js-cookie';
 import { showSuccessToast } from '../utils/toast.js';
 import { errorHandler } from '../utils/errors.js';
+import { login } from '../api/UserApi.js';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -28,16 +29,17 @@ const Login = () => {
     const userData = {
       email: email,
       password: password,
+      isMaintainer: true,
     };
 
     try {
       const response = await login(userData);
 
-      const data = {
-        id: response.data.id
-      };
-      
-      localStorage.setItem('user', JSON.stringify(data));
+      Cookies.set('jwt', response.data.token, {
+        secure: true,
+        sameSite: 'strict',
+      });
+
       navigate('/landing');
       showSuccessToast('User logged in successfully!');
     } catch (error) {
@@ -58,25 +60,34 @@ const Login = () => {
           </div>
           <div className='form-group mt-3'>
             <label>Email address</label>
-            <input type='email' className='form-control mt-1' placeholder='Enter email' onChange={handleEmailChange} />
+            <input
+              type='email'
+              className='form-control mt-1'
+              placeholder='Enter email'
+              onChange={handleEmailChange}
+            />
           </div>
           <div className='form-group mt-3'>
             <label>Password</label>
-            <input type='password' className='form-control mt-1' placeholder='Enter password' onChange={handlePasswordChange} />
+            <input
+              type='password'
+              className='form-control mt-1'
+              placeholder='Enter password'
+              onChange={handlePasswordChange}
+            />
           </div>
           <div className='d-grid gap-2 mt-3'>
-            <button type='submit' className='btn btn-primary' onClick={handleLoginSubmit}>
+            <button
+              type='submit'
+              className='btn btn-primary'
+              onClick={handleLoginSubmit}>
               Submit
             </button>
           </div>
-          {/* To be used when we have forgot password feature */}
-          {/* <p className='text-center mt-2'>
-            Forgot <a href='#'>password?</a>
-          </p> */}
         </div>
       </form>
     </div>
   );
-}
+};
 
 export default Login;
