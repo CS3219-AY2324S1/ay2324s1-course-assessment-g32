@@ -9,9 +9,11 @@
         "install:backend": "cd backend && npm install",
         "install:frontend": "cd frontend && npm install",
         "install:auth": "cd Auth && npm install",
+        "install:question": "cd Question && npm install",
         "start-all": "npm-run-all -p start:*",
         "start:backend": "cd backend && npm start",
         "start:frontend": "cd frontend && npm start",
-        "start:auth": "cd Auth && npm start"
+        "start:auth": "cd Auth && npm start",
+        "start:question": "cd Question && npm start"
     }
 }

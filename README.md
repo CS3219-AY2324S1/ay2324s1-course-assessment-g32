@@ -57,6 +57,7 @@ Or start them indvidually (run them in different terminals):
 - Frontend: `cd frontend && npm start`
 - Backend: `cd backend && npm start`
 - Auth service: `cd Auth && npm start`
+- Question service: `cd Question && npm start`
 
 # Developer Notes
 
