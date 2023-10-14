@@ -19,8 +19,7 @@ For development, you may also want to install:
 
 1. Search for **MySQL 8.1 Command Line Client** on your computer. Execute it to open up the terminal.
 2. Enter your root password.
-3. Run the SQL statements in `./backend/schema.sql` on the terminal.
-4. Run the SQL statements in `./Auth/schema.sql` on the terminal.
+3. Run the SQL statements in `./User/schema.sql` on the terminal.
 
 ## Setup environment variables
 
@@ -28,7 +27,6 @@ For development, you may also want to install:
    ```
    cp template.env .env
    ```
-   
 2. Open `.env` file
 3. Enter root password (previously configured when installing MySQL)  
    Example: if your root password is "password1234",
@@ -40,7 +38,7 @@ For development, you may also want to install:
 ## Install NodeJS packages
 
 ```
-npm i install-all && npm run install-all && cd Auth && npm i && cd ..
+npm i install-all && npm run install-all
 ```
 
 # Start Application
@@ -59,6 +57,7 @@ Or start them indvidually:
 - Frontend: `cd frontend && npm start`
 - Backend: `cd backend && npm start`
 - Auth service: `cd Auth && npm start`
+- User service: `cd User && npm start`
 
 # Developer Notes
 
@@ -82,5 +81,5 @@ Or start them indvidually:
 
 - `auth` API (port 5001) contains all the authorization related endpoints.
 - `question` API (port 3001) contains all the question data related endpoints.
-- `user` API (port 3001) contains all the user data related endpoints (including authentication).
+- `user` API (port 4001) contains all the user data related endpoints (including authentication).
 - Note that if the API path requires JWT token to be in the header, it means the user has to be logged in.
