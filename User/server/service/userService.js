@@ -1,4 +1,4 @@
-const userDatabase = require('../repositories/userRepoMySql');
+const userDatabase = require('../../../User/server/repository/userRepoMySql');
 const bcrypt = require('bcrypt');
 
 const verifyPassword = async (userId, givenPassword) => {
