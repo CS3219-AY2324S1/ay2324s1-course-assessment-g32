@@ -3,13 +3,22 @@ const env = require('../loadEnvironment');
 
 const rootUrl = env.SERVER_URL + '/question';
 
-const config = {
-  headers: {
-    'Content-Type': 'application/json',
-  },
+const getConfig = (jwtToken) => {
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + jwtToken,
+    },
+  };
 };
 
-export const createQuestion = async (title, complexity, description, tags) => {
+export const createQuestion = async (
+  title,
+  complexity,
+  description,
+  tags,
+  jwtToken
+) => {
   try {
     const questionData = {
       title: title,
@@ -17,7 +26,11 @@ export const createQuestion = async (title, complexity, description, tags) => {
       description: description,
       tags: tags,
     };
-    return await axios.post(rootUrl + '/create', questionData, config);
+    return await axios.post(
+      rootUrl + '/create',
+      questionData,
+      getConfig(jwtToken)
+    );
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -29,9 +42,9 @@ export const createQuestion = async (title, complexity, description, tags) => {
   }
 };
 
-export const getQuestions = async () => {
+export const getQuestions = async (jwtToken) => {
   try {
-    const response = await axios.get(rootUrl + '/getAll');
+    const response = await axios.get(rootUrl + '/getAll', getConfig(jwtToken));
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -44,13 +57,14 @@ export const getQuestions = async () => {
   }
 };
 
-export const getQuestionDetails = async (questionId) => {
+export const getQuestionDetails = async (questionId, jwtToken) => {
   try {
-    const questionDetails = await axios.get(rootUrl + '/getQuestionDetails', {
-      params: {
-        id: questionId,
-      },
-    });
+    let config = getConfig(jwtToken);
+    config.params = { id: questionId };
+    const questionDetails = await axios.get(
+      rootUrl + '/getQuestionDetails',
+      config
+    );
     return questionDetails.data.question;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -68,7 +82,8 @@ export const editQuestion = async (
   title,
   complexity,
   description,
-  tags
+  tags,
+  jwtToken
 ) => {
   try {
     const questionData = {
@@ -78,7 +93,11 @@ export const editQuestion = async (
       description: description,
       tags: tags,
     };
-    return await axios.post(rootUrl + '/edit', questionData, config);
+    return await axios.post(
+      rootUrl + '/edit',
+      questionData,
+      getConfig(jwtToken)
+    );
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -90,13 +109,11 @@ export const editQuestion = async (
   }
 };
 
-export const deleteQuestion = async (id) => {
+export const deleteQuestion = async (id, jwtToken) => {
   try {
-    const response = await axios.delete(rootUrl + '/delete', {
-      params: {
-        id: id,
-      },
-    });
+    let config = getConfig(jwtToken);
+    config.params = { id: id };
+    const response = await axios.delete(rootUrl + '/delete', config);
     return response;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {

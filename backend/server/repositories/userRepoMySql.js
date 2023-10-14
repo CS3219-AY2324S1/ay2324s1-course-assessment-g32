@@ -13,21 +13,22 @@ const conn = mysql.createConnection({
  * userId is null -> Cannot find user with email;
  *
  * @param {string} email
- * @returns userId
+ * @returns {userId, isMaintainer}
  */
 const findByEmail = async (email) => {
   var _userId = Number();
-
+  var _isMaintainer = Boolean();
   const query = conn
     .promise()
-    .query('SELECT id FROM users WHERE email=?;', [email])
+    .query('SELECT id, isMaintainer FROM users WHERE email=?;', [email])
     .then(([rows, fields]) => {
       _userId = rows.length ? rows[0].id : null;
+      _isMaintainer = rows.length ? rows[0].isMaintainer : null;
     })
     .catch(console.error);
 
-  await query; // Wait for uid to be updated
-  return _userId;
+  await query; // Wait for uid and isMaintainer to be updated
+  return { userId: _userId, isMaintainer: _isMaintainer };
 };
 
 const createUser = async (email, password) => {
@@ -56,7 +57,7 @@ const createUser = async (email, password) => {
 
 const getUserInfoByEmail = async (email) => {
   var _userId = Number();
-  await findByEmail(email).then((id) => (_userId = id));
+  await findByEmail(email).then((userInfo) => (_userId = userInfo._userId));
 
   if (!_userId) throw 'No user is using ' + email;
 
@@ -83,7 +84,6 @@ const getAllUserInfo = async () => {
 
 const getUserInfoById = async (userId) => {
   var _userInfo = {};
-
   const selectStmt = `SELECT * FROM users WHERE id=?;`;
 
   const query = conn

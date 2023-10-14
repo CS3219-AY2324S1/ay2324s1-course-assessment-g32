@@ -1,4 +1,5 @@
 const questionService = require('../services/questionService');
+const jwt = require('jsonwebtoken');
 
 // Define a controller function for creating questions
 const create = async (req, res) => {

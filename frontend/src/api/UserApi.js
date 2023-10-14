@@ -3,13 +3,26 @@ const env = require('../loadEnvironment');
 
 const userRootUrl = env.SERVER_URL + '/user';
 
+const getConfig = () => {
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+};
+
+const getTokenConfig = (jwtToken) => {
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + jwtToken,
+    },
+  };
+};
+
 export const signup = async (userData) => {
   try {
-    return await axios.post(userRootUrl + '/signup', userData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return await axios.post(userRootUrl + '/signup', userData, getConfig());
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -23,11 +36,7 @@ export const signup = async (userData) => {
 
 export const login = async (userData) => {
   try {
-    return await axios.post(userRootUrl + '/login', userData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return await axios.post(userRootUrl + '/login', userData, getConfig());
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -39,35 +48,11 @@ export const login = async (userData) => {
   }
 };
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (jwtToken) => {
   try {
-    const res = await axios.get(userRootUrl + '/readAll', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    return res.data.info;
-  } catch (err) {
-    if (err.code === 'ERR_NETWORK') {
-      throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
-        message: 'Network Error',
-      });
-    }
-    throw err;
-  }
-};
-
-export const getUser = async (id) => {
-  try {
-    const res = await axios.post(
-      userRootUrl + '/read',
-      { id },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
+    const res = await axios.get(
+      userRootUrl + '/readAll',
+      getTokenConfig(jwtToken)
     );
     return res.data.info;
   } catch (err) {
@@ -81,16 +66,31 @@ export const getUser = async (id) => {
   }
 };
 
-export const updateUsername = async (id, newUsername) => {
+export const getUser = async (id, jwtToken) => {
+  try {
+    const res = await axios.post(
+      userRootUrl + '/read',
+      { id },
+      getTokenConfig(jwtToken)
+    );
+    return res.data.info;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+export const updateUsername = async (id, newUsername, jwtToken) => {
   try {
     const res = await axios.post(
       userRootUrl + '/update',
       { id: id, username: newUsername },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
+      getTokenConfig(jwtToken)
     );
     return res;
   } catch (err) {
@@ -108,7 +108,8 @@ export const updatePassword = async (
   id,
   currentPassword,
   newPassword,
-  confirmPassword
+  confirmPassword,
+  jwtToken
 ) => {
   try {
     return await axios.post(
@@ -119,11 +120,7 @@ export const updatePassword = async (
         newPassword: newPassword,
         confirmPassword: confirmPassword,
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
+      getTokenConfig(jwtToken)
     );
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -136,16 +133,12 @@ export const updatePassword = async (
   }
 };
 
-export const deleteUser = async (id) => {
+export const deleteUser = async (id, jwtToken) => {
   try {
     return await axios.post(
       userRootUrl + '/delete',
       { id },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
+      getTokenConfig(jwtToken)
     );
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {

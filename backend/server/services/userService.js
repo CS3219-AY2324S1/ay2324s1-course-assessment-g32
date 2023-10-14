@@ -8,28 +8,34 @@ const verifyPassword = async (userId, givenPassword) => {
 
 const loginUser = async (email, password) => {
   try {
-    let userId = Number();
+    let userInfo = new Object();
 
     // Check for missing inputs
     if (!email || !password) {
       throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
 
-    // Check if a user with the given email exists
-    await userDatabase.findByEmail(email).then((id) => (userId = id));
+    // Check if email is valid
+    var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      throw Object.assign(new Error('Invalid email'), { status: 400 });
+    }
 
-    if (!userId) {
+    // Check if a user with the given email exists
+    await userDatabase.findByEmail(email).then((info) => (userInfo = info));
+
+    if (!userInfo.userId && !userInfo.isMaintainer) {
       throw Object.assign(new Error('Email not registered with any user'), {
         status: 410,
       });
     }
 
     // Compare the entered password with the hashed password stored in the database
-    if (!(await verifyPassword(userId, password))) {
+    if (!(await verifyPassword(userInfo.userId, password))) {
       throw Object.assign(new Error('Incorrect password'), { status: 401 });
     }
 
-    return userId;
+    return userInfo;
   } catch (err) {
     throw err;
   }
@@ -52,7 +58,7 @@ const createUser = async (email, password, confirmPassword) => {
 
     // Check if a user with the given email already exists
     const existingUserCheck = userDatabase.findByEmail(email).then((userId) => {
-      passExistingUserCheck = userId == null;
+      passExistingUserCheck = userId['userId'] === null;
     });
 
     // Check if the password is at least 8 characters long
@@ -113,7 +119,6 @@ const getUserInfo = async (userId, email) => {
  *
  * @param {int|string} userId ID of user in DB. Read-only.
  * @param {string} username New Username
- * @param {string} password New password
  */
 const updateUser = async (userId, username) => {
   try {
@@ -208,7 +213,6 @@ const changeUserPassword = async (
       throw Object.assign(new Error('Incorrect password'), { status: 401 });
     }
 
-    // Change the password
     const password = bcrypt.hashSync(newPassword, 10);
     if (!userDatabase.updatePassword(id, password)) {
       throw Object.assign(new Error('Failed to update password'), {
@@ -221,11 +225,11 @@ const changeUserPassword = async (
 };
 
 module.exports = {
-  createUser, // Create
+  loginUser,
+  createUser,
   getAllUserInfo, // Read
   getUserInfo, // Read
   updateUser, // Update
   deleteUser, // Delete
-  loginUser,
   changeUserPassword, // Update
 };
