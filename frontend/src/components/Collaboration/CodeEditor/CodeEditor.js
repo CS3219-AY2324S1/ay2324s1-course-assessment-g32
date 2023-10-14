@@ -99,7 +99,7 @@ const CodeEditor = ({ socket, roomId }) => {
   }, [language]);
 
   return (
-    <div className="code-editor">
+    <div className="editor-container">
       <div className="row">
         <label htmlFor="languageSelect" className="col-sm-2">Language:</label>
         <div className="col-sm-2">
@@ -115,7 +115,7 @@ const CodeEditor = ({ socket, roomId }) => {
           </select>
         </div>
       </div>
-      <div className="editor-container">
+      <div className="code-editor">
         <div ref={editor}></div>
       </div>
     </div>

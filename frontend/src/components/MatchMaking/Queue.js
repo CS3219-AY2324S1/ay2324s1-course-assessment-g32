@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CountdownTimer from '../CountdownTimer/CountdownTimer.js';
 import { joinQueue, exitQueue } from '../../api/QueueApi.js';
+import { getQuestionDetails } from '../../api/QuestionApi';
 import { errorHandler } from '../../utils/errors.js';
 import { showFailureToast } from '../../utils/toast.js';
 
 const Queue = ({ user, queueName, onCancel, sessionID }) => {
-
   const [status, setStatus] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,7 +25,13 @@ const Queue = ({ user, queueName, onCancel, sessionID }) => {
           const roomId = reply.data.response.roomId;
           const hostId = reply.data.response.hostId;
           const matchedHostId = reply.data.response.matchedHostId;
-          navigate('/collaboration', { state: { roomId, hostId, matchedHostId } });
+
+          // TODO: Change this to find a question that matches the matching criteria and return its id
+          // Currently, it is hardcoded to return the question with id '6523fc6aade3f2e3c54b0648'
+          const question = await getQuestionDetails('6523fc6aade3f2e3c54b0648');
+          navigate('/collaboration', {
+            state: { roomId, hostId, matchedHostId, question },
+          });
         }
       } catch (error) {
         errorHandler(error);
@@ -55,19 +61,18 @@ const Queue = ({ user, queueName, onCancel, sessionID }) => {
     }
   };
 
-
   return isLoading ? (
-    <div className='container'>
-      <div className='row d-flex justify-content-center gap-3' style={{ marginTop: '10px' }}>
+    <div className="container">
+      <div className="row d-flex justify-content-center gap-3" style={{ marginTop: '10px' }}>
         <CountdownTimer duration={30} />
-        <button className='btn btn-danger' onClick={handleCancelClick} >Cancel</button>
+        <button className="btn btn-danger" onClick={handleCancelClick}>Cancel</button>
       </div>
     </div>
   ) : (
-    <div className='container'>
-      <div className='row text-center'>
+    <div className="container">
+      <div className="row text-center">
         <p>{status}</p>
-        <button className='btn btn-secondary' onClick={handleCancelClick} >Back</button>
+        <button className="btn btn-secondary" onClick={handleCancelClick}>Back</button>
       </div>
     </div>
   );
