@@ -8,8 +8,6 @@ const AUTH_PORT = process.env.AUTH_PORT || 5001;
 
 const AUTH_URL = REACT_APP_HOST + ':' + AUTH_PORT;
 
-const MONGO_CLIENT = process.env.ATLAS_URI || '';
-
 const mysqlDbName = process.env.MY_SQL_DB_NAME || '';
 const mysqlCreds = {
   port: process.env.MY_SQL_PORT || 3306,
@@ -21,7 +19,6 @@ const mysqlCreds = {
 module.exports = {
   WEB_PORT,
   SERVER_PORT,
-  MONGO_CLIENT,
   mysqlDbName,
   mysqlCreds,
   AUTH_URL,
