@@ -8,7 +8,6 @@ const http = require("http"); // for collaboration
 const socketIo = require('socket.io'); // for collaboration
 const userRoutes = require('./server/routes/user');
 const questionRoutes = require('./server/routes/question');
-const queueRoutes = require('./server/routes/queue');
 const env = require('./loadEnvironment');
 
 console.log('Starting server ...');
@@ -19,7 +18,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/user', userRoutes);
 app.use('/question', questionRoutes);
-app.use('/queue', queueRoutes);
 app.listen(env.SERVER_PORT, () => {
   console.log(`Server is running on port: ${env.SERVER_PORT}`);
 });
