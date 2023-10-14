@@ -5,15 +5,14 @@ const bodyParser = require('body-parser');
 const userRoutes = require('./server/route/user');
 const env = require('./loadEnvironment');
 
-console.log('Starting server ...');
+console.log('Starting UserService ...');
 
-// start the Express (web) server
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/user', userRoutes);
 app.listen(env.USER_PORT, () => {
-  console.log(`Server is running on port: ${env.USER_PORT}`);
+  console.log(`UserService is running on port: ${env.USER_PORT}`);
 });
 
 try {
