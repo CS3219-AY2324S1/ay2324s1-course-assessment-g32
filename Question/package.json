@@ -4,7 +4,8 @@
   "description": "",
   "main": "QuestionServer.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon QuestionServer.js",
+    "start": "nodemon QuestionServer.js"
   },
   "author": "",
   "license": "ISC",
@@ -15,5 +16,8 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mongoose": "^7.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

@@ -12,8 +12,8 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/question', questionRoutes);
-app.listen(env.SERVER_PORT, () => {
-  console.log(`Server is running on port: ${env.SERVER_PORT}`);
+app.listen(env.QUESTION_PORT, () => {
+  console.log(`Server is running on port: ${env.QUESTION_PORT}`);
 });
 
 try {
