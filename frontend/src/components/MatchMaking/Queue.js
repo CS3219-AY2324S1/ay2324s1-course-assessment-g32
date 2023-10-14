@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CountdownTimer from '../CountdownTimer/CountdownTimer.js';
-import { joinQueue, exitQueue } from '../../api/QueueApi.js';
+import { joinQueue, exitQueue } from '../../api/MatchApi.js';
 import { errorHandler } from '../../utils/errors.js';
 import { showFailureToast } from '../../utils/toast.js';
 
