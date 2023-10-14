@@ -23,7 +23,6 @@ app.listen(env.SERVER_PORT, () => {
 });
 
 try {
-  // MongoDB
   mongoose.connect(env.MONGO_CLIENT, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -37,11 +36,11 @@ try {
     console.error('MongoDB database connection error:', error);
   });
 
-
   // MySQL
   const mysqlDb = mysql.createConnection({
     ...env.mysqlCreds,
-    ...{ database: env.mysqlDbName }
+    ...{ database: env.mysqlDbName },
+
   });
 
   mysqlDb.connect((error) => {
@@ -49,7 +48,6 @@ try {
       throw new Error('MySQL database connection error:' + error.message);
     console.log('SUCCESS: Connected to the MySQL database');
   });
-
 
   // Collaboration
   const httpServer = http.createServer();
