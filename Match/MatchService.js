@@ -26,7 +26,7 @@ const rabbitMQserver = async () => {
 
   await channel.assertQueue('commonQueue', { durable: false });
 
-  console.log('Queueing service is running...');
+  console.log('Matching service is running...');
 
   // Consume from the common queue
   channel.consume('commonQueue', async (message) => {

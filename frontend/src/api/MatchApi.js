@@ -3,10 +3,13 @@ const env = require("../loadEnvironment");
 
 const rootUrl = env.MATCH_URL + '/queue';
 
-const config = {
-  headers: {
-    'Content-Type': 'application/json'
-  }
+const getConfig = (jwtToken) => {
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + jwtToken,
+    },
+  };
 };
 
 export const joinQueue = async (jwt, queueName, sessionID) => {
@@ -16,7 +19,7 @@ export const joinQueue = async (jwt, queueName, sessionID) => {
       queueName: queueName,
       sessionID: sessionID
     };
-    return await axios.post(rootUrl + "/join", data, config);
+    return await axios.post(rootUrl + "/join", data, getConfig(jwt));
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
@@ -32,7 +35,7 @@ export const exitQueue = async (jwt, queueName, sessionID) => {
       queueName: queueName,
       sessionID: sessionID
     };
-    return await axios.post(rootUrl + "/exit", data, config);
+    return await axios.post(rootUrl + "/exit", data, getConfig(jwt));
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), { response: { status: 408 }, message: 'Network Error' });
