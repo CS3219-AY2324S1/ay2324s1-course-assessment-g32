@@ -39,7 +39,7 @@ For development, you may also want to install:
 ## Install NodeJS packages
 
 ```
-npm i install-all && npm run install-all && cd Auth && npm i && cd ..
+npm i install-all && npm run install-all
 ```
 
 # Start Application
