@@ -20,7 +20,6 @@ For development, you may also want to install:
 1. Search for **MySQL 8.1 Command Line Client** on your computer. Execute it to open up the terminal.
 2. Enter your root password.
 3. Run the SQL statements in `./backend/schema.sql` on the terminal.
-4. Run the SQL statements in `./Auth/schema.sql` on the terminal.
 
 ## Setup environment variables
 
@@ -47,14 +46,13 @@ npm i install-all && npm run install-all && cd Auth && npm i && cd ..
 
 Start local MySQL Server (Windows Service), if necessary.
 
-Start all services using the following commands (run them in different terminals):
+Start all services using the following commands:
 
 ```
 npm run start-all
-cd Auth && npm start
 ```
 
-Or start them indvidually:
+Or start them indvidually (run them in different terminals):
 
 - Frontend: `cd frontend && npm start`
 - Backend: `cd backend && npm start`

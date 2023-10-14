@@ -83,9 +83,6 @@ const getAllUserInfo = async () => {
 };
 
 const getUserInfoById = async (userId) => {
-  // idk why this is needed but there was error in the SQL syntax here if i dont do this
-  // userId = userId['_userId'];
-
   var _userInfo = {};
   const selectStmt = `SELECT * FROM users WHERE id=?;`;
 
