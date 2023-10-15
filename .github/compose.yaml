@@ -4,7 +4,7 @@ networks:
 
 services:
   user-db:
-    container_name: PeerPrepUsers
+    container_name: user-db
     env_file: ../../.env
     expose:
       - 3306
@@ -15,3 +15,5 @@ services:
       - '3306:3306'
     volumes:
       - ../../User/initdb:/docker-entrypoint-initdb.d
+  # user:
+  #   container_name: user-service
