@@ -1,4 +1,4 @@
-const questionModel = require('../model/QuestionModel');
+const questionModel = require('./QuestionModel');
 
 const createQuestion = async (title, complexity, description, tags) => {
   try {

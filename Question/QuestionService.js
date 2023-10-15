@@ -1,4 +1,4 @@
-const questionRepository = require('../repository/QuestionRepository');
+const questionRepository = require('./QuestionRepository');
 
 const missingInputsThrowsValidationError = (title, complexity, description) => {
   const innerText = description.replace(/<[^>]+>|\s+/g, '');
