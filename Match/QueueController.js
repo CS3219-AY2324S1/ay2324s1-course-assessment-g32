@@ -1,4 +1,4 @@
-const queueService = require('../services/queueService');
+const queueService = require('./services/producerService.js');
 
 const joinQueue = async (req, res) => {
   try {

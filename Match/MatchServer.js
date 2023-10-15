@@ -2,9 +2,9 @@ const amqp = require('amqplib');
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
-const queueRoutes = require('./server/routes/queue');
-const consume = require('./server/services/consumeService');
-const env = require('./loadEnvironment');
+const queueRoutes = require('./QueueRoutes.js');
+const consume = require('./services/consumerService.js');
+const env = require('./loadEnvironment.js');
 
 console.log('Starting server ...');
 

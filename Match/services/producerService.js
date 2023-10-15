@@ -1,7 +1,7 @@
 const amqp = require('amqplib');
 const { v4: uuidv4 } = require('uuid');
-const authApi = require('../api/AuthApi.js');
-const url = 'amqp://localhost';
+const authApi = require('../helpers/callsToAuth.js');
+const env = require('../loadEnvironment.js');
 
 // Generate a unique id
 const generateUuid = () => {
@@ -15,7 +15,7 @@ const generateUuid = () => {
   The requester (client) consumes the response to get the result.
 */
 const joinQueue = async (jwt, queueName, sessionID) => {
-  const connection = await amqp.connect(url);
+  const connection = await amqp.connect(env.RABBITMQ_URL);
   const channel = await connection.createChannel();
 
   const requestQueue = queueName;
@@ -71,7 +71,7 @@ const joinQueue = async (jwt, queueName, sessionID) => {
 
 // Send an exit request to the request queue
 const exitQueue = async (jwt, queueName, sessionID) => {
-  const connection = await amqp.connect(url);
+  const connection = await amqp.connect(env.RABBITMQ_URL);
   const channel = await connection.createChannel();
 
   const requestQueue = queueName;
