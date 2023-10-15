@@ -1,11 +1,11 @@
 {
-  "name": "User",
+  "name": "user",
   "version": "1.0.0",
   "description": "",
-  "main": "User.js",
+  "main": "UserServer.js",
   "scripts": {
-    "dev": "nodemon User.js",
-    "start": "node User.js"
+    "dev": "nodemon UserServer.js",
+    "start": "node UserServer.js"
   },
   "author": "",
   "license": "ISC",
