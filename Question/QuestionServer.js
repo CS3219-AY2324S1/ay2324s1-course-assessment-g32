@@ -2,7 +2,7 @@ const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const questionRoutes = require('./QuestionRoute');
+const questionRoutes = require('./QuestionRoutes');
 const env = require('./loadEnvironment');
 
 console.log('Starting QuestionServer ...');
