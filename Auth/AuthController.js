@@ -1,6 +1,6 @@
-const { getJwtToken } = require('#helpers/jwt.js');
+const { getJwtToken } = require('./helpers/jwt.js');
 const jwt = require('jsonwebtoken');
-const env = require('#loadEnvironment.js');
+const env = require('./loadEnvironment.js');
 
 // Used by login requests
 const generate = async (req, res) => {
