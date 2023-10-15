@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const userRoutes = require('#UserRoutes.js');
 const env = require('#loadEnvironment.js');
 
-console.log('Starting User server...');
+console.log('Starting UserServer...');
 
 const app = express();
 app.use(cors());

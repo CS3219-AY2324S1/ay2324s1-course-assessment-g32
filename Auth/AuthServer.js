@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('#AuthRoutes.js');
 const env = require('#loadEnvironment.js');
 
-console.log('Starting Auth server ...');
+console.log('Starting AuthServer ...');
 
 const app = express();
 app.use(cors());
