@@ -12,6 +12,7 @@ jobs:
         run: |
           mv template.env .env
           cat .env
+          echo triggered
 
       - name: Start Containers
         run: docker compose up

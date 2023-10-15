@@ -5,7 +5,7 @@ networks:
 services:
   user-db:
     container_name: user-db
-    env_file: ../../.env
+    env_file: .env
     expose:
       - 3306
     image: mysql/mysql-server:latest
@@ -14,6 +14,6 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - ../../User/initdb:/docker-entrypoint-initdb.d
+      - ./User/initdb:/docker-entrypoint-initdb.d
   # user:
   #   container_name: user-service
