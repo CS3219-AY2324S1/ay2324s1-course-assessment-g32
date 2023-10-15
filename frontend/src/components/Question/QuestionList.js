@@ -6,19 +6,23 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import MatchingModal from '../MatchMaking/MatchingModal.js';
 import { getQuestions } from '../../api/QuestionApi.js';
 import { errorHandler } from '../../utils/errors.js';
+import { getIsMaintainer, getCookie } from '../../utils/helpers.js';
 
 const QuestionList = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isMatchingModalOpen, setMatchingModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [isMaintainer, setIsMaintainer] = React.useState(false);
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
   useEffect(() => {
     const fetchDataAndInitializeTable = async () => {
       try {
-        const questions = await getQuestions();
+        const questions = await getQuestions(getCookie());
+        const isMaintainerResponse = await getIsMaintainer();
+        setIsMaintainer(isMaintainerResponse);
         setTableData(questions);
         setIsLoading(false);
       } catch (error) {
@@ -77,10 +81,14 @@ const QuestionList = () => {
   const questionList = tableData.map((question, index) => (
     <tr key={question._id} onClick={() => handleRowClick(question._id)}>
       <th scope='row'>{index + 1}</th>
-      <td>{question.title}</td>
+      <td style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
+        {question.title}
+      </td>
       <td>{RenderTags(question.tags)}</td>
       <td>
-        <span className={`badge ${getComplexityColor(question?.complexity)}`}>{question.complexity} </span>
+        <span className={`badge ${getComplexityColor(question?.complexity)}`}>
+          {question.complexity}{' '}
+        </span>
       </td>
     </tr>
   ));
@@ -112,9 +120,14 @@ const QuestionList = () => {
         <tbody className='table-group-divider'>{questionList}</tbody>
       </table>
       <div className='text-md-end'>
-        <button type='button' className='btn btn-success' onClick={handleNewQuestionClick}>
-          Add
-        </button>
+        {isMaintainer ? (
+          <button
+            type='button'
+            className='btn btn-success'
+            onClick={handleNewQuestionClick}>
+            Add
+          </button>
+        ) : null}
       </div>
       <div className='text-md-end'>
         <button type="button" className="btn btn-primary" onClick={handleToggleModal}>

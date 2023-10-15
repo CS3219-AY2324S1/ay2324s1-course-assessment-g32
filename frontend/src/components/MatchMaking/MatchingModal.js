@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { exitQueue } from '../../api/MatchApi.js';
+import { getCookie } from '../../utils/helpers.js';
 import Queue from './Queue';
-import { exitQueue } from '../../api/QueueApi.js';
 import '../../css/Modal.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -12,21 +13,16 @@ const MatchingModal = ({ isOpen, onClose }) => {
   const [complexity, setComplexity] = useState('Easy');
   const [programmingLanguage, setProgrammingLanguage] = useState('');
   const [sessionID, setSessionID] = useState('');
+  const [jwt, setJwt] = useState('');
 
-  const storedUser = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!storedUser) {
-      navigate('/login');
-    }
-  }, [navigate, storedUser]);
-
-  useEffect(() => {
+    setJwt(getCookie());
     const handleExitTab = async () => {
       if (isFindingMatch) {
         const queueName = complexity + programmingLanguage;
-        await exitQueue(storedUser, queueName);
+        await exitQueue(jwt, queueName);
       }
     };
     // Add event listeners for closing the tab
@@ -53,7 +49,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
   const handleClosingModal = () => {
     if (isFindingMatch) {
       const queueName = complexity + programmingLanguage;
-      exitQueue(storedUser, queueName, sessionID);
+      exitQueue(jwt, queueName, sessionID);
     }
     onClose();
     setIsFindingMatch(false);
@@ -72,7 +68,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
             {isFindingMatch ? (
               <div className="modal-body">
                 <Queue
-                  user={storedUser}
+                  jwt={jwt}
                   queueName={complexity + programmingLanguage}
                   onCancel={handleMatchingToggle}
                   sessionID={sessionID}
