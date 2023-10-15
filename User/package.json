@@ -1,11 +1,11 @@
 {
-  "name": "UserService",
+  "name": "User",
   "version": "1.0.0",
   "description": "",
-  "main": "UserService.js",
+  "main": "User.js",
   "scripts": {
-    "dev": "nodemon UserService.js",
-    "start": "nodemon UserService.js"
+    "dev": "nodemon User.js",
+    "start": "node User.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,5 +20,9 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
+  },
+  "imports": {
+    "#helpers/*.js": "./helpers/*.js",
+    "#*.js": "./*.js"
   }
 }
