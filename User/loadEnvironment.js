@@ -2,13 +2,10 @@ require('dotenv').config({ path: `${__dirname}/../.env` });
 
 const REACT_APP_HOST = process.env.REACT_APP_HOST || 'http://localhost';
 
-const WEB_PORT = process.env.WEB_PORT || 3000;
-const SERVER_PORT = process.env.SERVER_PORT || 3001;
+const USER_PORT = process.env.USER_PORT || 4001;
+
 const AUTH_PORT = process.env.AUTH_PORT || 5001;
-
 const AUTH_URL = REACT_APP_HOST + ':' + AUTH_PORT;
-
-const MONGO_CLIENT = process.env.ATLAS_URI || '';
 
 const mysqlDbName = process.env.MY_SQL_DB_NAME || '';
 const mysqlCreds = {
@@ -19,9 +16,7 @@ const mysqlCreds = {
 };
 
 module.exports = {
-  WEB_PORT,
-  SERVER_PORT,
-  MONGO_CLIENT,
+  USER_PORT,
   mysqlDbName,
   mysqlCreds,
   AUTH_URL,

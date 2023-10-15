@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-const env = require('../../loadEnvironment.js');
+const env = require('./loadEnvironment.js');
 
 const conn = mysql.createConnection({
   ...env.mysqlCreds,

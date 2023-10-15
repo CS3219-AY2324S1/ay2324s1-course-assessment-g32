@@ -6,12 +6,14 @@
     },
     "scripts": {
         "install-all": "npm install && npm-run-all -p install:*",
-        "install:backend": "cd backend && npm install",
         "install:frontend": "cd frontend && npm install",
         "install:auth": "cd Auth && npm install",
+        "install:question": "cd Question && npm install",
+        "install:user": "cd User && npm install",
         "start-all": "npm-run-all -p start:*",
-        "start:backend": "cd backend && npm start",
         "start:frontend": "cd frontend && npm start",
-        "start:auth": "cd Auth && npm start"
+        "start:auth": "cd Auth && npm start",
+        "start:question": "cd Question && npm start",
+        "start:user": "cd User && npm start"
     }
 }
