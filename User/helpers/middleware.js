@@ -1,4 +1,4 @@
-const authApi = require('#helpers/callsToAuth.js');
+const authApi = require('./callsToAuth.js');
 
 const getToken = async (req, res) => {
   try {
