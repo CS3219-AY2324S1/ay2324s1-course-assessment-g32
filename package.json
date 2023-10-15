@@ -1,7 +1,5 @@
 {
     "dependencies": {
-        "install-all": "^1.1.0",
-        "npm-install-all": "^1.1.21",
         "npm-run-all": "^4.1.5"
     },
     "scripts": {
@@ -10,16 +8,13 @@
         "install:frontend": "cd frontend && npm install",
         "install:auth": "cd Auth && npm install",
         "install:user": "cd User && npm install",
-        
         "start-all": "npm-run-all -p start:*",
         "start:backend": "cd backend && npm start",
         "start:frontend": "cd frontend && npm start",
         "start:auth": "cd Auth && npm start",
         "start:user": "cd User && npm start",
-
         "dev-all": "npm-run-all -p dev:*",
         "dev:backend": "cd backend && npm run dev",
-        "dev:frontend": "cd frontend && npm run dev",
         "dev:auth": "cd Auth && npm run ev",
         "dev:user": "cd User && npm run dev"
     }

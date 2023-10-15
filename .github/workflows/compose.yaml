@@ -1,0 +1,17 @@
+networks:
+  local-bridge:
+    driver: bridge
+
+services:
+  user-db:
+    container_name: PeerPrepUsers
+    env_file: ../../.env
+    expose:
+      - 3306
+    image: mysql/mysql-server:latest
+    networks:
+      - local-bridge
+    ports:
+      - '3306:3306'
+    volumes:
+      - ../../User/initdb:/docker-entrypoint-initdb.d
