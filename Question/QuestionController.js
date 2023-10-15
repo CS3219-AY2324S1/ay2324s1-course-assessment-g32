@@ -1,5 +1,4 @@
-const questionService = require('../services/questionService');
-const jwt = require('jsonwebtoken');
+const questionService = require('./QuestionService');
 
 // Define a controller function for creating questions
 const create = async (req, res) => {

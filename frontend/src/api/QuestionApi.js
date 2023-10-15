@@ -1,7 +1,7 @@
 import axios from 'axios';
 const env = require('../loadEnvironment');
 
-const rootUrl = env.SERVER_URL + '/question';
+const questionRootUrl = env.QUESTION_URL + '/question';
 
 const getConfig = (jwtToken) => {
   return {
@@ -27,7 +27,7 @@ export const createQuestion = async (
       tags: tags,
     };
     return await axios.post(
-      rootUrl + '/create',
+      questionRootUrl + '/create',
       questionData,
       getConfig(jwtToken)
     );
@@ -44,7 +44,7 @@ export const createQuestion = async (
 
 export const getQuestions = async (jwtToken) => {
   try {
-    const response = await axios.get(rootUrl + '/getAll', getConfig(jwtToken));
+    const response = await axios.get(questionRootUrl + '/getAll', getConfig(jwtToken));
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -62,7 +62,7 @@ export const getQuestionDetails = async (questionId, jwtToken) => {
     let config = getConfig(jwtToken);
     config.params = { id: questionId };
     const questionDetails = await axios.get(
-      rootUrl + '/getQuestionDetails',
+      questionRootUrl + '/getQuestionDetails',
       config
     );
     return questionDetails.data.question;
@@ -94,7 +94,7 @@ export const editQuestion = async (
       tags: tags,
     };
     return await axios.post(
-      rootUrl + '/edit',
+      questionRootUrl + '/edit',
       questionData,
       getConfig(jwtToken)
     );
@@ -113,7 +113,7 @@ export const deleteQuestion = async (id, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { id: id };
-    const response = await axios.delete(rootUrl + '/delete', config);
+    const response = await axios.delete(questionRootUrl + '/delete', config);
     return response;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
