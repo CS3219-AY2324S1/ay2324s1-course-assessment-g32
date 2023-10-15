@@ -5,7 +5,7 @@
   "main": "UserService.js",
   "scripts": {
     "dev": "nodemon UserService.js",
-    "start": "nodemon UserService.js"
+    "start": "node UserService.js"
   },
   "author": "",
   "license": "ISC",
