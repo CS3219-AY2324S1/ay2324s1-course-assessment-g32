@@ -1,12 +1,11 @@
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
-const authRoutes = require('./server/route/auth.js');
-const env = require('./loadEnvironment');
+const authRoutes = require('#AuthRoutes.js');
+const env = require('#loadEnvironment.js');
 
-console.log('Starting server ...');
+console.log('Starting AuthServer ...');
 
-// start the Express (web) server
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());

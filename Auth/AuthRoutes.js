@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const authController = require('../controller/authController.js');
+const authController = require('#AuthController.js');
 
 router.post('/generate', authController.generate);
 router.get('/authorize', authController.authorize);
