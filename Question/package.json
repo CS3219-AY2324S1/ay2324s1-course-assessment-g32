@@ -5,7 +5,7 @@
   "main": "QuestionServer.js",
   "scripts": {
     "dev": "nodemon QuestionServer.js",
-    "start": "nodemon QuestionServer.js"
+    "start": "node QuestionServer.js"
   },
   "author": "",
   "license": "ISC",
