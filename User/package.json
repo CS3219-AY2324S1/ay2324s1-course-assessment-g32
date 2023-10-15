@@ -21,9 +21,5 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
-  },
-  "imports": {
-    "#helpers/*.js": "./helpers/*.js",
-    "#*.js": "./*.js"
   }
 }
