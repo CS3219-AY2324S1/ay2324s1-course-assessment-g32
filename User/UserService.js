@@ -1,4 +1,4 @@
-const userDatabase = require('#UserRepository.js');
+const userDatabase = require('./UserRepository.js');
 const bcrypt = require('bcrypt');
 
 const verifyPassword = async (userId, givenPassword) => {
