@@ -1,8 +1,8 @@
 {
-  "name": "UserService",
+  "name": "user",
   "version": "1.0.0",
   "description": "",
-  "main": "UserService.js",
+  "main": "UserServer.js",
   "scripts": {
     "dev": "nodemon UserService.js",
     "start": "node UserService.js"
@@ -20,5 +20,9 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
+  },
+  "imports": {
+    "#helpers/*.js": "./helpers/*.js",
+    "#*.js": "./*.js"
   }
 }

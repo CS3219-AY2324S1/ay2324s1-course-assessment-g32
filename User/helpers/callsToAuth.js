@@ -1,5 +1,5 @@
 axios = require('axios');
-const env = require('../../../User/loadEnvironment.js');
+const env = require('#loadEnvironment.js');
 
 const authRootUrl = env.AUTH_URL + '/auth';
 
