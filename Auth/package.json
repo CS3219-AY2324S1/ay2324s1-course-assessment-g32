@@ -4,8 +4,8 @@
     "description": "",
     "main": "AuthServer.js",
     "scripts": {
-        "dev": "nodemon AuthService.js",
-        "start": "node AuthService.js"
+        "dev": "nodemon AuthServer.js",
+        "start": "node AuthServer.js"
     },
     "keywords": [],
     "author": "",
