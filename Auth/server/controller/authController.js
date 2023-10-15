@@ -1,4 +1,4 @@
-const { getJwtToken } = require('../helpers/jwt.js');
+const { getJwtToken } = require('../helper/jwt.js');
 const jwt = require('jsonwebtoken');
 const env = require('../../loadEnvironment.js');
 

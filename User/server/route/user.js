@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const userController = require('../../../backend/server/controllers/userController.js');
-const middleware = require('../middleware.js');
+const userController = require('../../../User/server/controller/userController.js');
+const middleware = require('../../../User/server/middleware.js');
 
 // Get JWT token after logging in
 router.post('/login', userController.login, middleware.getToken);

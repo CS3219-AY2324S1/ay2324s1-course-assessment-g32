@@ -1,7 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
-const authRoutes = require('./server/routes/auth.js');
+const authRoutes = require('./server/route/auth.js');
 const env = require('./loadEnvironment');
 
 console.log('Starting server ...');
@@ -14,4 +14,3 @@ app.use('/auth', authRoutes);
 app.listen(env.AUTH_PORT, () => {
   console.log(`Server is running on port: ${env.AUTH_PORT}`);
 });
-
