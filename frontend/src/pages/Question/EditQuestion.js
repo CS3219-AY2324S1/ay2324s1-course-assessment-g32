@@ -65,20 +65,20 @@ const EditQuestion = () => {
   return isLoading ? (
     <Spinner />
   ) : (
-    <div className="landing">
+    <div className='landing'>
       <Header />
-      <div className="container">
-        <div className="card">
-          <div className="card-header text-center">
+      <div className='container'>
+        <div className='card'>
+          <div className='card-header text-center'>
             <h2>Edit</h2>
           </div>
-          <div className="card-body">
+          <div className='card-body'>
             <QuestionForm oldFormData={formData} onFormSubmit={handleSaveClick} />
           </div>
-          <div className="card-footer">
-            <div className="d-flex justify-content-between">
-              <button type="button" className="btn btn-secondary" onClick={handleBackClick}>Back</button>
-              <button type="submit" form="questionForm" className="btn btn-success">Save</button>
+          <div className='card-footer'>
+            <div className='d-flex justify-content-between'>
+              <button type='button' className='btn btn-secondary' onClick={handleBackClick}>Back</button>
+              <button type='submit' form='questionForm' className='btn btn-success'>Save</button>
             </div>
           </div>
           {isEditWindowOpen && (

@@ -30,15 +30,15 @@ const Collaboration = () => {
   };
 
   return (
-    <div className="collaboration-container">
-      <div className="header">
+    <div className='collaboration-container'>
+      <div className='header'>
         <h1>Collaboration</h1>
       </div>
-      <div className="content">
-        <div className="left">
+      <div className='content'>
+        <div className='left'>
           <QuestionContent question={question} />
         </div>
-        <div className="right">
+        <div className='right'>
           <CodeEditor socket={socket} roomId={roomId} />
           <Chat socket={socket} roomId={roomId} host={hostId} />
         </div>

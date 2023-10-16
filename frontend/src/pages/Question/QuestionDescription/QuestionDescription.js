@@ -71,24 +71,24 @@ const QuestionDescription = () => {
   return isLoading ? (
     <Spinner />
   ) : (
-    <div className="landing">
+    <div className='landing'>
       <Header />
-      <div className="container question-container">
-        <div className="card text-center">
-          <div className="card-header">
-            <div className="d-flex justify-content-between">
-              <button type="button" className="btn btn-secondary" onClick={handleBackClick}>Back</button>
+      <div className='container question-container'>
+        <div className='card text-center'>
+          <div className='card-header'>
+            <div className='d-flex justify-content-between'>
+              <button type='button' className='btn btn-secondary' onClick={handleBackClick}>Back</button>
               {isMaintainer ? (
                 <div>
-                  <button type="button" className="btn btn-primary me-2" onClick={handleEditClick}>Edit</button>
-                  <button type="button" className="btn btn-danger" onClick={handleDeleteClick}>Delete</button>
+                  <button type='button' className='btn btn-primary me-2' onClick={handleEditClick}>Edit</button>
+                  <button type='button' className='btn btn-danger' onClick={handleDeleteClick}>Delete</button>
                 </div>
               ) : (
                 <></>
               )}
             </div>
           </div>
-          <div className="qc-container">
+          <div className='qc-container'>
             <QuestionContent question={question} />
           </div>
         </div>

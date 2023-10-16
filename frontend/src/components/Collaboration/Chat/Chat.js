@@ -35,8 +35,8 @@ const Chat = ({ socket, roomId, host }) => {
   }, []);
 
   return (
-    <div className="chat-container">
-      <div className="chat-messages">
+    <div className='chat-container'>
+      <div className='chat-messages'>
         {messages.map((msg, index) => (
           <div
             key={index}
@@ -44,15 +44,15 @@ const Chat = ({ socket, roomId, host }) => {
           >
             {msg.text}
             {msg.timestamp && (
-              <small className="timestamp">{msg.timestamp}</small>
+              <small className='timestamp'>{msg.timestamp}</small>
             )}
           </div>
         ))}
       </div>
-      <div className="chat-input">
+      <div className='chat-input'>
         <input
-          type="text"
-          placeholder="Enter a message"
+          type='text'
+          placeholder='Enter a message'
           value={inputMessage}
           onChange={handleInputChange}
         />

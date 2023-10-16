@@ -11,14 +11,14 @@ import './Landing.css';
 
 function Landing() {
   return (
-    <div className="landing">
+    <div className='landing'>
       <Header />
-      <div className="body">
+      <div className='body'>
         <Routes>
-          <Route path="/" element={<QuestionList />} />
-          <Route path="/question/:id" element={<QuestionDescription />} />
-          <Route path="/edit/:id" element={<EditQuestion />} />
-          <Route path="/new" element={<CreateQuestion />} />
+          <Route path='/' element={<QuestionList />} />
+          <Route path='/question/:id' element={<QuestionDescription />} />
+          <Route path='/edit/:id' element={<EditQuestion />} />
+          <Route path='/new' element={<CreateQuestion />} />
         </Routes>
       </div>
     </div>
