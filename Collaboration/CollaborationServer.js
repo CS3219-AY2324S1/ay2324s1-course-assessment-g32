@@ -1,16 +1,8 @@
-const cors = require('cors');
-const express = require('express');
-const bodyParser = require('body-parser');
+const http = require('http');
+const socketIo = require('socket.io');
 const env = require('./loadEnvironment.js');
 
 console.log('Starting CollaborationServer...');
-
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
-app.listen(env.COLLAB_PORT, () => {
-  console.log(`CollaborationServer is running on port: ${env.COLLAB_PORT}`);
-});
 
 try {
   const httpServer = http.createServer();
@@ -55,9 +47,14 @@ try {
       io.to(data.room).emit('languageUpdate', data.updatedLanguage); // Broadcast language to everyone in the room
     });
 
+    // Handle disconnects
     socket.on('disconnect', () => {
       console.log('A user disconnected');
     });
+  });
+
+  httpServer.listen(env.COLLAB_PORT, () => {
+    console.log(`Socket.IO server is running on port: ${env.COLLAB_PORT}`);
   });
 } catch (err) {
   console.error(err);

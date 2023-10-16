@@ -1,4 +1,4 @@
-import CreateQuestion from './CreateQuestion/CreateQuestion';
+import CreateQuestion from './CreateQuestion';
 import EditQuestion from './EditQuestion';
 import QuestionDescription from './QuestionDescription/QuestionDescription';
 

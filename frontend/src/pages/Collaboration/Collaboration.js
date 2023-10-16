@@ -5,7 +5,7 @@ import Chat from '../../components/Collaboration/Chat/Chat';
 import CodeEditor from '../../components/Collaboration/CodeEditor/CodeEditor';
 import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
 import './Collaboration.css';
-const env = require('../loadEnvironment.js');
+import env from '../../loadEnvironment';
 
 const Collaboration = () => {
   const location = useLocation();
@@ -20,7 +20,7 @@ const Collaboration = () => {
   const socket = io(env.COLLAB_URL);
 
   useEffect(() => {
-    // Join the Socket.io room when the component mounts
+    // Join the Socket.io roozgm when the component mounts
     socket.emit('joinRoom', { room: roomId, host: hostId });
   }, []);
 
