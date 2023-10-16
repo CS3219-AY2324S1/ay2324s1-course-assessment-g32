@@ -9,7 +9,6 @@ import { errorHandler } from '../../utils/errors.js';
 import { getIsMaintainer, getCookie } from '../../utils/helpers.js';
 
 const QuestionList = () => {
-
   const [isLoading, setIsLoading] = useState(true);
   const [isMatchingModalOpen, setMatchingModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
@@ -61,7 +60,11 @@ const QuestionList = () => {
 
   const RenderTags = (tags) => {
     return tags?.map((tag, index) => {
-      return <span key={index} className="badge bg-secondary">{tag}</span>
+      return (
+        <span key={index} className="badge bg-secondary">
+          {tag}
+        </span>
+      );
     });
   };
 
@@ -80,7 +83,7 @@ const QuestionList = () => {
 
   const questionList = tableData.map((question, index) => (
     <tr key={question._id} onClick={() => handleRowClick(question._id)}>
-      <th scope='row'>{index + 1}</th>
+      <th scope="row">{index + 1}</th>
       <td style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
         {question.title}
       </td>
@@ -94,47 +97,57 @@ const QuestionList = () => {
   ));
 
   return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
+    <div className="spinner-border text-primary" role="status">
+      <span className="visually-hidden">Loading...</span>
     </div>
   ) : (
-    <div className='container'>
+    <div className="container">
       <h1>Question List</h1>
-      <table ref={tableRef} className='table table-hover table-striped'>
-        <thead className='table-dark'>
+      <table ref={tableRef} className="table table-hover table-striped">
+        <thead className="table-dark">
           <tr>
-            <th scope='col' width='100'>
+            <th scope="col" width="100">
               No.
             </th>
-            <th scope='col' width='800'>
+            <th scope="col" width="800">
               Title
             </th>
-            <th scope='col' width='200'>
+            <th scope="col" width="200">
               Tag
             </th>
-            <th scope='col' width='200'>
+            <th scope="col" width="200">
               Complexity
             </th>
           </tr>
         </thead>
-        <tbody className='table-group-divider'>{questionList}</tbody>
+        <tbody className="table-group-divider">{questionList}</tbody>
       </table>
-      <div className='text-md-end'>
+      <div className="text-md-end">
         {isMaintainer ? (
           <button
-            type='button'
-            className='btn btn-success'
-            onClick={handleNewQuestionClick}>
+            type="button"
+            className="btn btn-success"
+            onClick={handleNewQuestionClick}
+          >
             Add
           </button>
         ) : null}
       </div>
-      <div className='text-md-end'>
-        <button type="button" className="btn btn-primary" onClick={handleToggleModal}>
+      <div className="text-md-end">
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={handleToggleModal}
+        >
           Match
         </button>
       </div>
-      {isMatchingModalOpen && <MatchingModal isOpen={isMatchingModalOpen} onClose={handleToggleModal} />}
+      {isMatchingModalOpen && (
+        <MatchingModal
+          isOpen={isMatchingModalOpen}
+          onClose={handleToggleModal}
+        />
+      )}
     </div>
   );
 };
