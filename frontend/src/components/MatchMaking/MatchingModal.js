@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { exitQueue } from '../../api/MatchApi.js';
 import { getCookie } from '../../utils/helpers.js';
 import Queue from './Queue';
-import '../../css/Modal.css'
+import '../../css/Modal.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -57,16 +57,18 @@ const MatchingModal = ({ isOpen, onClose }) => {
 
   return (
     <div>
-      <div className="modal-backdrop fade show"></div>
-      <div className={`modal fade ${isOpen ? 'show' : ''}`} tabIndex="-1" style={{ display: isOpen ? 'block' : 'none' }}>
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Match with other users to collaborate!</h5>
-              <button type="button" className="btn-close" onClick={handleClosingModal}></button>
+      <div className='modal-backdrop fade show'></div>
+      <div className={`modal fade ${isOpen ? 'show' : ''}`} tabIndex='-1' style={{ display: isOpen ? 'block' : 'none' }}>
+        <div className='modal-dialog modal-dialog-centered'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h5 className='modal-title'>
+                Match with other users to collaborate!
+              </h5>
+              <button type='button' className='btn-close' onClick={handleClosingModal}></button>
             </div>
             {isFindingMatch ? (
-              <div className="modal-body">
+              <div className='modal-body'>
                 <Queue
                   jwt={jwt}
                   queueName={complexity + programmingLanguage}
@@ -76,10 +78,10 @@ const MatchingModal = ({ isOpen, onClose }) => {
               </div>
             ) : (
               <div>
-                <div className="modal-body">
-                  <form className='create-question-form needs-validation' >
+                <div className='modal-body'>
+                  <form className='create-question-form needs-validation'>
                     <div className='form-floating mb-3'>
-                      <select className='form-select mb-3' id='matchingQuestitonComplexity' defaultValue={complexity} onChange={handleComplexityChange} >
+                      <select className='form-select mb-3' id='matchingQuestitonComplexity' defaultValue={complexity} onChange={handleComplexityChange}>
                         <option value='Easy'>Easy</option>
                         <option value='Medium'>Medium</option>
                         <option value='Hard'>Hard</option>
@@ -87,7 +89,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
                       <label htmlFor='matchingQuestitonComplexity'>Complexity</label>
                     </div>
                     <div className='form-floating mb-3'>
-                      <select className='form-select mb-3' id='matchingQuestitonLanguage' defaultValue={programmingLanguage} onChange={handleLanguageChange} >
+                      <select className='form-select mb-3' id='matchingQuestitonLanguage' defaultValue={programmingLanguage} onChange={handleLanguageChange}>
                         <option value=''>Select a Programming Language</option>
                         <option value='Python'>Python</option>
                         <option value='Java'>Java</option>
@@ -97,8 +99,8 @@ const MatchingModal = ({ isOpen, onClose }) => {
                     </div>
                   </form>
                 </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-success" onClick={handleMatchingToggle}>Start</button>
+                <div className='modal-footer'>
+                  <button type='button' className='btn btn-success' onClick={handleMatchingToggle}>Start</button>
                 </div>
               </div>
             )}

@@ -11,5 +11,5 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/auth', authRoutes);
 app.listen(env.AUTH_PORT, () => {
-  console.log(`Server is running on port: ${env.AUTH_PORT}`);
+  console.log(`AuthServer is running on port: ${env.AUTH_PORT}`);
 });

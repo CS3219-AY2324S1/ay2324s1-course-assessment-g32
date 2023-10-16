@@ -6,20 +6,20 @@ const queueRoutes = require('./QueueRoutes.js');
 const consume = require('./services/consumerService.js');
 const env = require('./loadEnvironment.js');
 
-console.log('Starting server ...');
+console.log('Starting Matchserver ...');
 
-// start the Express (web) server to listen for incoming RESTFul API requests
+// Start the Express (web) server to listen for incoming RESTFul API requests
 const expressServer = async () => {
   const app = express();
   app.use(cors());
   app.use(bodyParser.json());
   app.use('/queue', queueRoutes);
   app.listen(env.MATCH_PORT, () => {
-    console.log(`Server is running on port: ${env.MATCH_PORT}`);
+    console.log(`Matchserver is running on port: ${env.MATCH_PORT}`);
   });
 };
 
-// connect to RabbitMQ server to listen for incoming messages
+// Connect to RabbitMQ server to listen for incoming messages
 const rabbitMQserver = async () => {
   const connection = await amqp.connect(env.RABBITMQ_URL);
   const channel = await connection.createChannel();
@@ -34,8 +34,8 @@ const rabbitMQserver = async () => {
       const { requestQueue, responseQueue } = JSON.parse(message.content.toString());
 
       // Create the request and response queues if they do not exist
-      await channel.assertQueue(requestQueue, { durable: false, autoDelete: true });
-      await channel.assertQueue(responseQueue, { durable: false, autoDelete: true });
+      await channel.assertQueue(requestQueue, { durable: false, autoDelete: true, });
+      await channel.assertQueue(responseQueue, { durable: false, autoDelete: true, });
       channel.ack(message);
 
       // Start consuming from the request queue

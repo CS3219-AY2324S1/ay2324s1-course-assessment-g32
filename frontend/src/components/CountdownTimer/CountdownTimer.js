@@ -20,16 +20,16 @@ const CountdownTimer = ({ duration }) => {
   }, [seconds]);
 
   return (
-    <div className="countdown-timer-container">
+    <div className='countdown-timer-container'>
       <CircularProgress
-        variant="determinate"
+        variant='determinate'
         value={(seconds / duration) * 100}
         size={60}
         thickness={4}
         sx={{ color: 'green' }}
-        className="countdown-progress"
+        className='countdown-progress'
       />
-      <Typography variant="h6" className="countdown-timer-text">
+      <Typography variant='h6' className='countdown-timer-text'>
         {seconds}s
       </Typography>
     </div>

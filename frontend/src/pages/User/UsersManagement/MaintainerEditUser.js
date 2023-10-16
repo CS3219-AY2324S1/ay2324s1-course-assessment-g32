@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '../../../components/Header.js';
+import Spinner from '../../../components/Spinner.js';
 import EditUser from '../../../components/User/EditUser.js';
 
 const MaintainerEditUser = () => {
@@ -15,9 +16,7 @@ const MaintainerEditUser = () => {
   }, [location.state]);
 
   return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
-    </div>
+    <Spinner />
   ) : (
     <div>
       <Header />

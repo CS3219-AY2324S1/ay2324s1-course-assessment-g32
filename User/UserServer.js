@@ -12,11 +12,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/user', userRoutes);
 app.listen(env.USER_PORT, () => {
-  console.log(`UserService is running on port: ${env.USER_PORT}`);
+  console.log(`UserServer is running on port: ${env.USER_PORT}`);
 });
 
 try {
-  // MySQL
   const mysqlDb = mysql.createConnection({
     ...env.mysqlCreds,
     ...{ database: env.mysqlDbName },

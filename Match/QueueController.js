@@ -26,5 +26,5 @@ const exitQueue = async (req, res) => {
 
 module.exports = {
   joinQueue,
-  exitQueue
+  exitQueue,
 };

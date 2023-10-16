@@ -7,13 +7,12 @@ const env = require('./loadEnvironment');
 
 console.log('Starting QuestionServer ...');
 
-// start the Express (web) server
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/question', questionRoutes);
 app.listen(env.QUESTION_PORT, () => {
-  console.log(`Server is running on port: ${env.QUESTION_PORT}`);
+  console.log(`QuestionServer is running on port: ${env.QUESTION_PORT}`);
 });
 
 try {

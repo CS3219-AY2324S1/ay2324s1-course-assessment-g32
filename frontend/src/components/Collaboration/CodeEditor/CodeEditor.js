@@ -99,23 +99,25 @@ const CodeEditor = ({ socket, roomId }) => {
   }, [language]);
 
   return (
-    <div className="editor-container">
-      <div className="row">
-        <label htmlFor="languageSelect" className="col-sm-2">Language:</label>
-        <div className="col-sm-2">
+    <div className='editor-container'>
+      <div className='row'>
+        <label htmlFor='languageSelect' className='col-sm-2'>
+          Language:
+        </label>
+        <div className='col-sm-2'>
           <select
-            className="form-select-sm"
-            id="languageSelect"
+            className='form-select-sm'
+            id='languageSelect'
             defaultValue={language}
             onChange={handleLanguageChange}
           >
-            <option value="Python">Python</option>
-            <option value="Java">Java</option>
-            <option value="C++">C++</option>
+            <option value='Python'>Python</option>
+            <option value='Java'>Java</option>
+            <option value='C++'>C++</option>
           </select>
         </div>
       </div>
-      <div className="code-editor">
+      <div className='code-editor'>
         <div ref={editor}></div>
       </div>
     </div>

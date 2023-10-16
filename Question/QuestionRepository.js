@@ -6,7 +6,7 @@ const createQuestion = async (title, complexity, description, tags) => {
       title: title,
       complexity: complexity,
       description: description,
-      tags: tags
+      tags: tags,
     });
 
     // Save the question to the database
@@ -57,7 +57,7 @@ const editQuestion = async (id, title, complexity, description, tags) => {
       title: title,
       complexity: complexity,
       description: description,
-      tags: tags
+      tags: tags,
     };
     return questionModel.updateOne({ _id: id }, { $set: fields });
   } catch (err) {
@@ -80,5 +80,5 @@ module.exports = {
   findById,
   findByTitle,
   editQuestion,
-  deleteQuestion
+  deleteQuestion,
 };

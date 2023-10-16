@@ -37,24 +37,42 @@ const QuestionForm = ({ oldFormData = {}, onFormSubmit }) => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     onFormSubmit(formData);
-  }
+  };
 
   return (
-    <form className="create-question-form needs-validation" id="questionForm" onSubmit={handleFormSubmit}>
-      <div className="form-floating mb-3">
-        <input type="text" className="form-control" name="title" value={formData.title} placeholder="title" onChange={handleFormChange} />
-        <label htmlFor="createQuestionTitle">Title</label>
+    <form
+      className='create-question-form needs-validation'
+      id='questionForm'
+      onSubmit={handleFormSubmit}
+    >
+      <div className='form-floating mb-3'>
+        <input
+          type='text'
+          className='form-control'
+          name='title'
+          value={formData.title}
+          placeholder='title'
+          onChange={handleFormChange}
+        />
+        <label htmlFor='createQuestionTitle'>Title</label>
       </div>
-      <div className="form-floating mb-3">
-        <select className="form-select mb-3" name="complexity" value={formData.complexity} onChange={handleFormChange}>
-          <option disabled value="">Select a complexity...</option>
-          <option value="Easy">Easy</option>
-          <option value="Medium">Medium</option>
-          <option value="Hard">Hard</option>
+      <div className='form-floating mb-3'>
+        <select
+          className='form-select mb-3'
+          name='complexity'
+          value={formData.complexity}
+          onChange={handleFormChange}
+        >
+          <option disabled value=''>
+            Select a complexity...
+          </option>
+          <option value='Easy'>Easy</option>
+          <option value='Medium'>Medium</option>
+          <option value='Hard'>Hard</option>
         </select>
-        <label htmlFor="createQuestitonComplexity">Complexity</label>
+        <label htmlFor='createQuestitonComplexity'>Complexity</label>
       </div>
-      <div className="form-floating mb-3">
+      <div className='form-floating mb-3'>
         <TagsInput
           value={formData.tags}
           onChange={handleTagsChange}
@@ -64,7 +82,7 @@ const QuestionForm = ({ oldFormData = {}, onFormSubmit }) => {
           addKeys={[9, 13, 188]} // Tab, Enter, Comma
         />
       </div>
-      <div className="form-floating">
+      <div className='form-floating'>
         <TextEditor
           value={formData.description}
           onChange={handleDescriptionChange}

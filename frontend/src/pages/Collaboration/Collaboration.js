@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
+import io from 'socket.io-client';
 import Chat from '../../components/Collaboration/Chat/Chat';
 import CodeEditor from '../../components/Collaboration/CodeEditor/CodeEditor';
-import io from 'socket.io-client';
+import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
 import './Collaboration.css';
+import env from '../../loadEnvironment';
 
 const Collaboration = () => {
   const location = useLocation();
@@ -15,10 +16,11 @@ const Collaboration = () => {
   const matchedHostId = location.state?.matchedHostId;
   const question = location.state?.question;
 
-  const socket = io('http://localhost:3002');
+  // Check if the user is authenticated before connecting to the socket server
+  const socket = io(env.COLLAB_URL);
 
   useEffect(() => {
-    // Join the Socket.io room when the component mounts
+    // Join the Socket.io roozgm when the component mounts
     socket.emit('joinRoom', { room: roomId, host: hostId });
   }, []);
 
@@ -28,15 +30,15 @@ const Collaboration = () => {
   };
 
   return (
-    <div className="collaboration-container">
-      <div className="header">
+    <div className='collaboration-container'>
+      <div className='header'>
         <h1>Collaboration</h1>
       </div>
-      <div className="content">
-        <div className="left">
+      <div className='content'>
+        <div className='left'>
           <QuestionContent question={question} />
         </div>
-        <div className="right">
+        <div className='right'>
           <CodeEditor socket={socket} roomId={roomId} />
           <Chat socket={socket} roomId={roomId} host={hostId} />
         </div>

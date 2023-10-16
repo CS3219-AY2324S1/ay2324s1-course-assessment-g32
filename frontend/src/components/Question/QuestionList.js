@@ -4,12 +4,12 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import MatchingModal from '../MatchMaking/MatchingModal.js';
+import Spinner from '../Spinner.js';
 import { getQuestions } from '../../api/QuestionApi.js';
 import { errorHandler } from '../../utils/errors.js';
 import { getIsMaintainer, getCookie } from '../../utils/helpers.js';
 
 const QuestionList = () => {
-
   const [isLoading, setIsLoading] = useState(true);
   const [isMatchingModalOpen, setMatchingModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
@@ -61,7 +61,11 @@ const QuestionList = () => {
 
   const RenderTags = (tags) => {
     return tags?.map((tag, index) => {
-      return <span key={index} className="badge bg-secondary">{tag}</span>
+      return (
+        <span key={index} className='badge bg-secondary'>
+          {tag}
+        </span>
+      );
     });
   };
 
@@ -94,9 +98,7 @@ const QuestionList = () => {
   ));
 
   return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
-    </div>
+    <Spinner />
   ) : (
     <div className='container'>
       <h1>Question List</h1>
@@ -124,17 +126,27 @@ const QuestionList = () => {
           <button
             type='button'
             className='btn btn-success'
-            onClick={handleNewQuestionClick}>
+            onClick={handleNewQuestionClick}
+          >
             Add
           </button>
         ) : null}
       </div>
       <div className='text-md-end'>
-        <button type="button" className="btn btn-primary" onClick={handleToggleModal}>
+        <button
+          type='button'
+          className='btn btn-primary'
+          onClick={handleToggleModal}
+        >
           Match
         </button>
       </div>
-      {isMatchingModalOpen && <MatchingModal isOpen={isMatchingModalOpen} onClose={handleToggleModal} />}
+      {isMatchingModalOpen && (
+        <MatchingModal
+          isOpen={isMatchingModalOpen}
+          onClose={handleToggleModal}
+        />
+      )}
     </div>
   );
 };

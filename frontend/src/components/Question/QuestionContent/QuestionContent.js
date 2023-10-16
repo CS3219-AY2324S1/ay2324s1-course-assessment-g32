@@ -11,7 +11,7 @@ const QuestionContent = ({ question }) => {
   const renderTags = (tags) => {
     return tags?.map((tag, index) => {
       return (
-        <span key={index} className="badge bg-secondary">
+        <span key={index} className='badge bg-secondary'>
           {tag}
         </span>
       );
@@ -32,19 +32,19 @@ const QuestionContent = ({ question }) => {
   };
 
   return (
-    <div className="question-content-container">
-      <div className="card-body">
-        <h1 className="card-title">{title}</h1>
+    <div className='question-content-container'>
+      <div className='card-body'>
+        <h1 className='card-title'>{title}</h1>
         <div
-          className="scrollable-div"
+          className='scrollable-div'
           dangerouslySetInnerHTML={{
             __html: sanitizeHTML(description),
           }}
         />
       </div>
-      <div className="card-footer d-flex">
-        <div className="d-flex flex-wrap gap-1">{renderTags(tags)}</div>
-        <div className="ms-auto">
+      <div className='card-footer d-flex'>
+        <div className='d-flex flex-wrap gap-1'>{renderTags(tags)}</div>
+        <div className='ms-auto'>
           <span className={`badge ${getComplexityColor(complexity)}`}>
             {question.complexity}
           </span>

@@ -3,7 +3,6 @@ import { ToastContainer } from 'react-toastify';
 
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-
 import Collaboration from './pages/Collaboration/Collaboration';
 
 // Question pages
@@ -42,7 +41,6 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/collaboration' element={<Collaboration />} />
 
         {/* Question management for normal users */}
         <Route path='/landing' element={<ProtectedRoute />}>
@@ -79,6 +77,11 @@ function App() {
             element={<MaintainerEditUser />}
           />
           <Route path='/users-management/new' element={<AddUser />} />
+        </Route>
+
+        {/* Collaboration page for normal users*/}
+        <Route path='/collaboration' element={<ProtectedRoute />}>
+          <Route index element={<Collaboration />} />
         </Route>
 
         {/* Display Login component by default */}

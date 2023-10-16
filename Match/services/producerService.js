@@ -21,15 +21,20 @@ const joinQueue = async (jwt, queueName, sessionID) => {
   const requestQueue = queueName;
   const responseQueue = queueName + 'Response';
 
-  await channel.assertQueue('commonQueue', { durable: false });
-  await channel.assertQueue(requestQueue, { durable: false, autoDelete: true });
-  await channel.assertQueue(responseQueue, { durable: false, autoDelete: true });
+  await channel.assertQueue('commonQueue', { durable: false, });
+  await channel.assertQueue(requestQueue, { durable: false, autoDelete: true, });
+  await channel.assertQueue(responseQueue, { durable: false, autoDelete: true, });
 
   // Send the names of the request and response queues to the common queue for the server to create the queues
-  channel.sendToQueue('commonQueue', Buffer.from(JSON.stringify({
-    requestQueue: requestQueue,
-    responseQueue: responseQueue
-  })));
+  channel.sendToQueue(
+    'commonQueue',
+    Buffer.from(
+      JSON.stringify({
+        requestQueue: requestQueue,
+        responseQueue: responseQueue,
+      })
+    )
+  );
 
   const correlationId = generateUuid();
 
@@ -43,29 +48,33 @@ const joinQueue = async (jwt, queueName, sessionID) => {
     correlationId: correlationId,
     timestamp: Date.now(),
     isExit: false,
-    sessionID: sessionID
+    sessionID: sessionID,
   };
 
   // Send the message to the request queue with the queue name as a property
   channel.sendToQueue(requestQueue, Buffer.from(JSON.stringify(message)), {
-    queueName: queueName
+    queueName: queueName,
   });
 
   // Used to check if the connection is closed
   return new Promise((resolve, reject) => {
     // Waits for the response with matching correlation ID
-    channel.consume(responseQueue, (response) => {
-      if (response.properties.correlationId === correlationId) {
-        const responseBody = JSON.parse(response.content.toString());
-        resolve(responseBody);
-        channel.ack(response);
+    channel.consume(
+      responseQueue,
+      (response) => {
+        if (response.properties.correlationId === correlationId) {
+          const responseBody = JSON.parse(response.content.toString());
+          resolve(responseBody);
+          channel.ack(response);
 
-        // Close the connection
-        isClosed = true;
-        channel.close();
-        connection.close();
-      }
-    }, { noAck: false });
+          // Close the connection
+          isClosed = true;
+          channel.close();
+          connection.close();
+        }
+      },
+      { noAck: false }
+    );
   });
 };
 
@@ -75,7 +84,7 @@ const exitQueue = async (jwt, queueName, sessionID) => {
   const channel = await connection.createChannel();
 
   const requestQueue = queueName;
-  await channel.assertQueue(requestQueue, { durable: false, autoDelete: true });
+  await channel.assertQueue(requestQueue, { durable: false, autoDelete: true, });
 
   // Decrypt the userId from the jwt
   const decryptedUser = await authApi.authorize(jwt);
@@ -84,7 +93,7 @@ const exitQueue = async (jwt, queueName, sessionID) => {
   const message = {
     id: userId,
     isExit: true,
-    sessionID: sessionID
+    sessionID: sessionID,
   };
 
   // Send the message to the request queue
@@ -93,5 +102,5 @@ const exitQueue = async (jwt, queueName, sessionID) => {
 
 module.exports = {
   joinQueue,
-  exitQueue
+  exitQueue,
 };
