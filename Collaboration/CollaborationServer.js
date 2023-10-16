@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.listen(env.COLLAB_PORT, () => {
-  console.log(`CollaborationService is running on port: ${env.COLLAB_PORT}`);
+  console.log(`CollaborationServer is running on port: ${env.COLLAB_PORT}`);
 });
 
 try {
