@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../../../components/Header';
+import Spinner from '../../../../components/Spinner';
 import {
   ViewUserTopPane,
   ViewUserBottomPane,
@@ -33,9 +34,7 @@ function ManageUserProfile() {
   }, [navigate, setUser]);
 
   return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
-    </div>
+    <Spinner />
   ) : (
     <div>
       <Header />

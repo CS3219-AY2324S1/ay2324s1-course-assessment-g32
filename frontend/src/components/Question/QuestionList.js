@@ -4,6 +4,7 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import MatchingModal from '../MatchMaking/MatchingModal.js';
+import Spinner from '../Spinner.js';
 import { getQuestions } from '../../api/QuestionApi.js';
 import { errorHandler } from '../../utils/errors.js';
 import { getIsMaintainer, getCookie } from '../../utils/helpers.js';
@@ -97,9 +98,7 @@ const QuestionList = () => {
   ));
 
   return isLoading ? (
-    <div className="spinner-border text-primary" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </div>
+    <Spinner />
   ) : (
     <div className="container">
       <h1>Question List</h1>

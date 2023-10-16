@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../../components/Header.js';
+import Spinner from '../../../components/Spinner.js';
 import { Container, Grid } from '@mui/material';
 import { ViewUserTopPane } from '../../../components/User/ViewUser.js';
 import EditUser from '../../../components/User/EditUser.js';
@@ -22,9 +23,7 @@ const NormalEditUser = () => {
   }, [location.state, navigate]);
 
   return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
-    </div>
+    <Spinner />
   ) : (
     <div>
       <Header />

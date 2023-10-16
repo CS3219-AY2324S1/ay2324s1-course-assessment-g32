@@ -4,6 +4,7 @@ import { showSuccessToast } from '../../../utils/toast.js';
 import { updatePassword } from '../../../api/UserApi.js';
 import { errorHandler } from '../../../utils/errors.js';
 import Header from '../../../components/Header.js';
+import Spinner from '../../../components/Spinner.js';
 import { Container, Grid } from '@mui/material';
 import { ViewUserTopPane } from '../../../components/User/ViewUser.js';
 import { getCookie } from '../../../utils/helpers.js';
@@ -63,9 +64,7 @@ const ChangeUserPassword = () => {
   };
 
   return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
-    </div>
+    <Spinner />
   ) : (
     <div>
       <Header />

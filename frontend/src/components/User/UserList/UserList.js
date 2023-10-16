@@ -5,6 +5,7 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
+import Spinner from '../../../components/Spinner.js';
 import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
 import { showSuccessToast } from '../../../utils/toast.js';
 import { getCookie, getUserId, parseDatetime } from '../../../utils/helpers.js';
@@ -114,9 +115,7 @@ const UserList = () => {
   ));
 
   return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
-    </div>
+    <Spinner />
   ) : (
     <div className='container'>
       <h1>Manage User Profiles</h1>

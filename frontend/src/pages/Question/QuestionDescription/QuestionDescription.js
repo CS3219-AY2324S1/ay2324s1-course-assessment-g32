@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import QuestionContent from '../../../components/Question/QuestionContent/QuestionContent';
 import Header from '../../../components/Header';
+import Spinner from '../../../components/Spinner';
 import { getQuestionDetails, deleteQuestion } from '../../../api/QuestionApi';
 import { getCookie, getIsMaintainer } from '../../../utils/helpers';
 import { showSuccessToast } from '../../../utils/toast';
@@ -68,9 +69,7 @@ const QuestionDescription = () => {
   };
 
   return isLoading ? (
-    <div className="spinner-border text-primary" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </div>
+    <Spinner />
   ) : (
     <div className="landing">
       <Header />
