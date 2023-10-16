@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
+import io from 'socket.io-client';
 import Chat from '../../components/Collaboration/Chat/Chat';
 import CodeEditor from '../../components/Collaboration/CodeEditor/CodeEditor';
-import io from 'socket.io-client';
+import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
 import './Collaboration.css';
+const env = require('../loadEnvironment.js');
 
 const Collaboration = () => {
   const location = useLocation();
@@ -15,7 +16,8 @@ const Collaboration = () => {
   const matchedHostId = location.state?.matchedHostId;
   const question = location.state?.question;
 
-  const socket = io('http://localhost:3002');
+  // Check if the user is authenticated before connecting to the socket server
+  const socket = io(env.COLLAB_URL);
 
   useEffect(() => {
     // Join the Socket.io room when the component mounts

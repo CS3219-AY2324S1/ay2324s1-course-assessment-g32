@@ -5,11 +5,13 @@ const USER_URL = SERVER_HOST + ':' + USER_PORT;
 const AUTH_PORT = process.env.REACT_APP_AUTH_PORT || 5001;
 const QUESTION_PORT = process.env.REACT_APP_QUESTION_PORT || 6001;
 const MATCH_PORT = process.env.REACT_APP_MATCH_PORT || 7001;
+const COLLAB_PORT = process.env.REACT_APP_COLLAB_PORT || 8001;
 
 const QUESTION_URL = SERVER_HOST + ':' + QUESTION_PORT;
 const SERVER_URL = SERVER_HOST + ':' + SERVER_PORT;
 const AUTH_URL = SERVER_HOST + ':' + AUTH_PORT;
 const MATCH_URL = SERVER_HOST + ':' + MATCH_PORT;
+const COLLAB_URL = SERVER_HOST + ':' + COLLAB_PORT;
 
 module.exports = {
   SERVER_URL,
@@ -17,4 +19,5 @@ module.exports = {
   AUTH_URL,
   QUESTION_URL,
   MATCH_URL,
+  COLLAB_URL,
 };
