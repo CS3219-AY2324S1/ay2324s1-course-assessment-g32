@@ -1,19 +1,20 @@
-networks:
-  local-bridge:
-    driver: bridge
-
 services:
-  user-db:
-    container_name: user-db
+  db-user:
+    container_name: user-storage
+    image: mysql/mysql-server:8.0
     env_file: .env
-    expose:
-      - 3306
-    image: mysql/mysql-server:latest
-    networks:
-      - local-bridge
-    ports:
-      - '3306:3306'
+    ports: ['3306:3306']
+    expose: [3306]
     volumes:
       - ./User/initdb:/docker-entrypoint-initdb.d
-  # user:
-  #   container_name: user-service
+  svc-user:
+    container_name: user-service
+    build: ./User
+    env_file: .env
+    environment:
+      - MYSQL_HOST=db-user
+    ports: ['4001:4001']
+    expose: [4001]
+    depends_on:
+      - db-user
+    
