@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { exitQueue } from '../../api/MatchApi.js';
 import { getCookie } from '../../utils/helpers.js';
+import { errorHandler } from '../../utils/errors.js';
 import Queue from './Queue';
 import '../../css/Modal.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,19 +19,29 @@ const MatchingModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setJwt(getCookie());
-    const handleExitTab = async () => {
-      if (isFindingMatch) {
-        const queueName = complexity + programmingLanguage;
-        await exitQueue(jwt, queueName);
-      }
-    };
-    // Add event listeners for closing the tab
-    window.addEventListener('beforeunload', handleExitTab);
-    return () => {
-      handleExitTab();
-      window.removeEventListener('beforeunload', handleExitTab);
-    };
+    try {
+      setJwt(getCookie());
+      const handleExitTab = async () => {
+        if (isFindingMatch) {
+          const queueName = complexity + programmingLanguage;
+          try {
+            await exitQueue(jwt, queueName);
+          } catch (error) {
+            console.log(error);
+            errorHandler(error);
+          }
+        }
+      };
+      // Add event listeners for closing the tab
+      window.addEventListener('beforeunload', handleExitTab);
+      return () => {
+        handleExitTab();
+        window.removeEventListener('beforeunload', handleExitTab);
+      };
+    } catch (error) {
+      console.log(error);
+      errorHandler(error);
+    }
   });
 
   const handleComplexityChange = (event) => {
@@ -47,12 +58,16 @@ const MatchingModal = ({ isOpen, onClose }) => {
   };
 
   const handleClosingModal = () => {
-    if (isFindingMatch) {
-      const queueName = complexity + programmingLanguage;
-      exitQueue(jwt, queueName, sessionID);
+    try {
+      if (isFindingMatch) {
+        const queueName = complexity + programmingLanguage;
+        exitQueue(jwt, queueName, sessionID);
+      }
+      onClose();
+      setIsFindingMatch(false);
+    } catch (error) {
+      errorHandler(error);
     }
-    onClose();
-    setIsFindingMatch(false);
   };
 
   return (
