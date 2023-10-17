@@ -59,6 +59,15 @@ Or start them indvidually:
 - Auth service: `cd Auth && npm start`
 - User service: `cd User && npm start`
 
+## Containerisation
+
+1. Start Docker Daemon  
+   Eg. By opening Docker Desktop (can close afterwards)
+2. At root of PeerPrep project
+   * To start (detached): `docker compose up -d`
+   * To stop and close: `docker compose down`
+   * To view log: `docker logs container_name`
+
 # Developer Notes
 
 | Backend API Path               | Method | Purpose                                             | Parameters (JSON format)                                              | Require JWT token to be in header? | Does user have to be maintainer? |
