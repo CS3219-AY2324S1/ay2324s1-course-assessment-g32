@@ -6,7 +6,7 @@ const conn = mysql.createConnection({
   ...{ database: env.mysqlDbName },
 });
 
-mysqlDb.on('error', err => {
+conn.on('error', err => {
   console.error('MySQL Connection ', err);
 });
 
