@@ -15,18 +15,18 @@ app.listen(env.USER_PORT, () => {
   console.log(`UserService is running on port: ${env.USER_PORT}`);
 });
 
-try {
-  // MySQL
-  const mysqlDb = mysql.createConnection({
-    ...env.mysqlCreds,
-    ...{ database: env.mysqlDbName },
-  });
+// MySQL
+const mysqlDb = mysql.createConnection({
+  ...env.mysqlCreds,
+  ...{ database: env.mysqlDbName },
+});
 
-  mysqlDb.connect((error) => {
-    if (error)
-      throw new Error('MySQL database connection error:' + error.message);
-    console.log('SUCCESS: Connected to the MySQL database');
-  });
-} catch (err) {
-  console.error(err);
-}
+mysqlDb.on('error', err => {
+  console.error('MySQL Connection ', err);
+});
+
+mysqlDb.connect((error) => {
+  if (error)
+    console.error('MySQL database connection error:' + error.message);
+  console.log('SUCCESS: Connected to the MySQL database');
+});

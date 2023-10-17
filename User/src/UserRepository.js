@@ -6,6 +6,10 @@ const conn = mysql.createConnection({
   ...{ database: env.mysqlDbName },
 });
 
+mysqlDb.on('error', err => {
+  console.error('MySQL Connection ', err);
+});
+
 /**
  * Finds and returns userId of user with email.
  *
