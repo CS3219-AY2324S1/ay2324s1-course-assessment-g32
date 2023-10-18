@@ -16,5 +16,6 @@ services:
     ports: ['4001:4001']
     expose: [4001]
     depends_on:
-      - db-user
-    
+      db-user:
+        condition: service_started
+        restart: true
