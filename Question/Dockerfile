@@ -19,8 +19,8 @@ RUN npm install
 COPY . .
 
 # Expose ports so they can be mapped by Docker daemon.
-# Should expose ${USER_PORT}
-EXPOSE 4001
+# Should expose ${QUESTION_PORT}
+EXPOSE 6001
 
 # Define the command to run your app using CMD which defines your runtime.
-CMD ["node", "src/UserServer.js"]
+CMD ["node", "src/QuestionServer.js"]
