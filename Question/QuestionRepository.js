@@ -1,8 +1,8 @@
-const Question = require('../models/question');
+const questionModel = require('./QuestionModel');
 
 const createQuestion = async (title, complexity, description, tags) => {
   try {
-    const question = new Question({
+    const question = new questionModel({
       title: title,
       complexity: complexity,
       description: description,
@@ -21,7 +21,7 @@ const createQuestion = async (title, complexity, description, tags) => {
 const getQuestions = async () => {
   try {
     // Return all questions without the description
-    return await Question.find({}, { description: 0 });
+    return await questionModel.find({}, { description: 0 });
   } catch (err) {
     throw err;
   }
@@ -29,7 +29,7 @@ const getQuestions = async () => {
 
 const getQuestionDetails = async (id) => {
   try {
-    return await Question.findOne({ _id: id });
+    return await questionModel.findOne({ _id: id });
   } catch (err) {
     throw err;
   }
@@ -37,7 +37,7 @@ const getQuestionDetails = async (id) => {
 
 const findById = async (id) => {
   try {
-    return await Question.findOne({ _id: id });
+    return await questionModel.findOne({ _id: id });
   } catch (err) {
     throw err;
   }
@@ -45,7 +45,7 @@ const findById = async (id) => {
 
 const findByTitle = async (title) => {
   try {
-    return await Question.findOne({ title: title });
+    return await questionModel.findOne({ title: title });
   } catch (err) {
     throw err;
   }
@@ -59,7 +59,7 @@ const editQuestion = async (id, title, complexity, description, tags) => {
       description: description,
       tags: tags
     };
-    return Question.updateOne({ _id: id }, { $set: fields });
+    return questionModel.updateOne({ _id: id }, { $set: fields });
   } catch (err) {
     throw err;
   }
@@ -67,7 +67,7 @@ const editQuestion = async (id, title, complexity, description, tags) => {
 
 const deleteQuestion = async (id) => {
   try {
-    return await Question.deleteOne({ _id: id });
+    return await questionModel.deleteOne({ _id: id });
   } catch (err) {
     throw err;
   }

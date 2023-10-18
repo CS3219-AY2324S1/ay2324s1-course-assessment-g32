@@ -2,22 +2,21 @@ const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const questionRoutes = require('./server/routes/question');
+const questionRoutes = require('./QuestionRoute');
 const env = require('./loadEnvironment');
 
-console.log('Starting server ...');
+console.log('Starting QuestionServer ...');
 
 // start the Express (web) server
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/question', questionRoutes);
-app.listen(env.SERVER_PORT, () => {
-  console.log(`Server is running on port: ${env.SERVER_PORT}`);
+app.listen(env.QUESTION_PORT, () => {
+  console.log(`Server is running on port: ${env.QUESTION_PORT}`);
 });
 
 try {
-  // MongoDB
   mongoose.connect(env.MONGO_CLIENT, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

@@ -45,18 +45,18 @@ npm i install-all && npm run install-all
 
 Start local MySQL Server (Windows Service), if necessary.
 
-Start all services using the following commands (run them in different terminals):
+Start all services using the following commands:
 
 ```
 npm run start-all
-cd Auth && npm start
 ```
 
-Or start them indvidually:
+Or start them indvidually (run them in different terminals):
 
 - Frontend: `cd frontend && npm start`
 - Backend: `cd backend && npm start`
 - Auth service: `cd Auth && npm start`
+- Question service: `cd Question && npm start`
 - User service: `cd User && npm start`
 
 ## Containerisation
