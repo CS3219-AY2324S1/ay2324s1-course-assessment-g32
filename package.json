@@ -17,7 +17,8 @@
 
         "dev-all": "npm-run-all -p dev:*",
         "dev:backend": "cd backend && npm run dev",
-        "dev:auth": "cd Auth && npm run ev",
+        "dev:auth": "cd Auth && npm run dev",
+        "dev:question": "cd Question && npm run dev",
         "dev:user": "cd User && npm run dev"
     }
 }
