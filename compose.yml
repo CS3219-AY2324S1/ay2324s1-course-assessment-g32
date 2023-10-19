@@ -1,4 +1,10 @@
 services:
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    env_file: .env
+    ports: ['3000:3000']
+    expose: [3000]
   db-user:
     container_name: user-storage
     image: mysql/mysql-server:8.0
@@ -7,12 +13,6 @@ services:
     expose: [3306]
     volumes:
       - ./User/initdb:/docker-entrypoint-initdb.d
-  frontend:
-    container_name: frontend
-    build: ./Frontend
-    env_file: .env
-    ports: ['3000:3000']
-    expose: [3000]
   svc-user:
     container_name: user-service
     build: ./User
