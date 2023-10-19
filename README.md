@@ -40,8 +40,8 @@ Download and install these software if you do not have them locally.
 
 For clarity, the commands given below should be executed at the root directory if not specified otherwise.
 
-The commands below are provided for convenience and may be incorrect.
-If reading the textual instruction is not clear enough, do reach out to us for clarification.
+_The commands below are provided for convenience and may be incorrect.
+If reading the textual instruction is not clear enough, do reach out to us for clarification._
 
 ## Pre-testing Set up
 
@@ -127,14 +127,14 @@ Note: during this step, it may not be immediately ready, as the docker may still
 
 ### Sample Accounts
 
-By default, we have created 2 accounts as part of the fresh database.
+By default, we have created 2 accounts as part of the fresh database. These accounts are for testing purposes, and would not be avilable for production.
 
 | Email          | Password | Remarks                                  |
 | -------------- | -------- | ---------------------------------------- |
 | admin@test.com | password | Has admin rights. Regard as a superuser. |
 | user@test.com  | password | Normal user. Cannot manage other users.  |
 
-Note: if you delete these accounts via the user profile management functionalities, you may have to restart the pre-testing steps to get back the accounts.
+Note: if you delete these accounts via the user profile management functionalities, you may have from restart the pre-testing steps to get back the accounts.
 
 ## Post-testing
 
@@ -147,9 +147,9 @@ docker compose down
 
 #
 
-Disclaimer:
+_Disclaimer:_
 
-While we did our best to make the instructions as clear as possible,
+_While we did our best to make the instructions as clear as possible,
 it is not idiot-proof. 
 we can only put in so much effort into a README,
-since the objective of this assignment and course is not learning how to design a user manual.
+since the objective of this assignment and course is not learning how to design a user manual._
