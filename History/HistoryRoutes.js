@@ -7,5 +7,6 @@ const historyController = require('./HistoryController.js');
 // No middleware function
 router.post('/attempts', historyController.addAttempt);
 router.delete('/attempts', historyController.deleteAttempt);
+router.get('/attempts', historyController.getAttempts);
 
 module.exports = router;

@@ -20,8 +20,19 @@ const deleteAttempt = async (req, res) => {
   }
 };
 
+const getAttempts = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const attempts = await historyService.getAttempts(userId);
+    res.json({ message: 'SUCCESS', attempts });
+  } catch (err) {
+    res.status(err?.status || 400).json({ error: err?.message || err });
+  }
+};
+
 
 module.exports = {
   addAttempt,
   deleteAttempt,
+  getAttempts,
 };

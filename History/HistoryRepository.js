@@ -45,8 +45,22 @@ const deleteAttempt = async (userId, questionId) => {
   await query; // Wait for attempt to be deleted
 };
 
+const getAttempts = async (userId) => {
+  var _attempts = Array();
+  const query = conn
+    .promise()
+    .query('SELECT * FROM attempts WHERE userId=?;', [userId])
+    .then(([rows, fields]) => {
+      _attempts = rows;
+    })
+    .catch(console.error);
+  await query;
+  return _attempts;
+};
+
 module.exports = {
   findAttemptByEmailAndQuestion,
   addAttempt,
   deleteAttempt,
+  getAttempts,
 };
