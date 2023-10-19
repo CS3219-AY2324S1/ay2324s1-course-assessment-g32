@@ -1,94 +1,155 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
 
-# Software Requirements
+# Assignment 4 - Containerization
 
+We used Docker to containerize our various micro-services which serves our combined application.
+
+The combined application contains qualities of:
+* Question Repository Application
+* User Profile Management Application
+
+We have various micro-services including:
+* MySQL Database
+* User Service
+* Auth Service
+* Question Service
+* Frontend Service (Web UI)
+
+Additional Notes:
+
+If you are not using Windows OS, and would like a equivalent instruction for a differnt OS, do reach out to us for clarification.
+
+**For clarifications, do leave your questions at [Feedback PR](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32/pull/1) created in our repository.**
+
+# Requirements
+
+## Network
+
+Internet connection is required.
+
+**[ IMPORTANT! ]** Do _not_ test while on NUS grounds or connected
+(either directly or indirectly) to NUS Wifi.
+(NUS networks blocks MongoDB which is required by our application.) 
+
+## Software
 Download and install these software if you do not have them locally.
 
-- [NodeJS](https://nodejs.org/en/download)
-- [MySQL](https://dev.mysql.com/downloads/mysql/)
-
-For development, you may also want to install:
-
-- [MongoDB Compass](https://www.mongodb.com/try/download/compass)
 - [Docker Desktop](https://www.docker.com/get-started/)
-- [Postman](https://www.postman.com/downloads/)
 
-# Setup
+# Testing
 
-## Setup MySQL locally
+For clarity, the commands given below should be executed at the root directory if not specified otherwise.
 
-1. Search for **MySQL 8.1 Command Line Client** on your computer. Execute it to open up the terminal.
-2. Enter your root password.
-3. Run the SQL statements in `./User/schema.sql` on the terminal.
+The commands below are provided for convenience and may be incorrect.
+If reading the textual instruction is not clear enough, do reach out to us for clarification.
 
-## Setup environment variables
+## Pre-testing Set up
 
-1. Enter the following command
-   ```
-   cp template.env .env
-   ```
-2. Open `.env` file
-3. Enter root password (previously configured when installing MySQL)  
-   Example: if your root password is "password1234",
-   `MY_SQL_PWD=password1234`
-4. Enter JWT token password (for generating and decoding JWT tokens)  
-   Example: if your root password is "password",
-   `JWT_SECRET_KEY=password`
+### Clone repository
 
-## Install NodeJS packages
+Clone the repository locally to your device (laptop/computer).
 
-```
-npm i install-all && npm run install-all
+```shell
+git clone https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32.git
 ```
 
-# Start Application
+Note: If the above not work, please use the correct link or download the source code directly from the release.
 
-Start local MySQL Server (Windows Service), if necessary.
+### Setup environment variables
 
-Start all services using the following commands:
+Duplicate `template.env` as `.env` at the root directory.
 
+```shell
+cp template.env .env
 ```
-npm run start-all
+
+### Start Docker Daemon
+
+For Windows, start _Docker Desktop_.
+For other OS, reach out for clarifcation if unsure.
+
+To check that the daemon has started, open a terminal and check the version.
+
+```shell
+docker version
 ```
 
-Or start them indvidually (run them in different terminals):
+It should output something like
+```
+Client:
+ Cloud integration: v1.0.35+desktop.5
+ Version:           24.0.6
+ API version:       1.43
+ Go version:        go1.20.7
+ Git commit:        ed223bc
+ Built:             Mon Sep  4 12:32:48 2023
+ OS/Arch:           windows/amd64
+ Context:           default
 
-- Frontend: `cd frontend && npm start`
-- Backend: `cd backend && npm start`
-- Auth service: `cd Auth && npm start`
-- Question service: `cd Question && npm start`
-- User service: `cd User && npm start`
+Server: Docker Desktop 4.24.2 (124339)
+ Engine:
+  Version:          24.0.6
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.7
+  Git commit:       1a79695
+  Built:            Mon Sep  4 12:32:16 2023
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.6.22
+  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca
+ runc:
+  Version:          1.1.8
+  GitCommit:        v1.1.8-0-g82f18fe
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+```
 
-## Containerisation
+## Testing
 
-1. Start Docker Daemon  
-   Eg. By opening Docker Desktop (can close afterwards)
-2. At root of PeerPrep project
-   * To start (detached): `docker compose up -d`
-   * To stop and close: `docker compose down`
-   * To view log: `docker logs container_name`
+### Dockered Microservices
 
-# Developer Notes
+At the root directory, open a terminal 
+to create and start containers of the micro-services.
 
-| Backend API Path               | Method | Purpose                                             | Parameters (JSON format)                                              | Require JWT token to be in header? | Does user have to be maintainer? |
-| ------------------------------ | ------ | --------------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------- | -------------------------------- |
-| `/auth/authorize`              | GET    | Used to authorize all users                         | -                                                                     | Yes                                | No                               |
-| `/auth/authorizeMaintainer`    | GET    | Used to authorize maintainers                       | -                                                                     | Yes                                | Yes                              |
-| `/auth/generate`               | POST   | Used to generate JWT token after user has logged in | `userId` <br> `isMaintainer`                                          | No                                 | -                                |
-| `/question/create`             | POST   | Used to create new question                         | `title` <br> `complexity` <br> `description` <br> `tags`              | Yes                                | Yes                              |
-| `/question/delete`             | DELETE | Used to delete question                             | `id`                                                                  | Yes                                | Yes                              |
-| `/question/edit`               | POST   | Used to edit question                               | `id` <br> `title` <br> `complexity` <br> `description` <br> `tags`    | Yes                                | Yes                              |
-| `/question/getAll`             | GET    | Used to get all the questions from the database     | -                                                                     | Yes                                | No                               |
-| `/question/getQuestionDetails` | GET    | Used to get the details of the specified question   | `id`                                                                  | Yes                                | No                               |
-| `/user/change-password`        | POST   | Used to change user password                        | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | Yes                                | No                               |
-| `/user/delete`                 | POST   | Used to delete user                                 | `id`                                                                  | Yes                                | No                               |
-| `/user/login`                  | POST   | Used to login                                       | `email` <br> `password`                                               | No                                 | -                                |
-| `/user/read`                   | POST   | Used to get user information                        | `id` or `email`                                                       | Yes                                | No                               |
-| `/user/readAll`                | GET    | Used to get all users information                   | -                                                                     | Yes                                | Yes                              |
-| `/user/signup`                 | POST   | Used to create new user                             | `email` <br> `password` <br> `confirmPassword`                        | No                                 | -                                |
-| `/user/update`                 | POST   | Used to update user information (username)          | `id` <br> `username`                                                  | Yes                                | No                               |
+```shell
+docker compose up -d
+```
 
-- `auth` API (port 5001) contains all the authorization related endpoints.
-- `question` API (port 3001) contains all the question data related endpoints.
-- `user` API (port 4001) contains all the user data related endpoints (including authentication).
-- Note that if the API path requires JWT token to be in the header, it means the user has to be logged in.
+It may take a few minutes for the inital build as it needs to download the images online.
+
+### Frontend Application
+
+Locally, open a web browser and go to [http://localhost:3000](http://localhost:3000).
+
+Note: during this step, it may not be immediately ready, as the docker may still be building the containers. Please be patient.
+
+### Sample Accounts
+
+By default, we have created 2 accounts as part of the fresh database.
+
+| Email          | Password | Remarks                                  |
+| -------------- | -------- | ---------------------------------------- |
+| admin@test.com | password | Has admin rights. Regard as a superuser. |
+| user@test.com  | password | Normal user. Cannot manage other users.  |
+
+Note: if you delete these accounts via the user profile management functionalities, you may have to restart the pre-testing steps to get back the accounts.
+
+## Post-testing
+
+After testing, open a terminal at the root directory 
+to stop and remove the containers of the micro-services.
+
+```shell
+docker compose down
+```
+
+#
+
+Disclaimer:
+
+While we did our best to make the instructions as clear as possible,
+it is not idiot-proof. 
+we can only put in so much effort into a README,
+since the objective of this assignment and course is not learning how to design a user manual.
