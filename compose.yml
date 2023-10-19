@@ -3,8 +3,16 @@ services:
     container_name: frontend
     build: ./frontend
     env_file: .env
+    environment:
+      - USER_HOST=svc-user
+      - AUTH_HOST=svc-auth
+      - QUESTION_HOST=svc-question
     ports: ['3000:3000']
     expose: [3000]
+    depends_on:
+      - svc-user
+      - svc-auth
+      - svc-question
   db-user:
     container_name: user-storage
     image: mysql/mysql-server:8.0
