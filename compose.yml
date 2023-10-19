@@ -1,18 +1,4 @@
 services:
-  frontend:
-    container_name: frontend
-    build: ./frontend
-    env_file: .env
-    environment:
-      - USER_HOST=svc-user
-      - AUTH_HOST=svc-auth
-      - QUESTION_HOST=svc-question
-    ports: ['3000:3000']
-    expose: [3000]
-    depends_on:
-      - svc-user
-      - svc-auth
-      - svc-question
   db-user:
     container_name: user-storage
     image: mysql/mysql-server:8.0
@@ -26,13 +12,16 @@ services:
     build: ./User
     env_file: .env
     environment:
-      - MYSQL_HOST=db-user
+      - MYSQL_HOST=user-storage
+      - AUTH_HOST=auth-service
     ports: ['4001:4001']
     expose: [4001]
     depends_on:
       db-user:
         condition: service_started
         restart: true
+      svc-auth:
+        condition: service_started
   svc-auth:
     container_name: auth-service
     build: ./Auth
@@ -49,3 +38,17 @@ services:
     expose: [6001]
     depends_on:
       - svc-auth
+  svc-web-ui:
+    container_name: web-ui
+    build: ./frontend
+    env_file: .env
+    environment:
+      - USER_HOST=user-service
+      - AUTH_HOST=auth-service
+      - QUESTION_HOST=question-servcie
+    ports: ['3000:3000']
+    expose: [3000]
+    depends_on:
+      - svc-user
+      - svc-auth
+      - svc-question
