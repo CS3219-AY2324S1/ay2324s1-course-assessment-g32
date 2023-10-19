@@ -28,6 +28,8 @@ import {
 import UnauthorizedPage from './pages/UnauthorizedPage/UnauthorizedPage';
 // Page not found page
 import PageNotFound from './pages/PageNotFound/PageNotFound';
+// Submission History page
+import SubmissionHistory from './pages/SubmissionHistory/SubmissionHistory';
 // Special routes
 import ProtectedRoute from './utils/ProtectedRoute';
 import MaintainerRoute from './utils/MaintainerRoute';
@@ -77,6 +79,12 @@ function App() {
             element={<MaintainerEditUser />}
           />
           <Route path='/users-management/new' element={<AddUser />} />
+        </Route>
+
+
+        {/* Submission History for normal users */}
+        <Route path='/submission-history' element={<ProtectedRoute />}>
+          <Route index element={<SubmissionHistory />} />
         </Route>
 
         {/* Collaboration page for normal users*/}
