@@ -6,4 +6,8 @@ const mysqlDb = mysql.createPool({
   ...{ database: env.mysqlDbName },
 });
 
+mysqlDb.on('error', err => {
+  console.error('MySQL', err);
+});
+
 module.exports = mysqlDb;
