@@ -5,8 +5,7 @@ USE assignmentdb;
 
 CREATE TABLE attempts (
   userId INT NOT NULL,
-  questionId INT NOT NULL,
-  timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (userId, questionId)
+  questionId VARCHAR(50) NOT NULL,
+  timeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

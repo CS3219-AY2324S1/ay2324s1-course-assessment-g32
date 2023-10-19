@@ -31,3 +31,17 @@
   border-radius: 5px;
   height: 100%;
 }
+
+.row-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.red-button {
+  background-color: red;
+}
+
+.green-button {
+  background-color: green;
+}

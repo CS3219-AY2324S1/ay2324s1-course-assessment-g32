@@ -1,26 +1,18 @@
 const historyDatabase = require('./HistoryRepository.js');
+const authApi = require('./helpers/callsToAuth.js');
 
-const addAttempt = async (userId, questionId) => {
+const addAttempt = async (jwtToken, questionId) => {
   try {
+
+    // Decrypt jwtToken to get userId
+    const decryptedUser = await authApi.authorize(jwtToken);
+    const userId = decryptedUser.data.userInfo.userId;
+
     let passExistingAttemptCheck = undefined;
 
     // Check for missing inputs
     if (!userId || !questionId) {
       throw Object.assign(new Error('Missing inputs'), { status: 400 });
-    }
-
-    // Check if the user has already attempted the question
-    const existingAttemptCheck = historyDatabase.findAttemptByEmailAndQuestion(userId, questionId).then((attempt) => {
-      passExistingAttemptCheck = attempt['timeStamp'] === null;
-    });
-
-    // Check results of existingAttemptCheck
-    await existingAttemptCheck;
-    if (passExistingAttemptCheck === undefined) {
-      console.error('No results from existingUserCheck');
-    }
-    if (!passExistingAttemptCheck) {
-      throw Object.assign(new Error('User has already attempted this question'), { status: 409 });
     }
 
     // Create using with userId and questionId
@@ -30,32 +22,16 @@ const addAttempt = async (userId, questionId) => {
   }
 };
 
-const deleteAttempt = async (userId, questionId) => {
+const deleteUserAttempts = async (userId) => {
   try {
 
-    let passExistingAttemptCheck = undefined;
-
-    // Check for missing inputs
-    if (!userId || !questionId) {
-      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+    // Check for missing input
+    if (!userId) {
+      throw Object.assign(new Error('Missing input'), { status: 400 });
     }
 
-    // Check if the user has already attempted the question
-    const existingAttemptCheck = historyDatabase.findAttemptByEmailAndQuestion(userId, questionId).then((attempt) => {
-      passExistingAttemptCheck = attempt['timeStamp'] !== null;
-    });
-
-    // Check results of existingAttemptCheck
-    await existingAttemptCheck;
-    if (passExistingAttemptCheck === undefined) {
-      console.error('No results from existingUserCheck');
-    }
-    if (!passExistingAttemptCheck) {
-      throw Object.assign(new Error('User has not attempted this question yet'), { status: 409 });
-    }
-
-    // Delete attempt
-    await historyDatabase.deleteAttempt(userId, questionId);
+    // Delete attempts
+    await historyDatabase.deleteUserAttempts(userId);
   } catch (err) {
     throw err;
   }
@@ -74,6 +50,6 @@ const getAttempts = async (userId) => {
 
 module.exports = {
   addAttempt,
-  deleteAttempt,
+  deleteUserAttempts,
   getAttempts,
 };

@@ -32,11 +32,11 @@ const addAttempt = async (userId, questionId) => {
   await query; // Wait for new attempt to be inserted
 };
 
-const deleteAttempt = async (userId, questionId) => {
+const deleteUserAttempts = async (userId, questionId) => {
   // Delete attempt from database
   const query = conn
     .promise()
-    .query('DELETE FROM attempts WHERE userId=? AND questionId=?;', [
+    .query('DELETE FROM attempts WHERE userId=?;', [
       userId,
       questionId,
     ])
@@ -61,6 +61,6 @@ const getAttempts = async (userId) => {
 module.exports = {
   findAttemptByEmailAndQuestion,
   addAttempt,
-  deleteAttempt,
+  deleteUserAttempts,
   getAttempts,
 };
