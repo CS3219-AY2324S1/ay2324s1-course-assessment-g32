@@ -1,14 +1,4 @@
-const mysql = require('mysql2');
-const env = require('./loadEnvironment.js');
-
-const conn = mysql.createConnection({
-  ...env.mysqlCreds,
-  ...{ database: env.mysqlDbName },
-});
-
-conn.on('error', err => {
-  console.error('MySQL Connection ', err);
-});
+const mysqlDb = require('./Connection.js');
 
 /**
  * Finds and returns userId of user with email.
@@ -22,7 +12,7 @@ conn.on('error', err => {
 const findByEmail = async (email) => {
   var _userId = Number();
   var _isMaintainer = Boolean();
-  const query = conn
+  const query = mysqlDb
     .promise()
     .query('SELECT id, isMaintainer FROM users WHERE email=?;', [email])
     .then(([rows, fields]) => {
@@ -43,7 +33,7 @@ const createUser = async (email, password) => {
   await password.then((x) => (_password = x));
 
   // Add new user to database
-  const query = conn
+  const query = mysqlDb
     .promise()
     .query('INSERT INTO users(username, email, password) VALUES (?, ?, ?);', [
       _username,
@@ -73,7 +63,7 @@ const getAllUserInfo = async () => {
 
   const selectStmt = `SELECT * FROM users;`;
 
-  const query = conn
+  const query = mysqlDb
     .promise()
     .query(selectStmt)
     .then(([rows, fields]) => {
@@ -90,7 +80,7 @@ const getUserInfoById = async (userId) => {
   var _userInfo = {};
   const selectStmt = `SELECT * FROM users WHERE id=?;`;
 
-  const query = conn
+  const query = mysqlDb
     .promise()
     .query(selectStmt, [userId])
     .then(([rows, fields]) => {
@@ -133,7 +123,7 @@ const updateUser = async (userId, username) => {
   _sql = _sql.concat(' WHERE id = ?;');
   _placeholders.push(userId);
 
-  const query = conn
+  const query = mysqlDb
     .promise()
     .query(_sql, _placeholders)
     .then(([result, fields]) => {
@@ -158,7 +148,7 @@ const updatePassword = async (userId, password) => {
   _sql = _sql.concat(' WHERE id = ?;');
   _placeholders.push(userId);
 
-  const query = conn
+  const query = mysqlDb
     .promise()
     .query(_sql, _placeholders)
     .then(([result, fields]) => {
@@ -178,7 +168,7 @@ const updatePassword = async (userId, password) => {
 const deleteUser = async (userId) => {
   var _success = Boolean();
 
-  const query = conn
+  const query = mysqlDb
     .promise()
     .query('DELETE FROM users WHERE id=?;', [userId])
     .then(([result, fields]) => {
