@@ -13,7 +13,7 @@ jobs:
         run: mv template.env .env
 
       - name: Start Containers
-        run: docker -f "docker-compose.yml" up -d
+        run: docker compose -f "docker-compose.yml" up -d
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -34,4 +34,4 @@ jobs:
       
       - name: Stop Containers
         if: always()
-        run: docker -f "docker-compose.yml" down
+        run: docker compose -f "docker-compose.yml" down
