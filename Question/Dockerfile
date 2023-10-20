@@ -23,4 +23,4 @@ COPY . .
 EXPOSE 6001
 
 # Define the command to run your app using CMD which defines your runtime.
-CMD ["node", "src/QuestionServer.js"]
+CMD ["npm", "start"]

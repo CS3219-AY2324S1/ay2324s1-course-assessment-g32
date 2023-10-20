@@ -23,4 +23,4 @@ COPY . .
 EXPOSE 5001
 
 # Define the command to run your app using CMD which defines your runtime.
-CMD ["node", "src/AuthServer.js"]
+CMD ["npm", "start"]
