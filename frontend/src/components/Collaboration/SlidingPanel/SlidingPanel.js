@@ -27,6 +27,16 @@ const SlidingPanel = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const RenderTags = (tags) => {
+    return tags?.map((tag, index) => {
+      return (
+        <span key={index} className='badge bg-secondary'>
+          {tag}
+        </span>
+      );
+    });
+  };
+
   const getComplexityColor = (complexity) => {
     switch (complexity) {
       case 'Easy':
@@ -41,15 +51,16 @@ const SlidingPanel = ({ isOpen, onClose }) => {
   };
 
   const questionList = questions.map((question, index) => (
-    <tr key={question._id}>
-      <td style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
-        {question.title}
-      </td>
-      <td>
-        <span className={`badge ${getComplexityColor(question?.complexity)}`}>
-          {question.complexity}{' '}
-        </span>
-      </td>
+    <tr>
+      <div>
+        <div className='d-flex justify-content-between'>
+          <div style={{ wordWrap: 'break-word' }}>{question.title}</div>
+          <span className={`badge ${getComplexityColor(question?.complexity)}`}>
+            {question.complexity}
+          </span>
+        </div>
+        <div>{RenderTags(question.tags)}</div>
+      </div>
     </tr>
   ));
 
@@ -67,12 +78,7 @@ const SlidingPanel = ({ isOpen, onClose }) => {
           <table className='table table-hover table-striped'>
             <thead className='table-dark'>
               <tr>
-                <th scope='col' width='600'>
-                  Title
-                </th>
-                <th scope='col' width='150'>
-                  Complexity
-                </th>
+                <h2>Question List</h2>
               </tr>
             </thead>
             <tbody className='table-group-divider'>{questionList}</tbody>
