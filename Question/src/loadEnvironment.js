@@ -1,4 +1,4 @@
-require('dotenv').config({ path: `${__dirname}/../.env` });
+require('dotenv').config({ path: `${__dirname}/../../.env` });
 
 const REACT_APP_HOST = process.env.REACT_APP_HOST || 'http://localhost';
 

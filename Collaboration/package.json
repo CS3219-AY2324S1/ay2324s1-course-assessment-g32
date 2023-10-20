@@ -4,8 +4,8 @@
   "description": "",
   "main": "CollaborationServer.js",
   "scripts": {
-    "dev": "nodemon CollaborationServer.js",
-    "start": "node CollaborationServer.js"
+    "dev": "nodemon src/CollaborationServer.js",
+    "start": "node src/CollaborationServer.js"
   },
   "author": "",
   "license": "ISC",
