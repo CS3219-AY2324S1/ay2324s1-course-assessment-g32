@@ -31,8 +31,11 @@ const Collaboration = () => {
 
   return (
     <div className='collaboration-container'>
-      <div className='header'>
-        <h1>Collaboration</h1>
+      <div className='collaboration-header'>
+        <div className='d-flex justify-content-between'>
+          <button type='button' className='btn btn-primary me-2'>Change Question</button>
+          <button type='button' className='btn btn-danger' onClick={handleLeaveRoom}>Leave Room</button>
+        </div>
       </div>
       <div className='content'>
         <div className='left'>
@@ -42,9 +45,6 @@ const Collaboration = () => {
           <CodeEditor socket={socket} roomId={roomId} />
           <Chat socket={socket} roomId={roomId} host={hostId} />
         </div>
-      </div>
-      <div>
-        <button onClick={handleLeaveRoom}>Leave Room</button>
       </div>
     </div>
   );

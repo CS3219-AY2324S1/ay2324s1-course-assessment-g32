@@ -26,4 +26,5 @@
   max-height: 100%; /* Take up the maximum available height */
   overflow-y: auto; /* Enable vertical scrollbar if content overflows */
   text-align: left; /* Align text to the left if needed */
+  padding: 10px;
 }

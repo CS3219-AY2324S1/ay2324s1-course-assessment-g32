@@ -42,9 +42,9 @@ const QuestionContent = ({ question }) => {
           }}
         />
       </div>
-      <div className='card-footer d-flex'>
-        <div className='d-flex flex-wrap gap-1'>{renderTags(tags)}</div>
-        <div className='ms-auto'>
+      <div className='card-footer'>
+        <div className='d-flex justify-content-between'>
+          <div className='d-flex flex-wrap gap-1'>{renderTags(tags)}</div>
           <span className={`badge ${getComplexityColor(complexity)}`}>
             {question.complexity}
           </span>
