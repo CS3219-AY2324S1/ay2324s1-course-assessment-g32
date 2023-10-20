@@ -34,7 +34,7 @@ const QuestionContent = ({ question }) => {
   return (
     <div className='question-content-container'>
       <div className='card-body'>
-        <h1 className='card-title'>{title}</h1>
+        <h2 className='card-title'>{title}</h2>
         <div
           className='scrollable-div'
           dangerouslySetInnerHTML={{

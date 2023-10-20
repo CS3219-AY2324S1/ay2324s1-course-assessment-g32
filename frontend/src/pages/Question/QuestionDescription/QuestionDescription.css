@@ -11,6 +11,10 @@
   max-width: 100%;
   background-color: #f2f2f2;
   border-radius: 5px;
-  border: 1px solid #ccc;
   overflow-y: auto;
+}
+
+.card-header {
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
