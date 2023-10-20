@@ -27,6 +27,10 @@ const SlidingPanel = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const handleRowClick = (id) => {
+
+  };
+
   const RenderTags = (tags) => {
     return tags?.map((tag, index) => {
       return (
@@ -51,7 +55,7 @@ const SlidingPanel = ({ isOpen, onClose }) => {
   };
 
   const questionList = questions.map((question, index) => (
-    <tr>
+    <tr key={question._id} onClick={() => handleRowClick(question._id)}>
       <div>
         <div className='d-flex justify-content-between'>
           <div style={{ wordWrap: 'break-word' }}>{question.title}</div>
