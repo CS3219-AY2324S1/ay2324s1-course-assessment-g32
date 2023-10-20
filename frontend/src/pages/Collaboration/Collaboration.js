@@ -16,6 +16,7 @@ const Collaboration = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState('');
   const [jwtToken, setJwtToken] = useState('');
+  const [code, setCode] = useState('');
 
   const roomId = location.state?.roomId;
   const hostId = location.state?.hostId;
@@ -43,7 +44,7 @@ const Collaboration = () => {
   };
 
   const submitAttempt = () => {
-      attemptQuestion(jwtToken, userId, question._id, 'code').then((res) => {
+      attemptQuestion(jwtToken, userId, question._id, code).then((res) => {
       showSuccessToast(res.data.message);
     }).catch((err) => {
       errorHandler(err);
@@ -60,7 +61,7 @@ const Collaboration = () => {
           <QuestionContent question={question} />
         </div>
         <div className='right'>
-          <CodeEditor socket={socket} roomId={roomId} />
+          <CodeEditor socket={socket} roomId={roomId} handleCodeChange={setCode} />
           <Chat socket={socket} roomId={roomId} host={hostId} />
         </div>
       </div>
