@@ -12,11 +12,10 @@ const getConfig = (jwtToken) => {
   };
 };
 
-export const attemptQuestion = async (jwtToken, questionId, code) => {
-
+export const attemptQuestion = async (jwtToken, userId, questionId, code) => {
   try {
     const attemptData = {
-      jwtToken: jwtToken,
+      userId: userId,
       questionId: questionId,
     };
     return await axios.post(

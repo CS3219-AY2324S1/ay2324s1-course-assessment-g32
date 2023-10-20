@@ -14,7 +14,7 @@ const findAttemptByEmailAndQuestion = async (userId, questionId) => {
     .then(([rows, fields]) => {
       _timeStamp = rows.length ? rows[0].timeStamp : null;
     })
-    .catch(console.error);
+
   await query;
   return { timeStamp: _timeStamp };
 };
@@ -27,7 +27,6 @@ const addAttempt = async (userId, questionId) => {
       userId,
       questionId,
     ])
-    .catch(console.error);
 
   await query; // Wait for new attempt to be inserted
 };
@@ -40,7 +39,6 @@ const deleteUserAttempts = async (userId, questionId) => {
       userId,
       questionId,
     ])
-    .catch(console.error);
 
   await query; // Wait for attempt to be deleted
 };
@@ -53,7 +51,7 @@ const getAttempts = async (userId) => {
     .then(([rows, fields]) => {
       _attempts = rows;
     })
-    .catch(console.error);
+
   await query;
   return _attempts;
 };

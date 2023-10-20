@@ -7,14 +7,15 @@ import QuestionContent from '../../components/Question/QuestionContent/QuestionC
 import { attemptQuestion } from '../../api/HistoryApi';
 import { showSuccessToast } from '../../utils/toast';
 import { errorHandler } from '../../utils/errors';
-import { getCookie } from '../../utils/helpers';
+import { getCookie, getUserId } from '../../utils/helpers';
 import './Collaboration.css';
 import env from '../../loadEnvironment';
 
 const Collaboration = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [jwt, setJwt] = useState('');
+  const [userId, setUserId] = useState('');
+  const [jwtToken, setJwtToken] = useState('');
 
   const roomId = location.state?.roomId;
   const hostId = location.state?.hostId;
@@ -25,10 +26,14 @@ const Collaboration = () => {
   const socket = io(env.COLLAB_URL);
 
   useEffect(() => {
-    // Set the JWT token
-    setJwt(getCookie());
+    const fetchUserId = async () => {
+      const id = await getUserId();
+      setUserId(id);
+    };
+    fetchUserId();
+    setJwtToken(getCookie());
 
-    // Join the Socket.io roozgm when the component mounts
+    // Join the Socket.io room when the component mounts
     socket.emit('joinRoom', { room: roomId, host: hostId });
   }, []);
 
@@ -38,7 +43,7 @@ const Collaboration = () => {
   };
 
   const submitAttempt = () => {
-      attemptQuestion(jwt, question._id, 'code').then((res) => {
+      attemptQuestion(jwtToken, userId, question._id, 'code').then((res) => {
       showSuccessToast(res.data.message);
     }).catch((err) => {
       errorHandler(err);

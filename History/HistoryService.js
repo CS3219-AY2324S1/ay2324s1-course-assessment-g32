@@ -1,17 +1,11 @@
 const historyDatabase = require('./HistoryRepository.js');
-const authApi = require('./helpers/callsToAuth.js');
 
-const addAttempt = async (jwtToken, questionId) => {
+const addAttempt = async (userId, questionId) => {
   try {
-
     // Check for missing inputs
-    if (!jwtToken || !questionId) {
+    if (!userId || !questionId) {
       throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
-
-    // Decrypt jwtToken to get userId
-    const decryptedUser = await authApi.authorize(jwtToken);
-    const userId = decryptedUser.data.userInfo.userId;
 
     // Create using with userId and questionId
     await historyDatabase.addAttempt(userId, questionId);
@@ -20,8 +14,6 @@ const addAttempt = async (jwtToken, questionId) => {
   }
 };
 
-
-// TODO: Change UserId to JWT Token input. Decrypt JWT Token to get UserId.
 const deleteUserAttempts = async (userId) => {
   try {
 
@@ -37,15 +29,11 @@ const deleteUserAttempts = async (userId) => {
   }
 };
 
-const getAttempts = async (jwtToken) => {
+const getAttempts = async (userId) => {
   try {
-    if (!jwtToken) {
+    if (!userId) {
       throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
-
-    // Decrypt jwtToken to get userId
-    const decryptedUser = await authApi.authorize(jwtToken);
-    const userId = decryptedUser.data.userInfo.userId;
 
     return historyDatabase.getAttempts(userId);
   } catch (err) {
