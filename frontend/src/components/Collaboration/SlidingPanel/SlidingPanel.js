@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Spinner from '../Spinner.js';
-import { getQuestions } from '../../api/QuestionApi.js';
-import { errorHandler } from '../../utils/errors.js';
-import { getCookie } from '../../utils/helpers.js';
+import React, { useState, useEffect } from 'react';
+import Spinner from '../../Spinner.js';
+import { getQuestions } from '../../../api/QuestionApi.js';
+import { errorHandler } from '../../../utils/errors.js';
+import { getCookie } from '../../../utils/helpers.js';
 import './SlidingPanel.css';
 
 const SlidingPanel = ({ isOpen, onClose }) => {
@@ -42,7 +42,6 @@ const SlidingPanel = ({ isOpen, onClose }) => {
 
   const questionList = questions.map((question, index) => (
     <tr key={question._id}>
-      <th scope='row'>{index + 1}</th>
       <td style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
         {question.title}
       </td>
@@ -68,13 +67,10 @@ const SlidingPanel = ({ isOpen, onClose }) => {
           <table className='table table-hover table-striped'>
             <thead className='table-dark'>
               <tr>
-                <th scope='col' width='100'>
-                  No.
-                </th>
-                <th scope='col' width='800'>
+                <th scope='col' width='600'>
                   Title
                 </th>
-                <th scope='col' width='200'>
+                <th scope='col' width='150'>
                   Complexity
                 </th>
               </tr>

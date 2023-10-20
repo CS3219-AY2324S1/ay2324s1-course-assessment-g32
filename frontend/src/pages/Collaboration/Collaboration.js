@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import Chat from '../../components/Collaboration/Chat/Chat';
 import CodeEditor from '../../components/Collaboration/CodeEditor/CodeEditor';
+import SlidingPanel from '../../components/Collaboration/SlidingPanel/SlidingPanel';
 import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
-import SlidingPanel from '../../components/SlidingPanel/SlidingPanel';
 import './Collaboration.css';
 import env from '../../loadEnvironment';
 
@@ -38,15 +38,27 @@ const Collaboration = () => {
 
   const handleClosePanel = () => {
     setIsPanelOpen(false);
-  }
+  };
 
   return (
     <div>
       <div className='collaboration-container'>
         <div className='collaboration-header'>
           <div className='d-flex justify-content-between'>
-            <button type='button' className='btn btn-primary me-2' onClick={handleOpenPanel}>Change Question</button>
-            <button type='button' className='btn btn-danger' onClick={handleLeaveRoom}>Leave Room</button>
+            <button
+              type='button'
+              className='btn btn-primary me-2'
+              onClick={handleOpenPanel}
+            >
+              Change Question
+            </button>
+            <button
+              type='button'
+              className='btn btn-danger'
+              onClick={handleLeaveRoom}
+            >
+              Leave Room
+            </button>
           </div>
         </div>
         <div className='content'>
@@ -59,7 +71,9 @@ const Collaboration = () => {
           </div>
         </div>
       </div>
-      {isPanelOpen && <SlidingPanel isOpen={isPanelOpen} onClose={handleClosePanel} />}
+      {isPanelOpen && (
+        <SlidingPanel isOpen={isPanelOpen} onClose={handleClosePanel} />
+      )}
     </div>
   );
 };
