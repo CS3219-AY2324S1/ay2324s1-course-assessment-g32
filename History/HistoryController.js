@@ -22,7 +22,7 @@ const deleteUserAttempts = async (req, res) => {
 
 const getAttempts = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.query;
     const attempts = await historyService.getAttempts(userId);
     res.json({ message: 'SUCCESS', attempts });
   } catch (err) {

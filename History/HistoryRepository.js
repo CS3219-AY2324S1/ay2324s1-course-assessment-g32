@@ -47,7 +47,7 @@ const getAttempts = async (userId) => {
   var _attempts = Array();
   const query = conn
     .promise()
-    .query('SELECT * FROM attempts WHERE userId=?;', [userId])
+    .query('SELECT id, questionId, timeStamp FROM attempts WHERE userId=?;', [userId])
     .then(([rows, fields]) => {
       _attempts = rows;
     })
