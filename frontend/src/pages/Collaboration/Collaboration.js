@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import Chat from '../../components/Collaboration/Chat/Chat';
 import CodeEditor from '../../components/Collaboration/CodeEditor/CodeEditor';
 import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
+import SlidingPanel from '../../components/SlidingPanel/SlidingPanel';
 import './Collaboration.css';
 import env from '../../loadEnvironment';
 
 const Collaboration = () => {
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -29,23 +32,34 @@ const Collaboration = () => {
     navigate('/landing');
   };
 
+  const handleOpenPanel = () => {
+    setIsPanelOpen(true);
+  };
+
+  const handleClosePanel = () => {
+    setIsPanelOpen(false);
+  }
+
   return (
-    <div className='collaboration-container'>
-      <div className='collaboration-header'>
-        <div className='d-flex justify-content-between'>
-          <button type='button' className='btn btn-primary me-2'>Change Question</button>
-          <button type='button' className='btn btn-danger' onClick={handleLeaveRoom}>Leave Room</button>
+    <div>
+      <div className='collaboration-container'>
+        <div className='collaboration-header'>
+          <div className='d-flex justify-content-between'>
+            <button type='button' className='btn btn-primary me-2' onClick={handleOpenPanel}>Change Question</button>
+            <button type='button' className='btn btn-danger' onClick={handleLeaveRoom}>Leave Room</button>
+          </div>
+        </div>
+        <div className='content'>
+          <div className='left'>
+            <QuestionContent question={question} />
+          </div>
+          <div className='right'>
+            <CodeEditor socket={socket} roomId={roomId} />
+            <Chat socket={socket} roomId={roomId} host={hostId} />
+          </div>
         </div>
       </div>
-      <div className='content'>
-        <div className='left'>
-          <QuestionContent question={question} />
-        </div>
-        <div className='right'>
-          <CodeEditor socket={socket} roomId={roomId} />
-          <Chat socket={socket} roomId={roomId} host={hostId} />
-        </div>
-      </div>
+      {isPanelOpen && <SlidingPanel isOpen={isPanelOpen} onClose={handleClosePanel} />}
     </div>
   );
 };
