@@ -8,11 +8,10 @@ import Spinner from '../../components/Spinner.js';
 import { getCookie, getUserId, parseDatetime } from '../../utils/helpers.js';
 import { errorHandler } from '../../utils/errors.js';
 import { getSubmissionHistory } from '../../api/HistoryApi.js';
-import { getQuestionDetails } from '../../api/QuestionApi.js';
+import { appendQuestionTitle } from '../../api/QuestionApi.js';
 
 const SubmissionList = () => {
   const [userId, setUserId] = useState('');
-  const [jwtToken, setJwtToken] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
 
@@ -23,8 +22,9 @@ const SubmissionList = () => {
 
   const fetchData = async () => {
     try {
-      const response = await getSubmissionHistory(jwtToken, await getUserId());
-      setTableData(response.data.attempts);
+      const historyResponse = await getSubmissionHistory(await getCookie(), await getUserId());
+      const questionResponse = await appendQuestionTitle(await getCookie(), historyResponse.data.attempts);
+      setTableData(questionResponse.data.attemptsWithTitles);
       setIsLoading(false);
     } catch (error) {
       errorHandler(error);
@@ -32,7 +32,6 @@ const SubmissionList = () => {
   };
 
   useEffect(() => {
-    setJwtToken(getCookie());
     fetchData();
   }, []);
 
@@ -52,7 +51,7 @@ const SubmissionList = () => {
   const submissionList = tableData.map((submission, index) => (
     <tr key={submission.id}>
       <th scope='row'>{index + 1}</th>
-      <td>{submission.questionId}</td>
+      <td>{submission.title}</td>
       <td>{parseDatetime(submission.timeStamp)}</td>
     </tr>
   ));
@@ -68,7 +67,7 @@ const SubmissionList = () => {
               No.
             </th>
             <th scope='col' width='400'>
-              Question ID
+              Question Title
             </th>
             <th scope='col' width='400'>
               Time of Submission

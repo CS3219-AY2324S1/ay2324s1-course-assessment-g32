@@ -19,13 +19,14 @@ const findAttemptByEmailAndQuestion = async (userId, questionId) => {
   return { timeStamp: _timeStamp };
 };
 
-const addAttempt = async (userId, questionId) => {
+const addAttempt = async (userId, questionId, code) => {
   // Add new attempt to database
   const query = conn
     .promise()
-    .query('INSERT INTO attempts(userId, questionId) VALUES (?, ?);', [
+    .query('INSERT INTO attempts(userId, questionId, code) VALUES (?, ?, ?);', [
       userId,
       questionId,
+      code,
     ])
 
   await query; // Wait for new attempt to be inserted

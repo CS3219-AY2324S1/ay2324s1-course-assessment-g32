@@ -17,6 +17,7 @@ export const attemptQuestion = async (jwtToken, userId, questionId, code) => {
     const attemptData = {
       userId: userId,
       questionId: questionId,
+      code: code,
     };
     return await axios.post(
       historyRootUrl + '/attempts',
@@ -36,14 +37,11 @@ export const attemptQuestion = async (jwtToken, userId, questionId, code) => {
 
 export const getSubmissionHistory = async (jwtToken, userId) => {
   try {
+    let config = getConfig(jwtToken);
+    config.params = { userId: userId };
     return await axios.get(
       historyRootUrl + '/attempts',
-      {
-        params : {
-          userId: userId,
-        }
-      },
-      getConfig(jwtToken)
+      config
     );
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {

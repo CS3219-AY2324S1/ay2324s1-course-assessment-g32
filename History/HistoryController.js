@@ -2,8 +2,8 @@ const historyService = require('./HistoryService.js');
 
 const addAttempt = async (req, res) => {
   try {
-    const { userId, questionId } = req.body;
-    await historyService.addAttempt(userId, questionId);
+    const { userId, questionId, code } = req.body;
+    await historyService.addAttempt(userId, questionId, code);
     res.json({ message: 'SUCCESS: History attempt added' });
   } catch (err) {
     res.status(err?.status || 400).json({ error: err?.message || err });
@@ -29,7 +29,6 @@ const getAttempts = async (req, res) => {
     res.status(err?.status || 400).json({ error: err?.message || err });
   }
 };
-
 
 module.exports = {
   addAttempt,
