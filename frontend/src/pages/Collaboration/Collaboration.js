@@ -40,24 +40,48 @@ const Collaboration = () => {
 
   const handleClosePanel = () => {
     setIsPanelOpen(false);
-  }
+  };
 
   const handleQuestionSelect = (question) => {
     setSelectedQuestion(question);
-  }
+
+    // Send question changes to the server
+    socket.emit('questionChange', { room: roomId, question: question });
+  };
+
+  // Receive question changes from the server
+  useEffect(() => {
+    socket.on('questionUpdate', (updatedQuestion) => {
+      setSelectedQuestion(updatedQuestion);
+    });
+  }, []);
 
   return (
     <div>
       <div className='collaboration-container'>
         <div className='collaboration-header'>
           <div className='d-flex justify-content-between'>
-            <button type='button' className='btn btn-primary me-2' onClick={handleOpenPanel}>Change Question</button>
-            <button type='button' className='btn btn-danger' onClick={handleLeaveRoom}>Leave Room</button>
+            <button
+              type='button'
+              className='btn btn-primary me-2'
+              onClick={handleOpenPanel}
+            >
+              Change Question
+            </button>
+            <button
+              type='button'
+              className='btn btn-danger'
+              onClick={handleLeaveRoom}
+            >
+              Leave Room
+            </button>
           </div>
         </div>
         <div className='content'>
           <div className='left'>
-            {selectedQuestion && <QuestionContent question={selectedQuestion} />}
+            {selectedQuestion && (
+              <QuestionContent question={selectedQuestion} />
+            )}
           </div>
           <div className='right'>
             <CodeEditor socket={socket} roomId={roomId} />
