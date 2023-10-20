@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { exitQueue } from '../../api/MatchApi.js';
 import { getCookie } from '../../utils/helpers.js';
@@ -15,8 +14,6 @@ const MatchingModal = ({ isOpen, onClose }) => {
   const [programmingLanguage, setProgrammingLanguage] = useState('');
   const [sessionID, setSessionID] = useState('');
   const [jwt, setJwt] = useState('');
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     try {
@@ -87,6 +84,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
                 <Queue
                   jwt={jwt}
                   queueName={complexity + programmingLanguage}
+                  complexity={complexity}
                   onCancel={handleMatchingToggle}
                   sessionID={sessionID}
                 />

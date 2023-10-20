@@ -77,6 +77,26 @@ export const getQuestionDetails = async (questionId, jwtToken) => {
   }
 };
 
+export const getMatchingQuestion = async (complexity, jwtToken) => {
+  try {
+    let config = getConfig(jwtToken);
+    config.params = { complexity: complexity };
+    const questionDetails = await axios.get(
+      questionRootUrl + '/getMatchingQuestion',
+      config
+    );
+    return questionDetails.data.question;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+}
+
 export const editQuestion = async (
   id,
   title,

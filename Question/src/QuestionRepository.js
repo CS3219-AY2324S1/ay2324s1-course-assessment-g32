@@ -51,6 +51,14 @@ const findByTitle = async (title) => {
   }
 };
 
+const findByMatchingCriteria = async (complexity) => {
+  try {
+    return await questionModel.findOne({ complexity: complexity });
+  } catch (err) {
+    throw err;
+  }
+}
+
 const editQuestion = async (id, title, complexity, description, tags) => {
   try {
     const fields = {
@@ -79,6 +87,7 @@ module.exports = {
   getQuestionDetails,
   findById,
   findByTitle,
+  findByMatchingCriteria,
   editQuestion,
   deleteQuestion,
 };

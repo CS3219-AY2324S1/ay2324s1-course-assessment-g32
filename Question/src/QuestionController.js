@@ -37,6 +37,17 @@ const getQuestionDetails = async (req, res) => {
   }
 };
 
+// Define a controller function for getting a question that matches the matching criteria
+const getMatchingQuestion = async (req, res) => {
+  try {
+    const { complexity } = req.query;
+    const question = await questionService.getMatchingQuestion(complexity);
+    res.json({ message: 'Question retrieved successfully', question });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
 // Define a controller function for editing a question
 const edit = async (req, res) => {
   try {
@@ -69,6 +80,7 @@ module.exports = {
   create,
   getAll,
   getQuestionDetails,
+  getMatchingQuestion,
   edit,
   deleteQuestion,
 };

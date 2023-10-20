@@ -50,6 +50,18 @@ const getQuestionDetails = async (id) => {
   }
 };
 
+const getMatchingQuestion = async (complexity) => {
+  try {
+    const question = await questionRepository.findByMatchingCriteria(complexity);
+    if (!question) {
+      throw { status: 410, message: 'Question does not exist' };
+    }
+    return question;
+  } catch (err) {
+    throw err;
+  }
+};
+
 const editQuestion = async (id, title, complexity, description, tags) => {
   try {
     missingInputsThrowsValidationError(title, complexity, description);
@@ -84,6 +96,7 @@ module.exports = {
   createQuestion,
   getQuestions,
   getQuestionDetails,
+  getMatchingQuestion,
   editQuestion,
   deleteQuestion,
 };

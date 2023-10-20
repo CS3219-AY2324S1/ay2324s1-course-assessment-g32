@@ -12,5 +12,6 @@ router.delete('/delete', middleware.checkTokenMaintainer, questionController.del
 // User and maintainer can access the remaining routes
 router.get('/getAll', middleware.checkToken, questionController.getAll);
 router.get('/getQuestionDetails', middleware.checkToken, questionController.getQuestionDetails);
+router.get('/getMatchingQuestion', middleware.checkToken, questionController.getMatchingQuestion);
 
 module.exports = router;
