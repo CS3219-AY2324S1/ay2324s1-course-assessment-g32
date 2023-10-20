@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Spinner from '../../Spinner.js';
-import { getQuestions } from '../../../api/QuestionApi.js';
+import { getQuestions, getQuestionDetails } from '../../../api/QuestionApi.js';
 import { errorHandler } from '../../../utils/errors.js';
 import { getCookie } from '../../../utils/helpers.js';
 import './SlidingPanel.css';
 
-const SlidingPanel = ({ isOpen, onClose }) => {
+const SlidingPanel = ({ isOpen, onClose, onSelectQuestion }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [questions, setQuestions] = useState([]);
 
@@ -27,8 +27,10 @@ const SlidingPanel = ({ isOpen, onClose }) => {
     onClose();
   };
 
-  const handleRowClick = (id) => {
-
+  const handleRowClick = async (id) => {
+    const question = await getQuestionDetails(id, getCookie());
+    onSelectQuestion(question);
+    onClose();
   };
 
   const RenderTags = (tags) => {
@@ -56,15 +58,19 @@ const SlidingPanel = ({ isOpen, onClose }) => {
 
   const questionList = questions.map((question, index) => (
     <tr key={question._id} onClick={() => handleRowClick(question._id)}>
-      <div>
-        <div className='d-flex justify-content-between'>
-          <div style={{ wordWrap: 'break-word' }}>{question.title}</div>
-          <span className={`badge ${getComplexityColor(question?.complexity)}`}>
-            {question.complexity}
-          </span>
+      <td>
+        <div>
+          <div className='d-flex justify-content-between'>
+            <div style={{ wordWrap: 'break-word' }}>{question.title}</div>
+            <span
+              className={`badge ${getComplexityColor(question?.complexity)}`}
+            >
+              {question.complexity}
+            </span>
+          </div>
+          <div>{RenderTags(question.tags)}</div>
         </div>
-        <div>{RenderTags(question.tags)}</div>
-      </div>
+      </td>
     </tr>
   ));
 
@@ -79,12 +85,8 @@ const SlidingPanel = ({ isOpen, onClose }) => {
       />
       <div className={`sliding-panel ${isOpen ? 'open' : ''}`}>
         <div className='panel-content'>
+          <h2>Question List</h2>
           <table className='table table-hover table-striped'>
-            <thead className='table-dark'>
-              <tr>
-                <h2>Question List</h2>
-              </tr>
-            </thead>
             <tbody className='table-group-divider'>{questionList}</tbody>
           </table>
         </div>

@@ -10,6 +10,7 @@ import env from '../../loadEnvironment';
 
 const Collaboration = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -23,8 +24,9 @@ const Collaboration = () => {
   const socket = io(env.COLLAB_URL);
 
   useEffect(() => {
-    // Join the Socket.io roozgm when the component mounts
+    // Join the Socket.io room when the component mounts
     socket.emit('joinRoom', { room: roomId, host: hostId });
+    setSelectedQuestion(question);
   }, []);
 
   const handleLeaveRoom = () => {
@@ -38,32 +40,24 @@ const Collaboration = () => {
 
   const handleClosePanel = () => {
     setIsPanelOpen(false);
-  };
+  }
+
+  const handleQuestionSelect = (question) => {
+    setSelectedQuestion(question);
+  }
 
   return (
     <div>
       <div className='collaboration-container'>
         <div className='collaboration-header'>
           <div className='d-flex justify-content-between'>
-            <button
-              type='button'
-              className='btn btn-primary me-2'
-              onClick={handleOpenPanel}
-            >
-              Change Question
-            </button>
-            <button
-              type='button'
-              className='btn btn-danger'
-              onClick={handleLeaveRoom}
-            >
-              Leave Room
-            </button>
+            <button type='button' className='btn btn-primary me-2' onClick={handleOpenPanel}>Change Question</button>
+            <button type='button' className='btn btn-danger' onClick={handleLeaveRoom}>Leave Room</button>
           </div>
         </div>
         <div className='content'>
           <div className='left'>
-            <QuestionContent question={question} />
+            {selectedQuestion && <QuestionContent question={selectedQuestion} />}
           </div>
           <div className='right'>
             <CodeEditor socket={socket} roomId={roomId} />
@@ -72,7 +66,11 @@ const Collaboration = () => {
         </div>
       </div>
       {isPanelOpen && (
-        <SlidingPanel isOpen={isPanelOpen} onClose={handleClosePanel} />
+        <SlidingPanel
+          isOpen={isPanelOpen}
+          onClose={handleClosePanel}
+          onSelectQuestion={handleQuestionSelect}
+        />
       )}
     </div>
   );
