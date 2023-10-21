@@ -4,8 +4,8 @@
   "description": "",
   "main": "QuestionServer.js",
   "scripts": {
-    "dev": "nodemon QuestionServer.js",
-    "start": "node QuestionServer.js"
+    "dev": "nodemon src/QuestionServer.js",
+    "start": "node src/QuestionServer.js"
   },
   "author": "",
   "license": "ISC",
