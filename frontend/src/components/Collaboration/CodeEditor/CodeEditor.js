@@ -8,11 +8,11 @@ import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
 import './CodeEditor.css';
 
-const CodeEditor = ({ socket, roomId }) => {
+const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   const editor = useRef(null);
   const viewRef = useRef(null);
   const [code, setCode] = useState('');
-  const [language, setLanguage] = useState(python());
+  const [language, setLanguage] = useState(selectedLanguage);
 
   const onUpdate = EditorView.updateListener.of((update) => {
     if (update.docChanged) {
@@ -20,17 +20,6 @@ const CodeEditor = ({ socket, roomId }) => {
       setCode(updatedCode);
     }
   });
-
-  const handleLanguageChange = (e) => {
-    const selectedLanguage = e.target.value;
-    setLanguage(getLanguageExtension(selectedLanguage));
-
-    // Send language changes to the server
-    socket.emit('languageChange', {
-      room: roomId,
-      updatedLanguage: selectedLanguage,
-    });
-  };
 
   const getLanguageExtension = (selectedLanguage) => {
     switch (selectedLanguage) {
@@ -43,6 +32,17 @@ const CodeEditor = ({ socket, roomId }) => {
       default:
         return python();
     }
+  };
+
+  const handleLanguageChange = (e) => {
+    const selectedLanguage = e.target.value;
+    setLanguage(selectedLanguage);
+
+    // Send language changes to the server
+    socket.emit('languageChange', {
+      room: roomId,
+      updatedLanguage: selectedLanguage,
+    });
   };
 
   // Send code changes to the server
@@ -72,13 +72,14 @@ const CodeEditor = ({ socket, roomId }) => {
   useEffect(() => {
     socket.on('languageUpdate', (updatedLanguage) => {
       const languageSelect = document.getElementById('languageSelect');
-      if (languageSelect) {
+      if (languageSelect.value !== updatedLanguage) {
         languageSelect.value = updatedLanguage;
+        setLanguage(updatedLanguage);
       }
-      setLanguage(getLanguageExtension(updatedLanguage));
     });
   }, []);
 
+  // Initialize the editor
   useEffect(() => {
     const state = EditorState.create({
       doc: code,
@@ -86,7 +87,7 @@ const CodeEditor = ({ socket, roomId }) => {
         basicSetup,
         keymap.of([...defaultKeymap, indentWithTab]),
         onUpdate,
-        language,
+        getLanguageExtension(language),
       ],
     });
 
@@ -101,9 +102,6 @@ const CodeEditor = ({ socket, roomId }) => {
   return (
     <div className='editor-container'>
       <div className='row'>
-        <label htmlFor='languageSelect' className='col-sm-2'>
-          Language:
-        </label>
         <div className='col-sm-2'>
           <select
             className='form-select-sm'
