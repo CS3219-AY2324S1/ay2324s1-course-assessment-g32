@@ -37,11 +37,11 @@ const getQuestionDetails = async (req, res) => {
   }
 };
 
-// Define a controller function for getting a question that matches the matching criteria
-const getMatchingQuestion = async (req, res) => {
+// Define a controller function for getting a random question by criteria
+const getRandomQuestionByCriteria = async (req, res) => {
   try {
     const { complexity } = req.query;
-    const question = await questionService.getMatchingQuestion(complexity);
+    const question = await questionService.getRandomQuestionByComplexity(complexity);
     res.json({ message: 'Question retrieved successfully', question });
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
@@ -80,7 +80,7 @@ module.exports = {
   create,
   getAll,
   getQuestionDetails,
-  getMatchingQuestion,
+  getRandomQuestionByCriteria,
   edit,
   deleteQuestion,
 };

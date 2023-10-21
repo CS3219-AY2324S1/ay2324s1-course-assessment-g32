@@ -35,6 +35,21 @@ const getQuestionDetails = async (id) => {
   }
 };
 
+const getRandomQuestionByComplexity = async (complexity) => {
+  try {
+    const randomQuestion = await questionModel
+      .aggregate([
+        { $match: { complexity: complexity } },
+        { $sample: { size: 1 } },
+      ])
+      .exec();
+
+    return randomQuestion[0];
+  } catch (err) {
+    throw err;
+  }
+};
+
 const findById = async (id) => {
   try {
     return await questionModel.findOne({ _id: id });
@@ -50,14 +65,6 @@ const findByTitle = async (title) => {
     throw err;
   }
 };
-
-const findByMatchingCriteria = async (complexity) => {
-  try {
-    return await questionModel.findOne({ complexity: complexity });
-  } catch (err) {
-    throw err;
-  }
-}
 
 const editQuestion = async (id, title, complexity, description, tags) => {
   try {
@@ -85,9 +92,9 @@ module.exports = {
   createQuestion,
   getQuestions,
   getQuestionDetails,
+  getRandomQuestionByComplexity,
   findById,
   findByTitle,
-  findByMatchingCriteria,
   editQuestion,
   deleteQuestion,
 };

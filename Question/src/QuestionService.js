@@ -50,9 +50,9 @@ const getQuestionDetails = async (id) => {
   }
 };
 
-const getMatchingQuestion = async (complexity) => {
+const getRandomQuestionByComplexity = async (complexity) => {
   try {
-    const question = await questionRepository.findByMatchingCriteria(complexity);
+    const question = await questionRepository.getRandomQuestionByComplexity(complexity);
     if (!question) {
       throw { status: 410, message: 'Question does not exist' };
     }
@@ -96,7 +96,7 @@ module.exports = {
   createQuestion,
   getQuestions,
   getQuestionDetails,
-  getMatchingQuestion,
+  getRandomQuestionByComplexity,
   editQuestion,
   deleteQuestion,
 };

@@ -7,7 +7,7 @@ const getConfig = (jwtToken) => {
   return {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + jwtToken,
+      Authorization: 'Bearer ' + jwtToken,
     },
   };
 };
@@ -44,7 +44,10 @@ export const createQuestion = async (
 
 export const getQuestions = async (jwtToken) => {
   try {
-    const response = await axios.get(questionRootUrl + '/getAll', getConfig(jwtToken));
+    const response = await axios.get(
+      questionRootUrl + '/getAll',
+      getConfig(jwtToken)
+    );
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -77,12 +80,12 @@ export const getQuestionDetails = async (questionId, jwtToken) => {
   }
 };
 
-export const getMatchingQuestion = async (complexity, jwtToken) => {
+export const getRandomQuestionByCriteria = async (complexity, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { complexity: complexity };
     const questionDetails = await axios.get(
-      questionRootUrl + '/getMatchingQuestion',
+      questionRootUrl + '/getRandomQuestionByCriteria',
       config
     );
     return questionDetails.data.question;
@@ -95,7 +98,7 @@ export const getMatchingQuestion = async (complexity, jwtToken) => {
     }
     throw err;
   }
-}
+};
 
 export const editQuestion = async (
   id,
