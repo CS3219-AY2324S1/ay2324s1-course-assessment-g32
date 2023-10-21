@@ -13,6 +13,11 @@ router.get(
   middleware.checkTokenMaintainer,
   userController.getAllUserInfo
 );
+router.post(
+  '/toggle-user-role',
+  middleware.checkTokenMaintainer,
+  userController.toggleUserRole
+);
 
 // User and maintainer can access the remaining routes
 router.post('/read', middleware.checkToken, userController.getUserInfo);

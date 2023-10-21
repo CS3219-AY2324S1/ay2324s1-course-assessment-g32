@@ -191,6 +191,32 @@ const getUsernameFromEmail = (email) => {
   return email.substring(0, email.indexOf('@'));
 };
 
+const toggleUserRole = async (userId) => {
+  const user = await getUserInfoById(userId);
+  const newIsMaintainer = user.isMaintainer ? 0 : 1; // Toggle the isMaintainer field
+
+  var _success = Boolean();
+  var _placeholders = [];
+  var _sql = 'UPDATE users SET ';
+
+  _sql = _sql.concat('isMaintainer=?');
+  _placeholders.push(newIsMaintainer);
+
+  _sql = _sql.concat(' WHERE id = ?;');
+  _placeholders.push(userId);
+
+  const query = conn
+    .promise()
+    .query(_sql, _placeholders)
+    .then(([result, fields]) => {
+      _success = result.affectedRows === 1;
+    })
+    .catch(console.error);
+
+  await query; // Wait for user to be updated
+  return _success;
+};
+
 module.exports = {
   findByEmail,
   createUser,
@@ -200,4 +226,5 @@ module.exports = {
   getAllUserInfo,
   getUserInfoByEmail,
   getUserInfoById,
+  toggleUserRole,
 };

@@ -75,6 +75,16 @@ const changePassword = async (req, res) => {
   }
 };
 
+const toggleUserRole = async (req, res) => {
+  try {
+    const { id } = req.body;
+    await userService.toggleUserRole(id);
+    res.json({ message: 'SUCCESS: User role toggled' });
+  } catch (err) {
+    res.status(err?.status || 400).json({ error: err?.message || err });
+  }
+};
+
 module.exports = {
   signup,
   login,
@@ -83,4 +93,5 @@ module.exports = {
   updateUser,
   deleteUser,
   changePassword,
+  toggleUserRole,
 };

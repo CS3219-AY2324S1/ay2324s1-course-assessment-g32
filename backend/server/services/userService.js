@@ -224,6 +224,18 @@ const changeUserPassword = async (
   }
 };
 
+const toggleUserRole = async (userId) => {
+  try {
+    if (!userId) {
+      throw Object.assign(new Error('Missing userId'), { status: 400 });
+    }
+
+    return userDatabase.toggleUserRole(userId);
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   loginUser,
   createUser,
@@ -232,4 +244,5 @@ module.exports = {
   updateUser, // Update
   deleteUser, // Delete
   changeUserPassword, // Update
+  toggleUserRole, // Update
 };
