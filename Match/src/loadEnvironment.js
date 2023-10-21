@@ -8,7 +8,10 @@ const AUTH_HOST = process.env.AUTH_HOST || 'localhost';
 const AUTH_PORT = process.env.AUTH_PORT || 5001;
 const AUTH_URL = 'http://' + AUTH_HOST + ':' + AUTH_PORT;
 
-const RABBITMQ_URL = process.env.RABBITMQ_URL || 'amqp://localhost';
+// Dependency Config: RabbitMQ
+const RABBITMQ_HOST = process.env.RABBITMQ_HOST || 'localhost';
+const RABBITMQ_PORT = process.env.RABBITMQ_PORT || 5672;
+const RABBITMQ_URL = 'amqp://' + RABBITMQ_HOST + ':' + RABBITMQ_PORT;
 
 module.exports = {
   MATCH_PORT,

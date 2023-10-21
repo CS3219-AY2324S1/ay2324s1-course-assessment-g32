@@ -7,6 +7,11 @@ services:
     expose: [3306]
     volumes:
       - ./User/initdb:/docker-entrypoint-initdb.d
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:latest
+    ports: ['5672:5672']
+    expose: [5672]
   svc-user:
     container_name: user-service
     build: ./User
@@ -38,6 +43,24 @@ services:
     expose: [6001]
     depends_on:
       - svc-auth
+  svc-match:
+    container_name: match-service
+    build: ./Match
+    env_file: .env
+    environment:
+      - AUTH_HOST=svc-auth
+      - RABBITMQ_HOST=rabbitmq
+    ports: ['7001:7001']
+    expose: [7001]
+    depends_on:
+      - svc-auth
+      - rabbitmq
+  svc-collab:
+    container_name: collab-service
+    build: ./Collaboration
+    env_file: .env
+    ports: ['8001:8001']
+    expose: [8001]
   svc-web-ui:
     container_name: web-ui
     build: ./frontend
@@ -45,10 +68,14 @@ services:
     environment:
       - USER_HOST=user-service
       - AUTH_HOST=auth-service
-      - QUESTION_HOST=question-servcie
+      - QUESTION_HOST=question-service
+      - MATCH_HOST=match-service
+      - COLLAB_HOST=collab-service
     ports: ['3000:3000']
     expose: [3000]
     depends_on:
       - svc-user
       - svc-auth
       - svc-question
+      - svc-match
+      - svc-collab
