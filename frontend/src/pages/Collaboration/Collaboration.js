@@ -5,6 +5,7 @@ import Chat from '../../components/Collaboration/Chat/Chat';
 import CodeEditor from '../../components/Collaboration/CodeEditor/CodeEditor';
 import SlidingPanel from '../../components/Collaboration/SlidingPanel/SlidingPanel';
 import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
+import { showFailureToast } from '../../utils/toast';
 import env from '../../loadEnvironment';
 import './Collaboration.css';
 
@@ -24,6 +25,12 @@ const Collaboration = () => {
   const language = location.state?.question.language;
 
   useEffect(() => {
+
+    // If roomId is not present in the location state, redirect to landing page
+    if (!roomId) {
+      showFailureToast('Invalid Room');
+      navigate('/landing');
+    }
     // Join the Socket.io room when the component mounts
     socket.emit('joinRoom', { room: roomId, host: hostId });
     socket.emit('questionChange', { room: roomId, question: question });
