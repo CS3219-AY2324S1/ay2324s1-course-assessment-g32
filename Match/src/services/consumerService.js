@@ -24,8 +24,7 @@ const handleExitRequest = (request, channel, queueName, message) => {
   if (waitingHost !== undefined) {
     const waitingHostRequest = JSON.parse(waitingHost.content.toString());
     if (waitingHostRequest.sessionID === request.sessionID) {
-      const response = { message: `You have exited ${queueName} room!`, };
-      console.log(`Host ${waitingHostRequest.id} has exited ${queueName} room!`);
+      const response = { message: `You have exited the queue`, };
       channel.sendToQueue(
         waitingHostRequest.replyTo,
         Buffer.from(JSON.stringify(response)),
@@ -41,9 +40,8 @@ const handleExitRequest = (request, channel, queueName, message) => {
 };
 
 // Handle request when the host in current queue times out
-const handleTimeoutRequest = (request, channel, queueName, message) => {
-  const response = { message: `You have timed out in ${queueName} room!`, };
-  console.log(`Host ${request.id} has timed out in ${queueName} room!`);
+const handleTimeoutRequest = (request, channel, message) => {
+  const response = { message: `You have timed out!`, };
   channel.sendToQueue(
     request.replyTo,
     Buffer.from(JSON.stringify(response)),
@@ -55,14 +53,10 @@ const handleTimeoutRequest = (request, channel, queueName, message) => {
 };
 
 // Handle request when a single user is waiting in multiple tabs. Refresh host waiting time.
-const checkMultipleTabsRequest = (request, channel, queueName, message) => {
-
+const checkMultipleTabsRequest = (request, channel, queueName) => {
   const waitingHost = waitingHosts.get(queueName);
-
   if (waitingHost !== undefined && JSON.parse(waitingHost.content.toString()).id === request.id) {
     const waitingHostRequest = JSON.parse(waitingHost.content.toString());
-
-    console.log(`Host ${waitingHostRequest.id} is already waiting in ${queueName} room!`);
     const waitingHostResponse = { message: `You are waiting in multiple tabs!`, };
     // Send the response to waiting host
     channel.sendToQueue(
@@ -79,11 +73,7 @@ const checkMultipleTabsRequest = (request, channel, queueName, message) => {
 
 // Handle request when 2 unique users are matched
 const handleMatchedRequest = (request, channel, queueName, message, waitingHost) => {
-
   const waitingHostRequest = JSON.parse(waitingHost.content.toString());
-
-  console.log(`Host ${request.id} is matched with host ${waitingHostRequest.id} in ${queueName} room!`);
-
   const roomId = generateUniqueRoomId();
   const waitingHostResponse = {
     message: `You have been matched with host ${request.id} in ${queueName} room!`,
@@ -126,7 +116,6 @@ const handleMatchedRequest = (request, channel, queueName, message, waitingHost)
 // Handle no match request
 const handleNoMatchRequest = (request, channel, queueName, message) => {
   // If there is no other host waiting in the queue
-  console.log(`Host ${request.id} is waiting for a ${queueName} match...`);
   waitingHosts.set(queueName, message);
 
   // Set a timeout for the host
@@ -138,9 +127,7 @@ const handleNoMatchRequest = (request, channel, queueName, message) => {
 
     // Ensure that there is no match before sending the timeout response
     if (waitingHostRequest.correlationId === request.correlationId) {
-      const response = { message: `You have timed out in ${queueName} room!`, };
-      console.log(`Host ${request.id} has timed out in ${queueName} room!`);
-
+      const response = { message: `You have timed out!`, };
       channel.sendToQueue(
         request.replyTo,
         Buffer.from(JSON.stringify(response)),
@@ -168,12 +155,12 @@ const consume = async (queueName, channel) => {
 
       // Checks if the host has timed out by the time the request is received by the queue (server)
       if (isTimeOut(request.timestamp)) {
-        handleTimeoutRequest(request, channel, queueName, message);
+        handleTimeoutRequest(request, channel, queueName);
         return;
       }
 
       // Refreshes waiting host if coming from the same user (user opens multiple tabs)
-      checkMultipleTabsRequest(request, channel, queueName, message);
+      checkMultipleTabsRequest(request, channel, queueName);
 
       const waitingHost = waitingHosts.get(queueName);
 
