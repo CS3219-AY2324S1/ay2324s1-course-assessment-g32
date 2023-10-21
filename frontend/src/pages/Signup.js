@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signup } from '../api/UserApi.js'
+import { signup } from '../api/UserApi.js';
 import { showSuccessToast } from '../utils/toast.js';
 import { errorHandler } from '../utils/errors.js';
 
@@ -51,7 +51,7 @@ function Signup() {
         <div className='Auth-form-content'>
           <h3 className='Auth-form-title'>Sign Up</h3>
           <div className='text-center'>
-            Already registered?{' '}
+            Already registered?
             <span className='link-primary' onClick={handleLoginPageChange}>
               Sign In
             </span>

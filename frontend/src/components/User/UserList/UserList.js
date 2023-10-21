@@ -156,7 +156,7 @@ const UserList = () => {
               onClick={() =>
                 handleToggleUserRoleClick(user.id, user.isMaintainer)
               }>
-              Demote to user
+              Demote to normal user
             </Button>
           ) : (
             <Button
