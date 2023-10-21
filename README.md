@@ -36,12 +36,14 @@ Download and install these software if you do not have them locally.
 
 - [Docker Desktop](https://www.docker.com/get-started/)
 
+**Ensure that MySQL Server is NOT running locally.** 
+
 # Testing
 
 For clarity, the commands given below should be executed at the root directory if not specified otherwise.
 
 _The commands below are provided for convenience and may be incorrect.
-If reading the textual instruction is not clear enough, do reach out to us for clarification._
+Do reach out to us for clarification if necessary._
 
 ## Pre-testing Set up
 
@@ -65,8 +67,8 @@ cp template.env .env
 
 ### Start Docker Daemon
 
-For Windows, start _Docker Desktop_.
-For other OS, reach out for clarifcation if unsure.
+Start the docker daemon by opening _Docker Desktop_.
+If _Docker Desktop_ does not support your OS, do reach out to clarify how to start the docker daemon.
 
 To check that the daemon has started, open a terminal and check the version.
 
@@ -117,13 +119,12 @@ to create and start containers of the micro-services.
 docker compose up -d
 ```
 
-It may take a few minutes for the inital build as it needs to download the images online.
+It may take a few minutes for the inital build as it needs to download the images online. 
+The frontend would only be available after the containers are running.
 
 ### Frontend Application
 
 Locally, open a web browser and go to [http://localhost:3000](http://localhost:3000).
-
-Note: during this step, it may not be immediately ready, as the docker may still be building the containers. Please be patient.
 
 ### Sample Accounts
 
@@ -136,6 +137,10 @@ By default, we have created 2 accounts as part of the fresh database. These acco
 
 Note: if you delete these accounts via the user profile management functionalities, you may have from restart the pre-testing steps to get back the accounts.
 
+### Optional Testing of API endpoints
+
+If you wish to test individual microservice's API, you can refer to our [API endpoints](API_Endpoints.md).
+
 ## Post-testing
 
 After testing, open a terminal at the root directory 
@@ -144,12 +149,3 @@ to stop and remove the containers of the micro-services.
 ```shell
 docker compose down
 ```
-
-#
-
-_Disclaimer:_
-
-_While we did our best to make the instructions as clear as possible,
-it is not idiot-proof. 
-we can only put in so much effort into a README,
-since the objective of this assignment and course is not learning how to design a user manual._
