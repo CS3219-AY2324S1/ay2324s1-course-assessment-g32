@@ -16,7 +16,6 @@ const expressServer = async () => {
   app.use('/queue', queueRoutes);
   app.listen(env.MATCH_PORT, () => {
     console.log(`Matchserver is running on port: ${env.MATCH_PORT}`);
-    console.log(`Matchserver is using RabbitMQ server: ${env.RABBITMQ_URL}`)
   });
 };
 
@@ -27,7 +26,7 @@ const rabbitMQserver = async () => {
 
   await channel.assertQueue('commonQueue', { durable: false });
 
-  console.log('Matching service is running...');
+  console.log(`Matchserver is using RabbitMQ server: ${env.RABBITMQ_URL}`)
 
   // Consume from the common queue
   channel.consume('commonQueue', async (message) => {
