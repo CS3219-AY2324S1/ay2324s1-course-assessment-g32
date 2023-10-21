@@ -30,6 +30,8 @@ import UnauthorizedPage from './pages/UnauthorizedPage/UnauthorizedPage';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 // Submission History page
 import SubmissionHistory from './pages/SubmissionHistory/SubmissionHistory';
+// Submission Attempt page
+import SubmissionAttempt from './pages/SubmissionHistory/SubmissionAttempt';
 // Special routes
 import ProtectedRoute from './utils/ProtectedRoute';
 import MaintainerRoute from './utils/MaintainerRoute';
@@ -85,6 +87,7 @@ function App() {
         {/* Submission History for normal users */}
         <Route path='/submission-history' element={<ProtectedRoute />}>
           <Route index element={<SubmissionHistory />} />
+          <Route path='/submission-history/:id' element={<SubmissionAttempt />} />
         </Route>
 
         {/* Collaboration page for normal users*/}

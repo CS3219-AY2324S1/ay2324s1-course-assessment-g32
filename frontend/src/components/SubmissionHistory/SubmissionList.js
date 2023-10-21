@@ -48,8 +48,12 @@ const SubmissionList = () => {
     }
   }, [tableData]); // Initialize whenever tableData changes
 
+  const handleRowClick = (id) => {
+    navigate('/submission-history/' + id);
+  };
+
   const submissionList = tableData.map((submission, index) => (
-    <tr key={submission.id}>
+    <tr key={submission.id} onClick={() => handleRowClick(submission.id)}>
       <th scope='row'>{index + 1}</th>
       <td>{submission.title}</td>
       <td>{parseDatetime(submission.timeStamp)}</td>
