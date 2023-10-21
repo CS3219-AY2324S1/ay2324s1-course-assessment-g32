@@ -5,10 +5,17 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
+import {
+  deleteUser,
+  getAllUsers,
+  toggleUserRole,
+} from '../../../api/UserApi.js';
 import { showSuccessToast } from '../../../utils/toast.js';
 import { getCookie, getUserId, parseDatetime } from '../../../utils/helpers.js';
-import { DeregisterWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
+import {
+  DeregisterWindow,
+  ToggleUserRoleWindow,
+} from '../../ConfirmationWindow/ConfirmationWindows.js';
 import { errorHandler } from '../../../utils/errors.js';
 import './UserList.css';
 
@@ -18,6 +25,11 @@ const UserList = () => {
   const [tableData, setTableData] = useState([]);
   const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
   const [deregisterId, setDeregisterId] = useState(null);
+  const [isToggleUserRoleWindowOpen, setToggleUserRoleWindowOpen] =
+    useState(false);
+  const [toggleUserRoleId, setToggleUserRoleId] = useState(null);
+  const [toggleUserRoleIsMaintainer, setToggleUserRoleIsMaintainer] =
+    useState(null);
 
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
@@ -86,6 +98,35 @@ const UserList = () => {
     setDeregisterWindowOpen(false);
   };
 
+  const handleToggleUserRoleClick = (id, isMaintainer) => {
+    setToggleUserRoleId(id);
+    setToggleUserRoleIsMaintainer(isMaintainer);
+    setToggleUserRoleWindowOpen(true);
+  };
+
+  const handleToggleUserRoleConfirm = async () => {
+    setToggleUserRoleWindowOpen(false);
+    try {
+      await toggleUserRole(toggleUserRoleId, getCookie());
+      fetchData();
+      if (toggleUserRoleIsMaintainer) {
+        // Is now a normal user
+        showSuccessToast(
+          'User has been demoted to a normal user successfully!'
+        );
+      } else {
+        // Is now a maintainer
+        showSuccessToast('User has been promoted to maintainer successfully!');
+      }
+    } catch (error) {
+      errorHandler(error);
+    }
+  };
+
+  const handleToggleUserRoleCancel = () => {
+    setToggleUserRoleWindowOpen(false);
+  };
+
   const userList = tableData.map((user, index) => (
     <tr key={user.id}>
       <th scope='row'>{index + 1}</th>
@@ -108,6 +149,25 @@ const UserList = () => {
             onClick={() => handleDeregisterClick(user.id)}>
             Deregister
           </Button>
+          {user.isMaintainer ? (
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={() =>
+                handleToggleUserRoleClick(user.id, user.isMaintainer)
+              }>
+              Demote to user
+            </Button>
+          ) : (
+            <Button
+              variant='contained'
+              color='warning'
+              onClick={() =>
+                handleToggleUserRoleClick(user.id, user.isMaintainer)
+              }>
+              Promote to maintainer
+            </Button>
+          )}
         </td>
       )}
     </tr>
@@ -160,6 +220,13 @@ const UserList = () => {
         <DeregisterWindow
           onConfirm={handleDeregisterConfirm}
           onClose={handleDeregisterCancel}
+        />
+      )}
+      {isToggleUserRoleWindowOpen && (
+        <ToggleUserRoleWindow
+          onConfirm={handleToggleUserRoleConfirm}
+          onClose={handleToggleUserRoleCancel}
+          isMaintainer={toggleUserRoleIsMaintainer}
         />
       )}
     </div>
