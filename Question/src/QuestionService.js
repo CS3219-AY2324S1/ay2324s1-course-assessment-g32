@@ -38,6 +38,14 @@ const getQuestions = async () => {
   }
 };
 
+const getQuestionsByComplexity = async (complexity) => {
+  try {
+    return await questionRepository.getQuestionsByComplexity(complexity);
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getQuestionDetails = async (id) => {
   try {
     const question = await questionRepository.getQuestionDetails(id);
@@ -95,6 +103,7 @@ const deleteQuestion = async (id) => {
 module.exports = {
   createQuestion,
   getQuestions,
+  getQuestionsByComplexity,
   getQuestionDetails,
   getRandomQuestionByComplexity,
   editQuestion,

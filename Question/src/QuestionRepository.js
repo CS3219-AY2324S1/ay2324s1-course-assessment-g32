@@ -27,6 +27,15 @@ const getQuestions = async () => {
   }
 };
 
+const getQuestionsByComplexity = async (complexity) => {
+  try {
+    // Return all questions without the description
+    return await questionModel.find({ complexity: complexity }, { description: 0 });
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getQuestionDetails = async (id) => {
   try {
     return await questionModel.findOne({ _id: id });
@@ -91,6 +100,7 @@ const deleteQuestion = async (id) => {
 module.exports = {
   createQuestion,
   getQuestions,
+  getQuestionsByComplexity,
   getQuestionDetails,
   getRandomQuestionByComplexity,
   findById,

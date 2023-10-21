@@ -60,6 +60,26 @@ export const getQuestions = async (jwtToken) => {
   }
 };
 
+export const getQuestionsByComplexity = async (complexity, jwtToken) => {
+  try {
+    let config = getConfig(jwtToken);
+    config.params = { complexity: complexity };
+    const response = await axios.get(
+      questionRootUrl + '/getAllByComplexity',
+      config
+    );
+    return response.data.questions;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
 export const getQuestionDetails = async (questionId, jwtToken) => {
   try {
     let config = getConfig(jwtToken);

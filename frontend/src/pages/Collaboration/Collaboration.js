@@ -43,7 +43,7 @@ const Collaboration = () => {
   };
 
   // Send question changes to the server
-  const handleQuestionSelect = (question) => {
+  const handleQuestionChange = (question) => {
     setSelectedQuestion(question);
     socket.emit('questionChange', { room: roomId, question: question });
   };
@@ -82,7 +82,8 @@ const Collaboration = () => {
         <SlidingPanel
           isOpen={isPanelOpen}
           onClose={handleClosePanel}
-          onSelectQuestion={handleQuestionSelect}
+          onChangeQuestion={handleQuestionChange}
+          complexity={complexity}
         />
       )}
     </div>

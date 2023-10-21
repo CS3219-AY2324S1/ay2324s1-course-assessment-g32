@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Spinner from '../../Spinner.js';
-import { getQuestions, getQuestionDetails } from '../../../api/QuestionApi.js';
+import { getQuestionsByComplexity, getQuestionDetails } from '../../../api/QuestionApi.js';
 import { errorHandler } from '../../../utils/errors.js';
 import { getCookie } from '../../../utils/helpers.js';
 import './SlidingPanel.css';
 
-const SlidingPanel = ({ isOpen, onClose, onSelectQuestion }) => {
+const SlidingPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    const fetchDataAndInitializeTable = async () => {
+    const fetchData = async () => {
       try {
-        const questions = await getQuestions(getCookie());
+        const questions = await getQuestionsByComplexity(complexity, getCookie());
         setQuestions(questions);
         setIsLoading(false);
       } catch (error) {
@@ -20,7 +20,7 @@ const SlidingPanel = ({ isOpen, onClose, onSelectQuestion }) => {
       }
     };
 
-    fetchDataAndInitializeTable();
+    fetchData();
   }, []);
 
   const handleOverlayClick = () => {
@@ -29,7 +29,7 @@ const SlidingPanel = ({ isOpen, onClose, onSelectQuestion }) => {
 
   const handleRowClick = async (id) => {
     const question = await getQuestionDetails(id, getCookie());
-    onSelectQuestion(question);
+    onChangeQuestion(question);
     onClose();
   };
 
