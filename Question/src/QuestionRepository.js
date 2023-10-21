@@ -27,9 +27,33 @@ const getQuestions = async () => {
   }
 };
 
+const getQuestionsByComplexity = async (complexity) => {
+  try {
+    // Return all questions without the description
+    return await questionModel.find({ complexity: complexity }, { description: 0 });
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getQuestionDetails = async (id) => {
   try {
     return await questionModel.findOne({ _id: id });
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getRandomQuestionByComplexity = async (complexity) => {
+  try {
+    const randomQuestion = await questionModel
+      .aggregate([
+        { $match: { complexity: complexity } },
+        { $sample: { size: 1 } },
+      ])
+      .exec();
+
+    return randomQuestion[0];
   } catch (err) {
     throw err;
   }
@@ -76,7 +100,9 @@ const deleteQuestion = async (id) => {
 module.exports = {
   createQuestion,
   getQuestions,
+  getQuestionsByComplexity,
   getQuestionDetails,
+  getRandomQuestionByComplexity,
   findById,
   findByTitle,
   editQuestion,

@@ -38,9 +38,31 @@ const getQuestions = async () => {
   }
 };
 
+const getQuestionsByComplexity = async (complexity) => {
+  try {
+    return await questionRepository.getQuestionsByComplexity(complexity);
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getQuestionDetails = async (id) => {
   try {
     const question = await questionRepository.getQuestionDetails(id);
+    if (!question) {
+      throw { status: 410, message: 'Question does not exist' };
+    }
+    return question;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getRandomQuestionByComplexity = async (complexity) => {
+  try {
+    const question = await questionRepository.getRandomQuestionByComplexity(
+      complexity
+    );
     if (!question) {
       throw { status: 410, message: 'Question does not exist' };
     }
@@ -83,7 +105,9 @@ const deleteQuestion = async (id) => {
 module.exports = {
   createQuestion,
   getQuestions,
+  getQuestionsByComplexity,
   getQuestionDetails,
+  getRandomQuestionByComplexity,
   editQuestion,
   deleteQuestion,
 };

@@ -47,6 +47,11 @@ try {
       io.to(data.room).emit('languageUpdate', data.updatedLanguage); // Broadcast language to everyone in the room
     });
 
+    // Handle question changes
+    socket.on('questionChange', (data) => {
+      io.to(data.room).emit('questionUpdate', data.question); // Broadcast question to everyone in the room
+    });
+
     // Handle disconnects
     socket.on('disconnect', () => {
       console.log('A user disconnected');

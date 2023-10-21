@@ -91,7 +91,7 @@ const QuestionList = () => {
       <td>{RenderTags(question.tags)}</td>
       <td>
         <span className={`badge ${getComplexityColor(question?.complexity)}`}>
-          {question.complexity}{' '}
+          {question.complexity}
         </span>
       </td>
     </tr>

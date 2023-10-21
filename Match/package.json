@@ -4,8 +4,8 @@
   "description": "",
   "main": "MatchServer.js",
   "scripts": {
-    "dev": "nodemon MatchServer.js",
-    "start": "node MatchServer.js"
+    "dev": "nodemon src/MatchServer.js",
+    "start": "node src/MatchServer.js"
   },
   "author": "",
   "license": "ISC",

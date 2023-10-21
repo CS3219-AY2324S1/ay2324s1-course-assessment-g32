@@ -7,7 +7,7 @@ const getConfig = (jwtToken) => {
   return {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + jwtToken,
+      Authorization: 'Bearer ' + jwtToken,
     },
   };
 };
@@ -44,7 +44,30 @@ export const createQuestion = async (
 
 export const getQuestions = async (jwtToken) => {
   try {
-    const response = await axios.get(questionRootUrl + '/getAll', getConfig(jwtToken));
+    const response = await axios.get(
+      questionRootUrl + '/getAll',
+      getConfig(jwtToken)
+    );
+    return response.data.questions;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+export const getQuestionsByComplexity = async (complexity, jwtToken) => {
+  try {
+    let config = getConfig(jwtToken);
+    config.params = { complexity: complexity };
+    const response = await axios.get(
+      questionRootUrl + '/getAllByComplexity',
+      config
+    );
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -63,6 +86,26 @@ export const getQuestionDetails = async (questionId, jwtToken) => {
     config.params = { id: questionId };
     const questionDetails = await axios.get(
       questionRootUrl + '/getQuestionDetails',
+      config
+    );
+    return questionDetails.data.question;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+export const getRandomQuestionByCriteria = async (complexity, jwtToken) => {
+  try {
+    let config = getConfig(jwtToken);
+    config.params = { complexity: complexity };
+    const questionDetails = await axios.get(
+      questionRootUrl + '/getRandomQuestionByCriteria',
       config
     );
     return questionDetails.data.question;

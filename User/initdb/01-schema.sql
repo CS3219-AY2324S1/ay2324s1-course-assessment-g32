@@ -1,7 +1,6 @@
 -- enter lines 2 to 14 in mysql shell to create database and table
-CREATE DATABASE assignmentdb;
-
-USE assignmentdb;
+CREATE DATABASE user_profiles;
+USE user_profiles;
 
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,3 +14,5 @@ CREATE TABLE users (
 
 -- use this to change normal user to maintainer manually
 -- UPDATE users SET isMaintainer = TRUE WHERE id = ?;
+
+

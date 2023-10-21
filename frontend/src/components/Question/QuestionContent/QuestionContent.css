@@ -4,15 +4,27 @@
   height: 100%;
 }
 
+.card-title {
+  text-align: center;
+}
+
 .card-body {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow-y: hidden; /* Hide any overflow beyond the card-body */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.card-footer {
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .scrollable-div {
   max-height: 100%; /* Take up the maximum available height */
   overflow-y: auto; /* Enable vertical scrollbar if content overflows */
   text-align: left; /* Align text to the left if needed */
+  padding: 10px;
 }

@@ -16,6 +16,7 @@ const expressServer = async () => {
   app.use('/queue', queueRoutes);
   app.listen(env.MATCH_PORT, () => {
     console.log(`Matchserver is running on port: ${env.MATCH_PORT}`);
+    console.log(`Matchserver is using RabbitMQ server: ${env.RABBITMQ_URL}`)
   });
 };
 

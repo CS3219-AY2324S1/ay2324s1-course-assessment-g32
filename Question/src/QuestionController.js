@@ -26,11 +26,35 @@ const getAll = async (req, res) => {
   }
 };
 
+// Define a controller function for getting all questions by complexity
+const getAllByComplexity = async (req, res) => {
+  try {
+    const { complexity } = req.query;
+    const questions = await questionService.getQuestionsByComplexity(
+      complexity
+    );
+    res.json({ message: 'Questions retrieved successfully', questions });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
 // Define a controller function for getting details for a question
 const getQuestionDetails = async (req, res) => {
   try {
     const { id } = req.query;
     const question = await questionService.getQuestionDetails(id);
+    res.json({ message: 'Question retrieved successfully', question });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
+// Define a controller function for getting a random question by criteria
+const getRandomQuestionByCriteria = async (req, res) => {
+  try {
+    const { complexity } = req.query;
+    const question = await questionService.getRandomQuestionByComplexity(complexity);
     res.json({ message: 'Question retrieved successfully', question });
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
@@ -68,7 +92,9 @@ const deleteQuestion = async (req, res) => {
 module.exports = {
   create,
   getAll,
+  getAllByComplexity,
   getQuestionDetails,
+  getRandomQuestionByCriteria,
   edit,
   deleteQuestion,
 };
