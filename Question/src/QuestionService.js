@@ -60,7 +60,9 @@ const getQuestionDetails = async (id) => {
 
 const getRandomQuestionByComplexity = async (complexity) => {
   try {
-    const question = await questionRepository.getRandomQuestionByComplexity(complexity);
+    const question = await questionRepository.getRandomQuestionByComplexity(
+      complexity
+    );
     if (!question) {
       throw { status: 410, message: 'Question does not exist' };
     }

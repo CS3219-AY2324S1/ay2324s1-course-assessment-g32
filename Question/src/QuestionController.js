@@ -30,7 +30,9 @@ const getAll = async (req, res) => {
 const getAllByComplexity = async (req, res) => {
   try {
     const { complexity } = req.query;
-    const questions = await questionService.getQuestionsByComplexity(complexity);
+    const questions = await questionService.getQuestionsByComplexity(
+      complexity
+    );
     res.json({ message: 'Questions retrieved successfully', questions });
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
