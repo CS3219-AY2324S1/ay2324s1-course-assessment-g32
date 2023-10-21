@@ -1,7 +1,29 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
 
-# Software Requirements
+We have various micro-services including:
+* MySQL Database
+* User Service
+* Auth Service
+* Question Service
+* Frontend Service (Web UI)
 
+Additional Notes:
+
+If you are not using Windows OS, and would like a equivalent instruction for a differnt OS, do reach out to us for clarification.
+
+**For clarifications, do leave your questions at [Feedback PR](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32/pull/1) created in our repository.**
+
+# Requirements
+
+## Network
+
+Internet connection is required.
+
+**[ IMPORTANT! ]** Do _not_ test while on NUS grounds or connected
+(either directly or indirectly) to NUS Wifi.
+(NUS networks blocks MongoDB which is required by our application.) 
+
+## Software
 Download and install these software if you do not have them locally.
 
 - [NodeJS](https://nodejs.org/en/download)
@@ -13,48 +35,38 @@ For development, you may also want to install:
 
 - [MongoDB Compass](https://www.mongodb.com/try/download/compass)
 - [Docker Desktop](https://www.docker.com/get-started/)
-- [Postman](https://www.postman.com/downloads/)
 
-# Setup
+**Ensure that MySQL Server is NOT running locally.** 
 
 
 ## Setup MySQL locally
 
-1. Search for **MySQL 8.1 Command Line Client** on your computer. Execute it to open up the terminal.
-2. Enter your root password.
-3. Run the SQL statements in `./User/schema.sql` on the terminal.
+For clarity, the commands given below should be executed at the root directory if not specified otherwise.
 
-## Setup environment variables
+_The commands below are provided for convenience and may be incorrect.
+Do reach out to us for clarification if necessary._
 
-1. Enter the following command
-   ```
-   cp template.env .env
-   ```
-2. Open `.env` file
-3. Enter root password (previously configured when installing MySQL)  
-   Example: if your root password is "password1234",
-   `MY_SQL_PWD=password1234`
-4. Enter JWT token password (for generating and decoding JWT tokens)  
-   Example: if your root password is "password",
-   `JWT_SECRET_KEY=password`
+## Pre-testing Set up
 
-## Install NodeJS packages
+### Clone repository
 
-```
-npm i install-all && npm run install-all
+Clone the repository locally to your device (laptop/computer).
+
+```shell
+git clone https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32.git
 ```
 
-# Start Application
+Note: If the above not work, please use the correct link or download the source code directly from the release.
 
-Start local MySQL Server (Windows Service), if necessary.
+### Setup environment variables
 
-Start all services using the following commands:
+Duplicate `template.env` as `.env` at the root directory.
 
+```shell
+cp template.env .env
 ```
-npm run start-all
-```
 
-Or start them indvidually (run them in different terminals):
+### Start Docker Daemon
 
 - Frontend: `cd frontend && npm start`
 - Backend: `cd backend && npm start`
@@ -63,7 +75,7 @@ Or start them indvidually (run them in different terminals):
 - User service: `cd User && npm start`
 - Match service: `cd Match && npm start`
 
-# Developer Notes
+To check that the daemon has started, open a terminal and check the version.
 
 | Backend API Path               | Method | Purpose                                             | Parameters (JSON format)                                              | Require JWT token to be in header? | Does user have to be maintainer? |
 |--------------------------------|--------|-----------------------------------------------------|-----------------------------------------------------------------------|------------------------------------|----------------------------------|

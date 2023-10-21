@@ -1,12 +1,14 @@
 require('dotenv').config({ path: `${__dirname}/../../.env` });
 
-const REACT_APP_HOST = process.env.REACT_APP_HOST || 'http://localhost';
-
+// Config for this service
 const QUESTION_PORT = process.env.QUESTION_PORT || 6001;
 
+// Dependency Config: Auth Service
+const AUTH_HOST = process.env.AUTH_HOST || 'localhost';
 const AUTH_PORT = process.env.AUTH_PORT || 5001;
-const AUTH_URL = REACT_APP_HOST + ':' + AUTH_PORT;
+const AUTH_URL = 'http://' + AUTH_HOST + ':' + AUTH_PORT;
 
+// Dependency Config: MongoDB
 const MONGO_CLIENT = process.env.ATLAS_URI || '';
 
 module.exports = {

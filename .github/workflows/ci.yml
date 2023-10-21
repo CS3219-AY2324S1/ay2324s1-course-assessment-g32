@@ -1,26 +1,26 @@
 name: CI Pipeline
 
-on:
-  - push
-
+on: push
 jobs:
   build:
+    timeout-minutes: 5
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Prepare Environment
+        run: mv template.env .env
+
+      - name: Start Containers
+        run: docker compose up -d
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
           cache: 'npm'
-
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.9.0
-        with:
-          mongodb-version: '6.0'
-
-      - name: Install dependencies
-        run: npm ci
+      
+      - name: Stop Containers
+        if: always()
+        run: docker compose down
