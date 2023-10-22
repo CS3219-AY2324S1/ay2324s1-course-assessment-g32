@@ -45,7 +45,7 @@ services:
     environment:
       - USER_HOST=user-service
       - AUTH_HOST=auth-service
-      - QUESTION_HOST=question-servcie
+      - QUESTION_HOST=question-service
     ports: ['3000:3000']
     expose: [3000]
     depends_on:
