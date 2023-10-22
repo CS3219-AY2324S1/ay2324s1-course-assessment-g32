@@ -1,11 +1,11 @@
 {
-    "name": "AuthService",
+    "name": "auth",
     "version": "1.0.0",
     "description": "",
-    "main": "AuthService.js",
+    "main": "src/AuthServer.js",
     "scripts": {
-        "dev": "nodemon AuthService.js",
-        "start": "nodemon AuthService.js"
+        "dev": "nodemon src/AuthServer.js",
+        "start": "node src/AuthServer.js"
     },
     "keywords": [],
     "author": "",

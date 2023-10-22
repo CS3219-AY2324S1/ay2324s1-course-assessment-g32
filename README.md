@@ -17,9 +17,19 @@ For development, you may also want to install:
 
 ## Setup MySQL locally
 
-1. Search for **MySQL 8.1 Command Line Client** on your computer. Execute it to open up the terminal.
-2. Enter your root password.
-3. Run the SQL statements in `./backend/schema.sql` on the terminal.
+1. For Windows, ensure MySQL Windows Service is already started.
+   - `Win + R` to open the run windws
+   - Type `services.msc`
+   - Press `Ctrl + Shift + Enter` to run as administrator
+     - If prompted by _User Account Control_, enter administrator password
+   - In the Services application, search for the MySQL Service (eg. _MYSQL81_ for MySQL 8.1)
+   - Check _Status_ of the service
+     - Running: OK, no further action needed
+     - Blank: Need to be started, do the next step
+   - Right click and press `Start`
+2. Search for **MySQL 8.1 Command Line Client** on your computer. Execute it to open up the terminal.
+3. Enter your root password.
+4. Run the SQL statements in `./backend/schema.sql` on the terminal.
 
 ## Setup environment variables
 
@@ -38,12 +48,12 @@ For development, you may also want to install:
 ## Install NodeJS packages
 
 ```
-npm i install-all && npm run install-all
+npm run install-all
 ```
 
 # Start Application
 
-Start local MySQL Server (Windows Service), if necessary.
+Start local MySQL Server Windows Service, if necessary. Follow the first step under [Setup MySQL locally](#setup-mysql-locally).
 
 Start all services using the following commands:
 
