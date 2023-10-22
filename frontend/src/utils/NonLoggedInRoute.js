@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
-import { getUserInfo } from '../utils/helpers.js';
+import { getLoginStatus } from '../utils/helpers.js';
 
 const NonLoggedInRoute = () => {
   const navigate = useNavigate();
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const userInfo = await getUserInfo();
-      setIsAuthorized(userInfo);
-      if (userInfo) {
-        navigate('/landing');
+    const checkLogInStatus = async () => {
+      const isLoggedInStatus = await getLoginStatus();
+      setIsLoggedIn(isLoggedInStatus);
+      if (isLoggedInStatus) {
+        navigate('/landing', { replace: true });
       }
     };
-    checkAuth();
+    checkLogInStatus();
   }, [navigate]);
 
-  if (isAuthorized) {
+  if (isLoggedIn) {
     return null;
   } else {
     return <Outlet />;
