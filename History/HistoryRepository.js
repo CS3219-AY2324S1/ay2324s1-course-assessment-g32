@@ -6,7 +6,7 @@ const conn = mysql.createConnection({
   ...{ database: env.mysqlDbName },
 });
 
-const findAttemptByEmailAndQuestion = async (userId, questionId) => {
+const findAttemptByUserIdAndQuestion = async (userId, questionId) => {
   var _timeStamp = String();
   const query = conn
     .promise()
@@ -32,7 +32,7 @@ const addAttempt = async (userId, questionId, code) => {
   await query; // Wait for new attempt to be inserted
 };
 
-const deleteUserAttempts = async (userId, questionId) => {
+const deleteAttemptsByUserId = async (userId) => {
   // Delete attempt from database
   const query = conn
     .promise()
@@ -44,7 +44,7 @@ const deleteUserAttempts = async (userId, questionId) => {
   await query; // Wait for attempt to be deleted
 };
 
-const getAttempts = async (userId) => {
+const getAttemptsByUserId = async (userId) => {
   var _attempts = Array();
   const query = conn
     .promise()
@@ -58,8 +58,8 @@ const getAttempts = async (userId) => {
 };
 
 module.exports = {
-  findAttemptByEmailAndQuestion,
+  findAttemptByUserIdAndQuestion,
   addAttempt,
-  deleteUserAttempts,
-  getAttempts,
+  deleteAttemptsByUserId,
+  getAttemptsByUserId,
 };

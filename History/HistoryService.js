@@ -23,7 +23,7 @@ const deleteUserAttempts = async (userId) => {
     }
 
     // Delete attempts
-    await historyDatabase.deleteUserAttempts(userId);
+    await historyDatabase.deleteAttemptsByUserId(userId);
   } catch (err) {
     throw err;
   }
@@ -35,7 +35,7 @@ const getAttempts = async (userId) => {
       throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
 
-    const attempts = await historyDatabase.getAttempts(userId);
+    const attempts = await historyDatabase.getAttemptsByUserId(userId);
     console.log(attempts);
 
     return attempts;
