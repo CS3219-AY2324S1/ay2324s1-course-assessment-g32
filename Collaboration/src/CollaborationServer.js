@@ -6,9 +6,17 @@ console.log('Starting CollaborationServer...');
 
 try {
   const httpServer = http.createServer();
+
+  const allowedOrigins = [
+    env.WEB_URL, // Run locally
+    env.REACT_APP_HOST, // Run via Nginx
+  ];
+
+  console.log('Allowed origins: ', allowedOrigins);
+
   const io = socketIo(httpServer, {
     cors: {
-      origin: env.WEB_URL,
+      origin: allowedOrigins,
       methods: ['GET', 'POST'],
     },
   });

@@ -1,4 +1,13 @@
 services:
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    ports: ['80:80']
+    expose: [80]
+    volumes:
+      - ./Nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - svc-web-ui
   db-user:
     container_name: user-storage
     image: mysql/mysql-server:8.0
@@ -74,8 +83,6 @@ services:
       - QUESTION_HOST=question-service
       - MATCH_HOST=match-service
       - COLLAB_HOST=collab-service
-    ports: ['3000:3000']
-    expose: [3000]
     depends_on:
       - svc-user
       - svc-auth

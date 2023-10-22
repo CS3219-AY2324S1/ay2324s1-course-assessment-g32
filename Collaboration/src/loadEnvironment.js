@@ -11,4 +11,5 @@ const WEB_URL = REACT_APP_HOST + ':' + WEB_PORT;
 module.exports = {
   COLLAB_PORT,
   WEB_URL,
+  REACT_APP_HOST,
 };
