@@ -28,7 +28,7 @@ const findByEmail = async (email) => {
     .catch(console.error);
 
   await query; // Wait for uid and isMaintainer to be updated
-  return { userId: _userId, isMaintainer: _isMaintainer };
+  return { _userId: _userId, _isMaintainer: _isMaintainer };
 };
 
 const createUser = async (email, password) => {
@@ -105,6 +105,7 @@ const getUserInfoById = async (userId) => {
       _userInfo['password'] = userInfo.password;
       _userInfo['created_at'] = userInfo.created_at;
       _userInfo['updated_at'] = userInfo.updated_at;
+      _userInfo['isMaintainer'] = userInfo.isMaintainer;
     })
     .catch(console.error);
 
@@ -193,7 +194,7 @@ const getUsernameFromEmail = (email) => {
 
 const toggleUserRole = async (userId) => {
   const user = await getUserInfoById(userId);
-  const newIsMaintainer = user.isMaintainer ? 0 : 1; // Toggle the isMaintainer field
+  const newIsMaintainer = user?.isMaintainer ? 0 : 1; // Toggle the isMaintainer field
 
   var _success = Boolean();
   var _placeholders = [];
@@ -202,7 +203,7 @@ const toggleUserRole = async (userId) => {
   _sql = _sql.concat('isMaintainer=?');
   _placeholders.push(newIsMaintainer);
 
-  _sql = _sql.concat(' WHERE id = ?;');
+  _sql = _sql.concat(' WHERE id=?;');
   _placeholders.push(userId);
 
   const query = conn
