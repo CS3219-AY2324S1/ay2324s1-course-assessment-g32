@@ -54,7 +54,7 @@ const EditQuestion = () => {
   const handleSaveClick = async (formData) => {
     const { title, complexity, description, tags } = formData;
     try {
-      await editQuestion(id, title, complexity, description, tags);
+      await editQuestion(id, title, complexity, description, tags, getCookie());
       navigate(-1);
       showSuccessToast('Question Edited Successfully!');
     } catch (error) {

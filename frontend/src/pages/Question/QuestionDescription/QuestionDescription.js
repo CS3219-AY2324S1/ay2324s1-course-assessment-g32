@@ -56,7 +56,7 @@ const QuestionDescription = () => {
   const handleConfirmDeletion = async () => {
     setDeletionWindowOpen(false);
     try {
-      await deleteQuestion(id);
+      await deleteQuestion(id, getCookie());
       showSuccessToast('Successfully Deleted!');
       navigate('../');
     } catch (error) {
