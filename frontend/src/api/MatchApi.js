@@ -2,6 +2,9 @@ import axios from 'axios';
 const env = require('../loadEnvironment');
 
 const rootUrl = env.MATCH_URL + '/queue';
+const axiosInstance = axios.create({
+  baseURL: rootUrl,
+});
 
 const getConfig = (jwtToken) => {
   return {
@@ -19,7 +22,7 @@ export const joinQueue = async (jwt, queueName, sessionID) => {
       queueName: queueName,
       sessionID: sessionID,
     };
-    return await axios.post(rootUrl + '/join', data, getConfig(jwt));
+    return await axiosInstance.post("/join", data, getConfig(jwt));
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -38,7 +41,7 @@ export const exitQueue = async (jwt, queueName, sessionID) => {
       queueName: queueName,
       sessionID: sessionID,
     };
-    return await axios.post(rootUrl + '/exit', data, getConfig(jwt));
+    return await axiosInstance.post("/exit", data, getConfig(jwt));
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {

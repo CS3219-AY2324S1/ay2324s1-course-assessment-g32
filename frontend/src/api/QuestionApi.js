@@ -2,6 +2,9 @@ import axios from 'axios';
 const env = require('../loadEnvironment');
 
 const questionRootUrl = env.QUESTION_URL + '/question';
+const axiosInstance = axios.create({
+  baseURL: questionRootUrl,
+});
 
 const getConfig = (jwtToken) => {
   return {
@@ -26,8 +29,8 @@ export const createQuestion = async (
       description: description,
       tags: tags,
     };
-    return await axios.post(
-      questionRootUrl + '/create',
+    return await axiosInstance.post(
+      '/create',
       questionData,
       getConfig(jwtToken)
     );
@@ -44,10 +47,7 @@ export const createQuestion = async (
 
 export const getQuestions = async (jwtToken) => {
   try {
-    const response = await axios.get(
-      questionRootUrl + '/getAll',
-      getConfig(jwtToken)
-    );
+    const response = await axiosInstance.get('/getAll', getConfig(jwtToken));
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -64,10 +64,7 @@ export const getQuestionsByComplexity = async (complexity, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { complexity: complexity };
-    const response = await axios.get(
-      questionRootUrl + '/getAllByComplexity',
-      config
-    );
+    const response = await axiosInstance.get('/getAllByComplexity', config);
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -84,8 +81,8 @@ export const getQuestionDetails = async (questionId, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { id: questionId };
-    const questionDetails = await axios.get(
-      questionRootUrl + '/getQuestionDetails',
+    const questionDetails = await axiosInstance.get(
+      '/getQuestionDetails',
       config
     );
     return questionDetails.data.question;
@@ -104,8 +101,8 @@ export const getRandomQuestionByCriteria = async (complexity, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { complexity: complexity };
-    const questionDetails = await axios.get(
-      questionRootUrl + '/getRandomQuestionByCriteria',
+    const questionDetails = await axiosInstance.get(
+      '/getRandomQuestionByCriteria',
       config
     );
     return questionDetails.data.question;
@@ -136,11 +133,7 @@ export const editQuestion = async (
       description: description,
       tags: tags,
     };
-    return await axios.post(
-      questionRootUrl + '/edit',
-      questionData,
-      getConfig(jwtToken)
-    );
+    return await axiosInstance.post('/edit', questionData, getConfig(jwtToken));
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -156,7 +149,7 @@ export const deleteQuestion = async (id, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { id: id };
-    const response = await axios.delete(questionRootUrl + '/delete', config);
+    const response = await axiosInstance.delete('/delete', config);
     return response;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {

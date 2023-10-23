@@ -12,8 +12,6 @@ try {
     env.REACT_APP_HOST, // Run via Nginx
   ];
 
-  console.log('Allowed origins: ', allowedOrigins);
-
   const io = socketIo(httpServer, {
     cors: {
       origin: allowedOrigins,

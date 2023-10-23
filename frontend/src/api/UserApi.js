@@ -2,6 +2,9 @@ import axios from 'axios';
 const env = require('../loadEnvironment');
 
 const userRootUrl = env.USER_URL + '/user';
+const axiosInstance = axios.create({
+  baseURL: userRootUrl,
+});
 
 const getConfig = () => {
   return {
@@ -22,7 +25,7 @@ const getTokenConfig = (jwtToken) => {
 
 export const signup = async (userData) => {
   try {
-    return await axios.post(userRootUrl + '/signup', userData, getConfig());
+    return await axiosInstance.post('/signup', userData, getConfig());
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -36,7 +39,7 @@ export const signup = async (userData) => {
 
 export const login = async (userData) => {
   try {
-    return await axios.post(userRootUrl + '/login', userData, getConfig());
+    return await axiosInstance.post('/login', userData, getConfig());
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -50,10 +53,7 @@ export const login = async (userData) => {
 
 export const getAllUsers = async (jwtToken) => {
   try {
-    const res = await axios.get(
-      userRootUrl + '/readAll',
-      getTokenConfig(jwtToken)
-    );
+    const res = await axiosInstance.get('/readAll', getTokenConfig(jwtToken));
     return res.data.info;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -68,8 +68,8 @@ export const getAllUsers = async (jwtToken) => {
 
 export const getUser = async (id, jwtToken) => {
   try {
-    const res = await axios.post(
-      userRootUrl + '/read',
+    const res = await axiosInstance.post(
+      '/read',
       { id },
       getTokenConfig(jwtToken)
     );
@@ -87,8 +87,8 @@ export const getUser = async (id, jwtToken) => {
 
 export const updateUsername = async (id, newUsername, jwtToken) => {
   try {
-    const res = await axios.post(
-      userRootUrl + '/update',
+    const res = await axiosInstance.post(
+      '/update',
       { id: id, username: newUsername },
       getTokenConfig(jwtToken)
     );
@@ -112,8 +112,8 @@ export const updatePassword = async (
   jwtToken
 ) => {
   try {
-    return await axios.post(
-      userRootUrl + '/change-password',
+    return await axiosInstance.post(
+      '/change-password',
       {
         id: id,
         currentPassword: currentPassword,
@@ -135,8 +135,8 @@ export const updatePassword = async (
 
 export const deleteUser = async (id, jwtToken) => {
   try {
-    return await axios.post(
-      userRootUrl + '/delete',
+    return await axiosInstance.post(
+      '/delete',
       { id },
       getTokenConfig(jwtToken)
     );

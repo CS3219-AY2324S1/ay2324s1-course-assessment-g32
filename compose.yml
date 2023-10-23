@@ -2,46 +2,46 @@ services:
   nginx:
     container_name: nginx
     image: nginx:latest
-    ports: ['80:80']
-    expose: [80]
+    ports: ['3000:80']
     volumes:
       - ./Nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - svc-web-ui
+
   db-user:
     container_name: user-storage
     image: mysql/mysql-server:8.0
     env_file: .env
     ports: ['3306:3306']
-    expose: [3306]
     volumes:
       - ./User/initdb:/docker-entrypoint-initdb.d
+
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:latest
     ports: ['5672:5672']
-    expose: [5672]
+
   svc-user:
     container_name: user-service
     build: ./User
     env_file: .env
     environment:
-      - MYSQL_HOST=user-storage
-      - AUTH_HOST=auth-service
+      - MYSQL_HOST=db-user
+      - AUTH_HOST=svc-auth
     ports: ['4001:4001']
-    expose: [4001]
     depends_on:
       db-user:
         condition: service_started
         restart: true
       svc-auth:
         condition: service_started
+
   svc-auth:
     container_name: auth-service
     build: ./Auth
     env_file: .env
     ports: ['5001:5001']
-    expose: [5001]
+
   svc-question:
     container_name: question-service
     build: ./Question
@@ -49,40 +49,40 @@ services:
     environment:
       - AUTH_HOST=svc-auth
     ports: ['6001:6001']
-    expose: [6001]
     depends_on:
       - svc-auth
+
   svc-match:
     container_name: match-service
     build: ./Match
     env_file: .env
     environment:
-      - AUTH_HOST=svc-auth
       - RABBITMQ_HOST=rabbitmq
+      - AUTH_HOST=svc-auth
     ports: ['7001:7001']
-    expose: [7001]
     depends_on:
       rabbitmq:
         condition: service_started
         restart: true
       svc-auth:
         condition: service_started
+
   svc-collab:
     container_name: collab-service
     build: ./Collaboration
     env_file: .env
     ports: ['8001:8001']
-    expose: [8001]
+
   svc-web-ui:
     container_name: web-ui
     build: ./frontend
     env_file: .env
     environment:
-      - USER_HOST=user-service
-      - AUTH_HOST=auth-service
-      - QUESTION_HOST=question-service
-      - MATCH_HOST=match-service
-      - COLLAB_HOST=collab-service
+      - AUTH_HOST=svc-auth
+      - USER_HOST=svc-user
+      - QUESTION_HOST=svc-question
+      - MATCH_HOST=svc-match
+      - COLLAB_HOST=svc-collab
     depends_on:
       - svc-user
       - svc-auth

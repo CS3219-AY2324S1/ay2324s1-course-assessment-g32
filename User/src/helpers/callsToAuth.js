@@ -2,10 +2,13 @@ const axios = require('axios');
 const env = require('../loadEnvironment.js');
 
 const authRootUrl = env.AUTH_URL + '/auth';
+const axiosInstance = axios.create({
+  baseURL: authRootUrl,
+});
 
 const getToken = async (userInfo) => {
   try {
-    return await axios.post(authRootUrl + '/generate', userInfo, {
+    return await axiosInstance.post('/generate', userInfo, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -23,7 +26,7 @@ const getToken = async (userInfo) => {
 
 const authorize = async (token) => {
   try {
-    return await axios.get(authRootUrl + '/authorize', {
+    return await axiosInstance.get('/authorize', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token,
@@ -42,7 +45,7 @@ const authorize = async (token) => {
 
 const authorizeMaintainer = async (token) => {
   try {
-    return await axios.get(authRootUrl + '/authorizeMaintainer', {
+    return await axiosInstance.get('/authorizeMaintainer', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token,
