@@ -54,7 +54,7 @@ const EditQuestion = () => {
   const handleSaveClick = async (formData) => {
     const { title, complexity, description, tags } = formData;
     try {
-      await editQuestion(id, title, complexity, description, tags);
+      await editQuestion(id, title, complexity, description, tags, getCookie());
       navigate(-1);
       showSuccessToast('Question Edited Successfully!');
     } catch (error) {
@@ -73,12 +73,27 @@ const EditQuestion = () => {
             <h2>Edit</h2>
           </div>
           <div className='card-body'>
-            <QuestionForm oldFormData={formData} onFormSubmit={handleSaveClick} />
+            <QuestionForm
+              oldFormData={formData}
+              onFormSubmit={handleSaveClick}
+            />
           </div>
           <div className='card-footer'>
             <div className='d-flex justify-content-between'>
-              <button type='button' className='btn btn-secondary' onClick={handleBackClick}>Back</button>
-              <button type='submit' form='questionForm' className='btn btn-success'>Save</button>
+              <button
+                type='button'
+                className='btn btn-secondary'
+                onClick={handleBackClick}
+              >
+                Back
+              </button>
+              <button
+                type='submit'
+                form='questionForm'
+                className='btn btn-success'
+              >
+                Save
+              </button>
             </div>
           </div>
           {isEditWindowOpen && (
