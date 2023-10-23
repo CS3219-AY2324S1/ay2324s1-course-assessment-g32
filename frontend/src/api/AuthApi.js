@@ -1,6 +1,6 @@
 import axios from 'axios';
-
 const env = require('../loadEnvironment.js');
+
 const authRootUrl = env.AUTH_URL + '/auth';
 
 // To get userId/isMaintainer

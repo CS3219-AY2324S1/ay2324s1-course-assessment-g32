@@ -7,7 +7,7 @@ const getConfig = (jwtToken) => {
   return {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + jwtToken,
+      'Authorization': 'Bearer ' + jwtToken,
     },
   };
 };
