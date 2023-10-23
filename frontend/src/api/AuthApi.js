@@ -1,15 +1,9 @@
-import axios from 'axios';
-const env = require('../loadEnvironment.js');
-
-const authRootUrl = env.AUTH_URL + '/auth';
-const axiosInstance = axios.create({
-  baseURL: authRootUrl,
-});
+import { axiosAuth } from '../utils/axios';
 
 // To get userId/isMaintainer
 export const authorize = async (token) => {
   try {
-    return await axiosInstance.get('/authorize', {
+    return await axiosAuth.get('/authorize', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token,
