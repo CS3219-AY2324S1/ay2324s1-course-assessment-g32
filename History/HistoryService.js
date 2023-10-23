@@ -34,10 +34,7 @@ const getAttempts = async (userId) => {
     if (!userId) {
       throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
-
     const attempts = await historyDatabase.getAttemptsByUserId(userId);
-    console.log(attempts);
-
     return attempts;
   } catch (err) {
     throw err;

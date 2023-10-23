@@ -128,11 +128,11 @@ export const deleteQuestion = async (id, jwtToken) => {
 
 export const appendQuestionTitle = async (jwtToken, attempts) => {
   try {
-    let config = getConfig(jwtToken);
-    config.params = { attempts: attempts };
-    const response = await axios.get(
+    const data = { attempts: attempts };
+    const response = await axios.post(
       questionRootUrl + '/appendQuestionTitle',
-      config
+      data,
+      getConfig(jwtToken),
     );
     return response;
   } catch (err) {

@@ -83,8 +83,11 @@ const deleteQuestion = async (id) => {
 const appendQuestionTitle = async (attempts) => {
   try {
     const attemptsWithTitles = await Promise.all(attempts.map(async (entry) => {
-      const entryWithTitle = await getQuestionDetails(entry.questionId);
-      return { ...entry, title: entryWithTitle.title };
+      const question = await questionRepository.getQuestionDetails(entry.questionId);
+      if (question === null) {
+        return { ...entry, title: 'Question Not Found' };
+      }
+      return { ...entry, title: question.title };
     }));
     return attemptsWithTitles;
   } catch (err) {

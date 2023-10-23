@@ -56,7 +56,7 @@ const SubmissionList = () => {
     <tr key={submission.id} onClick={() => handleRowClick(submission.id)}>
       <th scope='row'>{index + 1}</th>
       <td>{submission.title}</td>
-      <td>{parseDatetime(submission.timeStamp)}</td>
+      <td>{parseDatetime(submission.createdAt)}</td>
     </tr>
   ));
 

@@ -12,6 +12,6 @@ router.delete('/delete', middleware.checkTokenMaintainer, questionController.del
 // User and maintainer can access the remaining routes
 router.get('/getAll', middleware.checkToken, questionController.getAll);
 router.get('/getQuestionDetails', middleware.checkToken, questionController.getQuestionDetails);
-router.get('/appendQuestionTitle', middleware.checkToken, questionController.appendQuestionTitle);
+router.post('/appendQuestionTitle', middleware.checkToken, questionController.appendQuestionTitle);
 
 module.exports = router;

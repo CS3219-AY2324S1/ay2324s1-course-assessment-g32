@@ -14,7 +14,7 @@ const addAttempt = async (userId, questionId, code) => {
   try {
     const history = new historyModel({
       userId: userId,
-      questionId: new mongoose.Types.ObjectId(questionId),
+      questionId: questionId,
       code: code,
     });
 
@@ -24,17 +24,28 @@ const addAttempt = async (userId, questionId, code) => {
   }
 };
 
-
 const deleteAttemptsByUserId = async (userId) => {
-  return
+  try {
+    await historyModel.deleteMany({ userId: userId });
+  } catch (err) {
+    throw err;
+  }
 };
 
 const getAttemptsByUserId = async (userId) => {
-  return
+  try {
+    return await historyModel.find({ userId: userId });
+  } catch (err) {
+    throw err;
+  }
 };
 
 const deleteAttemptsByQuestionId = async (questionId) => {
-  return
+  try {
+    await historyModel.deleteMany({ questionId: questionId });
+  } catch (err) {
+    throw err;
+  }
 };
 
 module.exports = {
