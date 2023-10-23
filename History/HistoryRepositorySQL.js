@@ -1,3 +1,4 @@
+/*
 const mysql = require('mysql2');
 const env = require('./loadEnvironment.js');
 
@@ -69,3 +70,4 @@ module.exports = {
   getAttemptsByUserId,
   deleteAttemptsByQuestionId,
 };
+*/

@@ -1,60 +1,40 @@
-const mysql = require('mysql2');
-const env = require('./loadEnvironment.js');
-
-const conn = mysql.createConnection({
-  ...env.mysqlCreds,
-  ...{ database: env.mysqlDbName },
-});
+const historyModel = require('./HistoryModel');
+const mongoose = require('mongoose');
 
 const findAttemptByUserIdAndQuestion = async (userId, questionId) => {
-  var _timeStamp = String();
-  const query = conn
-    .promise()
-    .query('SELECT timeStamp FROM attempts WHERE userId=? AND questionId=?;', [userId, questionId])
-    .then(([rows, fields]) => {
-      _timeStamp = rows.length ? rows[0].timeStamp : null;
-    })
-
-  await query;
-  return { timeStamp: _timeStamp };
+  try {
+    return await historyModel.findOne({ userId: userId, questionId: questionId });
+  } catch (err) {
+    throw err;
+  }
 };
 
 const addAttempt = async (userId, questionId, code) => {
   // Add new attempt to database
-  const query = conn
-    .promise()
-    .query('INSERT INTO attempts(userId, questionId, code) VALUES (?, ?, ?);', [
-      userId,
-      questionId,
-      code,
-    ])
+  try {
+    const history = new historyModel({
+      userId: userId,
+      questionId: new mongoose.Types.ObjectId(questionId),
+      code: code,
+    });
 
-  await query; // Wait for new attempt to be inserted
+    await history.save();
+  } catch (err) {
+    throw err;
+  }
 };
 
-const deleteAttemptsByUserId = async (userId) => {
-  // Delete attempt from database
-  const query = conn
-    .promise()
-    .query('DELETE FROM attempts WHERE userId=?;', [
-      userId,
-      questionId,
-    ])
 
-  await query; // Wait for attempt to be deleted
+const deleteAttemptsByUserId = async (userId) => {
+  return
 };
 
 const getAttemptsByUserId = async (userId) => {
-  var _attempts = Array();
-  const query = conn
-    .promise()
-    .query('SELECT id, questionId, timeStamp FROM attempts WHERE userId=?;', [userId])
-    .then(([rows, fields]) => {
-      _attempts = rows;
-    })
+  return
+};
 
-  await query;
-  return _attempts;
+const deleteAttemptsByQuestionId = async (questionId) => {
+  return
 };
 
 module.exports = {
@@ -62,4 +42,5 @@ module.exports = {
   addAttempt,
   deleteAttemptsByUserId,
   getAttemptsByUserId,
+  deleteAttemptsByQuestionId,
 };

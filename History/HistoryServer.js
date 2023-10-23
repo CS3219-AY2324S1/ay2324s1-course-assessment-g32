@@ -1,6 +1,6 @@
 const cors = require('cors');
 const express = require('express');
-const mysql = require('mysql2');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const historyRoutes = require('./HistoryRoutes.js');
 const env = require('./loadEnvironment.js');
@@ -16,15 +16,16 @@ app.listen(env.HISTORY_PORT, () => {
 });
 
 try {
-  const mysqlDb = mysql.createConnection({
-    ...env.mysqlCreds,
-    ...{ database: env.mysqlDbName },
+  mongoose.connect(env.MONGO_CLIENT, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   });
-
-  mysqlDb.connect((error) => {
-    if (error)
-      throw new Error('MySQL database connection error:' + error.message);
-    console.log('SUCCESS: Connected to the MySQL database');
+  const mongoDb = mongoose.connection;
+  mongoDb.once('open', () => {
+    console.log('SUCCESS: Connected to the MongoDB database');
+  });
+  mongoDb.on('error', (error) => {
+    console.error('MongoDB database connection error:', error);
   });
 } catch (err) {
   console.error(err);
