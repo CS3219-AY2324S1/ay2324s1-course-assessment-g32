@@ -224,13 +224,17 @@ const changeUserPassword = async (
   }
 };
 
-const toggleUserRole = async (userId) => {
+/**
+ * Toggles the role of the user. Throws error if no parameters.
+ * @param {string | number} id User ID
+ */
+const toggleUserRole = async (id) => {
   try {
-    if (!userId) {
-      throw Object.assign(new Error('Missing userId'), { status: 400 });
+    if (!id) {
+      throw Object.assign(new Error('Missing user id'), { status: 400 });
     }
 
-    return userDatabase.toggleUserRole(userId);
+    return userDatabase.toggleUserRole(id);
   } catch (err) {
     throw err;
   }

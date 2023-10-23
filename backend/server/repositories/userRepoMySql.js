@@ -28,7 +28,7 @@ const findByEmail = async (email) => {
     .catch(console.error);
 
   await query; // Wait for uid and isMaintainer to be updated
-  return { _userId: _userId, _isMaintainer: _isMaintainer };
+  return { userId: _userId, isMaintainer: _isMaintainer };
 };
 
 const createUser = async (email, password) => {
@@ -57,7 +57,7 @@ const createUser = async (email, password) => {
 
 const getUserInfoByEmail = async (email) => {
   var _userId = Number();
-  await findByEmail(email).then((userInfo) => (_userId = userInfo._userId));
+  await findByEmail(email).then((userInfo) => (_userId = userInfo.userId));
 
   if (!_userId) throw 'No user is using ' + email;
 
@@ -192,6 +192,11 @@ const getUsernameFromEmail = (email) => {
   return email.substring(0, email.indexOf('@'));
 };
 
+/**
+ * Toggle role of user of given userId from the database.
+ * @param {int|string} userId
+ * @returns If the deletion was successful
+ */
 const toggleUserRole = async (userId) => {
   const user = await getUserInfoById(userId);
   const newIsMaintainer = user?.isMaintainer ? 0 : 1; // Toggle the isMaintainer field

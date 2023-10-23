@@ -161,7 +161,7 @@ const UserList = () => {
           ) : (
             <Button
               variant='contained'
-              color='warning'
+              color='success'
               onClick={() =>
                 handleToggleUserRoleClick(user.id, user.isMaintainer)
               }>
@@ -186,7 +186,7 @@ const UserList = () => {
             <th scope='col' width='50'>
               No.
             </th>
-            <th scope='col' width='400'>
+            <th scope='col' width='300'>
               Username
             </th>
             <th scope='col' width='400'>
@@ -198,7 +198,7 @@ const UserList = () => {
             <th scope='col' width='400'>
               Updated At
             </th>
-            <th scope='col' width='300'>
+            <th scope='col' width='400'>
               Actions
             </th>
           </tr>
