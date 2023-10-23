@@ -85,11 +85,11 @@ export const getUser = async (id, jwtToken) => {
   }
 };
 
-export const updateUsername = async (id, newUsername, jwtToken) => {
+export const updateDisplayName = async (id, newDisplayName, jwtToken) => {
   try {
     const res = await axios.post(
       userRootUrl + '/update',
-      { id: id, username: newUsername },
+      { id: id, displayName: newDisplayName },
       getTokenConfig(jwtToken)
     );
     return res;

@@ -72,9 +72,9 @@ const UserList = () => {
     navigate('/users-management/new');
   };
 
-  const handleEditClick = (id, username) => {
+  const handleEditClick = (id, displayName) => {
     navigate('/users-management/edit', {
-      state: { user: { id: id, username: username } },
+      state: { user: { id: id, displayName: displayName } },
     });
   };
 
@@ -130,17 +130,17 @@ const UserList = () => {
   const userList = tableData.map((user, index) => (
     <tr key={user.id}>
       <th scope='row'>{index + 1}</th>
-      <td>{user.username}</td>
+      <td>{user.displayName}</td>
       <td>{user.email}</td>
-      <td>{parseDatetime(user.created_at)}</td>
-      <td>{parseDatetime(user.updated_at)}</td>
+      <td>{parseDatetime(user.createdAt)}</td>
+      <td>{parseDatetime(user.updatedAt)}</td>
       {user.id === userId ? (
         <td />
       ) : (
         <td>
           <Button
             variant='contained'
-            onClick={() => handleEditClick(user.id, user.username)}>
+            onClick={() => handleEditClick(user.id, user.displayName)}>
             Edit
           </Button>
           <Button
@@ -187,7 +187,7 @@ const UserList = () => {
               No.
             </th>
             <th scope='col' width='300'>
-              Username
+              Display Name
             </th>
             <th scope='col' width='400'>
               Email

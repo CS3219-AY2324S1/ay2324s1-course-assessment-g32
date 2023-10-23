@@ -91,7 +91,7 @@ Or start them indvidually (run them in different terminals):
 | `/user/readAll`                | GET    | Used to get all users information                   | -                                                                     | Yes                                | Yes                              |
 | `/user/signup`                 | POST   | Used to create new user                             | `email` <br> `password` <br> `confirmPassword`                        | No                                 | -                                |
 | `/user/toggle-user-role`       | POST   | Used to toggle user role (normal user / maintainer) | `id`                                                                  | Yes                                | Yes                              |
-| `/user/update`                 | POST   | Used to update user information (username)          | `id` <br> `username`                                                  | Yes                                | No                               |
+| `/user/update`                 | POST   | Used to update user information (displayName)       | `id` <br> `displayName`                                               | Yes                                | No                               |
 
 - `auth` API (port 5001) contains all the authorization related endpoints.
 - `question` API (port 3001) contains all the question data related endpoints.

@@ -42,8 +42,8 @@ const getUserInfo = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { id, username } = req.body;
-    await userService.updateUser(id, username);
+    const { id, displayName } = req.body;
+    await userService.updateUser(id, displayName);
     res.json({ message: 'SUCCESS: User info updated' });
   } catch (err) {
     res.status(err?.status || 400).json({ error: err?.message || err });
