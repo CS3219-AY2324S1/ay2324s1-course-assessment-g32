@@ -85,11 +85,11 @@ const appendQuestionTitle = async (attempts) => {
     const attemptsWithTitles = await Promise.all(attempts.map(async (entry) => {
       const question = await questionRepository.getQuestionDetails(entry.questionId);
       if (question === null) {
-        return { ...entry, title: 'Question Not Found' };
+        return { ...entry, title: null };
       }
       return { ...entry, title: question.title };
     }));
-    return attemptsWithTitles;
+    return attemptsWithTitles.filter((entry) => entry.title !== null);
   } catch (err) {
     throw err;
   }
