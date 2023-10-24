@@ -6,13 +6,16 @@ import { defaultKeymap, indentWithTab } from '@codemirror/commands';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
+import { jsPython } from 'jspython-interpreter';
 import './CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   const editor = useRef(null);
   const viewRef = useRef(null);
   const [code, setCode] = useState('');
+  const [codeExecutionResult, setCodeExecutionResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
+  const pyInterpreter = jsPython();
 
   const onUpdate = EditorView.updateListener.of((update) => {
     if (update.docChanged) {
@@ -43,6 +46,32 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
       room: roomId,
       updatedLanguage: selectedLanguage,
     });
+  };
+
+  const executePyCode = () => {
+    try {
+      pyInterpreter.evaluate(code).then(res => {
+        setCodeExecutionResult(res)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  const handleCodeExecution = () => {
+    switch (language) {
+      case 'Python':
+        executePyCode();
+        break
+      case 'Java':
+        console.log("java");
+        break
+      case 'C++':
+        console.log("cpp");
+        break
+      default:
+        eval("console.log('hello world js')") ;
+    }
   };
 
   // Send code changes to the server
@@ -113,10 +142,22 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
             <option value='Java'>Java</option>
             <option value='C++'>C++</option>
           </select>
+          <button type='button' className='btn btn-primary me-2' onClick={handleCodeExecution}>
+            Run code
+          </button>
         </div>
       </div>
       <div className='code-editor'>
         <div ref={editor}></div>
+      </div>
+      <div className='output-container'>
+        <textarea
+          className='form-control'
+          rows='10'
+          readOnly
+          placeholder='Code execution results will appear here'
+          value={codeExecutionResult} // Use codeExecutionResult to display execution output
+        />
       </div>
     </div>
   );

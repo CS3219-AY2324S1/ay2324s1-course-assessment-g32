@@ -26,6 +26,7 @@
         "env-cmd": "^10.1.0",
         "jquery": "^3.7.1",
         "js-cookie": "^3.0.5",
+        "jspython-interpreter": "^2.1.15",
         "react": "^18.2.0",
         "react-bootstrap": "^2.8.0",
         "react-dom": "^18.2.0",
