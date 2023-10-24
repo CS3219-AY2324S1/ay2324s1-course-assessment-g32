@@ -68,11 +68,9 @@ export const getAllUsers = async (jwtToken) => {
 
 export const getUser = async (id, jwtToken) => {
   try {
-    const res = await axios.post(
-      userRootUrl + '/read',
-      { id },
-      getTokenConfig(jwtToken)
-    );
+    let config = getTokenConfig(jwtToken);
+    config.params = { id: id };
+    const res = await axios.get(userRootUrl + '/read', config);
     return res.data.info;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -85,11 +83,11 @@ export const getUser = async (id, jwtToken) => {
   }
 };
 
-export const updateUsername = async (id, newUsername, jwtToken) => {
+export const updateDisplayName = async (id, newDisplayName, jwtToken) => {
   try {
     const res = await axios.post(
       userRootUrl + '/update',
-      { id: id, username: newUsername },
+      { id: id, displayName: newDisplayName },
       getTokenConfig(jwtToken)
     );
     return res;
@@ -113,7 +111,7 @@ export const updatePassword = async (
 ) => {
   try {
     return await axios.post(
-      userRootUrl + '/change-password',
+      userRootUrl + '/changePassword',
       {
         id: id,
         currentPassword: currentPassword,
@@ -135,8 +133,24 @@ export const updatePassword = async (
 
 export const deleteUser = async (id, jwtToken) => {
   try {
+    let config = getTokenConfig(jwtToken);
+    config.params = { id: id };
+    return await axios.delete(userRootUrl + '/delete', config);
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+export const toggleUserRole = async (id, jwtToken) => {
+  try {
     return await axios.post(
-      userRootUrl + '/delete',
+      userRootUrl + '/toggleUserRole',
       { id },
       getTokenConfig(jwtToken)
     );

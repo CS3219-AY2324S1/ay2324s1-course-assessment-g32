@@ -20,10 +20,10 @@ const findByEmail = async (email) => {
   var _isMaintainer = Boolean();
   const query = conn
     .promise()
-    .query('SELECT id, isMaintainer FROM users WHERE email=?;', [email])
+    .query('SELECT id, is_maintainer FROM users WHERE email=?;', [email])
     .then(([rows, fields]) => {
       _userId = rows.length ? rows[0].id : null;
-      _isMaintainer = rows.length ? rows[0].isMaintainer : null;
+      _isMaintainer = rows.length ? rows[0].is_maintainer : null;
     })
     .catch(console.error);
 
@@ -34,18 +34,17 @@ const findByEmail = async (email) => {
 const createUser = async (email, password) => {
   var _userId = Number();
   var _password = String();
-  const _username = getUsernameFromEmail(email);
+  const _displayName = getDisplayNameFromEmail(email);
 
   await password.then((x) => (_password = x));
 
   // Add new user to database
   const query = conn
     .promise()
-    .query('INSERT INTO users(username, email, password) VALUES (?, ?, ?);', [
-      _username,
-      email,
-      _password,
-    ])
+    .query(
+      'INSERT INTO users(display_name, email, password) VALUES (?, ?, ?);',
+      [_displayName, email, _password]
+    )
     .then(([result, fields]) => {
       _userId = result.insertId;
     })
@@ -57,7 +56,7 @@ const createUser = async (email, password) => {
 
 const getUserInfoByEmail = async (email) => {
   var _userId = Number();
-  await findByEmail(email).then((userInfo) => (_userId = userInfo._userId));
+  await findByEmail(email).then((userInfo) => (_userId = userInfo.userId));
 
   if (!_userId) throw 'No user is using ' + email;
 
@@ -73,7 +72,22 @@ const getAllUserInfo = async () => {
     .promise()
     .query(selectStmt)
     .then(([rows, fields]) => {
-      _userInfo = rows.map(({ password, ...rest }) => rest);
+      _userInfo = rows.map(
+        ({
+          password,
+          display_name,
+          created_at,
+          updated_at,
+          is_maintainer,
+          ...rest
+        }) => ({
+          ...rest,
+          displayName: display_name,
+          createdAt: created_at,
+          updatedAt: updated_at,
+          isMaintainer: is_maintainer,
+        })
+      );
     })
     .catch(console.error);
 
@@ -100,11 +114,12 @@ const getUserInfoById = async (userId) => {
       if (userInfo.id != userId) throw 'getUserInfo: Wrong user info retrieved';
 
       _userInfo['id'] = userId;
-      _userInfo['username'] = userInfo.username;
-      _userInfo['email'] = userInfo.email;
+      _userInfo['displayName'] = userInfo.display_name;
       _userInfo['password'] = userInfo.password;
-      _userInfo['created_at'] = userInfo.created_at;
-      _userInfo['updated_at'] = userInfo.updated_at;
+      _userInfo['email'] = userInfo.email;
+      _userInfo['createdAt'] = userInfo.created_at;
+      _userInfo['updatedAt'] = userInfo.updated_at;
+      _userInfo['isMaintainer'] = userInfo.is_maintainer;
     })
     .catch(console.error);
 
@@ -116,14 +131,14 @@ const getUserInfoById = async (userId) => {
   return _userInfo;
 };
 
-const updateUser = async (userId, username) => {
+const updateUser = async (userId, displayName) => {
   var _success = Boolean();
   var _placeholders = [];
   var _sql = 'UPDATE users SET ';
 
-  if (username) {
-    _sql = _sql.concat('username=?');
-    _placeholders.push(username);
+  if (displayName) {
+    _sql = _sql.concat('display_name=?');
+    _placeholders.push(displayName);
   }
 
   _sql = _sql.concat(' WHERE id = ?;');
@@ -138,6 +153,11 @@ const updateUser = async (userId, username) => {
     .catch(console.error);
 
   await query; // Wait for user to be updated
+
+  if (!_success) {
+    throw 'User info cannot be updated';
+  }
+
   return _success;
 };
 
@@ -186,9 +206,40 @@ const deleteUser = async (userId) => {
   return _success;
 };
 
-const getUsernameFromEmail = (email) => {
-  // Assumes username from email (up until '@')
+const getDisplayNameFromEmail = (email) => {
+  // Assumes displayName from email (up until '@')
   return email.substring(0, email.indexOf('@'));
+};
+
+/**
+ * Toggle role of user of given userId from the database.
+ * @param {int|string} userId
+ * @returns If the deletion was successful
+ */
+const toggleUserRole = async (userId) => {
+  const user = await getUserInfoById(userId);
+  const newIsMaintainer = user?.isMaintainer ? 0 : 1; // Toggle the isMaintainer field
+
+  var _success = Boolean();
+  var _placeholders = [];
+  var _sql = 'UPDATE users SET ';
+
+  _sql = _sql.concat('is_maintainer=?');
+  _placeholders.push(newIsMaintainer);
+
+  _sql = _sql.concat(' WHERE id=?;');
+  _placeholders.push(userId);
+
+  const query = conn
+    .promise()
+    .query(_sql, _placeholders)
+    .then(([result, fields]) => {
+      _success = result.affectedRows === 1;
+    })
+    .catch(console.error);
+
+  await query; // Wait for user to be updated
+  return _success;
 };
 
 module.exports = {
@@ -200,4 +251,5 @@ module.exports = {
   getAllUserInfo,
   getUserInfoByEmail,
   getUserInfoById,
+  toggleUserRole,
 };

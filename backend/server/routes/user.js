@@ -13,13 +13,18 @@ router.get(
   middleware.checkTokenMaintainer,
   userController.getAllUserInfo
 );
+router.post(
+  '/toggleUserRole',
+  middleware.checkTokenMaintainer,
+  userController.toggleUserRole
+);
 
 // User and maintainer can access the remaining routes
-router.post('/read', middleware.checkToken, userController.getUserInfo);
+router.get('/read', middleware.checkToken, userController.getUserInfo);
 router.post('/update', middleware.checkToken, userController.updateUser);
-router.post('/delete', middleware.checkToken, userController.deleteUser);
+router.delete('/delete', middleware.checkToken, userController.deleteUser);
 router.post(
-  '/change-password',
+  '/changePassword',
   middleware.checkToken,
   userController.changePassword
 );

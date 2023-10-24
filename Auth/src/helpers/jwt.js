@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const env = require('../../loadEnvironment.js');
+const env = require('../loadEnvironment.js');
 
 const getJwtToken = (userInfo) => {
   const payload = {

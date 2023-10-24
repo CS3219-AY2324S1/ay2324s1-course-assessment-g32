@@ -6,7 +6,7 @@ const createQuestion = async (title, complexity, description, tags) => {
       title: title,
       complexity: complexity,
       description: description,
-      tags: tags
+      tags: tags,
     });
 
     // Save the question to the database
@@ -57,7 +57,7 @@ const editQuestion = async (id, title, complexity, description, tags) => {
       title: title,
       complexity: complexity,
       description: description,
-      tags: tags
+      tags: tags,
     };
     return Question.updateOne({ _id: id }, { $set: fields });
   } catch (err) {
@@ -67,7 +67,11 @@ const editQuestion = async (id, title, complexity, description, tags) => {
 
 const deleteQuestion = async (id) => {
   try {
-    return await Question.deleteOne({ _id: id });
+    const result = await Question.deleteOne({ _id: id });
+    if (result.deletedCount === 0) {
+      throw `deleteQuestion: No question with id ${id}`;
+    }
+    return result;
   } catch (err) {
     throw err;
   }
@@ -80,5 +84,5 @@ module.exports = {
   findById,
   findByTitle,
   editQuestion,
-  deleteQuestion
+  deleteQuestion,
 };
