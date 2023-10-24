@@ -44,7 +44,10 @@ export const createQuestion = async (
 
 export const getQuestions = async (jwtToken) => {
   try {
-    const response = await axios.get(rootUrl + '/getAll', getConfig(jwtToken));
+    const response = await axios.get(
+      rootUrl + '/read-all',
+      getConfig(jwtToken)
+    );
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -61,10 +64,7 @@ export const getQuestionDetails = async (questionId, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { id: questionId };
-    const questionDetails = await axios.get(
-      rootUrl + '/getQuestionDetails',
-      config
-    );
+    const questionDetails = await axios.get(rootUrl + '/read', config);
     return questionDetails.data.question;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -93,7 +93,7 @@ export const editQuestion = async (
       description: description,
       tags: tags,
     };
-    return await axios.post(
+    return await axios.put(
       rootUrl + '/edit',
       questionData,
       getConfig(jwtToken)

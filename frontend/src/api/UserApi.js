@@ -51,7 +51,7 @@ export const login = async (userData) => {
 export const getAllUsers = async (jwtToken) => {
   try {
     const res = await axios.get(
-      userRootUrl + '/readAll',
+      userRootUrl + '/read-all',
       getTokenConfig(jwtToken)
     );
     return res.data.info;
@@ -85,7 +85,7 @@ export const getUser = async (id, jwtToken) => {
 
 export const updateDisplayName = async (id, newDisplayName, jwtToken) => {
   try {
-    const res = await axios.post(
+    const res = await axios.put(
       userRootUrl + '/update',
       { id: id, displayName: newDisplayName },
       getTokenConfig(jwtToken)
@@ -110,8 +110,8 @@ export const updatePassword = async (
   jwtToken
 ) => {
   try {
-    return await axios.post(
-      userRootUrl + '/changePassword',
+    return await axios.put(
+      userRootUrl + '/change-password',
       {
         id: id,
         currentPassword: currentPassword,
@@ -149,8 +149,8 @@ export const deleteUser = async (id, jwtToken) => {
 
 export const toggleUserRole = async (id, jwtToken) => {
   try {
-    return await axios.post(
-      userRootUrl + '/toggleUserRole',
+    return await axios.put(
+      userRootUrl + '/toggle-user-role',
       { id },
       getTokenConfig(jwtToken)
     );
