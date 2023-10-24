@@ -77,12 +77,6 @@ services:
     container_name: web-ui
     build: ./frontend
     env_file: .env
-    environment:
-      - AUTH_HOST=svc-auth
-      - USER_HOST=svc-user
-      - QUESTION_HOST=svc-question
-      - MATCH_HOST=svc-match
-      - COLLAB_HOST=svc-collab
     depends_on:
       - svc-user
       - svc-auth
