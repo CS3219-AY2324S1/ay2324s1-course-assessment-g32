@@ -1,4 +1,5 @@
 const historyService = require('./HistoryService.js');
+const questionApi = require('./helpers/callsToQuestion.js');
 
 const addAttempt = async (req, res) => {
   try {
@@ -22,9 +23,12 @@ const deleteUserAttempts = async (req, res) => {
 
 const getAttempts = async (req, res) => {
   try {
+    const jwtToken = req.headers['authorization'];
     const { userId } = req.query;
     const attempts = await historyService.getAttempts(userId);
-    res.json({ message: 'SUCCESS', attempts });
+    const questionResponse = await questionApi.appendQuestionTitle(jwtToken, attempts);
+    const attemptsWithTitles = questionResponse.data.attemptsWithTitles;
+    res.json({ message: 'SUCCESS', attemptsWithTitles });
   } catch (err) {
     res.status(err?.status || 400).json({ error: err?.message || err });
   }

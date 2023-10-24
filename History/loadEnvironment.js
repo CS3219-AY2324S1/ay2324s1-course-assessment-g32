@@ -6,10 +6,15 @@ const HISTORY_PORT = process.env.HISTORY_PORT || 9001;
 
 const HISTORY_URL = REACT_APP_HOST + ':' + HISTORY_PORT;
 
+const QUESTION_PORT = process.env.QUESTION_PORT || 6001;
+
+const QUESTION_URL = REACT_APP_HOST + ':' + QUESTION_PORT;
+
 const MONGO_CLIENT = process.env.ATLAS_URI || '';
 
 module.exports = {
   HISTORY_PORT,
   HISTORY_URL,
+  QUESTION_URL,
   MONGO_CLIENT,
 };

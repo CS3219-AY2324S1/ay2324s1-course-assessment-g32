@@ -23,8 +23,7 @@ const SubmissionList = () => {
   const fetchData = async () => {
     try {
       const historyResponse = await getSubmissionHistory(await getCookie(), await getUserId());
-      const questionResponse = await appendQuestionTitle(await getCookie(), historyResponse.data.attempts);
-      setTableData(questionResponse.data.attemptsWithTitles);
+      setTableData(historyResponse.data.attemptsWithTitles);
       setIsLoading(false);
     } catch (error) {
       errorHandler(error);
