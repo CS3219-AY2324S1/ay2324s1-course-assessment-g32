@@ -68,11 +68,9 @@ export const getAllUsers = async (jwtToken) => {
 
 export const getUser = async (id, jwtToken) => {
   try {
-    const res = await axios.post(
-      userRootUrl + '/read',
-      { id },
-      getTokenConfig(jwtToken)
-    );
+    let config = getTokenConfig(jwtToken);
+    config.params = { id: id };
+    const res = await axios.get(userRootUrl + '/read', config);
     return res.data.info;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -113,7 +111,7 @@ export const updatePassword = async (
 ) => {
   try {
     return await axios.post(
-      userRootUrl + '/change-password',
+      userRootUrl + '/changePassword',
       {
         id: id,
         currentPassword: currentPassword,
@@ -154,7 +152,7 @@ export const deleteUser = async (id, jwtToken) => {
 export const toggleUserRole = async (id, jwtToken) => {
   try {
     return await axios.post(
-      userRootUrl + '/toggle-user-role',
+      userRootUrl + '/toggleUserRole',
       { id },
       getTokenConfig(jwtToken)
     );

@@ -32,7 +32,7 @@ const getAllUserInfo = async (req, res) => {
 
 const getUserInfo = async (req, res) => {
   try {
-    const { id, email } = req.body;
+    const { id, email } = req.query;
     const info = await userService.getUserInfo(id, email);
     res.json({ message: 'SUCCESS', info });
   } catch (err) {

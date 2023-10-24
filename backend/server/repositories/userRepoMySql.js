@@ -115,8 +115,8 @@ const getUserInfoById = async (userId) => {
 
       _userInfo['id'] = userId;
       _userInfo['displayName'] = userInfo.display_name;
-      _userInfo['email'] = userInfo.email;
       _userInfo['password'] = userInfo.password;
+      _userInfo['email'] = userInfo.email;
       _userInfo['createdAt'] = userInfo.created_at;
       _userInfo['updatedAt'] = userInfo.updated_at;
       _userInfo['isMaintainer'] = userInfo.is_maintainer;
@@ -153,6 +153,11 @@ const updateUser = async (userId, displayName) => {
     .catch(console.error);
 
   await query; // Wait for user to be updated
+
+  if (!_success) {
+    throw 'User info cannot be updated';
+  }
+
   return _success;
 };
 

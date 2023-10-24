@@ -28,7 +28,7 @@ For development, you may also want to install:
      - Running: OK, no further action needed
      - Blank: Need to be started, do the next step
      - Right click and click `Start`
-   - For MacOS,
+   - For macOS,
      - Click on the apple icon on the top left of the screen and click on `System Settings` to open System Settings
      - Search for `MySQL`
      - Click `Start MySQL Server` if it has not been started
@@ -58,7 +58,7 @@ npm run install-all
 
 # Start Application
 
-Start local MySQL Server Windows Service, if necessary. Follow the first step under [Setup MySQL locally](#setup-mysql-locally).
+Start local MySQL Server service, if necessary. Follow the first step under [Setup MySQL locally](#setup-mysql-locally).
 
 Start all services using the following commands:
 
@@ -74,7 +74,7 @@ Or start them indvidually (run them in different terminals):
 
 # Developer Notes
 
-| Backend API Path               | Method | Purpose                                             | Parameters (JSON format)                                              | Require JWT token to be in header? | Does user have to be maintainer? |
+| Backend API Path               | Method | Purpose                                             | Parameters                                                            | Require JWT token to be in header? | Does user have to be maintainer? |
 | ------------------------------ | ------ | --------------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------- | -------------------------------- |
 | `/auth/authorize`              | GET    | Used to authorize all users                         | -                                                                     | Yes                                | No                               |
 | `/auth/authorizeMaintainer`    | GET    | Used to authorize maintainers                       | -                                                                     | Yes                                | Yes                              |
@@ -84,13 +84,13 @@ Or start them indvidually (run them in different terminals):
 | `/question/edit`               | POST   | Used to edit question                               | `id` <br> `title` <br> `complexity` <br> `description` <br> `tags`    | Yes                                | Yes                              |
 | `/question/getAll`             | GET    | Used to get all the questions from the database     | -                                                                     | Yes                                | No                               |
 | `/question/getQuestionDetails` | GET    | Used to get the details of the specified question   | `id`                                                                  | Yes                                | No                               |
-| `/user/change-password`        | POST   | Used to change user password                        | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | Yes                                | No                               |
+| `/user/changePassword`         | POST   | Used to change user password                        | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | Yes                                | No                               |
 | `/user/delete`                 | POST   | Used to delete user                                 | `id`                                                                  | Yes                                | No                               |
 | `/user/login`                  | POST   | Used to login                                       | `email` <br> `password`                                               | No                                 | -                                |
-| `/user/read`                   | POST   | Used to get user information                        | `id` or `email`                                                       | Yes                                | No                               |
+| `/user/read`                   | GET    | Used to get user information                        | `id` or `email`                                                       | Yes                                | No                               |
 | `/user/readAll`                | GET    | Used to get all users information                   | -                                                                     | Yes                                | Yes                              |
 | `/user/signup`                 | POST   | Used to create new user                             | `email` <br> `password` <br> `confirmPassword`                        | No                                 | -                                |
-| `/user/toggle-user-role`       | POST   | Used to toggle user role (normal user / maintainer) | `id`                                                                  | Yes                                | Yes                              |
+| `/user/toggleUserRole`         | POST   | Used to toggle user role (normal user / maintainer) | `id`                                                                  | Yes                                | Yes                              |
 | `/user/update`                 | POST   | Used to update user information (displayName)       | `id` <br> `displayName`                                               | Yes                                | No                               |
 
 - `auth` API (port 5001) contains all the authorization related endpoints.
