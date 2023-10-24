@@ -19,15 +19,15 @@ For development, you may also want to install:
 
 1. Ensure MySQL is already started.
    - For Windows OS,
-     - `Win + R` to open the run windws
+     - `Win + R` to open the Run window
      - Type `services.msc`
      - Press `Ctrl + Shift + Enter` to run as administrator
      - If prompted by _User Account Control_, enter administrator password
      - In the Services application, search for the MySQL Service (eg. _MYSQL81_ for MySQL 8.1)
      - Check _Status_ of the service
-     - Running: OK, no further action needed
-     - Blank: Need to be started, do the next step
-     - Right click and click `Start`
+        - Running: OK, no further action needed
+        - Blank: Need to be started, do the next step
+     - Right click and press `Start`
    - For macOS,
      - Click on the apple icon on the top left of the screen and click on `System Settings` to open System Settings
      - Search for `MySQL`
