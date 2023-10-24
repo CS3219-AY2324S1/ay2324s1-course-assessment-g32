@@ -1,9 +1,20 @@
 name: CI Pipeline
 
-on: push
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - assignment-?
+  pull_request_target:
+    branches:
+      - master
+      - dev
+      - assignment-?
+
 jobs:
   build:
-    timeout-minutes: 5
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
