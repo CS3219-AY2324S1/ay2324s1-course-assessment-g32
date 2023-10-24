@@ -15,7 +15,7 @@ const create = async (req, res) => {
     logger.logSuccess('Question created');
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
-    log.error('Cannot create question:', err?.message || err);
+    logger.error('Cannot create question:', err?.message || err);
   }
 };
 
@@ -27,7 +27,7 @@ const getAll = async (req, res) => {
     logger.logSuccess('Questions retrieved');
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
-    log.error('Cannot retrieve questions:', err?.message || err);
+    logger.error('Cannot retrieve questions:', err?.message || err);
   }
 };
 
@@ -40,7 +40,7 @@ const getQuestionDetails = async (req, res) => {
     logger.logSuccess('Retrieved details for question', id);
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
-    log.error('Cannot get question details:', err?.message || err);
+    logger.error('Cannot get question details:', err?.message || err);
   }
 };
 
@@ -59,7 +59,7 @@ const edit = async (req, res) => {
     logger.logSuccess('Edited question', id);
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
-    log.error('Cannot edit question:', err?.message || err);
+    logger.error('Cannot edit question:', err?.message || err);
   }
 };
 
@@ -72,7 +72,7 @@ const deleteQuestion = async (req, res) => {
     logger.logSuccess('Deleted question', id);
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
-    log.error('Cannot delete question:', err?.message || err);
+    logger.error('Cannot delete question:', err?.message || err);
   }
 };
 
