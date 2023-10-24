@@ -34,7 +34,7 @@ For development, you may also want to install:
      - Click `Start MySQL Server` if it has not been started
 2. Search for **MySQL 8.1 Command Line Client** on your computer. Execute it to open up the terminal.
 3. Enter your root password.
-4. Run the SQL statements in `./backend/schema.sql` on the terminal.
+4. Run the SQL statements in `./backend/schema.sql` on the terminal using `source <path_to_schema.sql>` (e.g. `source C:\Users\User\CS3219\assignment\backend\schema.sql`).
 
 ## Setup environment variables
 
@@ -71,6 +71,8 @@ Or start them indvidually (run them in different terminals):
 - Frontend: `cd frontend && npm start`
 - Backend: `cd backend && npm start`
 - Auth service: `cd Auth && npm start`
+
+Note that the backend will crash if you are connected to NUS wifi, as backend is unable to connect to MongoDB Atlas.
 
 # Developer Notes
 
