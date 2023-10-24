@@ -17,7 +17,7 @@ CREATE TABLE users (
 -- Creates 1 sample admin account and 1 sample normal user account
 
 -- Login Credentials
--- Email: admin@email.com
+-- Email: admin@test.com
 -- Password: password
 INSERT INTO users (display_name, email, password, is_maintainer)
 VALUES('admin', 'admin@test.com', '$2b$10$b.yHMk1XCm3wEDfQbuM2w.3RC15YCWCrfO/ArhvC3NuqeQwl0.vY6', 1);
