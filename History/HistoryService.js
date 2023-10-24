@@ -41,8 +41,50 @@ const getAttempts = async (userId) => {
   }
 };
 
+const getHeatMapData = async (userId) => {
+  try {
+    if (!userId) {
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+    }
+    const result = await historyDatabase.getAttemptsByUserId(userId);
+
+    const countByDate = result.reduce((acc, curr) => {
+      const date = new Date(curr.createdAt);
+      const formattedDate = date.toISOString().slice(0, 10); // Extract the date part only
+
+      const foundIndex = acc.findIndex(item => item.date === formattedDate);
+
+      if (foundIndex !== -1) {
+        acc[foundIndex].count += 1;
+      } else {
+        acc.push({ date: formattedDate, count: 1 });
+      }
+      return acc;
+    }, []);
+
+    return countByDate;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getAttemptedQuestionsId = async (userId) => {
+  try {
+    if (!userId) {
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+    }
+    const result = await historyDatabase.getAttemptsByUserId(userId);
+    const questionsId = result.map(item => item.questionId);
+    return questionsId;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   addAttempt,
   deleteUserAttempts,
   getAttempts,
+  getHeatMapData,
+  getAttemptedQuestionsId,
 };

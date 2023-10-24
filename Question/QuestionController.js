@@ -76,6 +76,25 @@ const appendQuestionTitle = async (req, res) => {
   }
 };
 
+const getQuestionDifficultyCount = async (req, res) => {
+  try {
+    const { questionsId } = req.body;
+    const questionCountByDifficulty = await questionService.getQuestionCountByDifficulty(questionsId);
+    res.json({ message: 'Question count by difficulty retrieved successfully', questionCountByDifficulty });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
+const getQuestionStatistics = async (req, res) => {
+  try {
+    const questionStatistics = await questionService.getQuestionStatistics();
+    res.json({ message: 'Question statistics retrieved successfully', questionStatistics });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
 module.exports = {
   create,
   getAll,
@@ -83,4 +102,6 @@ module.exports = {
   edit,
   deleteQuestion,
   appendQuestionTitle,
+  getQuestionDifficultyCount,
+  getQuestionStatistics,
 };

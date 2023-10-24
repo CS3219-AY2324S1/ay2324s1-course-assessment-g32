@@ -11,7 +11,6 @@ import { getSubmissionHistory } from '../../api/HistoryApi.js';
 import { appendQuestionTitle } from '../../api/QuestionApi.js';
 
 const SubmissionList = () => {
-  const [userId, setUserId] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
 

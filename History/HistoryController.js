@@ -34,8 +34,39 @@ const getAttempts = async (req, res) => {
   }
 };
 
+const getHeatMapData = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const heatMapData = await historyService.getHeatMapData(userId);
+    res.json({ message: 'SUCCESS', heatMapData });
+  } catch (err) {
+    res.status(err?.status || 400).json({ error: err?.message || err });
+  }
+};
+
+const getPieChartData = async (req, res) => {
+  try {
+    const jwtToken = req.headers['authorization'];
+    const { userId } = req.query;
+    const attemptedQuestionsId = await historyService.getAttemptedQuestionsId(userId);
+    const attemptedQuestionsStats = await questionApi.getQuestionDifficultyCount(jwtToken, attemptedQuestionsId);
+    const allQuestionsStats = await questionApi.getQuestionStatistics(jwtToken);
+
+    const pieChartData = {
+      attemptedQuestionsStats: attemptedQuestionsStats.data.questionCountByDifficulty,
+      allQuestionsStats: allQuestionsStats.data.questionStatistics,
+    };
+
+    res.json({ message: 'SUCCESS', pieChartData });
+  } catch (err) {
+    res.status(err?.status || 400).json({ error: err?.message || err });
+  }
+};
+
 module.exports = {
   addAttempt,
   deleteUserAttempts,
   getAttempts,
+  getHeatMapData,
+  getPieChartData,
 };

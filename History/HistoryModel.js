@@ -14,7 +14,7 @@ const HistorySchema = new Schema({
   },
   code: {
     type: String,
-  }
+  },
 }, {timestamps: true});
 
 // Create a model named "History", which represents a collection in the database

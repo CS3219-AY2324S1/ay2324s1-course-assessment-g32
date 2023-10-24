@@ -13,5 +13,7 @@ router.delete('/delete', middleware.checkTokenMaintainer, questionController.del
 router.get('/getAll', middleware.checkToken, questionController.getAll);
 router.get('/getQuestionDetails', middleware.checkToken, questionController.getQuestionDetails);
 router.post('/appendQuestionTitle', middleware.checkToken, questionController.appendQuestionTitle);
+router.post('/getQuestionDifficultyCount', middleware.checkToken, questionController.getQuestionDifficultyCount);
+router.get('/getQuestionStatistics', middleware.checkToken, questionController.getQuestionStatistics);
 
 module.exports = router;

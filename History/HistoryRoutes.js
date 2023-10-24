@@ -8,5 +8,7 @@ const historyController = require('./HistoryController.js');
 router.post('/attempts', historyController.addAttempt);
 router.delete('/attempts', historyController.deleteUserAttempts);
 router.get('/attempts', historyController.getAttempts);
+router.get('/heatmap', historyController.getHeatMapData);
+router.get('/piechart', historyController.getPieChartData);
 
 module.exports = router;

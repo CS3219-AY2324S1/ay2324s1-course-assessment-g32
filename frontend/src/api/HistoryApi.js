@@ -53,3 +53,41 @@ export const getSubmissionHistory = async (jwtToken, userId) => {
     throw err;
   }
 };
+
+export const getHeatMapData = async (jwtToken, userId) => {
+  try {
+    let config = getConfig(jwtToken);
+    config.params = { userId: userId };
+    return await axios.get(
+      historyRootUrl + '/heatmap',
+      config
+    );
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+export const getPieChartData = async (jwtToken, userId) => {
+  try {
+    let config = getConfig(jwtToken);
+    config.params = { userId: userId };
+    return await axios.get(
+      historyRootUrl + '/piechart',
+      config
+    );
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};

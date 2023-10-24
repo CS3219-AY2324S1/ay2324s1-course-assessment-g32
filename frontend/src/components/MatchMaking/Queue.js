@@ -28,7 +28,7 @@ const Queue = ({ jwt, queueName, onCancel, sessionID }) => {
 
           // TODO: Change this to find a question that matches the matching criteria and return its id
           // Currently, it is hardcoded to return the question with id '6523fc6aade3f2e3c54b0648'
-          const question = await getQuestionDetails('6523fc6aade3f2e3c54b0656', jwt);
+          const question = await getQuestionDetails('6523fc6bade3f2e3c54b0786', jwt);
           navigate('/collaboration', {
             state: { roomId, hostId, matchedHostId, question },
           });

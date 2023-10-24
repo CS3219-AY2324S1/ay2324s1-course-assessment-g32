@@ -95,6 +95,32 @@ const appendQuestionTitle = async (attempts) => {
   }
 };
 
+const getQuestionCountByDifficulty = async (questionsId) => {
+  try {
+    const difficultyCount = await questionRepository.getQuestionsDifficultyCount(questionsId);
+    const stats = difficultyCount.reduce((acc, item) => {
+        acc[item._id] = item.count * 200;
+        return acc;
+    }, { 'Easy': 0, 'Medium': 0, 'Hard': 0 });
+    return stats;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getQuestionStatistics = async () => {
+  try {
+    const difficultyCount = await questionRepository.getQuestionStatistics();
+    const stats = difficultyCount.reduce((acc, item) => {
+        acc[item._id] = item.count;
+        return acc;
+    }, { 'Easy': 0, 'Medium': 0, 'Hard': 0 });
+    return stats;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   createQuestion,
   getQuestions,
@@ -102,4 +128,6 @@ module.exports = {
   editQuestion,
   deleteQuestion,
   appendQuestionTitle,
+  getQuestionCountByDifficulty,
+  getQuestionStatistics,
 };

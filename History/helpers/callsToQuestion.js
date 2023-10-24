@@ -32,6 +32,46 @@ const appendQuestionTitle = async (jwtToken, attempts) => {
   }
 };
 
+const getQuestionDifficultyCount = async (jwtToken, questionsId) => {
+  try {
+    const data = { questionsId: questionsId };
+    const response = await axios.post(
+      questionRootUrl + '/getQuestionDifficultyCount',
+      data,
+      getConfig(jwtToken),
+    );
+    return response;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+const getQuestionStatistics = async (jwtToken) => {
+  try {
+    const response = await axios.get(
+      questionRootUrl + '/getQuestionStatistics',
+      getConfig(jwtToken),
+    );
+    return response;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
 module.exports = {
   appendQuestionTitle,
+  getQuestionDifficultyCount,
+  getQuestionStatistics,
 };
