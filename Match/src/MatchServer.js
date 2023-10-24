@@ -44,7 +44,7 @@ const rabbitMQserver = async () => {
   const channel = await connection.createChannel();
   await channel.assertQueue('commonQueue', { durable: false });
 
-  console.log(`Matchserver is using RabbitMQ server: ${env.RABBITMQ_URL}`)
+  console.log(`Matchserver is connected to RabbitMQ server: ${env.RABBITMQ_URL}`)
 
   // Consume from the common queue
   channel.consume('commonQueue', async (message) => {

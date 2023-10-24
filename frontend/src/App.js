@@ -45,10 +45,7 @@ function App() {
         {/* Question management for normal users */}
         <Route path='/landing' element={<ProtectedRoute />}>
           <Route index element={<Landing />} />
-          <Route
-            path='/landing/question/:id'
-            element={<QuestionDescription />}
-          />
+          <Route path='/landing/question/:id' element={<QuestionDescription />} />
         </Route>
 
         {/* Question management for maintainers only */}
@@ -63,19 +60,13 @@ function App() {
         <Route path='/user-profile' element={<ProtectedRoute />}>
           <Route index element={<ManageUserProfile />} />
           <Route path='/user-profile/edit' element={<NormalEditUser />} />
-          <Route
-            path='/user-profile/change-password'
-            element={<ChangeUserPassword />}
-          />
+          <Route path='/user-profile/change-password' element={<ChangeUserPassword />} />
         </Route>
 
         {/* Profile management for maintainers only */}
         <Route path='/users-management' element={<MaintainerRoute />}>
           <Route index element={<ManageUserProfiles />} />
-          <Route
-            path='/users-management/edit'
-            element={<MaintainerEditUser />}
-          />
+          <Route path='/users-management/edit' element={<MaintainerEditUser />} />
           <Route path='/users-management/new' element={<AddUser />} />
         </Route>
 
@@ -90,12 +81,12 @@ function App() {
         {/* Display UnauthorizedPage component if user is not authorized */}
         <Route path='/unauthorized' element={<UnauthorizedPage />} />
 
-        {/* Display UnauthorizedPage component if user is not authorized */}
+        {/* Display PageNotFound component if route does not exist */}
         <Route path='*' element={<PageNotFound />} />
       </Routes>
       <ToastContainer />
     </div>
   );
-}
+};
 
 export default App;
