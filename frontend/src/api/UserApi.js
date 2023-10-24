@@ -133,11 +133,9 @@ export const updatePassword = async (
 
 export const deleteUser = async (id, jwtToken) => {
   try {
-    return await axios.post(
-      userRootUrl + '/delete',
-      { id },
-      getTokenConfig(jwtToken)
-    );
+    let config = getTokenConfig(jwtToken);
+    config.params = { id: id };
+    return await axios.delete(userRootUrl + '/delete', config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {

@@ -22,7 +22,7 @@ router.post(
 // User and maintainer can access the remaining routes
 router.get('/read', middleware.checkToken, userController.getUserInfo);
 router.post('/update', middleware.checkToken, userController.updateUser);
-router.post('/delete', middleware.checkToken, userController.deleteUser);
+router.delete('/delete', middleware.checkToken, userController.deleteUser);
 router.post(
   '/changePassword',
   middleware.checkToken,
