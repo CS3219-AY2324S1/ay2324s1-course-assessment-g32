@@ -7,7 +7,7 @@ const consume = require('./services/consumerService');
 const env = require('./loadEnvironment');
 const { MAX_CONNECTION_ATTEMPTS, CONNECTION_INTERVAL } = require('./constants');
 
-console.log('Starting Matchserver ...');
+console.log('Starting MatchServer ...');
 
 // Start the Express (web) server to listen for incoming RESTFul API requests
 const expressServer = async () => {
@@ -16,7 +16,7 @@ const expressServer = async () => {
   app.use(bodyParser.json());
   app.use('/queue', queueRoutes);
   app.listen(env.MATCH_PORT, () => {
-    console.log(`Matchserver is running on port: ${env.MATCH_PORT}`);
+    console.log(`MatchServer is running on port: ${env.MATCH_PORT}`);
   });
 };
 
@@ -31,7 +31,7 @@ const rabbitMQserver = async () => {
       connection = await amqp.connect(env.RABBITMQ_URL);
       break;
     } catch (error) {
-      console.error(`Matchserver could not connect to RabbitMQ server: ${env.RABBITMQ_URL} in attempt ${i + 1} of 10`);
+      console.error(`MatchServer could not connect to RabbitMQ server: ${env.RABBITMQ_URL} in attempt ${i + 1} of 10`);
       await new Promise(resolve => setTimeout(resolve, CONNECTION_INTERVAL));
     }
   }

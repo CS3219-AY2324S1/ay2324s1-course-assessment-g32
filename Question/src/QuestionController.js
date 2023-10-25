@@ -1,4 +1,5 @@
 const questionService = require('./QuestionService');
+const { Status } = require('./constants');
 
 // Define a controller function for creating questions
 const create = async (req, res) => {
@@ -12,7 +13,9 @@ const create = async (req, res) => {
     );
     res.json({ message: 'Question created successfully', question });
   } catch (err) {
-    res.status(err?.status || 500).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -22,7 +25,9 @@ const getAll = async (req, res) => {
     const questions = await questionService.getQuestions();
     res.json({ message: 'Questions retrieved successfully', questions });
   } catch (err) {
-    res.status(err?.status || 500).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -35,7 +40,9 @@ const getAllByComplexity = async (req, res) => {
     );
     res.json({ message: 'Questions retrieved successfully', questions });
   } catch (err) {
-    res.status(err?.status || 500).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -46,7 +53,9 @@ const getQuestionDetails = async (req, res) => {
     const question = await questionService.getQuestionDetails(id);
     res.json({ message: 'Question retrieved successfully', question });
   } catch (err) {
-    res.status(err?.status || 500).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -54,10 +63,14 @@ const getQuestionDetails = async (req, res) => {
 const getRandomQuestionByCriteria = async (req, res) => {
   try {
     const { complexity } = req.query;
-    const question = await questionService.getRandomQuestionByComplexity(complexity);
+    const question = await questionService.getRandomQuestionByComplexity(
+      complexity
+    );
     res.json({ message: 'Question retrieved successfully', question });
   } catch (err) {
-    res.status(err?.status || 500).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -74,7 +87,9 @@ const edit = async (req, res) => {
     );
     res.json({ message: 'Question edited successfully', question });
   } catch (err) {
-    res.status(err?.status || 500).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -85,7 +100,9 @@ const deleteQuestion = async (req, res) => {
     const question = await questionService.deleteQuestion(id);
     res.json({ message: 'Question deleted successfully', question });
   } catch (err) {
-    res.status(err?.status || 500).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
+      .json({ error: err?.message || err });
   }
 };
 

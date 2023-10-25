@@ -1,9 +1,10 @@
 const questionRepository = require('./QuestionRepository');
+const { Status } = require('./constants');
 
 const missingInputsThrowsValidationError = (title, complexity, description) => {
   const innerText = description.replace(/<[^>]+>|\s+/g, '');
   if (!title || !complexity || !innerText) {
-    throw { status: 400, message: 'Missing inputs' };
+    throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
   }
 };
 
@@ -11,7 +12,7 @@ const duplicateTitleThrowsDuplicateError = async (id, title) => {
   // id == null then simply check if title exist, else cross-check id
   const isDuplicateTitle = await questionRepository.findByTitle(title);
   if (isDuplicateTitle && !isDuplicateTitle._id.equals(id)) {
-    throw { status: 409, message: 'Question title already exist' };
+    throw { status: Status.CONFLICT, message: 'Question title already exist' };
   }
 };
 
@@ -50,7 +51,7 @@ const getQuestionDetails = async (id) => {
   try {
     const question = await questionRepository.getQuestionDetails(id);
     if (!question) {
-      throw { status: 410, message: 'Question does not exist' };
+      throw { status: Status.GONE, message: 'Question does not exist' };
     }
     return question;
   } catch (err) {
@@ -64,7 +65,7 @@ const getRandomQuestionByComplexity = async (complexity) => {
       complexity
     );
     if (!question) {
-      throw { status: 410, message: 'Question does not exist' };
+      throw { status: Status.GONE, message: 'Question does not exist' };
     }
     return question;
   } catch (err) {
@@ -79,7 +80,7 @@ const editQuestion = async (id, title, complexity, description, tags) => {
 
     const question = await questionRepository.findById(id);
     if (!question) {
-      throw { status: 410, message: 'Question does not exist' };
+      throw { status: Status.GONE, message: 'Question does not exist' };
     }
 
     return await questionRepository.editQuestion(
