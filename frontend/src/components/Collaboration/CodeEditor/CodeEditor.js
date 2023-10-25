@@ -48,9 +48,15 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   };
 
   const handleCodeExecution = async () => {
+    console.log("you clicked to run code")
     const result = await executeCode(language, code);
+    console.log(result)
     setCodeExecutionResult(result);
   };
+
+  const handleTestExecution = async () => {
+    console.log("you clicked to run tests")
+  }
 
   // Send code changes to the server
   useEffect(() => {
@@ -123,7 +129,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
           <button type='button' className='btn btn-primary me-2' onClick={handleCodeExecution}>
             Run code
           </button>
-          <button type='button' className='btn btn-primary me-2' onClick={handleCodeExecution}>
+          <button type='button' className='btn btn-primary me-2' onClick={handleTestExecution}>
             Run tests
           </button>
         </div>

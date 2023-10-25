@@ -1,58 +1,92 @@
 import { axiosExecution } from '../utils/axios';
 
-const getConfig = (code) => {
+const getConfig = () => {
   return {
     headers: {
       'Content-Type': 'application/json',
-      'Code': code,
     },
   };
 };
 
 export const executeCode = async (language, code) => {
+  console.log("in execution api")
+
+  const codeObject = { code: code };
+
   switch (language) {
     case 'Python':
-      executePython(code);
-      break;
+      console.log("case python")
+      return await executePython(codeObject);
     case 'Java':
-      executeJava(code);
-      break;
+      console.log("case java")
+      return await executeJava(codeObject);
     case 'C++':
-      executeCpp(code);
-      break;
+      console.log("case cpp")
+      return await executeCpp(codeObject);
     default:
-      executeJs(code);
+      console.log("case js")
+      return await executeJs(codeObject);
   }
 };
 
-const executePython = async (code) => {
+const executePython = async (codeObject) => {
   try {
-    const response = await axiosExecution.post('/execute-python', getConfig(code));
+    console.log("posting python in api")
+    const response = await axiosExecution.post('/execute-python', codeObject, getConfig());
+    console.log(response.data.message)
+    return response.data.message;
   } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
     throw err;
   }
 }
 
-const executeJava = async (code) => {
+const executeJava = async (codeObject) => {
   try {
-    const response = await axiosExecution.post('/execute-java', getConfig(code));
+    const response = await axiosExecution.post('/execute-java', codeObject, getConfig());
+    return response.data.message;
   } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
     throw err;
   }
 };
 
-const executeCpp = async (code) => {
+const executeCpp = async (codeObject) => {
   try {
-    const response = await axiosExecution.post('/execute-cpp', getConfig(code));
+    const response = await axiosExecution.post('/execute-cpp', codeObject, getConfig());
+    return response.data.message;
   } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
     throw err;
   }
 };
 
-const executeJs = async (code) => {
+const executeJs = async (codeObject) => {
   try {
-    const response = await axiosExecution.post('/execute-js', getConfig(code));
+    const response = await axiosExecution.post('/execute-js', codeObject, getConfig());
+    return response.data.message;
   } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
     throw err;
   }
 };

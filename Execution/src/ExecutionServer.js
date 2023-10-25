@@ -9,7 +9,7 @@ console.log('Starting ExecutionServer ...');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/execution', executionRoutes);
+app.use('/execute', executionRoutes);
 app.listen(env.EXECUTION_PORT, () => {
   console.log(`ExecutionServer is running on port: ${env.EXECUTION_PORT}`);
 });
