@@ -1,0 +1,15 @@
+{
+  "name": "execution",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ExecutionServer.js",
+  "scripts": {
+    "dev": "nodemon src/ExecutionServer.js",
+    "start": "node src/ExecutionServer.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
