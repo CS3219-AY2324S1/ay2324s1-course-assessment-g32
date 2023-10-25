@@ -1,4 +1,4 @@
-const Status = {
+export const Status = {
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   REQUEST_TIMEOUT: 408,
@@ -7,11 +7,4 @@ const Status = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
-const JWT = {
-  ALGORITHM: 'HS256',
-};
-
-module.exports = {
-  Status,
-  JWT,
-};
+export const JWT_ALGORITHM = 'HS256';

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const env = require('../loadEnvironment');
-const { JWT } = require('../constants');
+const { JWT_ALGORITHM } = require('../constants');
 
 const getJwtToken = (userInfo) => {
   const payload = {
@@ -9,7 +9,7 @@ const getJwtToken = (userInfo) => {
   };
 
   // Issue JWT
-  return jwt.sign(payload, env.JWT_SECRET_KEY, { algorithm: JWT.ALGORITHM });
+  return jwt.sign(payload, env.JWT_SECRET_KEY, { algorithm: JWT_ALGORITHM });
 };
 
 module.exports = {

@@ -1,4 +1,4 @@
-const Event = {
+export const Event = {
   CONNECTION: 'connection',
   DISCONNECT: 'disconnect',
   JOIN_ROOM: 'joinRoom',
@@ -7,21 +7,14 @@ const Event = {
   QUESTION_UPDATE: 'questionUpdate',
 };
 
-const CollaborationEvent = {
+export const CollaborationEvent = {
   CODE_CHANGE: 'codeChange',
   CODE_UPDATE: 'codeUpdate',
   LANGUAGE_CHANGE: 'languageChange',
   LANGUAGE_UPDATE: 'languageUpdate',
 };
 
-const CommunicationEvent = {
+export const CommunicationEvent = {
   CHAT_SEND: 'chatMessage',
   CHAT_RECEIVE: 'message',
-};
-
-
-module.exports = {
-  Event,
-  CollaborationEvent,
-  CommunicationEvent,
 };
