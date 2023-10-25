@@ -1,5 +1,5 @@
 const authApi = require('./callsToAuth');
-const { Status } = require('./constants');
+const { Status } = require('../constants');
 
 const checkToken = async (req, res, next) => {
   // Extract the token from the Authorization header

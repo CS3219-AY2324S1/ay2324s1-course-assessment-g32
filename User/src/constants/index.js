@@ -1,4 +1,4 @@
-export const Status = {
+const Status = {
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   REQUEST_TIMEOUT: 408,
@@ -8,7 +8,14 @@ export const Status = {
 };
 
 // Email validation regex
-export const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
-export const MIN_PASSWORD_LENGTH = 8;
-export const BCRYPT_SALT_ROUNDS = 10;
+const MIN_PASSWORD_LENGTH = 8;
+const BCRYPT_SALT_ROUNDS = 10;
+
+module.exports = {
+  Status,
+  EMAIL_REGEX,
+  MIN_PASSWORD_LENGTH,
+  BCRYPT_SALT_ROUNDS,
+};
