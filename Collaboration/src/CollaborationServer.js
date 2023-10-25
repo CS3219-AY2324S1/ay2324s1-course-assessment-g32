@@ -1,6 +1,7 @@
 const http = require('http');
 const socketIo = require('socket.io');
-const env = require('./loadEnvironment.js');
+const env = require('./loadEnvironment');
+const { Event, CollaborationEvent, CommunicationEvent } = require('./constants');
 
 console.log('Starting CollaborationServer...');
 
@@ -19,47 +20,47 @@ try {
     },
   });
 
-  io.on('connection', (socket) => {
+  io.on(Event.CONNECTION, (socket) => {
     // Handle room joining
-    socket.on('joinRoom', (data) => {
+    socket.on(Event.JOIN_ROOM, (data) => {
       socket.join(data.room);
       console.log(`${data.host} joined room: ${data.room}`);
 
       const message = { text: `${data.host} joined room` };
-      io.to(data.room).emit('message', message); // Broadcast a message to the room when someone joins
+      io.to(data.room).emit(CommunicationEvent.CHAT_RECEIVE, message); // Broadcast a message to the room when someone joins
     });
 
     // Handle room leaving
-    socket.on('leaveRoom', (data) => {
+    socket.on(Event.LEAVE_ROOM, (data) => {
       socket.leave(data.room);
       console.log(`${data.host} left room: ${data.room}`);
 
       const message = { text: `${data.host} left room` };
-      io.to(data.room).emit('message', message); // Broadcast a message to the room when someone leaves
+      io.to(data.room).emit(CommunicationEvent.CHAT_RECEIVE, message); // Broadcast a message to the room when someone leaves
     });
 
     // Handle chat messages
-    socket.on('chatMessage', (data) => {
-      io.to(data.room).emit('message', data.message); // Broadcast message to everyone in the room
+    socket.on(CommunicationEvent.CHAT_SEND, (data) => {
+      io.to(data.room).emit(CommunicationEvent.CHAT_RECEIVE, data.message); // Broadcast message to everyone in the room
     });
 
     // Handle code changes
-    socket.on('codeChange', (data) => {
-      io.to(data.room).emit('codeUpdate', data.updatedCode); // Broadcast code to everyone in the room
+    socket.on(CollaborationEvent.CODE_CHANGE, (data) => {
+      io.to(data.room).emit(CollaborationEvent.CODE_UPDATE, data.updatedCode); // Broadcast code to everyone in the room
     });
 
     // Handle language changes
-    socket.on('languageChange', (data) => {
-      io.to(data.room).emit('languageUpdate', data.updatedLanguage); // Broadcast language to everyone in the room
+    socket.on(CollaborationEvent.LANGUAGE_CHANGE, (data) => {
+      io.to(data.room).emit(CollaborationEvent.LANGUAGE_UPDATE, data.updatedLanguage); // Broadcast language to everyone in the room
     });
 
     // Handle question changes
-    socket.on('questionChange', (data) => {
-      io.to(data.room).emit('questionUpdate', data.question); // Broadcast question to everyone in the room
+    socket.on(Event.QUESTION_CHANGE, (data) => {
+      io.to(data.room).emit(Event.QUESTION_UPDATE, data.question); // Broadcast question to everyone in the room
     });
 
     // Handle disconnects
-    socket.on('disconnect', () => {
+    socket.on(Event.DISCONNECT, () => {
       console.log('A user disconnected');
     });
   });
