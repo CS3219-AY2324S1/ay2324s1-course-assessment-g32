@@ -1,4 +1,5 @@
 import { axiosUser } from '../utils/axios';
+import { Status } from '../constants';
 
 const getConfig = () => {
   return {
@@ -23,7 +24,7 @@ export const signup = async (userData) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -37,7 +38,7 @@ export const login = async (userData) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -52,7 +53,7 @@ export const getAllUsers = async (jwtToken) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -67,7 +68,7 @@ export const getUser = async (id, jwtToken) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -86,7 +87,7 @@ export const updateUsername = async (id, newUsername, jwtToken) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -115,7 +116,7 @@ export const updatePassword = async (
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -129,7 +130,7 @@ export const deleteUser = async (id, jwtToken) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }

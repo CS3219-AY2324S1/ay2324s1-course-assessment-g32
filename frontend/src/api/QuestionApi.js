@@ -1,4 +1,5 @@
 import { axiosQuestion } from '../utils/axios';
+import { Status } from '../constants';
 
 const getConfig = (jwtToken) => {
   return {
@@ -31,7 +32,7 @@ export const createQuestion = async (
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -46,7 +47,7 @@ export const getQuestions = async (jwtToken) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -63,7 +64,7 @@ export const getQuestionsByComplexity = async (complexity, jwtToken) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -83,7 +84,7 @@ export const getQuestionDetails = async (questionId, jwtToken) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -103,7 +104,7 @@ export const getRandomQuestionByCriteria = async (complexity, jwtToken) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -131,7 +132,7 @@ export const editQuestion = async (
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -148,7 +149,7 @@ export const deleteQuestion = async (id, jwtToken) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }

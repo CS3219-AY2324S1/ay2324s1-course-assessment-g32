@@ -6,6 +6,7 @@ import CodeEditor from '../../components/Collaboration/CodeEditor/CodeEditor';
 import SlidingPanel from '../../components/Collaboration/SlidingPanel/SlidingPanel';
 import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
 import { showFailureToast } from '../../utils/toast';
+import { SocketEvent } from '../../constants';
 import env from '../../loadEnvironment';
 import './Collaboration.css';
 
@@ -32,12 +33,12 @@ const Collaboration = () => {
       navigate('/landing');
     }
     // Join the Socket.io room when the component mounts
-    socket.emit('joinRoom', { room: roomId, host: hostId });
-    socket.emit('questionChange', { room: roomId, question: question });
+    socket.emit(SocketEvent.JOIN_ROOM, { room: roomId, host: hostId });
+    socket.emit(SocketEvent.QUESTION_CHANGE, { room: roomId, question: question });
   }, []);
 
   const handleLeaveRoom = () => {
-    socket.emit('leaveRoom', { room: roomId, host: hostId });
+    socket.emit(SocketEvent.LEAVE_ROOM, { room: roomId, host: hostId });
     navigate('/landing');
   };
 
@@ -52,12 +53,12 @@ const Collaboration = () => {
   // Send question changes to the server
   const handleQuestionChange = (question) => {
     setSelectedQuestion(question);
-    socket.emit('questionChange', { room: roomId, question: question });
+    socket.emit(SocketEvent.QUESTION_CHANGE, { room: roomId, question: question });
   };
 
   // Receive question changes from the server
   useEffect(() => {
-    socket.on('questionUpdate', (updatedQuestion) => {
+    socket.on(SocketEvent.QUESTION_UPDATE, (updatedQuestion) => {
       if (selectedQuestion !== updatedQuestion) {
         setSelectedQuestion(updatedQuestion);
       }

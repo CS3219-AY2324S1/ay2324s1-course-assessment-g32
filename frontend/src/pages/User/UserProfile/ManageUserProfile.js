@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../../../components/Header';
-import Spinner from '../../../../components/Spinner';
+import Header from '../../../components/Header';
+import Spinner from '../../../components/Spinner';
 import {
   ViewUserTopPane,
   ViewUserBottomPane,
-} from '../../../../components/User/ViewUser';
-import { getUser } from '../../../../api/UserApi.js';
-import { errorHandler } from '../../../../utils/errors.js';
+} from '../../../components/User/ViewUser';
+import { getUser } from '../../../api/UserApi.js';
+import { errorHandler } from '../../../utils/errors.js';
 import { Grid, Container } from '@mui/material';
-import { getCookie, getUserId } from '../../../../utils/helpers';
+import { getCookie, getUserId } from '../../../utils/helpers';
 
 function ManageUserProfile() {
   const [user, setUser] = useState({});
@@ -29,7 +29,6 @@ function ManageUserProfile() {
     };
 
     fetchData();
-
     setIsLoading(false);
   }, [navigate, setUser]);
 

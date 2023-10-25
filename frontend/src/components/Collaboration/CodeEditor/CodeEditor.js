@@ -6,6 +6,7 @@ import { defaultKeymap, indentWithTab } from '@codemirror/commands';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
+import { Language, CollaborationEvent } from '../../../constants';
 import './CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
@@ -23,11 +24,11 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
 
   const getLanguageExtension = (selectedLanguage) => {
     switch (selectedLanguage) {
-      case 'Python':
+      case Language.PYTHON:
         return python();
-      case 'Java':
+      case Language.JAVA:
         return java();
-      case 'C++':
+      case Language.CPP:
         return cpp();
       default:
         return python();
@@ -39,7 +40,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
     setLanguage(selectedLanguage);
 
     // Send language changes to the server
-    socket.emit('languageChange', {
+    socket.emit(CollaborationEvent.LANGUAGE_CHANGE, {
       room: roomId,
       updatedLanguage: selectedLanguage,
     });
@@ -47,12 +48,12 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
 
   // Send code changes to the server
   useEffect(() => {
-    socket.emit('codeChange', { room: roomId, updatedCode: code });
+    socket.emit(CollaborationEvent.CODE_CHANGE, { room: roomId, updatedCode: code });
   }, [code, roomId, socket]);
 
   // Receive code changes from the server
   useEffect(() => {
-    socket.on('codeUpdate', (updatedCode) => {
+    socket.on(CollaborationEvent.CODE_UPDATE, (updatedCode) => {
       if (viewRef.current) {
         viewRef.current.dispatch({
           // Replace the entire document with the updated code
@@ -70,7 +71,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
 
   // Receive language changes from the server
   useEffect(() => {
-    socket.on('languageUpdate', (updatedLanguage) => {
+    socket.on(CollaborationEvent.CODE_UPDATE, (updatedLanguage) => {
       const languageSelect = document.getElementById('languageSelect');
       if (languageSelect.value !== updatedLanguage) {
         languageSelect.value = updatedLanguage;

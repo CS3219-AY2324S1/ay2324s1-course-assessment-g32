@@ -4,14 +4,15 @@ import Queue from './Queue';
 import { exitQueue } from '../../api/MatchApi.js';
 import { getCookie } from '../../utils/helpers.js';
 import { errorHandler } from '../../utils/errors.js';
+import { Complexity, Language } from '../../constants';
 import '../../css/Modal.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const MatchingModal = ({ isOpen, onClose }) => {
   const [isFindingMatch, setIsFindingMatch] = useState(false);
-  const [complexity, setComplexity] = useState('Easy');
-  const [language, setLanguage] = useState('Python');
+  const [complexity, setComplexity] = useState(Complexity.EASY);
+  const [language, setLanguage] = useState(Language.PYTHON);
   const [sessionID, setSessionID] = useState('');
   const [jwt, setJwt] = useState('');
   const queueName = `${complexity}-${language}`;
@@ -109,9 +110,9 @@ const MatchingModal = ({ isOpen, onClose }) => {
                         defaultValue={complexity}
                         onChange={handleComplexityChange}
                       >
-                        <option value='Easy'>Easy</option>
-                        <option value='Medium'>Medium</option>
-                        <option value='Hard'>Hard</option>
+                        <option value={Complexity.EASY}>{Complexity.EASY}</option>
+                        <option value={Complexity.MEDIUM}>{Complexity.MEDIUM}</option>
+                        <option value={Complexity.HARD}>{Complexity.HARD}</option>
                       </select>
                       <label htmlFor='matchingQuestitonComplexity'>
                         Complexity
@@ -124,9 +125,9 @@ const MatchingModal = ({ isOpen, onClose }) => {
                         defaultValue={language}
                         onChange={handleLanguageChange}
                       >
-                        <option value='Python'>Python</option>
-                        <option value='Java'>Java</option>
-                        <option value='C++'>C++</option>
+                        <option value={Language.PYTHON}>{Language.PYTHON}</option>
+                        <option value={Language.JAVA}>{Language.JAVA}</option>
+                        <option value={Language.CPP}>{Language.CPP}</option>
                       </select>
                       <label htmlFor='matchingQuestitonLanguage'>
                         Programming Language

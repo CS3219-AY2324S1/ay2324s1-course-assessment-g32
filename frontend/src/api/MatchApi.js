@@ -1,4 +1,5 @@
 import { axiosMatch } from '../utils/axios';
+import { Status } from '../constants';
 
 const getConfig = (jwtToken) => {
   return {
@@ -20,7 +21,7 @@ export const joinQueue = async (jwt, queueName, sessionID) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -39,7 +40,7 @@ export const exitQueue = async (jwt, queueName, sessionID) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
