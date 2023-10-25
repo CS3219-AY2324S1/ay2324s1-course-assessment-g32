@@ -6,40 +6,41 @@ import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
-import { showSuccessToast, showServerErrorToast, showValidationErrorToast } from '../../../utils/toast.js';
-import { parseDatetime } from '../../../utils/helpers.js';
+import { showSuccessToast } from '../../../utils/toast.js';
+import { getCookie, getUserId, parseDatetime } from '../../../utils/helpers.js';
+import { DeregisterWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
+import { errorHandler } from '../../../utils/errors.js';
 import './UserList.css';
 
 const UserList = () => {
-  const [tableData, setTableData] = useState([]);
+  const [userId, setUserId] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [tableData, setTableData] = useState([]);
+  const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
+  const [deregisterId, setDeregisterId] = useState(null);
 
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
-  const storedUser = JSON.parse(localStorage.getItem('user'));
+  const navigate = useNavigate();
 
   const fetchData = async () => {
-    getAllUsers()
-      .then((res) => {
-        setTableData(res);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      });
+    try {
+      const response = await getAllUsers(getCookie());
+      setTableData(response);
+      setIsLoading(false);
+    } catch (error) {
+      errorHandler(error);
+    }
   };
 
   useEffect(() => {
-    if (storedUser) {
-      fetchData();
-    } else {
-      navigate('/login');
-    }
+    const fetchUserId = async () => {
+      const id = await getUserId();
+      setUserId(id);
+    };
+    fetchUserId();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -55,29 +56,34 @@ const UserList = () => {
     }
   }, [tableData]); // Initialize whenever tableData changes
 
-  const navigate = useNavigate();
-
   const handleNewUserClick = () => {
     navigate('/users-management/new');
-  }
-
-  const handleEditClick = (id, username) => {
-    navigate('/users-management/edit', { state: { id: id, username: username } });
   };
 
-  const handleDeleteClick = (id) => {
-    deleteUser(id)
-      .then(() => {
-        fetchData();
-        showSuccessToast('User has been deleted successfully!');
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      });
+  const handleEditClick = (id, username) => {
+    navigate('/users-management/edit', {
+      state: { user: { id: id, username: username } },
+    });
+  };
+
+  const handleDeregisterClick = (id) => {
+    setDeregisterId(id);
+    setDeregisterWindowOpen(true);
+  };
+
+  const handleDeregisterConfirm = async () => {
+    setDeregisterWindowOpen(false);
+    try {
+      await deleteUser(deregisterId, getCookie());
+      fetchData();
+      showSuccessToast('User has been deleted successfully!');
+    } catch (error) {
+      errorHandler(error);
+    }
+  };
+
+  const handleDeregisterCancel = () => {
+    setDeregisterWindowOpen(false);
   };
 
   const userList = tableData.map((user, index) => (
@@ -87,14 +93,19 @@ const UserList = () => {
       <td>{user.email}</td>
       <td>{parseDatetime(user.created_at)}</td>
       <td>{parseDatetime(user.updated_at)}</td>
-      {user.id === storedUser.id ? (
+      {user.id === userId ? (
         <td />
       ) : (
         <td>
-          <Button variant='contained' onClick={() => handleEditClick(user.id, user.username)}>
+          <Button
+            variant='contained'
+            onClick={() => handleEditClick(user.id, user.username)}>
             Edit
           </Button>
-          <Button variant='contained' color='error' onClick={() => handleDeleteClick(user.id)}>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={() => handleDeregisterClick(user.id)}>
             Deregister
           </Button>
         </td>
@@ -132,13 +143,25 @@ const UserList = () => {
             </th>
           </tr>
         </thead>
-        <tbody key={userList} className='table-group-divider'>{userList}</tbody>
+        <tbody key={userList} className='table-group-divider'>
+          {userList}
+        </tbody>
       </table>
       <div className='text-md-end'>
-        <button type='button' className='btn btn-success' onClick={handleNewUserClick}>
-          Add
+        <button
+          type='button'
+          className='btn btn-success'
+          style={{ margin: '5px' }}
+          onClick={handleNewUserClick}>
+          Register New User
         </button>
       </div>
+      {isDeregisterWindowOpen && (
+        <DeregisterWindow
+          onConfirm={handleDeregisterConfirm}
+          onClose={handleDeregisterCancel}
+        />
+      )}
     </div>
   );
 };

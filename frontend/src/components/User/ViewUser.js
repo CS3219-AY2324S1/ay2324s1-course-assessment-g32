@@ -1,9 +1,16 @@
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Card, Box, Typography, Button } from '@mui/material';
+import Cookies from 'js-cookie';
 import { deleteUser } from '../../api/UserApi.js';
-import { showSuccessToast, showValidationErrorToast, showServerErrorToast } from '../../utils/toast.js';
+import { showSuccessToast } from '../../utils/toast.js';
+import { DeregisterWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
+import { errorHandler } from '../../utils/errors.js';
+import { getCookie } from '../../utils/helpers.js';
 
 export const ViewUserTopPane = ({ user }) => {
+  const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const handleViewProfileClick = () => {
@@ -11,28 +18,37 @@ export const ViewUserTopPane = ({ user }) => {
   };
 
   const handleChangePasswordClick = () => {
-    navigate('/user-profile/change-password/');
+    navigate('/user-profile/change-password/', { state: { user: user } });
   };
 
   const handleDeregisterClick = () => {
-    deleteUser(user.id)
-      .then(() => {
-        showSuccessToast('User has been deleted successfully!');
-        localStorage.removeItem('user');
-        navigate('/login');
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      });
+    setDeregisterWindowOpen(true);
+  };
+
+  const handleDeregisterConfirm = async () => {
+    setDeregisterWindowOpen(false);
+    try {
+      await deleteUser(user.id, getCookie());
+      showSuccessToast('User has been deleted successfully!');
+      Cookies.remove('jwt');
+      navigate('/');
+    } catch (error) {
+      errorHandler(error);
+    }
+  };
+
+  const handleDeregisterCancel = () => {
+    setDeregisterWindowOpen(false);
   };
 
   return (
     <Card sx={{ marginBottom: '10px' }}>
-      <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center' padding={2}>
+      <Box
+        display='flex'
+        flexDirection='column'
+        alignItems='center'
+        justifyContent='center'
+        padding={2}>
         <Typography variant='h4' sx={{ fontWeight: 'bold' }}>
           {user.username}
         </Typography>
@@ -44,11 +60,20 @@ export const ViewUserTopPane = ({ user }) => {
           <Button variant='contained' onClick={handleChangePasswordClick}>
             Change Password
           </Button>
-          <Button variant='contained' color='error' onClick={handleDeregisterClick}>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={handleDeregisterClick}>
             Deregister
           </Button>
         </Box>
       </Box>
+      {isDeregisterWindowOpen && (
+        <DeregisterWindow
+          onConfirm={handleDeregisterConfirm}
+          onClose={handleDeregisterCancel}
+        />
+      )}
     </Card>
   );
 };
@@ -57,7 +82,7 @@ export const ViewUserBottomPane = ({ user }) => {
   const navigate = useNavigate();
 
   const handleEditUsernameClick = () => {
-    navigate('/user-profile/edit/');
+    navigate('/user-profile/edit/', { state: { user: user } });
   };
 
   return (

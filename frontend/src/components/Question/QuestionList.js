@@ -4,26 +4,26 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import { getQuestions } from '../../api/QuestionApi.js';
-import { showServerErrorToast, showFailureToast } from '../../utils/toast.js';
+import { errorHandler } from '../../utils/errors.js';
+import { getIsMaintainer, getCookie } from '../../utils/helpers.js';
 
 const QuestionList = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
+  const [isMaintainer, setIsMaintainer] = React.useState(false);
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
 
   useEffect(() => {
     const fetchDataAndInitializeTable = async () => {
       try {
-        const questions = await getQuestions();
+        const questions = await getQuestions(getCookie());
+        const isMaintainerResponse = await getIsMaintainer();
+        setIsMaintainer(isMaintainerResponse);
         setTableData(questions);
+        setIsLoading(false);
       } catch (error) {
-        switch (error.response.status) {
-          case 408:
-            showServerErrorToast(error);
-            break;
-          default:
-            showFailureToast(error);
-        }
+        errorHandler(error);
       }
     };
 
@@ -68,14 +68,22 @@ const QuestionList = () => {
   const questionList = tableData.map((question, index) => (
     <tr key={question._id} onClick={() => handleRowClick(question._id)}>
       <th scope='row'>{index + 1}</th>
-      <td>{question.title}</td>
+      <td style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
+        {question.title}
+      </td>
       <td>
-        <span className={`badge ${getComplexityColor(question?.complexity)}`}>{question.complexity} </span>
+        <span className={`badge ${getComplexityColor(question?.complexity)}`}>
+          {question.complexity}{' '}
+        </span>
       </td>
     </tr>
   ));
 
-  return (
+  return isLoading ? (
+    <div className='spinner-border text-primary' role='status'>
+      <span className='visually-hidden'>Loading...</span>
+    </div>
+  ) : (
     <div className='container'>
       <h1>Question List</h1>
       <table ref={tableRef} className='table table-hover table-striped'>
@@ -95,9 +103,14 @@ const QuestionList = () => {
         <tbody className='table-group-divider'>{questionList}</tbody>
       </table>
       <div className='text-md-end'>
-        <button type='button' className='btn btn-success' onClick={handleNewQuestionClick}>
-          Add
-        </button>
+        {isMaintainer ? (
+          <button
+            type='button'
+            className='btn btn-success'
+            onClick={handleNewQuestionClick}>
+            Add
+          </button>
+        ) : null}
       </div>
     </div>
   );

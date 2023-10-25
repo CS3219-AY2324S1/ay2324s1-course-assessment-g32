@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signup } from '../api/UserApi';
-import { showValidationErrorToast, showServerErrorToast, showSuccessToast } from '../utils/toast.js';
+import { signup } from '../api/UserApi.js'
+import { showSuccessToast } from '../utils/toast.js';
+import { errorHandler } from '../utils/errors.js';
 
 function Signup() {
   const [email, setEmail] = useState('');
@@ -35,18 +36,13 @@ function Signup() {
       confirmPassword: confirmPassword,
     };
 
-    signup(userData)
-      .then(() => {
-        navigate('/login');
-        showSuccessToast('User registered successfully!');
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          showValidationErrorToast(error);
-        } else {
-          showServerErrorToast(error);
-        }
-      });
+    try {
+      await signup(userData);
+      navigate('/login');
+      showSuccessToast('User created successfully!');
+    } catch (error) {
+      errorHandler(error);
+    }
   };
 
   return (
@@ -62,18 +58,36 @@ function Signup() {
           </div>
           <div className='form-group mt-3'>
             <label>Email address</label>
-            <input type='email' className='form-control mt-1' placeholder='Enter email' onChange={handleEmailChange} />
+            <input
+              type='email'
+              className='form-control mt-1'
+              placeholder='Enter email'
+              onChange={handleEmailChange}
+            />
           </div>
           <div className='form-group mt-3'>
             <label>Password</label>
-            <input type='password' className='form-control mt-1' placeholder='Enter password' onChange={handlePasswordChange} />
+            <input
+              type='password'
+              className='form-control mt-1'
+              placeholder='Enter password'
+              onChange={handlePasswordChange}
+            />
           </div>
           <div className='form-group mt-3'>
             <label>Confirm Password</label>
-            <input type='password' className='form-control mt-1' placeholder='Enter password' onChange={handleConfirmPasswordChange} />
+            <input
+              type='password'
+              className='form-control mt-1'
+              placeholder='Enter password'
+              onChange={handleConfirmPasswordChange}
+            />
           </div>
           <div className='d-grid gap-2 mt-3'>
-            <button type='submit' className='btn btn-primary' onClick={handleSignupSubmit}>
+            <button
+              type='submit'
+              className='btn btn-primary'
+              onClick={handleSignupSubmit}>
               Register
             </button>
           </div>
