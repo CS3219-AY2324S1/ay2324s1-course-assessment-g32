@@ -6,7 +6,7 @@ import { defaultKeymap, indentWithTab } from '@codemirror/commands';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
-import { jsPython } from 'jspython-interpreter';
+import { executeCode } from '../../../api/ExecutionApi';
 import './CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
@@ -15,7 +15,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   const [code, setCode] = useState('');
   const [codeExecutionResult, setCodeExecutionResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
-  const pyInterpreter = jsPython();
 
   const onUpdate = EditorView.updateListener.of((update) => {
     if (update.docChanged) {
@@ -48,30 +47,9 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
     });
   };
 
-  const executePyCode = () => {
-    try {
-      pyInterpreter.evaluate(code).then(res => {
-        setCodeExecutionResult(res)
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  };
-
-  const handleCodeExecution = () => {
-    switch (language) {
-      case 'Python':
-        executePyCode();
-        break
-      case 'Java':
-        console.log("java");
-        break
-      case 'C++':
-        console.log("cpp");
-        break
-      default:
-        eval("console.log('hello world js')") ;
-    }
+  const handleCodeExecution = async () => {
+    const result = await executeCode(language, code);
+    setCodeExecutionResult(result);
   };
 
   // Send code changes to the server
@@ -144,6 +122,9 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
           </select>
           <button type='button' className='btn btn-primary me-2' onClick={handleCodeExecution}>
             Run code
+          </button>
+          <button type='button' className='btn btn-primary me-2' onClick={handleCodeExecution}>
+            Run tests
           </button>
         </div>
       </div>
