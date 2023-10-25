@@ -5,13 +5,13 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import Spinner from '../../../components/Spinner.js';
-import { deleteUser, getAllUsers } from '../../../api/UserApi.js';
-import { showSuccessToast } from '../../../utils/toast.js';
-import { getCookie, getUserId, parseDatetime } from '../../../utils/helpers.js';
-import { DeregisterWindow } from '../../ConfirmationWindow/ConfirmationWindows.js';
-import { errorHandler } from '../../../utils/errors.js';
-import './UserList.css';
+import Spinner from '../Spinner';
+import { DeregisterWindow } from '../ConfirmationWindows';
+import { deleteUser, getAllUsers } from '../../api/UserApi';
+import { showSuccessToast } from '../../utils/toast';
+import { getCookie, getUserId, parseDatetime } from '../../utils/helpers';
+import { errorHandler } from '../../utils/errors';
+import '../../css/UserList.css';
 
 const UserList = () => {
   const [userId, setUserId] = useState({});
@@ -100,13 +100,15 @@ const UserList = () => {
         <td>
           <Button
             variant='contained'
-            onClick={() => handleEditClick(user.id, user.username)}>
+            onClick={() => handleEditClick(user.id, user.username)}
+          >
             Edit
           </Button>
           <Button
             variant='contained'
             color='error'
-            onClick={() => handleDeregisterClick(user.id)}>
+            onClick={() => handleDeregisterClick(user.id)}
+          >
             Deregister
           </Button>
         </td>
@@ -151,7 +153,8 @@ const UserList = () => {
           type='button'
           className='btn btn-success'
           style={{ margin: '5px' }}
-          onClick={handleNewUserClick}>
+          onClick={handleNewUserClick}
+        >
           Register New User
         </button>
       </div>

@@ -5,7 +5,7 @@ import {
   showUserNotAuthorizedErrorToast,
   showDuplicateRecordErrorToast,
   showRecordNotFoundErrorToast,
-} from './toast.js';
+} from './toast';
 import { Status } from '../constants';
 
 export const errorHandler = (error) => {

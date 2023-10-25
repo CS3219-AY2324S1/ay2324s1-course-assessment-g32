@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { authorize } from '../api/AuthApi.js';
+import { authorize } from '../api/AuthApi';
 
 export const getCookie = () => {
   try {

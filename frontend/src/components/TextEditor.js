@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import './TextEditor.css';
+import '../css/TextEditor.css';
 
 const TextEditor = ({ value, onChange }) => {
   return (

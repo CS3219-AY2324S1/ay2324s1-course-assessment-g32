@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Queue from './Queue';
-import { exitQueue } from '../../api/MatchApi.js';
-import { getCookie } from '../../utils/helpers.js';
-import { errorHandler } from '../../utils/errors.js';
+import { exitQueue } from '../../api/MatchApi';
+import { getCookie } from '../../utils/helpers';
+import { errorHandler } from '../../utils/errors';
 import { Complexity, Language } from '../../constants';
-import '../../css/Modal.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import '../../css/Modal.css';
 
 const MatchingModal = ({ isOpen, onClose }) => {
   const [isFindingMatch, setIsFindingMatch] = useState(false);

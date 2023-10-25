@@ -1,13 +1,9 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import QuestionList from '../../components/Question/QuestionList';
-import {
-  CreateQuestion,
-  EditQuestion,
-  QuestionDescription,
-} from '../Question/Question';
-import Header from '../../components/Header';
-import './Landing.css';
+import Header from '../components/Header';
+import { QuestionList } from '../components/Question';
+import { CreateQuestion, EditQuestion, QuestionDescription } from './Question';
+import '../css/Landing.css';
 
 function Landing() {
   return (

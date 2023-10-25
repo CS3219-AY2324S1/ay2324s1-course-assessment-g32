@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import Chat from '../../components/Collaboration/Chat/Chat';
-import CodeEditor from '../../components/Collaboration/CodeEditor/CodeEditor';
-import SlidingPanel from '../../components/Collaboration/SlidingPanel/SlidingPanel';
-import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
-import { showFailureToast } from '../../utils/toast';
-import { SocketEvent } from '../../constants';
-import env from '../../loadEnvironment';
-import './Collaboration.css';
+import { Chat, CodeEditor, SlidingPanel } from '../components/Collaboration';
+import { QuestionContent } from '../components/Question';
+import { showFailureToast } from '../utils/toast';
+import { SocketEvent } from '../constants';
+import env from '../loadEnvironment';
+import '../css/Collaboration.css';
 
 const Collaboration = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);

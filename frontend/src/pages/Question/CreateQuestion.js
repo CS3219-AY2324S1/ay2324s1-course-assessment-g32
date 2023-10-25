@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import QuestionForm from '../../components/Question/QuestionForm.js';
-import Header from '../../components/Header.js';
-import { createQuestion } from '../../api/QuestionApi.js';
-import { EditWindow } from '../../components/ConfirmationWindow/ConfirmationWindows.js';
-import { getCookie } from '../../utils/helpers.js';
-import { showSuccessToast } from '../../utils/toast.js';
-import { errorHandler } from '../../utils/errors.js';
+import Header from '../../components/Header';
+import { QuestionForm } from '../../components/Question';
+import { EditWindow } from '../../components/ConfirmationWindows';
+import { createQuestion } from '../../api/QuestionApi';
+import { getCookie } from '../../utils/helpers';
+import { showSuccessToast } from '../../utils/toast';
+import { errorHandler } from '../../utils/errors';
 import '../../css/Tags.css';
 
 const CreateQuestion = () => {

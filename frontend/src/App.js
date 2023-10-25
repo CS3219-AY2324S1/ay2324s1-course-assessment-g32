@@ -3,31 +3,31 @@ import { ToastContainer } from 'react-toastify';
 
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Collaboration from './pages/Collaboration/Collaboration';
+import Collaboration from './pages/Collaboration';
 
 // Question pages
-import Landing from './pages/Landing/Landing';
+import Landing from './pages/Landing';
 import {
   CreateQuestion,
   EditQuestion,
   QuestionDescription,
-} from './pages/Question/Question';
+} from './pages/Question';
 // Normal user pages
 import {
   ChangeUserPassword,
   ManageUserProfile,
   NormalEditUser,
-} from './pages/User/UserProfile/UserProfile';
+} from './pages/User/UserProfile';
 // Maintainer pages
 import {
   AddUser,
   MaintainerEditUser,
   ManageUserProfiles,
-} from './pages/User/UsersManagement/UsersManagement';
+} from './pages/User/UsersManagement';
 // Unauthorized page
-import UnauthorizedPage from './pages/UnauthorizedPage/UnauthorizedPage';
+import UnauthorizedPage from './pages/UnauthorizedPage';
 // Page not found page
-import PageNotFound from './pages/PageNotFound/PageNotFound';
+import PageNotFound from './pages/PageNotFound';
 // Special routes
 import ProtectedRoute from './utils/ProtectedRoute';
 import MaintainerRoute from './utils/MaintainerRoute';
@@ -87,6 +87,6 @@ function App() {
       <ToastContainer />
     </div>
   );
-};
+}
 
 export default App;

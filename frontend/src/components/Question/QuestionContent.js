@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-import './QuestionContent.css';
+import '../../css/QuestionContent.css';
 
 const QuestionContent = ({ question }) => {
   const { title, description, tags, complexity } = question;

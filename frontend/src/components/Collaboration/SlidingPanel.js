@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Spinner from '../../Spinner.js';
-import { getQuestionsByComplexity, getQuestionDetails } from '../../../api/QuestionApi.js';
-import { errorHandler } from '../../../utils/errors.js';
-import { getCookie } from '../../../utils/helpers.js';
-import './SlidingPanel.css';
+import Spinner from '../Spinner';
+import { getQuestionsByComplexity, getQuestionDetails } from '../../api/QuestionApi';
+import { errorHandler } from '../../utils/errors';
+import { getCookie } from '../../utils/helpers';
+import '../../css/SlidingPanel.css';
 
 const SlidingPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
   const [isLoading, setIsLoading] = useState(true);

@@ -6,8 +6,8 @@ import { defaultKeymap, indentWithTab } from '@codemirror/commands';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
-import { Language, CollaborationEvent } from '../../../constants';
-import './CodeEditor.css';
+import { Language, CollaborationEvent } from '../../constants';
+import '../../css/CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   const editor = useRef(null);

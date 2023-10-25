@@ -1,8 +1,7 @@
 import Alert from 'react-bootstrap/Alert';
-import './ConfirmationWindows.css';
+import '../css/ConfirmationWindows.css';
 
 export function DeletionWindow({ onClose, onConfirm }) {
-
   return (
     <div className='overlay'>
       <Alert variant='danger'>
@@ -21,7 +20,6 @@ export function DeletionWindow({ onClose, onConfirm }) {
 };
 
 export function EditWindow({ onClose, onConfirm }) {
-
   return (
     <div className='overlay'>
       <Alert variant='warning'>
@@ -30,7 +28,6 @@ export function EditWindow({ onClose, onConfirm }) {
           All unsaved changes will be lost.
         </p>
         <hr />
-
         <div className='d-flex justify-content-end'>
           <button type='button' className='btn btn-outline-danger me-2' onClick={onClose}>No</button>
           <button type='button' className='btn btn-danger' onClick={onConfirm}>Yes</button>
@@ -41,7 +38,6 @@ export function EditWindow({ onClose, onConfirm }) {
 };
 
 export function DeregisterWindow({ onClose, onConfirm }) {
-
   return (
     <div className='overlay'>
       <Alert variant='danger'>

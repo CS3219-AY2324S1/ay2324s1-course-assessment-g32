@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import './CountdownTimer.css';
+import '../css/CountdownTimer.css';
 
 const CountdownTimer = ({ duration }) => {
   const [seconds, setSeconds] = useState(duration);

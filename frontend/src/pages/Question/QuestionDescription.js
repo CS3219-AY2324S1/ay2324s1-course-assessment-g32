@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import QuestionContent from '../../../components/Question/QuestionContent/QuestionContent';
-import Header from '../../../components/Header';
-import Spinner from '../../../components/Spinner';
-import { getQuestionDetails, deleteQuestion } from '../../../api/QuestionApi';
-import { getCookie, getIsMaintainer } from '../../../utils/helpers';
-import { showSuccessToast } from '../../../utils/toast';
-import { DeletionWindow } from '../../../components/ConfirmationWindow/ConfirmationWindows';
-import { errorHandler } from '../../../utils/errors';
-import './QuestionDescription.css';
-import '../../../css/Tags.css';
+import Header from '../../components/Header';
+import Spinner from '../../components/Spinner';
+import { QuestionContent } from '../../components/Question';
+import { DeletionWindow } from '../../components/ConfirmationWindows';
+import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi';
+import { getCookie, getIsMaintainer } from '../../utils/helpers';
+import { showSuccessToast } from '../../utils/toast';
+import { errorHandler } from '../../utils/errors';
+import '../../css/QuestionDescription.css';
+import '../../css/Tags.css';
 
 const QuestionDescription = () => {
   const [question, setQuestion] = useState({});

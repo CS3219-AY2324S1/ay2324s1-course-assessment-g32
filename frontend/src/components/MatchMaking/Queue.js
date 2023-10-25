@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CountdownTimer from '../CountdownTimer/CountdownTimer.js';
-import { joinQueue, exitQueue } from '../../api/MatchApi.js';
-import { getRandomQuestionByCriteria } from '../../api/QuestionApi.js';
-import { errorHandler } from '../../utils/errors.js';
-import { showFailureToast } from '../../utils/toast.js';
+import CountdownTimer from '../CountdownTimer';
+import { joinQueue, exitQueue } from '../../api/MatchApi';
+import { getRandomQuestionByCriteria } from '../../api/QuestionApi';
+import { errorHandler } from '../../utils/errors';
+import { showFailureToast } from '../../utils/toast';
 
 const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) => {
   const [status, setStatus] = useState({});
