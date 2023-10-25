@@ -2,9 +2,10 @@ const amqp = require('amqplib');
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
-const queueRoutes = require('./QueueRoutes.js');
-const consume = require('./services/consumerService.js');
-const env = require('./loadEnvironment.js');
+const queueRoutes = require('./QueueRoutes');
+const consume = require('./services/consumerService');
+const env = require('./loadEnvironment');
+const { MAX_CONNECTION_ATTEMPTS, CONNECTION_INTERVAL } = require('./constants');
 
 console.log('Starting Matchserver ...');
 
@@ -25,13 +26,13 @@ const rabbitMQserver = async () => {
   var connection = null;
 
   // Try to connect to RabbitMQ server 10 times with 5 second intervals
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < MAX_CONNECTION_ATTEMPTS; i++) {
     try {
       connection = await amqp.connect(env.RABBITMQ_URL);
       break;
     } catch (error) {
       console.error(`Matchserver could not connect to RabbitMQ server: ${env.RABBITMQ_URL} in attempt ${i + 1} of 10`);
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      await new Promise(resolve => setTimeout(resolve, CONNECTION_INTERVAL));
     }
   }
 
