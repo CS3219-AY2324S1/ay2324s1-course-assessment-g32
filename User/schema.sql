@@ -3,15 +3,27 @@ CREATE DATABASE assignmentdb;
 
 USE assignmentdb;
 
+-- Creates table for users
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(50) NOT NULL,
+  display_name VARCHAR(50) NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
-  password VARCHAR(200) NOT NULL,     -- to be hashed
-  isMaintainer BOOLEAN DEFAULT FALSE,
+  password VARCHAR(200) NOT NULL,
+  is_maintainer BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- use this to change normal user to maintainer manually
--- UPDATE users SET isMaintainer = TRUE WHERE id = ?;
+-- Creates 1 sample admin account and 1 sample normal user account
+
+-- Login Credentials
+-- Email: admin@test.com
+-- Password: password
+INSERT INTO users (display_name, email, password, is_maintainer)
+VALUES('admin', 'admin@test.com', '$2b$10$b.yHMk1XCm3wEDfQbuM2w.3RC15YCWCrfO/ArhvC3NuqeQwl0.vY6', 1);
+
+-- Login Credentials
+-- Email: user@test.com
+-- Password: password
+INSERT INTO users (display_name, email, password)
+VALUES('user', 'user@test.com', '$2b$10$b.yHMk1XCm3wEDfQbuM2w.3RC15YCWCrfO/ArhvC3NuqeQwl0.vY6');

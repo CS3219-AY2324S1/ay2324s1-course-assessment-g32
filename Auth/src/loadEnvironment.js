@@ -1,4 +1,4 @@
-require('dotenv').config({ path: `${__dirname}/../.env` });
+require('dotenv').config({ path: `${__dirname}/../../.env` });
 
 const AUTH_PORT = process.env.AUTH_PORT || 5001;
 

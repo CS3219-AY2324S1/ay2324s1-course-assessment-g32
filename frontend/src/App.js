@@ -26,7 +26,8 @@ import {
 import UnauthorizedPage from './pages/UnauthorizedPage/UnauthorizedPage';
 // Page not found page
 import PageNotFound from './pages/PageNotFound/PageNotFound';
-// Special routes
+// Routes
+import NonLoggedInRoute from './utils/NonLoggedInRoute';
 import ProtectedRoute from './utils/ProtectedRoute';
 import MaintainerRoute from './utils/MaintainerRoute';
 
@@ -37,8 +38,12 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
+        <Route path='/' element={<NonLoggedInRoute />}>
+          {/* Display Login component by default */}
+          <Route index element={<Login />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+        </Route>
 
         {/* Question management for normal users */}
         <Route path='/landing' element={<ProtectedRoute />}>
@@ -76,9 +81,6 @@ function App() {
           />
           <Route path='/users-management/new' element={<AddUser />} />
         </Route>
-
-        {/* Display Login component by default */}
-        <Route path='/' element={<Login />} />
 
         {/* Display UnauthorizedPage component if user is not authorized */}
         <Route path='/unauthorized' element={<UnauthorizedPage />} />
