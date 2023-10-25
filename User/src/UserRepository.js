@@ -1,4 +1,4 @@
-const mysqlDb = require('./Connection.js');
+const mysqlDb = require('./Connection');
 
 /**
  * Finds and returns userId of user with email.

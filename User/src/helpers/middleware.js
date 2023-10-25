@@ -1,4 +1,5 @@
-const authApi = require('./callsToAuth.js');
+const authApi = require('./callsToAuth');
+const { Status } = require('../constants');
 
 const getToken = async (req, res) => {
   try {
@@ -9,7 +10,7 @@ const getToken = async (req, res) => {
     });
   } catch (err) {
     res
-      .status(err?.response?.status || 500)
+      .status(err?.response?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.response?.data?.error || err });
   }
 };
@@ -25,7 +26,7 @@ const checkToken = async (req, res, next) => {
     next();
   } catch (err) {
     res
-      .status(err?.response?.status || 500)
+      .status(err?.response?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.response?.data?.error || err });
   }
 };
@@ -41,7 +42,7 @@ const checkTokenMaintainer = async (req, res, next) => {
     next();
   } catch (err) {
     res
-      .status(err?.response?.status || 500)
+      .status(err?.response?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.response?.data?.error || err });
   }
 };
