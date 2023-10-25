@@ -1,4 +1,5 @@
 const questionService = require('./QuestionService');
+const logger = require('./Log.js');
 
 // Define a controller function for creating questions
 const create = async (req, res) => {
@@ -11,8 +12,10 @@ const create = async (req, res) => {
       tags
     );
     res.json({ message: 'Question created successfully', question });
+    logger.logSuccess('Question created');
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
+    logger.error('Cannot create question:', err?.message || err);
   }
 };
 
@@ -21,8 +24,10 @@ const getAll = async (req, res) => {
   try {
     const questions = await questionService.getQuestions();
     res.json({ message: 'Questions retrieved successfully', questions });
+    logger.logSuccess('Questions retrieved');
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
+    logger.error('Cannot retrieve questions:', err?.message || err);
   }
 };
 
@@ -32,8 +37,10 @@ const getQuestionDetails = async (req, res) => {
     const { id } = req.query;
     const question = await questionService.getQuestionDetails(id);
     res.json({ message: 'Question retrieved successfully', question });
+    logger.logSuccess('Retrieved details for question', id);
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
+    logger.error('Cannot get question details:', err?.message || err);
   }
 };
 
@@ -49,8 +56,10 @@ const edit = async (req, res) => {
       tags
     );
     res.json({ message: 'Question edited successfully', question });
+    logger.logSuccess('Edited question', id);
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
+    logger.error('Cannot edit question:', err?.message || err);
   }
 };
 
@@ -60,8 +69,10 @@ const deleteQuestion = async (req, res) => {
     const { id } = req.query;
     const question = await questionService.deleteQuestion(id);
     res.json({ message: 'Question deleted successfully', question });
+    logger.logSuccess('Deleted question', id);
   } catch (err) {
     res.status(err?.status || 500).json({ error: err?.message || err });
+    logger.error('Cannot delete question:', err?.message || err);
   }
 };
 

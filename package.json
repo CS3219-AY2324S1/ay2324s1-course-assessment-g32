@@ -8,10 +8,17 @@
         "install:auth": "cd Auth && npm install",
         "install:question": "cd Question && npm install",
         "install:user": "cd User && npm install",
+        
         "start-all": "npm-run-all -p start:*",
         "start:frontend": "cd frontend && npm start",
         "start:auth": "cd Auth && npm start",
         "start:question": "cd Question && npm start",
-        "start:user": "cd User && npm start"
+        "start:user": "cd User && npm start",
+
+        "dev-all": "npm-run-all -p dev:*",
+        "dev:backend": "cd backend && npm run dev",
+        "dev:auth": "cd Auth && npm run dev",
+        "dev:question": "cd Question && npm run dev",
+        "dev:user": "cd User && npm run dev"
     }
 }
