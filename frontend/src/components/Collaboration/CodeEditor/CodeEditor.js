@@ -71,7 +71,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
 
   // Receive language changes from the server
   useEffect(() => {
-    socket.on(CollaborationEvent.CODE_UPDATE, (updatedLanguage) => {
+    socket.on(CollaborationEvent.LANGUAGE_UPDATE, (updatedLanguage) => {
       const languageSelect = document.getElementById('languageSelect');
       if (languageSelect.value !== updatedLanguage) {
         languageSelect.value = updatedLanguage;
