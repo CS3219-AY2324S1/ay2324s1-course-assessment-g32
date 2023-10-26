@@ -25,17 +25,18 @@ Note the root password used, as it would be needed in the later parts.
 
 ## Setup environment variables
 
-1. Enter the following command
+1. At the root directory, open a terminal
+2. Enter the following command
    ```
    cp template.env .env
    ```
-2. Open `.env` file (This should be in the root directory)
-3. Enter root password (previously configured when installing MySQL)  
-   Example: if your root password is "password1234",
-   `MYSQL_PWD=password1234`
-4. Enter JWT token password (for generating and decoding JWT tokens)  
-   Example: if your root password is "password",
-   `JWT_SECRET_KEY=password`
+3. Open `.env` file (This should be in the root directory)
+4. Enter root password (previously configured when installing MySQL)  
+   - Example: if your root password is "password1234",
+     `MYSQL_ROOT_PASSWORD=password1234`
+5. Enter JWT token password (for generating and decoding JWT tokens)  
+   - Example: if your root password is "password",
+     `JWT_SECRET_KEY=password`
 
 ## Install NodeJS packages
 
