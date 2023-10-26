@@ -42,7 +42,7 @@ const authorize = async (token) => {
 
 const authorizeMaintainer = async (token) => {
   try {
-    return await axios.get(authRootUrl + '/authorizeMaintainer', {
+    return await axios.get(authRootUrl + '/authorize-maintainer', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token,

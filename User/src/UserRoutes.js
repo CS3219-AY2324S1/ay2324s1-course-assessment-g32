@@ -9,16 +9,21 @@ router.post('/login', userController.login, middleware.getToken);
 
 // Only maintainer can access these routes
 router.get(
-  '/readAll',
+  '/read-all',
   middleware.checkTokenMaintainer,
   userController.getAllUserInfo
 );
+router.put(
+  '/toggle-user-role',
+  middleware.checkTokenMaintainer,
+  userController.toggleUserRole
+);
 
 // User and maintainer can access the remaining routes
-router.post('/read', middleware.checkToken, userController.getUserInfo);
-router.post('/update', middleware.checkToken, userController.updateUser);
-router.post('/delete', middleware.checkToken, userController.deleteUser);
-router.post(
+router.get('/read', middleware.checkToken, userController.getUserInfo);
+router.put('/update', middleware.checkToken, userController.updateUser);
+router.delete('/delete', middleware.checkToken, userController.deleteUser);
+router.put(
   '/change-password',
   middleware.checkToken,
   userController.changePassword
