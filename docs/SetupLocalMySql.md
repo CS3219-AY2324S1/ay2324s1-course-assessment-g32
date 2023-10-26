@@ -44,7 +44,7 @@ For Windows OS,
 
 > Quick Tip!\
 > In the terminal, you can quickly run the SQL statements by doing\
-> `source <path_to_schema.sql>`\
+> `source path_to_schema.sql`\
 > For example,\
 > `source C:\Users\User\PeerPrep\User\initdb\01-schema.sql`
 
