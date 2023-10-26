@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { updateUsername } from '../../api/UserApi.js';
-import { showSuccessToast } from '../../utils/toast.js';
-import { errorHandler } from '../../utils/errors.js';
-import { getCookie } from '../../utils/helpers.js';
+import { updateUsername } from '../../api/UserApi';
+import { showSuccessToast } from '../../utils/toast';
+import { errorHandler } from '../../utils/errors';
+import { getCookie } from '../../utils/helpers';
 
 const EditUser = ({ user, isMaintainerPage }) => {
   const [id, setId] = useState('');

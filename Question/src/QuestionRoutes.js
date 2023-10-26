@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const questionController = require('./QuestionController.js');
-const middleware = require('./helpers/middleware.js');
+const questionController = require('./QuestionController');
+const middleware = require('./helpers/middleware');
 
 // Only maintainer can access these routes
 router.post('/create', middleware.checkTokenMaintainer, questionController.create);

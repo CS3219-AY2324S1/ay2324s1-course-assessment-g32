@@ -1,6 +1,6 @@
 const express = require('express');
-const queueController = require('./QueueController.js');
-const middleware = require('./helpers/middleware.js');
+const queueController = require('./QueueController');
+const middleware = require('./helpers/middleware');
 
 const router = express.Router();
 

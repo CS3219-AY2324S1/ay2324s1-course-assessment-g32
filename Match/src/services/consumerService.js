@@ -1,7 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
+const { TIMEOUT } = require('../constants');
 
-// Timeout value; 30000ms = 30s
-const TIMEOUT = 30000;
 const waitingHosts = new Map();
 
 // Calculates how long the host has been waiting
@@ -24,7 +23,7 @@ const handleExitRequest = (request, channel, queueName, message) => {
   if (waitingHost !== undefined) {
     const waitingHostRequest = JSON.parse(waitingHost.content.toString());
     if (waitingHostRequest.sessionID === request.sessionID) {
-      const response = { message: `You have exited the queue`, };
+      const response = { message: `You have exited the queue` };
       channel.sendToQueue(
         waitingHostRequest.replyTo,
         Buffer.from(JSON.stringify(response)),
@@ -41,14 +40,10 @@ const handleExitRequest = (request, channel, queueName, message) => {
 
 // Handle request when the host in current queue times out
 const handleTimeoutRequest = (request, channel, message) => {
-  const response = { message: `You have timed out!`, };
-  channel.sendToQueue(
-    request.replyTo,
-    Buffer.from(JSON.stringify(response)),
-    {
-      correlationId: request.correlationId,
-    }
-  );
+  const response = { message: `You have timed out!` };
+  channel.sendToQueue(request.replyTo, Buffer.from(JSON.stringify(response)), {
+    correlationId: request.correlationId,
+  });
   channel.ack(message);
 };
 
@@ -127,7 +122,7 @@ const handleNoMatchRequest = (request, channel, queueName, message) => {
 
     // Ensure that there is no match before sending the timeout response
     if (waitingHostRequest.correlationId === request.correlationId) {
-      const response = { message: `You have timed out!`, };
+      const response = { message: `You have timed out!` };
       channel.sendToQueue(
         request.replyTo,
         Buffer.from(JSON.stringify(response)),
