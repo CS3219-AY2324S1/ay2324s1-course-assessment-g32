@@ -1,6 +1,6 @@
-# Assignment 4 - Containerization
+# Containerization (Assignment 4)
 
-We used Docker to containerize our various micro-services which serves our combined application.
+Docker to containerize our various micro-services which serves our combined application.
 
 The combined application contains qualities of:
 * Question Repository Application
@@ -15,9 +15,8 @@ We have various micro-services including:
 
 Additional Notes:
 
-If you are not using Windows OS, and would like a equivalent instruction for a differnt OS, do reach out to us for clarification.
-
-**For clarifications, do leave your questions at [Feedback PR](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32/pull/1) created in our repository.**
+The instructions we have are based on Windows OS.
+Do reach out to us for clarification for other OS.
 
 # Requirements
 

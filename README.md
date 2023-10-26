@@ -1,58 +1,42 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
 
-# Software Requirements
+# Setup
+
+## Software Requirements
 
 Download and install these software if you do not have them locally.
 
 - [NodeJS](https://nodejs.org/en/download)
 - [MySQL](https://dev.mysql.com/downloads/mysql/)
 
-For development, you may also want to install:
+## Internet Access
 
-- [MongoDB Compass](https://www.mongodb.com/try/download/compass)
-- [Docker Desktop](https://www.docker.com/get-started/)
-- [Postman](https://www.postman.com/downloads/)
+Ensure that you are connected to the internet.
 
-# Setup
+> Note!\
+> Do **not** connect to NUS Wifi/Network.\
+> The application would be unable to connect to MongoDB Atlas.
 
 ## Setup MySQL locally
 
-1. Ensure MySQL is already started.
-   - For Windows OS,
-     - `Win + R` to open the Run window
-     - Type `services.msc`
-     - Press `Ctrl + Shift + Enter` to run as administrator
-     - If prompted by _User Account Control_, enter administrator password
-     - In the Services application, search for the MySQL Service (eg. _MYSQL81_ for MySQL 8.1)
-     - Check _Status_ of the service
-        - Running: OK, no further action needed
-        - Blank: Need to be started, do the next step
-     - Right click and press `Start`
-   - For macOS,
-     - Click on the apple icon on the top left of the screen and click on `System Settings` to open System Settings
-     - Search for `MySQL`
-     - Click `Start MySQL Server` if it has not been started
-2. Search for **MySQL 8.1 Command Line Client** on your computer. Execute it to open up the terminal.
-3. Enter your root password.
-4. Run the SQL statements in `./User/initdb/01-schema.sql` 
-   on the terminal using `source <path_to_schema.sql>` 
-   (e.g. `source C:\Users\User\CS3219\assignment\backend\schema.sql`).
-5. Optionally, if you want sample accounts to use, run SQL statements
-   in `./User/initdb/03-sample-accts.sql` 
+Follow the steps in [Setup MySQL locally](docs/SetupLocalMySql.md).
+
+Note the root password used, as it would be needed in the later parts.
 
 ## Setup environment variables
 
-1. Enter the following command
+1. At the root directory, open a terminal
+2. Enter the following command
    ```
    cp template.env .env
    ```
-2. Open `.env` file
-3. Enter root password (previously configured when installing MySQL)  
-   Example: if your root password is "password1234",
-   `MYSQL_PWD=password1234`
-4. Enter JWT token password (for generating and decoding JWT tokens)  
-   Example: if your root password is "password",
-   `JWT_SECRET_KEY=password`
+3. Open `.env` file (This should be in the root directory)
+4. Enter root password (previously configured when installing MySQL)  
+   - Example: if your root password is "password1234",
+     `MYSQL_ROOT_PASSWORD=password1234`
+5. Enter JWT token password (for generating and decoding JWT tokens)  
+   - Example: if your root password is "password",
+     `JWT_SECRET_KEY=password`
 
 ## Install NodeJS packages
 
@@ -62,7 +46,8 @@ npm run install-all
 
 # Start Application
 
-Start local MySQL Server service, if necessary. Follow the first step under [Setup MySQL locally](#setup-mysql-locally).
+Ensure that MySQL Server service has started.
+(How to check? Click [here](docs/SetupLocalMySql.md#start-mysql-service).)
 
 Start all services using the following commands:
 
@@ -70,38 +55,35 @@ Start all services using the following commands:
 npm run start-all
 ```
 
-Or start them indvidually (run them in different terminals):
+# Resources for Developer / Tester
 
-- Frontend: `cd frontend && npm start`
-- Backend: `cd backend && npm start`
-- Auth service: `cd Auth && npm start`
-- User service: `cd User && npm start`
-- Question service: `cd Question && npm start`
+## Software
 
-Note that the backend will crash if you are connected to NUS wifi, as backend is unable to connect to MongoDB Atlas.
+For development, you may also want to install:
 
-# Developer Notes
+- [MongoDB Compass](https://www.mongodb.com/try/download/compass)
+- [Docker Desktop](https://www.docker.com/get-started/)
+- [Postman](https://www.postman.com/downloads/)
 
-| Backend API Path             | Method | Purpose                                             | Parameters                                                            | Require JWT token to be in header? | Does user have to be maintainer? |
-| ---------------------------- | ------ | --------------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------- | -------------------------------- |
-| `/auth/authorize`            | GET    | Used to authorize all users                         | -                                                                     | Yes                                | No                               |
-| `/auth/authorize-maintainer` | GET    | Used to authorize maintainers                       | -                                                                     | Yes                                | Yes                              |
-| `/auth/generate`             | POST   | Used to generate JWT token after user has logged in | `userId` <br> `isMaintainer`                                          | No                                 | -                                |
-| `/question/create`           | POST   | Used to create new question                         | `title` <br> `complexity` <br> `description` <br> `tags`              | Yes                                | Yes                              |
-| `/question/delete`           | DELETE | Used to delete question                             | `id`                                                                  | Yes                                | Yes                              |
-| `/question/edit`             | PUT    | Used to edit question                               | `id` <br> `title` <br> `complexity` <br> `description` <br> `tags`    | Yes                                | Yes                              |
-| `/question/read`             | GET    | Used to get the details of the specified question   | `id`                                                                  | Yes                                | No                               |
-| `/question/read-all`         | GET    | Used to get all the questions from the database     | -                                                                     | Yes                                | No                               |
-| `/user/change-password`      | PUT    | Used to change user password                        | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | Yes                                | No                               |
-| `/user/delete`               | DELETE | Used to delete user                                 | `id`                                                                  | Yes                                | No                               |
-| `/user/login`                | POST   | Used to login                                       | `email` <br> `password`                                               | No                                 | -                                |
-| `/user/read`                 | GET    | Used to get user information                        | `id` or `email`                                                       | Yes                                | No                               |
-| `/user/read-all`             | GET    | Used to get all users information                   | -                                                                     | Yes                                | Yes                              |
-| `/user/signup`               | POST   | Used to create new user                             | `email` <br> `password` <br> `confirmPassword`                        | No                                 | -                                |
-| `/user/toggle-user-role`     | PUT    | Used to toggle user role (normal user / maintainer) | `id`                                                                  | Yes                                | Yes                              |
-| `/user/update`               | PUT    | Used to update user information (displayName)       | `id` <br> `displayName`                                               | Yes                                | No                               |
+## Documentation
 
-- `auth` API (port 5001) contains all the authorization related endpoints.
-- `question` API (port 6001) contains all the question data related endpoints.
-- `user` API (port 4001) contains all the user data related endpoints (including authentication).
-- Note that if the API path requires JWT token to be in the header, it means the user has to be logged in.
+- [API Endpoints](docs/ApiEndpoints.md)
+- Assignment 4: [Containerization](docs/Containerization.md)
+
+## Micro-services
+
+You can start individual services separately to test them.
+
+However, as there are dependancies among the services,
+they might not function normally standalone.
+
+Run them in different terminals:
+
+- Auth service: `npm run start:auth`
+- User service: `npm run start:user`
+- Question service: `npm run start:question`
+- Frontend: `npm run start:frontend`
+
+
+---
+**For clarifications, do leave your questions at [Feedback PR](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32/pull/1) created in our repository.**
