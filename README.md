@@ -1,13 +1,13 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
 
-# Software Requirements
+# Setup
+
+## Software Requirements
 
 Download and install these software if you do not have them locally.
 
 - [NodeJS](https://nodejs.org/en/download)
 - [MySQL](https://dev.mysql.com/downloads/mysql/)
-
-# Setup
 
 ## Internet Access
 
