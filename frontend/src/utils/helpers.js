@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { authorize } from '../api/AuthApi.js';
+import { authorize, authorizeMaintainer } from '../api/AuthApi.js';
 
 export const getCookie = () => {
   try {
@@ -16,14 +16,10 @@ export const removeCookie = () => {
 export const getUserInfo = async () => {
   try {
     const token = getCookie();
-    if (token) {
-      const response = await authorize(token);
-      return response;
-    } else {
-      return null;
-    }
+    const response = await authorize(token);
+    return response;
   } catch (error) {
-    return null;
+    return error;
   }
 };
 
@@ -36,6 +32,20 @@ export const getLoginStatus = async () => {
 export const getUserId = async () => {
   const response = await getUserInfo();
   return response?.data?.userInfo?.userId;
+};
+
+export const getIsMaintainerForMaintainerPage = async () => {
+  try {
+    const token = getCookie();
+    const response = await authorizeMaintainer(token);
+    if (!response?.data?.userInfo || !response?.data?.userInfo?.isMaintainer) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (error) {
+    return false;
+  }
 };
 
 export const getIsMaintainer = async () => {

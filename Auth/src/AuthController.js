@@ -17,7 +17,7 @@ const generate = async (req, res) => {
         .json({ error: 'Invalid user information provided' });
     }
   } catch (err) {
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };
 
@@ -68,8 +68,8 @@ const authorizeMaintainer = async (req, res) => {
         return res.status(401).json({ error: 'Invalid JWT token' });
       }
 
-      if (!decodedJwtToken.isMaintainer) {
-        return res.status(401).json({ error: 'Not Maintainer' });
+      if (decodedJwtToken.isMaintainer !== 1) {
+        return res.status(403).json({ error: 'Not Maintainer' });
       }
 
       // Return userId and isMaintainer to user to use at frontend
