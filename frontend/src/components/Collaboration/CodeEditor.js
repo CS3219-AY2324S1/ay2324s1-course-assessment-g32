@@ -6,7 +6,7 @@ import { defaultKeymap, indentWithTab } from '@codemirror/commands';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
-import { Language, CollaborationEvent } from '../../constants';
+import { Language, Event } from '../../constants';
 import '../../css/CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
@@ -40,7 +40,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
     setLanguage(selectedLanguage);
 
     // Send language changes to the server
-    socket.emit(CollaborationEvent.LANGUAGE_CHANGE, {
+    socket.emit(Event.Collaboration.LANGUAGE_CHANGE, {
       room: roomId,
       updatedLanguage: selectedLanguage,
     });
@@ -48,12 +48,15 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
 
   // Send code changes to the server
   useEffect(() => {
-    socket.emit(CollaborationEvent.CODE_CHANGE, { room: roomId, updatedCode: code });
+    socket.emit(Event.Collaboration.CODE_CHANGE, {
+      room: roomId,
+      updatedCode: code,
+    });
   }, [code, roomId, socket]);
 
   // Receive code changes from the server
   useEffect(() => {
-    socket.on(CollaborationEvent.CODE_UPDATE, (updatedCode) => {
+    socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
       if (viewRef.current) {
         viewRef.current.dispatch({
           // Replace the entire document with the updated code
@@ -71,7 +74,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
 
   // Receive language changes from the server
   useEffect(() => {
-    socket.on(CollaborationEvent.LANGUAGE_UPDATE, (updatedLanguage) => {
+    socket.on(Event.Collaboration.LANGUAGE_UPDATE, (updatedLanguage) => {
       const languageSelect = document.getElementById('languageSelect');
       if (languageSelect.value !== updatedLanguage) {
         languageSelect.value = updatedLanguage;

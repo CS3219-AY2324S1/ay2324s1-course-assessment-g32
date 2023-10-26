@@ -19,30 +19,28 @@ const Language = {
   CPP: 'C++',
 };
 
-const SocketEvent = {
+const Event = {
   JOIN_ROOM: 'joinRoom',
   LEAVE_ROOM: 'leaveRoom',
-  QUESTION_CHANGE: 'questionChange',
-  QUESTION_UPDATE: 'questionUpdate',
-};
-
-const CollaborationEvent = {
-  CODE_CHANGE: 'codeChange',
-  CODE_UPDATE: 'codeUpdate',
-  LANGUAGE_CHANGE: 'languageChange',
-  LANGUAGE_UPDATE: 'languageUpdate',
-};
-
-const CommunicationEvent = {
-  CHAT_SEND: 'chatMessage',
-  CHAT_RECEIVE: 'message',
+  Question: {
+    QUESTION_CHANGE: 'questionChange',
+    QUESTION_UPDATE: 'questionUpdate',
+  },
+  Collaboration: {
+    CODE_CHANGE: 'codeChange',
+    CODE_UPDATE: 'codeUpdate',
+    LANGUAGE_CHANGE: 'languageChange',
+    LANGUAGE_UPDATE: 'languageUpdate',
+  },
+  Communication: {
+    CHAT_SEND: 'chatMessage',
+    CHAT_RECEIVE: 'message',
+  },
 };
 
 module.exports = {
   Status,
   Complexity,
   Language,
-  SocketEvent,
-  CollaborationEvent,
-  CommunicationEvent,
+  Event,
 };

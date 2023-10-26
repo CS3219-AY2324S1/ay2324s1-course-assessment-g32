@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CommunicationEvent } from '../../constants';
+import { Event } from '../../constants';
 import '../../css/Chat.css'
 
 const Chat = ({ socket, roomId, host }) => {
@@ -24,13 +24,13 @@ const Chat = ({ socket, roomId, host }) => {
         sender: host,
         timestamp: getTimestamp(),
       };
-      socket.emit(CommunicationEvent.CHAT_SEND, { room: roomId, message: message });
+      socket.emit(Event.Communication.CHAT_SEND, { room: roomId, message: message });
       setInputMessage('');
     }
   };
 
   useEffect(() => {
-    socket.on(CommunicationEvent.CHAT_RECEIVE, (message) => {
+    socket.on(Event.Communication.CHAT_RECEIVE, (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
   }, []);
