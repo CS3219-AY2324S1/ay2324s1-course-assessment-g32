@@ -224,7 +224,7 @@ const toggleUserRole = async (userId) => {
   _sql = _sql.concat(' WHERE id=?;');
   _placeholders.push(userId);
 
-  const query = conn
+  const query = mysqlDb
     .promise()
     .query(_sql, _placeholders)
     .then(([result, fields]) => {
