@@ -6,7 +6,7 @@ import { defaultKeymap, indentWithTab } from '@codemirror/commands';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
-import { executeCode } from '../../../api/ExecutionApi';
+import { executeCode } from '../../api/ExecutionApi';
 import { Language, Event } from '../../constants';
 import '../../css/CodeEditor.css';
 
@@ -14,7 +14,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   const editor = useRef(null);
   const viewRef = useRef(null);
   const [code, setCode] = useState('');
-  const [codeExecutionResult, setCodeExecutionResult] = useState('');
+  const [result, setResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
 
   const onUpdate = EditorView.updateListener.of((update) => {
@@ -49,10 +49,14 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   };
 
   const handleCodeExecution = async () => {
-    console.log("you clicked to run code")
     const result = await executeCode(language, code);
-    console.log(result)
-    setCodeExecutionResult(result);
+    setResult(result);
+
+    // Send execution results to the server
+    socket.emit(Event.Collaboration.RESULT_CHANGE, {
+      room: roomId,
+      updatedResult: result,
+    });
   };
 
   const handleTestExecution = async () => {
@@ -84,6 +88,13 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
       }
     });
   }, []);
+
+  // Receive result update from the server
+  useEffect(() => {
+    socket.on(Event.Collaboration.RESULT_UPDATE, (updatedResult) => {
+      setResult(updatedResult);
+    });
+  }, [result]);
 
   // Receive language changes from the server
   useEffect(() => {
@@ -144,10 +155,10 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
       <div className='output-container'>
         <textarea
           className='form-control'
-          rows='10'
+          rows='2'
           readOnly
           placeholder='Code execution results will appear here'
-          value={codeExecutionResult} // Use codeExecutionResult to display execution output
+          value={result}
         />
       </div>
     </div>

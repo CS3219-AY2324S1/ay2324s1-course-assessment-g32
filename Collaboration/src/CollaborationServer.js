@@ -49,6 +49,11 @@ try {
       io.to(data.room).emit(Event.Collaboration.CODE_UPDATE, data.updatedCode); // Broadcast code to everyone in the room
     });
 
+    // Handle code results
+    socket.on(Event.Collaboration.RESULT_CHANGE, (data) => {
+      io.to(data.room).emit(Event.Collaboration.RESULT_UPDATE, data.updatedResult);
+    });
+
     // Handle language changes
     socket.on(Event.Collaboration.LANGUAGE_CHANGE, (data) => {
       io.to(data.room).emit(

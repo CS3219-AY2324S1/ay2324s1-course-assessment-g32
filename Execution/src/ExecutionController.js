@@ -14,7 +14,7 @@ const executePython = async (req, res) => {
 const executeJava = async (req, res) => {
   try {
     console.log(req.body)
-    res.JSON({ message: "java code executed"})
+    res.json({ message: "java code executed"})
   } catch (err) {
     throw err;
   }
@@ -24,7 +24,7 @@ const executeJava = async (req, res) => {
 const executeCpp = async (req, res) => {
   try {
     console.log(req.body)
-    res.JSON({ message: "cpp code executed"})
+    res.json({ message: "cpp code executed"})
   } catch (err) {
     throw err;
   }
@@ -34,7 +34,7 @@ const executeCpp = async (req, res) => {
 const executeJs = async (req, res) => {
   try {
     console.log(req.body)
-    res.JSON({ message: "js code executed"})
+    res.json({ message: "js code executed"})
   } catch (err) {
     throw err;
   }

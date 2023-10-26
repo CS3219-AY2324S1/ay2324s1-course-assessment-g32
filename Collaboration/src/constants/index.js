@@ -12,6 +12,8 @@ const Event = {
     CODE_UPDATE: 'codeUpdate',
     LANGUAGE_CHANGE: 'languageChange',
     LANGUAGE_UPDATE: 'languageUpdate',
+    RESULT_CHANGE: 'resultChange',
+    RESULT_UPDATE: 'resultUpdate',
   },
   Communication: {
     CHAT_SEND: 'chatMessage',
