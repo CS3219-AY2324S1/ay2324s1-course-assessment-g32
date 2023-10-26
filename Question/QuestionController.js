@@ -65,10 +65,22 @@ const deleteQuestion = async (req, res) => {
   }
 };
 
+// Define a controller function for appending question title
+const appendQuestionTitle = async (req, res) => {
+  try {
+    const { attempts } = req.query;
+    const attemptsWithTitles = await questionService.appendQuestionTitle(attempts);
+    res.json({ message: 'Question title appended successfully', attemptsWithTitles });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
 module.exports = {
   create,
   getAll,
   getQuestionDetails,
   edit,
   deleteQuestion,
+  appendQuestionTitle,
 };

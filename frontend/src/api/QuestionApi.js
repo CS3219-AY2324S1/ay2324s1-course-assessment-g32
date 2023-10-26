@@ -125,3 +125,23 @@ export const deleteQuestion = async (id, jwtToken) => {
     throw err;
   }
 };
+
+export const appendQuestionTitle = async (jwtToken, attempts) => {
+  try {
+    let config = getConfig(jwtToken);
+    config.params = { attempts: attempts };
+    const response = await axios.get(
+      questionRootUrl + '/appendQuestionTitle',
+      config
+    );
+    return response;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};

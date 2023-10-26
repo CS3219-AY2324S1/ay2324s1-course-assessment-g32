@@ -80,10 +80,23 @@ const deleteQuestion = async (id) => {
   }
 };
 
+const appendQuestionTitle = async (attempts) => {
+  try {
+    const attemptsWithTitles = await Promise.all(attempts.map(async (entry) => {
+      const entryWithTitle = await getQuestionDetails(entry.questionId);
+      return { ...entry, title: entryWithTitle.title };
+    }));
+    return attemptsWithTitles;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   createQuestion,
   getQuestions,
   getQuestionDetails,
   editQuestion,
   deleteQuestion,
+  appendQuestionTitle,
 };

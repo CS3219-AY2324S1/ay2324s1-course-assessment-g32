@@ -8,7 +8,7 @@ import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
 import './CodeEditor.css';
 
-const CodeEditor = ({ socket, roomId }) => {
+const CodeEditor = ({ socket, roomId, handleCodeChange }) => {
   const editor = useRef(null);
   const viewRef = useRef(null);
   const [code, setCode] = useState('');
@@ -18,6 +18,7 @@ const CodeEditor = ({ socket, roomId }) => {
     if (update.docChanged) {
       const updatedCode = update.state.doc.toString();
       setCode(updatedCode);
+      handleCodeChange(updatedCode);
     }
   });
 
