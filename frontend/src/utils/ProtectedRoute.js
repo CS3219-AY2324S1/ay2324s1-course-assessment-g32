@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
-import { getUserId } from '../utils/helpers.js';
+import { getUserId } from '../utils/helpers';
 
 const ProtectedRoute = () => {
   const navigate = useNavigate();

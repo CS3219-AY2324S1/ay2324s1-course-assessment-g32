@@ -1,4 +1,5 @@
-const authApi = require('./callsToAuth.js');
+const authApi = require('./callsToAuth');
+const { Status } = require('../constants');
 
 const checkToken = async (req, res, next) => {
   // Extract the token from the Authorization header
@@ -11,7 +12,7 @@ const checkToken = async (req, res, next) => {
     next();
   } catch (err) {
     res
-      .status(err?.response?.status || 500)
+      .status(err?.response?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.response?.data?.error || err });
   }
 };

@@ -1,8 +1,8 @@
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
-const userRoutes = require('./UserRoutes.js');
-const env = require('./loadEnvironment.js');
+const userRoutes = require('./UserRoutes');
+const env = require('./loadEnvironment');
 
 console.log('Starting UserServer...');
 

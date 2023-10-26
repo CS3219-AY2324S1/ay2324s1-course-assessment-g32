@@ -1,7 +1,7 @@
 const amqp = require('amqplib');
 const { v4: uuidv4 } = require('uuid');
-const authApi = require('../helpers/callsToAuth.js');
-const env = require('../loadEnvironment.js');
+const authApi = require('../helpers/callsToAuth');
+const env = require('../loadEnvironment');
 
 // Generate a unique id
 const generateUuid = () => {

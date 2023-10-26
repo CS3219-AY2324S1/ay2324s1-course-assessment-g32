@@ -1,4 +1,5 @@
-const userService = require('./UserService.js');
+const userService = require('./UserService');
+const { Status } = require('./constants');
 
 const login = async (req, res, next) => {
   try {
@@ -7,7 +8,9 @@ const login = async (req, res, next) => {
     req.userInfo = userInfo;
     next();
   } catch (err) {
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -17,7 +20,9 @@ const signup = async (req, res) => {
     await userService.createUser(email, password, confirmPassword);
     res.json({ message: 'User registered successfully' });
   } catch (err) {
-    res.status(err?.status || 500).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -26,7 +31,9 @@ const getAllUserInfo = async (req, res) => {
     const info = await userService.getAllUserInfo();
     res.json({ message: 'SUCCESS', info });
   } catch (err) {
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -36,7 +43,9 @@ const getUserInfo = async (req, res) => {
     const info = await userService.getUserInfo(id, email);
     res.json({ message: 'SUCCESS', info });
   } catch (err) {
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -46,7 +55,9 @@ const updateUser = async (req, res) => {
     await userService.updateUser(id, username);
     res.json({ message: 'SUCCESS: User info updated' });
   } catch (err) {
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -56,7 +67,9 @@ const deleteUser = async (req, res) => {
     await userService.deleteUser(id);
     res.json({ message: 'SUCCESS: User deleted' });
   } catch (err) {
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -71,7 +84,9 @@ const changePassword = async (req, res) => {
     );
     res.json({ message: 'SUCCESS: Password changed' });
   } catch (err) {
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 

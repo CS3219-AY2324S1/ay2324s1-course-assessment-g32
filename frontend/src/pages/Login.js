@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { showSuccessToast } from '../utils/toast.js';
-import { errorHandler } from '../utils/errors.js';
-import { login } from '../api/UserApi.js';
+import { login } from '../api/UserApi';
+import { showSuccessToast } from '../utils/toast';
+import { errorHandler } from '../utils/errors';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -80,7 +80,8 @@ const Login = () => {
             <button
               type='submit'
               className='btn btn-primary'
-              onClick={handleLoginSubmit}>
+              onClick={handleLoginSubmit}
+            >
               Submit
             </button>
           </div>

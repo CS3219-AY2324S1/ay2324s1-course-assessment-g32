@@ -1,4 +1,5 @@
-const queueService = require('./services/producerService.js');
+const queueService = require('./services/producerService');
+const { Status } = require('./constants');
 
 const joinQueue = async (req, res) => {
   try {
@@ -7,7 +8,7 @@ const joinQueue = async (req, res) => {
     res.json({ message: 'Joined queue successfully', response });
   } catch (err) {
     res
-      .status(err?.status || 500)
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
   }
 };
@@ -19,7 +20,7 @@ const exitQueue = async (req, res) => {
     res.json({ message: 'Exited queue successfully' });
   } catch (err) {
     res
-      .status(err?.status || 500)
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
   }
 };

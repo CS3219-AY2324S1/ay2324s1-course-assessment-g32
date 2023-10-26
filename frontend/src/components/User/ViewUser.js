@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Card, Box, Typography, Button } from '@mui/material';
 import Cookies from 'js-cookie';
-import { deleteUser } from '../../api/UserApi.js';
-import { showSuccessToast } from '../../utils/toast.js';
-import { DeregisterWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
-import { errorHandler } from '../../utils/errors.js';
-import { getCookie } from '../../utils/helpers.js';
+import { DeregisterWindow } from '../ConfirmationWindows';
+import { deleteUser } from '../../api/UserApi';
+import { showSuccessToast } from '../../utils/toast';
+import { errorHandler } from '../../utils/errors';
+import { getCookie } from '../../utils/helpers';
+import { Grid, Card, Box, Typography, Button } from '@mui/material';
 
 export const ViewUserTopPane = ({ user }) => {
   const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);

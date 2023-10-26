@@ -1,5 +1,5 @@
 import axios from 'axios';
-const env = require('../loadEnvironment.js');
+const env = require('../loadEnvironment');
 
 export const axiosUser = axios.create({
   baseURL: env.USER_URL + '/user',
