@@ -93,7 +93,7 @@ export const editQuestion = async (
       description: description,
       tags: tags,
     };
-    return await axios.post(
+    return await axios.put(
       questionRootUrl + '/edit',
       questionData,
       getConfig(jwtToken)
