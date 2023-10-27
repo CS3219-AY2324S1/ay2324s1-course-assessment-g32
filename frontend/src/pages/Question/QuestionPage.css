@@ -1,0 +1,10 @@
+.landing {
+    flex-direction: column;
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    min-height: 100vh;
+}

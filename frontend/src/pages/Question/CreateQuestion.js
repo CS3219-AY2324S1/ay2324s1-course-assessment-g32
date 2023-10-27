@@ -37,7 +37,7 @@ const CreateQuestion = () => {
         tags,
         getCookie()
       );
-      navigate('../question/' + response.data.question._id);
+      navigate('../' + response.data.question._id);
       showSuccessToast('Question Created Successfully!');
     } catch (error) {
       errorHandler(error);

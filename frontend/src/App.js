@@ -32,6 +32,8 @@ import PageNotFound from './pages/PageNotFound/PageNotFound';
 import SubmissionHistory from './pages/SubmissionHistory/SubmissionHistory';
 // Submission Attempt page
 import SubmissionAttempt from './pages/SubmissionHistory/SubmissionAttempt';
+// Question page
+import QuestionPage from './pages/Question/QuestionPage';
 // Special routes
 import ProtectedRoute from './utils/ProtectedRoute';
 import MaintainerRoute from './utils/MaintainerRoute';
@@ -46,21 +48,23 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
 
-        {/* Question management for normal users */}
+        {/* Landing for normal users */}
         <Route path='/landing' element={<ProtectedRoute />}>
           <Route index element={<Landing />} />
-          <Route
-            path='/landing/question/:id'
-            element={<QuestionDescription />}
-          />
+        </Route>
+
+        {/* Question page for normal users */}
+        <Route path='/question' element={<ProtectedRoute />}>
+          <Route index element={<QuestionPage />} />
+          <Route path='/question/:id' element={<QuestionDescription />} />
         </Route>
 
         {/* Question management for maintainers only */}
-        <Route path='/landing' element={<MaintainerRoute />}>
-          <Route path='/landing/new' element={<CreateQuestion />} />
+        <Route path='/question' element={<MaintainerRoute />}>
+          <Route path='/question/new' element={<CreateQuestion />} />
         </Route>
-        <Route path='/landing/edit' element={<MaintainerRoute />}>
-          <Route path='/landing/edit/:id' element={<EditQuestion />} />
+        <Route path='/question/edit' element={<MaintainerRoute />}>
+          <Route path='/question/edit/:id' element={<EditQuestion />} />
         </Route>
 
         {/* Profile management for normal users */}
