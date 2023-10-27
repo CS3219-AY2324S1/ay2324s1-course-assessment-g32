@@ -1,28 +1,22 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
+# Containerization (Assignment 4)
 
-# Assignment 5 - Matching
-
-## Software Requirements
+Docker to containerize our various micro-services which serves our combined application.
 
 The combined application contains qualities of:
 * Question Repository Application
 * User Profile Management Application
-* Matchmaking Application
 
 We have various micro-services including:
 * MySQL Database
 * User Service
 * Auth Service
 * Question Service
-* Match Service
-* Collaboration Service
 * Frontend Service (Web UI)
 
 Additional Notes:
 
-If you are not using Windows OS, and would like a equivalent instruction for a differnt OS, do reach out to us for clarification.
-
-**For clarifications, do leave your questions at [Feedback PR](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32/pull/1) created in our repository.**
+The instructions we have are based on Windows OS.
+Do reach out to us for clarification for other OS.
 
 # Requirements
 
@@ -32,89 +26,31 @@ Internet connection is required.
 
 **[ IMPORTANT! ]** Do _not_ test while on NUS grounds or connected
 (either directly or indirectly) to NUS Wifi.
-(NUS networks blocks MongoDB which is required by our application.)
+(NUS networks blocks MongoDB which is required by our application.) 
 
 ## Software
 Download and install these software if you do not have them locally.
 
-- [NodeJS](https://nodejs.org/en/download)
-- [MySQL](https://dev.mysql.com/downloads/mysql/)
-
-## Internet Access
-
-Ensure that you are connected to the internet.
-
-> Note!\
-> Do **not** connect to NUS Wifi/Network.\
-> The application would be unable to connect to MongoDB Atlas.
-
-## Setup MySQL locally
-
-Follow the steps in [Setup MySQL locally](docs/SetupLocalMySql.md).
-
-Note the root password used, as it would be needed in the later parts.
-
-## Setup environment variables
-
-1. At the root directory, open a terminal
-2. Enter the following command
-   ```
-   cp template.env .env
-   ```
-3. Open `.env` file (This should be in the root directory)
-4. Enter root password (previously configured when installing MySQL)  
-   - Example: if your root password is "password1234",
-     `MYSQL_ROOT_PASSWORD=password1234`
-5. Enter JWT token password (for generating and decoding JWT tokens)  
-   - Example: if your root password is "password",
-     `JWT_SECRET_KEY=password`
-
-## Install NodeJS packages
-
-```
-npm run install-all
-```
-
-# Start Application
-
-Ensure that MySQL Server service has started.
-(How to check? Click [here](docs/SetupLocalMySql.md#start-mysql-service).)
-
-Start all services using the following commands:
-
-```
-npm run start-all
-```
-
-# Resources for Developer / Tester
-
-## Software
-
-For development, you may also want to install:
-
-- [MongoDB Compass](https://www.mongodb.com/try/download/compass)
 - [Docker Desktop](https://www.docker.com/get-started/)
-- [Postman](https://www.postman.com/downloads/)
 
-## Documentation
+**Ensure that MySQL Server is NOT running locally.** 
 
-- [API Endpoints](docs/ApiEndpoints.md)
-- Assignment 4: [Containerization](docs/Containerization.md)
+# Testing
 
-## Micro-services
+For clarity, the commands given below should be executed at the root directory if not specified otherwise.
 
-You can start individual services separately to test them.
+_The commands below are provided for convenience and may be incorrect.
+Do reach out to us for clarification if necessary._
 
-However, as there are dependancies among the services,
-they might not function normally standalone.
+## Pre-testing Set up
 
-Run them in different terminals:
+### Clone repository
 
-- Auth service: `npm run start:auth`
-- User service: `npm run start:user`
-- Question service: `npm run start:question`
-- Frontend: `npm run start:frontend`
+Clone the repository locally to your device (laptop/computer).
 
+```shell
+git clone https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32.git
+```
 
 Note: If the above not work, please use the correct link or download the source code directly from the release.
 
@@ -173,14 +109,14 @@ Server: Docker Desktop 4.24.2 (124339)
 
 ### Dockered Microservices
 
-At the root directory, open a terminal
+At the root directory, open a terminal 
 to create and start containers of the micro-services.
 
 ```shell
 docker compose up -d
 ```
 
-It may take a few minutes for the inital build as it needs to download the images online.
+It may take a few minutes for the inital build as it needs to download the images online. 
 The frontend would only be available after the containers are running.
 
 ### Frontend Application
@@ -204,7 +140,7 @@ If you wish to test individual microservice's API, you can refer to our [API end
 
 ## Post-testing
 
-After testing, open a terminal at the root directory
+After testing, open a terminal at the root directory 
 to stop and remove the containers of the micro-services.
 
 ```shell

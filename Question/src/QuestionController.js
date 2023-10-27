@@ -1,5 +1,6 @@
 const questionService = require('./QuestionService');
 const { Status } = require('./constants');
+const logger = require('./Log');
 
 // Define a controller function for creating questions
 const create = async (req, res) => {
@@ -11,8 +12,10 @@ const create = async (req, res) => {
       description,
       tags
     );
+    logger.logSuccess('Question created');
     res.json({ message: 'Question created successfully', question });
   } catch (err) {
+    logger.error('Cannot create question:', err?.message || err);
     res
       .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
@@ -23,8 +26,10 @@ const create = async (req, res) => {
 const getAll = async (req, res) => {
   try {
     const questions = await questionService.getQuestions();
+    logger.logSuccess('Questions retrieved');
     res.json({ message: 'Questions retrieved successfully', questions });
   } catch (err) {
+    logger.error('Cannot retrieve questions:', err?.message || err);
     res
       .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
@@ -35,11 +40,11 @@ const getAll = async (req, res) => {
 const getAllByComplexity = async (req, res) => {
   try {
     const { complexity } = req.query;
-    const questions = await questionService.getQuestionsByComplexity(
-      complexity
-    );
+    const questions = await questionService.getQuestionsByComplexity(complexity);
+    logger.logSuccess('Questions retrieved by complexity');
     res.json({ message: 'Questions retrieved successfully', questions });
   } catch (err) {
+    logger.error('Cannot retrieve questions:', err?.message || err);
     res
       .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
@@ -51,8 +56,10 @@ const getQuestionDetails = async (req, res) => {
   try {
     const { id } = req.query;
     const question = await questionService.getQuestionDetails(id);
+    logger.logSuccess('Retrieved details for question', id);
     res.json({ message: 'Question retrieved successfully', question });
   } catch (err) {
+    logger.error('Cannot get question details:', err?.message || err);
     res
       .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
@@ -63,11 +70,14 @@ const getQuestionDetails = async (req, res) => {
 const getRandomQuestionByCriteria = async (req, res) => {
   try {
     const { complexity } = req.query;
-    const question = await questionService.getRandomQuestionByComplexity(
-      complexity
-    );
+    const question = await questionService.getRandomQuestionByComplexity(complexity);
+    logger.logSuccess('Retrieved random question by complexity');
     res.json({ message: 'Question retrieved successfully', question });
   } catch (err) {
+    logger.error(
+      'Cannot get random question by complexity:',
+      err?.message || err
+    );
     res
       .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
@@ -85,8 +95,10 @@ const edit = async (req, res) => {
       description,
       tags
     );
+    logger.logSuccess('Edited question', id);
     res.json({ message: 'Question edited successfully', question });
   } catch (err) {
+    logger.error('Cannot edit question:', err?.message || err);
     res
       .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
@@ -98,8 +110,10 @@ const deleteQuestion = async (req, res) => {
   try {
     const { id } = req.query;
     const question = await questionService.deleteQuestion(id);
+    logger.logSuccess('Deleted question', id);
     res.json({ message: 'Question deleted successfully', question });
   } catch (err) {
+    logger.error('Cannot delete question:', err?.message || err);
     res
       .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
