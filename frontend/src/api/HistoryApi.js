@@ -111,3 +111,22 @@ export const getAttempt = async (jwtToken, attemptId) => {
     throw err;
   }
 };
+
+export const getAttemptsByQuestionAndUser = async (jwtToken, questionId, userId) => {
+  try {
+    let config = getConfig(jwtToken);
+    config.params = { questionId: questionId, userId: userId };
+    return await axios.get(
+      historyRootUrl + '/attempts',
+      config
+    );
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: 408 },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};

@@ -99,6 +99,18 @@ const getAttempt = async (attemptId) => {
   }
 };
 
+const getAttemptsByQuestionAndUser = async (questionId, userId) => {
+  try {
+    if (!questionId || !userId) {
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+    }
+    const attempts = await historyDatabase.getAttemptsByQuestionAndUser(questionId, userId);
+    return attempts;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   addAttempt,
   deleteUserAttempts,
@@ -107,4 +119,5 @@ module.exports = {
   getAttemptedQuestionsId,
   getUnattemptedQuestionsStats,
   getAttempt,
+  getAttemptsByQuestionAndUser,
 };

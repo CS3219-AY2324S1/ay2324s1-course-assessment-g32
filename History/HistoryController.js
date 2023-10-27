@@ -23,12 +23,17 @@ const deleteUserAttempts = async (req, res) => {
 
 const getAttempts = async (req, res) => {
   try {
-    const jwtToken = req.headers['authorization'];
-    const { userId } = req.query;
-    const attempts = await historyService.getAttempts(userId);
-    const questionResponse = await questionApi.appendQuestionTitle(jwtToken, attempts);
-    const attemptsWithTitles = questionResponse.data.attemptsWithTitles;
-    res.json({ message: 'SUCCESS', attemptsWithTitles });
+    const { userId, questionId } = req.query;
+    if (questionId) {
+      const attempts = await historyService.getAttemptsByQuestionAndUser(questionId, userId);
+      res.json({ message: 'SUCCESS', attempts });
+    } else {
+      const jwtToken = req.headers['authorization'];
+      const attempts = await historyService.getAttempts(userId);
+      const questionResponse = await questionApi.appendQuestionTitle(jwtToken, attempts);
+      const attemptsWithTitles = questionResponse.data.attemptsWithTitles;
+      res.json({ message: 'SUCCESS', attemptsWithTitles });
+    }
   } catch (err) {
     res.status(err?.status || 400).json({ error: err?.message || err });
   }
