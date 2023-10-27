@@ -25,7 +25,7 @@ const SubmissionHeatMap = () => {
   }, []);
 
   return (
-    <div className='d-flex align-items-center justify-content-center m-5'>
+    <div className='d-flex align-items-center justify-content-center m-3'>
       <HeatMap
         value={data}
         width={800}

@@ -11,30 +11,23 @@ const SubmissionPieChart = () => {
   var startDate = new Date();
   startDate.setMonth(startDate.getMonth() - 6);
 
-  const [attemptedEasyQuestions, setAttemptedEasyQuestions] = useState(0);
-  const [attemptedMediumQuestions, setAttemptedMediumQuestions] = useState(0);
-  const [attemptedHardQuestions, setAttemptedHardQuestions] = useState(0);
-  const [allEasyQuestions, setAllEasyQuestions] = useState(0);
-  const [allMediumQuestions, setAllMediumQuestions] = useState(0);
-  const [allHardQuestions, setAllHardQuestions] = useState(0);
-
-  const [data, setData] = useState([]);
+  const [attemptedQuestionsData, setAttemptedQuestionsData] = useState({});
+  const [unattemptedQuestionsData, setUnattemptedQuestionsData] = useState({});
+  const [allQuestionsData, setAllQuestionsData] = useState({});
+  const [pieChartData, setPieChartData] = useState([]);
 
   const updateData = (newData) => {
-    const { allQuestionsStats, attemptedQuestionsStats } = newData;
 
-    setAttemptedEasyQuestions(attemptedQuestionsStats.Easy);
-    setAttemptedMediumQuestions(attemptedQuestionsStats.Medium);
-    setAttemptedHardQuestions(attemptedQuestionsStats.Hard);
-    setAllEasyQuestions(allQuestionsStats.Easy);
-    setAllMediumQuestions(allQuestionsStats.Medium);
-    setAllHardQuestions(allQuestionsStats.Hard);
+    const { allQuestionsStats, attemptedQuestionsStats, unattemptedQuestionsStats } = newData;
+    setAllQuestionsData(allQuestionsStats);
+    setAttemptedQuestionsData(attemptedQuestionsStats);
+    setUnattemptedQuestionsData(unattemptedQuestionsStats);
 
-    setData([
-      { label: 'Easy', value: attemptedEasyQuestions, color: 'green' },
-      { label: 'Medium', value: attemptedMediumQuestions, color: 'orange' },
-      { label: 'Hard', value: attemptedHardQuestions, color: 'red' },
-      { label: 'Unattempted', value: allEasyQuestions + allMediumQuestions + allHardQuestions - attemptedEasyQuestions - attemptedMediumQuestions - attemptedHardQuestions, color: 'grey' },
+    setPieChartData([
+      { label: 'Easy', value: attemptedQuestionsStats.Easy, color: 'green' },
+      { label: 'Medium', value: attemptedQuestionsStats.Medium, color: 'orange' },
+      { label: 'Hard', value: attemptedQuestionsStats.Hard, color: 'red' },
+      { label: 'Unattempted', value: unattemptedQuestionsStats.count, color: 'grey' },
     ]);
   };
 
@@ -49,48 +42,48 @@ const SubmissionPieChart = () => {
     };
 
     fetchDataAndInitializePieChart();
-  }, [data]);
+  }, [setAttemptedQuestionsData, setAllQuestionsData, setPieChartData, setUnattemptedQuestionsData]);
 
   return (
-    <div className='d-flex align-items-center justify-content-center m-5'>
-    <div>
-      <div className='d-flex align-items-center'>
-        <ProgressBar className='bar green-background' variant="success" now={attemptedEasyQuestions / allEasyQuestions * 100}/>
-        <text>
-          <span class='bold-text'> Easy </span>
-          {attemptedEasyQuestions} / {allEasyQuestions}
-        </text>
+    <div className='d-flex align-items-center justify-content-center m-3'>
+      <div>
+        <div className='d-flex align-items-center'>
+          <ProgressBar className='bar green-background' variant="success" now={attemptedQuestionsData.Easy / allQuestionsData.Easy * 100}/>
+          <span>
+            <span class='bold-text'> Easy </span>
+            {attemptedQuestionsData.Easy} / {allQuestionsData.Easy}
+          </span>
+        </div>
+        <div className='d-flex align-items-center'>
+          <ProgressBar className='bar orange-background' variant="warning" now={attemptedQuestionsData.Medium / allQuestionsData.Medium * 100}/>
+          <span>
+            <span class='bold-text'> Medium </span>
+            {attemptedQuestionsData.Easy} / {allQuestionsData.Easy}
+          </span>
+        </div>
+        <div className='d-flex align-items-center'>
+          <ProgressBar className='bar red-background' variant="danger" now={attemptedQuestionsData.Hard / allQuestionsData.Hard * 100}/>
+          <span>
+            <span class='bold-text'> Hard </span>
+            {attemptedQuestionsData.Easy} / {allQuestionsData.Easy}
+          </span>
+        </div>
       </div>
-      <div className='d-flex align-items-center'>
-        <ProgressBar className='bar orange-background' variant="warning" now={attemptedMediumQuestions / allMediumQuestions * 100}/>
-        <text>
-          <span class='bold-text'> Medium </span>
-          {attemptedMediumQuestions} / {allMediumQuestions}
-        </text>
+      <div>
+        <PieChart
+          series={[
+            {
+              data: pieChartData,
+              innerRadius: 30,
+              outerRadius: 100,
+              paddingAngle: 1,
+              cornerRadius: 5,
+            },
+          ]}
+          width={400}
+          height={200}
+        />
       </div>
-      <div className='d-flex align-items-center'>
-        <ProgressBar className='bar red-background' variant="danger" now={attemptedHardQuestions / allHardQuestions * 100}/>
-        <text>
-          <span class='bold-text'> Hard </span>
-          {attemptedHardQuestions} / {allHardQuestions}
-        </text>
-      </div>
-    </div>
-    <div>
-    <PieChart
-      series={[
-        {
-          data: data,
-          innerRadius: 30,
-          outerRadius: 100,
-          paddingAngle: 1,
-          cornerRadius: 5,
-        },
-      ]}
-      width={400}
-      height={200}
-    />
-    </div>
     </div>
   )
 };

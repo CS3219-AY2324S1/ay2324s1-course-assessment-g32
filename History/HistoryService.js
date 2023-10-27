@@ -81,10 +81,17 @@ const getAttemptedQuestionsId = async (userId) => {
   }
 };
 
+const getUnattemptedQuestionsStats = (attemptedQuestionsStats, allQuestionsStats) => {
+  totalAttemptedQuestions = Object.values(attemptedQuestionsStats).reduce((acc, val) => acc + val, 0);
+  totalQuestions = Object.values(allQuestionsStats).reduce((acc, val) => acc + val, 0);
+  return { count: totalQuestions - totalAttemptedQuestions };
+};
+
 module.exports = {
   addAttempt,
   deleteUserAttempts,
   getAttempts,
   getHeatMapData,
   getAttemptedQuestionsId,
+  getUnattemptedQuestionsStats,
 };

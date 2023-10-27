@@ -51,10 +51,13 @@ const getPieChartData = async (req, res) => {
     const attemptedQuestionsId = await historyService.getAttemptedQuestionsId(userId);
     const attemptedQuestionsStats = await questionApi.getQuestionDifficultyCount(jwtToken, attemptedQuestionsId);
     const allQuestionsStats = await questionApi.getQuestionStatistics(jwtToken);
+    const unattemptedQuestionsStats = historyService.getUnattemptedQuestionsStats(
+      attemptedQuestionsStats.data.questionCountByDifficulty, allQuestionsStats.data.questionStatistics);
 
     const pieChartData = {
       attemptedQuestionsStats: attemptedQuestionsStats.data.questionCountByDifficulty,
       allQuestionsStats: allQuestionsStats.data.questionStatistics,
+      unattemptedQuestionsStats: unattemptedQuestionsStats,
     };
 
     res.json({ message: 'SUCCESS', pieChartData });
