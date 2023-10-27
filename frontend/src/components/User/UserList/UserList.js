@@ -149,7 +149,7 @@ const UserList = () => {
             onClick={() => handleDeregisterClick(user.id)}>
             Deregister
           </Button>
-          {user.isMaintainer ? (
+          {user.isMaintainer === 1 ? (
             <Button
               variant='contained'
               color='secondary'
