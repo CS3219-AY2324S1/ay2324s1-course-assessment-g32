@@ -38,11 +38,7 @@ export const getIsMaintainerForMaintainerPage = async () => {
   try {
     const token = getCookie();
     const response = await authorizeMaintainer(token);
-    if (!response?.data?.userInfo || !response?.data?.userInfo?.isMaintainer) {
-      return false;
-    } else {
-      return true;
-    }
+    return response?.data?.userInfo?.isMaintainer ? true : false;
   } catch (error) {
     return false;
   }
@@ -50,11 +46,7 @@ export const getIsMaintainerForMaintainerPage = async () => {
 
 export const getIsMaintainer = async () => {
   const response = await getUserInfo();
-  if (!response?.data?.userInfo || !response?.data?.userInfo?.isMaintainer) {
-    return false;
-  } else {
-    return true;
-  }
+  return response?.data?.userInfo?.isMaintainer ? true : false;
 };
 
 export const parseDatetime = (datetime) => {
