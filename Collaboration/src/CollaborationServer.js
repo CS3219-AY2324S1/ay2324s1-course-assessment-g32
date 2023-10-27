@@ -1,9 +1,15 @@
 const http = require('http');
 const socketIo = require('socket.io');
 const env = require('./loadEnvironment');
+const logger = require('./Log');
 const { Event } = require('./constants');
 
-console.log('Starting CollaborationServer...');
+logger.register({
+  serviceName: 'Collaboration Service',
+  logLevel: logger.LOG_LEVELS.all,
+});
+
+logger.log('Starting ...');
 
 try {
   const httpServer = http.createServer();
@@ -24,7 +30,7 @@ try {
     // Handle room joining
     socket.on(Event.JOIN_ROOM, (data) => {
       socket.join(data.room);
-      console.log(`${data.host} joined room: ${data.room}`);
+      logger.log(`${data.host} joined room: ${data.room}`);
 
       const message = { text: `${data.host} joined room` };
       io.to(data.room).emit(Event.Communication.CHAT_RECEIVE, message); // Broadcast a message to the room when someone joins
@@ -33,7 +39,7 @@ try {
     // Handle room leaving
     socket.on(Event.LEAVE_ROOM, (data) => {
       socket.leave(data.room);
-      console.log(`${data.host} left room: ${data.room}`);
+      logger.log(`${data.host} left room: ${data.room}`);
 
       const message = { text: `${data.host} left room` };
       io.to(data.room).emit(Event.Communication.CHAT_RECEIVE, message); // Broadcast a message to the room when someone leaves
@@ -64,12 +70,12 @@ try {
 
     // Handle disconnects
     socket.on(Event.DISCONNECT, () => {
-      console.log('A user disconnected');
+      logger.log('A user disconnected');
     });
   });
 
   httpServer.listen(env.COLLAB_PORT, () => {
-    console.log(`Socket.IO server is running on port: ${env.COLLAB_PORT}`);
+    logger.log(`Running on port: ${env.COLLAB_PORT}`);
   });
 } catch (err) {
   console.error(err);

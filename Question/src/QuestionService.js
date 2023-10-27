@@ -96,6 +96,10 @@ const editQuestion = async (id, title, complexity, description, tags) => {
 };
 
 const deleteQuestion = async (id) => {
+  if (!id) {
+    throw { status: 410, message: 'No question id is given' };
+  }
+
   try {
     await questionRepository.deleteQuestion(id);
   } catch (err) {

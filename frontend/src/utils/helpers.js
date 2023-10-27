@@ -27,6 +27,12 @@ export const getUserInfo = async () => {
   }
 };
 
+export const getLoginStatus = async () => {
+  const response = await getUserInfo();
+  // Return true if data is not null/undefined
+  return !!response?.data?.userInfo;
+};
+
 export const getUserId = async () => {
   const response = await getUserInfo();
   return response?.data?.userInfo?.userId;

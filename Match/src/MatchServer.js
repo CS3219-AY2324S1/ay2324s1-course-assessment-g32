@@ -5,9 +5,15 @@ const bodyParser = require('body-parser');
 const queueRoutes = require('./QueueRoutes');
 const consume = require('./services/consumerService');
 const env = require('./loadEnvironment');
+const logger = require('./Log');
 const { MAX_CONNECTION_ATTEMPTS, CONNECTION_INTERVAL } = require('./constants');
 
-console.log('Starting MatchServer ...');
+logger.register({
+  serviceName: 'Match Service',
+  logLevel: logger.LOG_LEVELS.all,
+});
+
+logger.log('Starting ...');
 
 // Start the Express (web) server to listen for incoming RESTFul API requests
 const expressServer = async () => {
@@ -16,7 +22,7 @@ const expressServer = async () => {
   app.use(bodyParser.json());
   app.use('/queue', queueRoutes);
   app.listen(env.MATCH_PORT, () => {
-    console.log(`MatchServer is running on port: ${env.MATCH_PORT}`);
+    logger.log(`Running on port: ${env.MATCH_PORT}`);
   });
 };
 
@@ -31,21 +37,21 @@ const rabbitMQserver = async () => {
       connection = await amqp.connect(env.RABBITMQ_URL);
       break;
     } catch (error) {
-      console.error(`MatchServer could not connect to RabbitMQ server: ${env.RABBITMQ_URL} in attempt ${i + 1} of 10`);
+      logger.error(`Connection attempt ${i + 1} of 10 to RabbitMQ server: ${env.RABBITMQ_URL} failed`);
       await new Promise(resolve => setTimeout(resolve, CONNECTION_INTERVAL));
     }
   }
 
   // If connection is still null, exit the process
   if (connection === null) {
-    console.error(`Matchserver could not connect to RabbitMQ server: ${env.RABBITMQ_URL}`);
+    logger.error(`Connection to RabbitMQ server: ${env.RABBITMQ_URL} failed`);
     process.exit(1);
   }
 
   const channel = await connection.createChannel();
   await channel.assertQueue('commonQueue', { durable: false });
 
-  console.log(`Matchserver is connected to RabbitMQ server: ${env.RABBITMQ_URL}`)
+  logger.log(`Connected to RabbitMQ server: ${env.RABBITMQ_URL}`)
 
   // Consume from the common queue
   channel.consume('commonQueue', async (message) => {
