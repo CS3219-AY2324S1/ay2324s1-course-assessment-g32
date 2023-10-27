@@ -78,6 +78,9 @@ const getAttempt = async (attemptId) => {
       throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
     const attempt = await historyDatabase.getAttemptById(attemptId);
+    if (!attempt) {
+      throw Object.assign(new Error('Attempt not found'), { status: 410 });
+    }
     return attempt;
   } catch (err) {
     throw err;

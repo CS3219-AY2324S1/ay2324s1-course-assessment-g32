@@ -26,6 +26,7 @@ function SubmissionAttempt() {
 
       } catch (error) {
         errorHandler(error);
+        navigate('../')
       }
     };
     fetchData();
