@@ -22,7 +22,7 @@ const generate = async (req, res) => {
     }
   } catch (err) {
     logger.error('Cannot generate JWT', err?.message || err);
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };
 
@@ -79,9 +79,9 @@ const authorizeMaintainer = async (req, res) => {
         return res.status(401).json({ error: 'Invalid JWT token' });
       }
 
-      if (!decodedJwtToken.isMaintainer) {
+      if (decodedJwtToken.isMaintainer !== 1) {
         logger.warn('Not Authorized (User not maintainer)');
-        return res.status(401).json({ error: 'Not Maintainer' });
+        return res.status(403).json({ error: 'Not Maintainer' });
       }
 
       // Return userId and isMaintainer to user to use at frontend
