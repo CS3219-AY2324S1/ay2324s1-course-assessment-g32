@@ -25,25 +25,9 @@ const addAttempt = async (userId, questionId, code, language) => {
   }
 };
 
-const deleteAttemptsByUserId = async (userId) => {
-  try {
-    await historyModel.deleteMany({ userId: userId });
-  } catch (err) {
-    throw err;
-  }
-};
-
 const getAttemptsByUserId = async (userId) => {
   try {
-    return await historyModel.find({ userId: userId });
-  } catch (err) {
-    throw err;
-  }
-};
-
-const deleteAttemptsByQuestionId = async (questionId) => {
-  try {
-    await historyModel.deleteMany({ questionId: questionId });
+    return await historyModel.find({ userId: userId }).sort({ createdAt: -1 });
   } catch (err) {
     throw err;
   }
@@ -59,7 +43,7 @@ const getAttemptById = async (attemptId) => {
 
 const getAttemptsByQuestionAndUser = async (questionId, userId) => {
   try {
-    return await historyModel.find({ questionId: questionId, userId: userId });
+    return await historyModel.find({ questionId: questionId, userId: userId }).sort({ createdAt: -1 });
   } catch (err) {
     throw err;
   }
@@ -68,9 +52,7 @@ const getAttemptsByQuestionAndUser = async (questionId, userId) => {
 module.exports = {
   findAttemptByUserIdAndQuestion,
   addAttempt,
-  deleteAttemptsByUserId,
   getAttemptsByUserId,
-  deleteAttemptsByQuestionId,
   getAttemptById,
   getAttemptsByQuestionAndUser,
 };

@@ -63,6 +63,7 @@ const SubmissionList = () => {
     <Spinner className='spinner' />
   ) : (
     <div className='container'>
+      <h1>Submission History</h1>
       <table ref={tableRef} className='table table-hover table-striped'>
         <thead className='table-dark'>
           <tr>

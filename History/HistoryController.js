@@ -11,16 +11,6 @@ const addAttempt = async (req, res) => {
   }
 };
 
-const deleteUserAttempts = async (req, res) => {
-  try {
-    const { userId } = req.body;
-    await historyService.deleteUserAttempts(userId);
-    res.json({ message: 'SUCCESS: History attempts deleted' });
-  } catch (err) {
-    res.status(err?.status || 400).json({ error: err?.message || err });
-  }
-};
-
 const getAttempts = async (req, res) => {
   try {
     const { userId, questionId } = req.query;
@@ -83,7 +73,6 @@ const getAttempt = async (req, res) => {
 
 module.exports = {
   addAttempt,
-  deleteUserAttempts,
   getAttempts,
   getHeatMapData,
   getPieChartData,
