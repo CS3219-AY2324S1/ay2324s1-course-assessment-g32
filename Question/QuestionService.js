@@ -99,7 +99,7 @@ const getQuestionCountByDifficulty = async (questionsId) => {
   try {
     const difficultyCount = await questionRepository.getQuestionsDifficultyCount(questionsId);
     const stats = difficultyCount.reduce((acc, item) => {
-        acc[item._id] = item.count * 200;
+        acc[item._id] = item.count;
         return acc;
     }, { 'Easy': 0, 'Medium': 0, 'Hard': 0 });
     return stats;
