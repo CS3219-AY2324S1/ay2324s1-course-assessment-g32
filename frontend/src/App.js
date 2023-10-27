@@ -27,7 +27,6 @@ import UnauthorizedPage from './pages/UnauthorizedPage/UnauthorizedPage';
 // Page not found page
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 // Routes
-import NonLoggedInRoute from './utils/NonLoggedInRoute';
 import ProtectedRoute from './utils/ProtectedRoute';
 import MaintainerRoute from './utils/MaintainerRoute';
 
@@ -38,12 +37,10 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<NonLoggedInRoute />}>
-          {/* Display Login component by default */}
-          <Route index element={<Login />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
-        </Route>
+        {/* Display Login component by default */}
+        <Route index element={<Login />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
 
         {/* Question management for normal users */}
         <Route path='/landing' element={<ProtectedRoute />}>
