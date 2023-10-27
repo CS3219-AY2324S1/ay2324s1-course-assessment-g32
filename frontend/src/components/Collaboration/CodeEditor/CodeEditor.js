@@ -8,7 +8,7 @@ import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
 import './CodeEditor.css';
 
-const CodeEditor = ({ socket, roomId, handleCodeChange }) => {
+const CodeEditor = ({ socket, roomId, handleCodeChange, handleLanguageToggle }) => {
   const editor = useRef(null);
   const viewRef = useRef(null);
   const [code, setCode] = useState('');
@@ -24,6 +24,7 @@ const CodeEditor = ({ socket, roomId, handleCodeChange }) => {
 
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
+    handleLanguageToggle(selectedLanguage);
     setLanguage(getLanguageExtension(selectedLanguage));
 
     // Send language changes to the server

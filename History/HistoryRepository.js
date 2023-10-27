@@ -9,13 +9,14 @@ const findAttemptByUserIdAndQuestion = async (userId, questionId) => {
   }
 };
 
-const addAttempt = async (userId, questionId, code) => {
+const addAttempt = async (userId, questionId, code, language) => {
   // Add new attempt to database
   try {
     const history = new historyModel({
       userId: userId,
       questionId: questionId,
       code: code,
+      language: language,
     });
 
     await history.save();
@@ -48,10 +49,19 @@ const deleteAttemptsByQuestionId = async (questionId) => {
   }
 };
 
+const getAttemptById = async (attemptId) => {
+  try {
+    return await historyModel.findById(attemptId);
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   findAttemptByUserIdAndQuestion,
   addAttempt,
   deleteAttemptsByUserId,
   getAttemptsByUserId,
   deleteAttemptsByQuestionId,
+  getAttemptById,
 };

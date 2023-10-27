@@ -17,6 +17,7 @@ const Collaboration = () => {
   const [userId, setUserId] = useState('');
   const [jwtToken, setJwtToken] = useState('');
   const [code, setCode] = useState('');
+  const [language, setLanguage] = useState('Python');
 
   const roomId = location.state?.roomId;
   const hostId = location.state?.hostId;
@@ -43,12 +44,13 @@ const Collaboration = () => {
     navigate('/landing');
   };
 
-  const submitAttempt = () => {
-      attemptQuestion(jwtToken, userId, question._id, code).then((res) => {
-      showSuccessToast(res.data.message);
-    }).catch((err) => {
+  const submitAttempt = async () => {
+    try {
+      const response = await attemptQuestion(jwtToken, userId, question._id, code, language);
+      showSuccessToast(response.data.message);
+    } catch (err) {
       errorHandler(err);
-    });
+    }
   };
 
   return (
@@ -61,7 +63,7 @@ const Collaboration = () => {
           <QuestionContent question={question} />
         </div>
         <div className='right'>
-          <CodeEditor socket={socket} roomId={roomId} handleCodeChange={setCode} />
+          <CodeEditor socket={socket} roomId={roomId} handleCodeChange={setCode} handleLanguageToggle={setLanguage} />
           <Chat socket={socket} roomId={roomId} host={hostId} />
         </div>
       </div>

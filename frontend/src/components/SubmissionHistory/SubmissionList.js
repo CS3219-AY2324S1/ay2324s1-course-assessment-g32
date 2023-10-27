@@ -51,10 +51,11 @@ const SubmissionList = () => {
   };
 
   const submissionList = tableData.map((submission, index) => (
-    <tr key={submission.id} onClick={() => handleRowClick(submission.id)}>
+    <tr key={submission.id} onClick={() => handleRowClick(submission._id)}>
       <th scope='row'>{index + 1}</th>
       <td>{submission.title}</td>
       <td>{parseDatetime(submission.createdAt)}</td>
+      <td>{submission.language}</td>
     </tr>
   ));
 
@@ -71,8 +72,11 @@ const SubmissionList = () => {
             <th scope='col' width='400'>
               Question Title
             </th>
-            <th scope='col' width='400'>
+            <th scope='col' width='200'>
               Time of Submission
+            </th>
+            <th scope='col' width='100'>
+              Language
             </th>
           </tr>
         </thead>

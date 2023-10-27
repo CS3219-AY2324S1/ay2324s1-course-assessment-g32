@@ -1,14 +1,14 @@
 const historyDatabase = require('./HistoryRepository.js');
 
-const addAttempt = async (userId, questionId, code) => {
+const addAttempt = async (userId, questionId, code, language) => {
   try {
     // Check for missing inputs
-    if (!userId || !questionId || !code) {
+    if (!userId || !questionId || !code || !language) {
       throw Object.assign(new Error('Missing inputs'), { status: 400 });
     }
 
     // Create using with userId and questionId
-    await historyDatabase.addAttempt(userId, questionId, code);
+    await historyDatabase.addAttempt(userId, questionId, code, language);
   } catch (err) {
     throw err;
   }
@@ -87,6 +87,18 @@ const getUnattemptedQuestionsStats = (attemptedQuestionsStats, allQuestionsStats
   return { count: totalQuestions - totalAttemptedQuestions };
 };
 
+const getAttempt = async (attemptId) => {
+  try {
+    if (!attemptId) {
+      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+    }
+    const attempt = await historyDatabase.getAttemptById(attemptId);
+    return attempt;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   addAttempt,
   deleteUserAttempts,
@@ -94,4 +106,5 @@ module.exports = {
   getHeatMapData,
   getAttemptedQuestionsId,
   getUnattemptedQuestionsStats,
+  getAttempt,
 };

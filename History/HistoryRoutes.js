@@ -10,5 +10,6 @@ router.delete('/attempts', historyController.deleteUserAttempts);
 router.get('/attempts', historyController.getAttempts);
 router.get('/heatmap', historyController.getHeatMapData);
 router.get('/piechart', historyController.getPieChartData);
+router.get('/attempt', historyController.getAttempt);
 
 module.exports = router;

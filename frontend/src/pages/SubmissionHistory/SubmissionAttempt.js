@@ -1,12 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getAttempt } from '../../api/HistoryApi';
+import { getQuestionDetails } from '../../api/QuestionApi';
+import { getCookie } from '../../utils/helpers';
+import { errorHandler } from '../../utils/errors';
 import Header from '../../components/Header';
 import SubmissionCode from '../../components/SubmissionHistory/SubmissionCode';
+import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
+import './SubmissionAttempt.css';
 
 function SubmissionAttempt() {
+
+  const { id } = useParams();
+  const [question, setQuestion] = useState({});
+  const [attempt, setAttempt] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAttempt(await getCookie(), id);
+        const question = await getQuestionDetails(response.data.attempt.questionId, await getCookie());
+        setAttempt(response.data.attempt);
+        setQuestion(question);
+
+      } catch (error) {
+        errorHandler(error);
+      }
+    };
+    fetchData();
+  }, [id, navigate]);
+
   return (
-    <div>
+    <div className='submission-container'>
       <Header />
-      <SubmissionCode />
+      <div className='content'>
+        <div className='left p-3 '>
+          <QuestionContent question={question} />
+        </div>
+        <div className='right'>
+          <SubmissionCode attempt={attempt} />
+        </div>
+      </div>
     </div>
   );
 }

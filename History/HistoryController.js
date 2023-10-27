@@ -3,8 +3,8 @@ const questionApi = require('./helpers/callsToQuestion.js');
 
 const addAttempt = async (req, res) => {
   try {
-    const { userId, questionId, code } = req.body;
-    await historyService.addAttempt(userId, questionId, code);
+    const { userId, questionId, code, language } = req.body;
+    await historyService.addAttempt(userId, questionId, code, language);
     res.json({ message: 'SUCCESS: History attempt added' });
   } catch (err) {
     res.status(err?.status || 400).json({ error: err?.message || err });
@@ -66,10 +66,21 @@ const getPieChartData = async (req, res) => {
   }
 };
 
+const getAttempt = async (req, res) => {
+  try {
+    const { attemptId } = req.query;
+    const attempt = await historyService.getAttempt(attemptId);
+    res.json({ message: 'SUCCESS', attempt });
+  } catch (err) {
+    res.status(err?.status || 400).json({ error: err?.message || err });
+  }
+};
+
 module.exports = {
   addAttempt,
   deleteUserAttempts,
   getAttempts,
   getHeatMapData,
   getPieChartData,
+  getAttempt,
 };
