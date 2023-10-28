@@ -80,6 +80,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, handleCodeChange, handle
       const languageSelect = document.getElementById('languageSelect');
       if (languageSelect.value !== updatedLanguage) {
         languageSelect.value = updatedLanguage;
+        handleLanguageToggle(updatedLanguage);
         setLanguage(updatedLanguage);
       }
     });
