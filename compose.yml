@@ -65,6 +65,17 @@ services:
     build: ./Collaboration
     env_file: .env
     ports: ['8001:8001']
+  svc-history:
+    container_name: history-service
+    build: ./History
+    env_file: .env
+    environment:
+      - AUTH_HOST=svc-auth
+      - QUESTION_HOST=svc-question
+    ports: ['9001:9001']
+    depends_on:
+      - svc-auth
+      - svc-question
   svc-web-ui:
     container_name: web-ui
     build: ./frontend
@@ -75,3 +86,4 @@ services:
       - svc-question
       - svc-match
       - svc-collab
+      - svc-history

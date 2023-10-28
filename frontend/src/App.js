@@ -59,17 +59,17 @@ function App() {
         </Route>
 
         {/* Question page for normal users */}
-        <Route path='/question' element={<ProtectedRoute />}>
+        <Route path='/ques' element={<ProtectedRoute />}>
           <Route index element={<QuestionPage />} />
-          <Route path='/question/:id' element={<QuestionDescription />} />
+          <Route path='/ques/:id' element={<QuestionDescription />} />
         </Route>
 
         {/* Question management for maintainers only */}
-        <Route path='/question' element={<MaintainerRoute />}>
-          <Route path='/question/new' element={<CreateQuestion />} />
+        <Route path='/ques' element={<MaintainerRoute />}>
+          <Route path='/ques/new' element={<CreateQuestion />} />
         </Route>
-        <Route path='/question/edit' element={<MaintainerRoute />}>
-          <Route path='/question/edit/:id' element={<EditQuestion />} />
+        <Route path='/ques/edit' element={<MaintainerRoute />}>
+          <Route path='/ques/edit/:id' element={<EditQuestion />} />
         </Route>
 
         {/* Profile management for normal users */}

@@ -8,6 +8,7 @@ The combined application contains qualities of:
 * Question Repository Application
 * User Profile Management Application
 * Matchmaking Application
+* History Repository Application
 
 We have various micro-services including:
 * MySQL Database
@@ -16,11 +17,12 @@ We have various micro-services including:
 * Question Service
 * Match Service
 * Collaboration Service
+* History Service
 * Frontend Service (Web UI)
 
 Additional Notes:
 
-If you are not using Windows OS, and would like a equivalent instruction for a differnt OS, do reach out to us for clarification.
+If you are not using Windows OS, and would like a equivalent instruction for a different OS, do reach out to us for clarification.
 
 **For clarifications, do leave your questions at [Feedback PR](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32/pull/1) created in our repository.**
 
@@ -114,6 +116,9 @@ Run them in different terminals:
 - User service: `npm run start:user`
 - Question service: `npm run start:question`
 - Frontend: `npm run start:frontend`
+- Match service: `npm run start:match`
+- Collaboration service: `npm run start:collaboration`
+- History service: `npm run start:history`
 
 
 Note: If the above not work, please use the correct link or download the source code directly from the release.

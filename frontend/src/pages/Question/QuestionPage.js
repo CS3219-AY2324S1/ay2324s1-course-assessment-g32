@@ -1,11 +1,9 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import QuestionList from '../../components/Question/QuestionList';
-import {
-  CreateQuestion,
-  EditQuestion,
-  QuestionDescription,
-} from './index';
+import QuestionDescription from './QuestionDescription';
+import EditQuestion from './EditQuestion';
+import CreateQuestion from './CreateQuestion';
 import Header from '../../components/Header';
 import './QuestionPage.css';
 
