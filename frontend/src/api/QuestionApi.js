@@ -1,7 +1,5 @@
-import axios from 'axios';
-const env = require('../loadEnvironment');
-
-const questionRootUrl = env.QUESTION_URL + '/question';
+import { axiosQuestion } from '../utils/axios';
+import { Status } from '../constants';
 
 const getConfig = (jwtToken) => {
   return {
@@ -26,15 +24,15 @@ export const createQuestion = async (
       description: description,
       tags: tags,
     };
-    return await axios.post(
-      questionRootUrl + '/create',
+    return await axiosQuestion.post(
+      '/create',
       questionData,
       getConfig(jwtToken)
     );
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -44,12 +42,29 @@ export const createQuestion = async (
 
 export const getQuestions = async (jwtToken) => {
   try {
-    const response = await axios.get(questionRootUrl + '/getAll', getConfig(jwtToken));
+    const response = await axiosQuestion.get('/read-all', getConfig(jwtToken));
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+export const getQuestionsByComplexity = async (complexity, jwtToken) => {
+  try {
+    let config = getConfig(jwtToken);
+    config.params = { complexity: complexity };
+    const response = await axiosQuestion.get('/read-all-by-complexity', config);
+    return response.data.questions;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -61,15 +76,29 @@ export const getQuestionDetails = async (questionId, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { id: questionId };
-    const questionDetails = await axios.get(
-      questionRootUrl + '/getQuestionDetails',
-      config
-    );
+    const questionDetails = await axiosQuestion.get('/read', config);
     return questionDetails.data.question;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+export const getRandomQuestionByCriteria = async (complexity, jwtToken) => {
+  try {
+    let config = getConfig(jwtToken);
+    config.params = { complexity: complexity };
+    const questionDetails = await axiosQuestion.get('/read-random', config);
+    return questionDetails.data.question;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -93,15 +122,11 @@ export const editQuestion = async (
       description: description,
       tags: tags,
     };
-    return await axios.post(
-      questionRootUrl + '/edit',
-      questionData,
-      getConfig(jwtToken)
-    );
+    return await axiosQuestion.put('/edit', questionData, getConfig(jwtToken));
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -113,32 +138,12 @@ export const deleteQuestion = async (id, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { id: id };
-    const response = await axios.delete(questionRootUrl + '/delete', config);
+    const response = await axiosQuestion.delete('/delete', config);
     return response;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
-        message: 'Network Error',
-      });
-    }
-    throw err;
-  }
-};
-
-export const appendQuestionTitle = async (jwtToken, attempts) => {
-  try {
-    const data = { attempts: attempts };
-    const response = await axios.post(
-      questionRootUrl + '/appendQuestionTitle',
-      data,
-      getConfig(jwtToken),
-    );
-    return response;
-  } catch (err) {
-    if (err.code === 'ERR_NETWORK') {
-      throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }

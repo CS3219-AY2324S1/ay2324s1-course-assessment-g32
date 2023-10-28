@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { authorize } from '../api/AuthApi.js';
+import { authorize } from '../api/AuthApi';
 
 export const getCookie = () => {
   try {
@@ -25,6 +25,12 @@ export const getUserInfo = async () => {
   } catch (error) {
     return null;
   }
+};
+
+export const getLoginStatus = async () => {
+  const response = await getUserInfo();
+  // Return true if data is not null/undefined
+  return !!response?.data?.userInfo;
 };
 
 export const getUserId = async () => {

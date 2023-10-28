@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import QuestionForm from '../../components/Question/QuestionForm.js';
-import Header from '../../components/Header.js';
-import Spinner from '../../components/Spinner.js';
-import { editQuestion, getQuestionDetails } from '../../api/QuestionApi.js';
-import { EditWindow } from '../../components/ConfirmationWindow/ConfirmationWindows.js';
-import { getCookie } from '../../utils/helpers.js';
-import { showSuccessToast } from '../../utils/toast.js';
-import { errorHandler } from '../../utils/errors.js';
+import Header from '../../components/Header';
+import Spinner from '../../components/Spinner';
+import { QuestionForm } from '../../components/Question';
+import { EditWindow } from '../../components/ConfirmationWindows';
+import { editQuestion, getQuestionDetails } from '../../api/QuestionApi';
+import { getCookie } from '../../utils/helpers';
+import { showSuccessToast } from '../../utils/toast';
+import { errorHandler } from '../../utils/errors';
 import '../../css/Tags.css';
 
 const EditQuestion = () => {
@@ -73,12 +73,27 @@ const EditQuestion = () => {
             <h2>Edit</h2>
           </div>
           <div className='card-body'>
-            <QuestionForm oldFormData={formData} onFormSubmit={handleSaveClick} />
+            <QuestionForm
+              oldFormData={formData}
+              onFormSubmit={handleSaveClick}
+            />
           </div>
           <div className='card-footer'>
             <div className='d-flex justify-content-between'>
-              <button type='button' className='btn btn-secondary' onClick={handleBackClick}>Back</button>
-              <button type='submit' form='questionForm' className='btn btn-success'>Save</button>
+              <button
+                type='button'
+                className='btn btn-secondary'
+                onClick={handleBackClick}
+              >
+                Back
+              </button>
+              <button
+                type='submit'
+                form='questionForm'
+                className='btn btn-success'
+              >
+                Save
+              </button>
             </div>
           </div>
           {isEditWindowOpen && (

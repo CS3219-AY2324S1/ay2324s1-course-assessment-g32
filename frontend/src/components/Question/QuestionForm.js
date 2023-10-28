@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
-import { showFailureToast } from '../../utils/toast.js';
-import TextEditor from '../TextEditor/TextEditor.js';
+import TextEditor from '../TextEditor';
+import { showFailureToast } from '../../utils/toast';
 
 const QuestionForm = ({ oldFormData = {}, onFormSubmit }) => {
   const [tagInput, setTagInput] = useState('');

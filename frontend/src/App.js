@@ -3,31 +3,31 @@ import { ToastContainer } from 'react-toastify';
 
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Collaboration from './pages/Collaboration/Collaboration';
+import Collaboration from './pages/Collaboration';
 
 // Question pages
-import Landing from './pages/Landing/Landing';
+import Landing from './pages/Landing';
 import {
   CreateQuestion,
   EditQuestion,
   QuestionDescription,
-} from './pages/Question/Question';
+} from './pages/Question';
 // Normal user pages
 import {
   ChangeUserPassword,
   ManageUserProfile,
   NormalEditUser,
-} from './pages/User/UserProfile/UserProfile';
+} from './pages/User/UserProfile';
 // Maintainer pages
 import {
   AddUser,
   MaintainerEditUser,
   ManageUserProfiles,
-} from './pages/User/UsersManagement/UsersManagement';
+} from './pages/User/UsersManagement';
 // Unauthorized page
-import UnauthorizedPage from './pages/UnauthorizedPage/UnauthorizedPage';
+import UnauthorizedPage from './pages/UnauthorizedPage';
 // Page not found page
-import PageNotFound from './pages/PageNotFound/PageNotFound';
+import PageNotFound from './pages/PageNotFound';
 // Submission History page
 import SubmissionHistory from './pages/SubmissionHistory/SubmissionHistory';
 // Submission Attempt page
@@ -35,6 +35,7 @@ import SubmissionAttempt from './pages/SubmissionHistory/SubmissionAttempt';
 // Question page
 import QuestionPage from './pages/Question/QuestionPage';
 // Special routes
+import NonLoggedInRoute from './utils/NonLoggedInRoute';
 import ProtectedRoute from './utils/ProtectedRoute';
 import MaintainerRoute from './utils/MaintainerRoute';
 
@@ -45,8 +46,12 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
+        <Route path='/' element={<NonLoggedInRoute />}>
+          {/* Display Login component by default */}
+          <Route index element={<Login />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+        </Route>
 
         {/* Landing for normal users */}
         <Route path='/landing' element={<ProtectedRoute />}>
@@ -71,19 +76,13 @@ function App() {
         <Route path='/user-profile' element={<ProtectedRoute />}>
           <Route index element={<ManageUserProfile />} />
           <Route path='/user-profile/edit' element={<NormalEditUser />} />
-          <Route
-            path='/user-profile/change-password'
-            element={<ChangeUserPassword />}
-          />
+          <Route path='/user-profile/change-password' element={<ChangeUserPassword />} />
         </Route>
 
         {/* Profile management for maintainers only */}
         <Route path='/users-management' element={<MaintainerRoute />}>
           <Route index element={<ManageUserProfiles />} />
-          <Route
-            path='/users-management/edit'
-            element={<MaintainerEditUser />}
-          />
+          <Route path='/users-management/edit' element={<MaintainerEditUser />} />
           <Route path='/users-management/new' element={<AddUser />} />
         </Route>
 
@@ -105,7 +104,7 @@ function App() {
         {/* Display UnauthorizedPage component if user is not authorized */}
         <Route path='/unauthorized' element={<UnauthorizedPage />} />
 
-        {/* Display UnauthorizedPage component if user is not authorized */}
+        {/* Display PageNotFound component if route does not exist */}
         <Route path='*' element={<PageNotFound />} />
       </Routes>
       <ToastContainer />

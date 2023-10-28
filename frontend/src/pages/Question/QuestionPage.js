@@ -5,7 +5,7 @@ import {
   CreateQuestion,
   EditQuestion,
   QuestionDescription,
-} from './Question';
+} from './index';
 import Header from '../../components/Header';
 import './QuestionPage.css';
 

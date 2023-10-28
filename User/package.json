@@ -2,10 +2,10 @@
   "name": "user",
   "version": "1.0.0",
   "description": "",
-  "main": "UserServer.js",
+  "main": "src/UserServer.js",
   "scripts": {
-    "dev": "nodemon UserServer.js",
-    "start": "node UserServer.js"
+    "dev": "nodemon src/UserServer.js",
+    "start": "node src/UserServer.js"
   },
   "author": "",
   "license": "ISC",

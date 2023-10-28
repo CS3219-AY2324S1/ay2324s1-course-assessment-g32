@@ -6,7 +6,7 @@ import { getCookie } from '../../utils/helpers';
 import { errorHandler } from '../../utils/errors';
 import Header from '../../components/Header';
 import SubmissionCode from '../../components/SubmissionHistory/SubmissionCode';
-import QuestionContent from '../../components/Question/QuestionContent/QuestionContent';
+import QuestionContent from '../../components/Question/QuestionContent';
 import './SubmissionAttempt.css';
 
 function SubmissionAttempt() {
