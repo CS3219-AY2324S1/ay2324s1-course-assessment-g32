@@ -4,8 +4,8 @@
   "description": "",
   "main": "HistoryServer.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node HistoryServer.js"
+    "dev": "nodemon src/HistoryServer.js",
+    "start": "node src/HistoryServer.js"
   },
   "author": "",
   "license": "ISC",
@@ -15,7 +15,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mongoose": "^7.6.3",
-    "mysql2": "^3.6.2"
+    "mongoose": "^7.6.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

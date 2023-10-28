@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
-const historyController = require('./HistoryController.js');
-const middleware = require('./helpers/middleware.js');
+const historyController = require('./HistoryController');
+const middleware = require('./helpers/middleware');
 
 router.post('/attempts', middleware.checkToken, historyController.addAttempt);
 router.get('/attempts', middleware.checkToken, historyController.getAttempts);

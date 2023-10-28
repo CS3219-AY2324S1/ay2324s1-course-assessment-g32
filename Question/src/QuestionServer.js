@@ -30,7 +30,7 @@ try {
     logger.logSuccess('Connected to the MongoDB database');
   });
   mongoDb.on('error', (error) => {
-    logger.error('Cannot connecr to MongoDB:', error);
+    logger.error('Cannot connect to MongoDB:', error);
   });
 } catch (err) {
   logger.error(err);

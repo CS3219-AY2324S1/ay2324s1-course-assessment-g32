@@ -1,10 +1,11 @@
-const historyDatabase = require('./HistoryRepository.js');
+const historyDatabase = require('./HistoryRepository');
+const { Status } = require('./constants');
 
 const addAttempt = async (userId, questionId, code, language) => {
   try {
     // Check for missing inputs
-    if (!userId || !questionId || !code || !language) {
-      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+    if (!userId || !questionId || !language) {
+      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
     }
 
     // Create using with userId and questionId
@@ -17,7 +18,7 @@ const addAttempt = async (userId, questionId, code, language) => {
 const getAttempts = async (userId) => {
   try {
     if (!userId) {
-      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
     }
     const attempts = await historyDatabase.getAttemptsByUserId(userId);
     return attempts;
@@ -29,7 +30,7 @@ const getAttempts = async (userId) => {
 const getHeatMapData = async (userId) => {
   try {
     if (!userId) {
-      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
     }
     const result = await historyDatabase.getAttemptsByUserId(userId);
 
@@ -56,7 +57,7 @@ const getHeatMapData = async (userId) => {
 const getAttemptedQuestionsId = async (userId) => {
   try {
     if (!userId) {
-      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
     }
     const result = await historyDatabase.getAttemptsByUserId(userId);
     const questionsId = result.map(item => item.questionId);
@@ -75,11 +76,11 @@ const getUnattemptedQuestionsStats = (attemptedQuestionsStats, allQuestionsStats
 const getAttempt = async (attemptId) => {
   try {
     if (!attemptId) {
-      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
     }
     const attempt = await historyDatabase.getAttemptById(attemptId);
     if (!attempt) {
-      throw Object.assign(new Error('Attempt not found'), { status: 410 });
+      throw { status: Status.GONE, message: 'Attempt does not exist' };
     }
     return attempt;
   } catch (err) {
@@ -90,7 +91,7 @@ const getAttempt = async (attemptId) => {
 const getAttemptsByQuestionAndUser = async (questionId, userId) => {
   try {
     if (!questionId || !userId) {
-      throw Object.assign(new Error('Missing inputs'), { status: 400 });
+      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
     }
     const attempts = await historyDatabase.getAttemptsByQuestionAndUser(questionId, userId);
     return attempts;
