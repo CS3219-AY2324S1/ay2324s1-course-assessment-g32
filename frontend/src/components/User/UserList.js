@@ -132,7 +132,7 @@ const UserList = () => {
         <td>
           <Button variant='contained' onClick={() => handleEditClick(user.id, user.displayName)}>Edit</Button>
           <Button variant='contained' color='error' onClick={() => handleDeregisterClick(user.id)}>Deregister</Button>
-          {user.isMaintainer ? (
+          {user.isMaintainer === 1 ? (
             <Button variant='contained' color='secondary' onClick={() => handleToggleUserRoleClick(user.id, user.isMaintainer)}>Demote to normal user</Button>
           ) : (
             <Button variant='contained' color='success' onClick={() => handleToggleUserRoleClick(user.id, user.isMaintainer)}>Promote to maintainer</Button>

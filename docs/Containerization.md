@@ -1,22 +1,19 @@
-# Containerization (Assignment 4)
+# Containerization
 
 Docker to containerize our various micro-services which serves our combined application.
-
-The combined application contains qualities of:
-* Question Repository Application
-* User Profile Management Application
 
 We have various micro-services including:
 * MySQL Database
 * User Service
 * Auth Service
 * Question Service
+* Match Service
+* Collaboration Service
 * Frontend Service (Web UI)
 
-Additional Notes:
-
-The instructions we have are based on Windows OS.
-Do reach out to us for clarification for other OS.
+> Additional Note:\
+> The instructions we have are based on Windows OS.
+> Do reach out to us for clarification for other OS.
 
 # Requirements
 
@@ -24,11 +21,13 @@ Do reach out to us for clarification for other OS.
 
 Internet connection is required.
 
-**[ IMPORTANT! ]** Do _not_ test while on NUS grounds or connected
-(either directly or indirectly) to NUS Wifi.
-(NUS networks blocks MongoDB which is required by our application.) 
+> **[ IMPORTANT! ]**\
+> Do _not_ test while on NUS grounds or connected
+> (either directly or indirectly) to NUS Wifi.
+> (NUS networks blocks MongoDB which is required by our application.)
 
 ## Software
+
 Download and install these software if you do not have them locally.
 
 - [Docker Desktop](https://www.docker.com/get-started/)
@@ -37,10 +36,10 @@ Download and install these software if you do not have them locally.
 
 # Testing
 
-For clarity, the commands given below should be executed at the root directory if not specified otherwise.
+Unless specified otherwise, the commands given below should be executed at the root directory.
 
-_The commands below are provided for convenience and may be incorrect.
-Do reach out to us for clarification if necessary._
+> _The commands below are provided for convenience and may be incorrect.
+> Do reach out to us for clarification if necessary._
 
 ## Pre-testing Set up
 
@@ -132,11 +131,9 @@ By default, we have created 2 accounts as part of the fresh database. These acco
 | admin@test.com | password | Has admin rights. Regard as a superuser. |
 | user@test.com  | password | Normal user. Cannot manage other users.  |
 
-Note: if you delete these accounts via the user profile management functionalities, you may have from restart the pre-testing steps to get back the accounts.
-
-### Optional Testing of API endpoints
-
-If you wish to test individual microservice's API, you can refer to our [API endpoints](API_Endpoints.md).
+> Note: if you delete these accounts via the user profile management
+> functionalities, you may have from restart the pre-testing steps to
+> get back the accounts.
 
 ## Post-testing
 
