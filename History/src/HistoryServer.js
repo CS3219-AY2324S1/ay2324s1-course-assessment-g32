@@ -7,7 +7,7 @@ const env = require('./loadEnvironment');
 const logger = require('./Log');
 
 logger.register({
-  serviceName: "History Service",
+  serviceName: 'History Service',
   logLevel: logger.LOG_LEVELS.all
 });
 
@@ -30,8 +30,9 @@ try {
     logger.logSuccess('Connected to the MongoDB database');
   });
   mongoDb.on('error', (error) => {
-    logger.error('Cannot connect to MongoDB:', error);
+    logger.error('Could not connect to MongoDB:', error, '\nExiting ...');
+    process.exit(1);
   });
 } catch (err) {
-  console.error(err);
+  logger.error(err);
 }

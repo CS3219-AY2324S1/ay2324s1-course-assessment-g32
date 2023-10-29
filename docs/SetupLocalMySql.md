@@ -7,6 +7,9 @@
   - Port should be `3306`
   - Note the root password that you set (you will need it later)
 
+For macOS, additonal steps (to set the PATH) might be required to be able to use `mysql` in the terminal. 
+You can follow the steps mentioned in this [video tutorial](https://youtu.be/-BDbOOY9jsc?t=253).
+
 ## Start MySQL Service
 
 For Windows OS,
@@ -32,9 +35,16 @@ For macOS,
 ## Open MySQL Terminal
 
 For Windows OS,
+
 1. Search for _MySQL 8.1 Command Line Client_ on your computer
 2. Execute it to open up the terminal
 3. Enter your root password (which you set during installation)
+
+For macOS,
+
+1. Open a terminal
+2. Type `mysql -u root -p` and press `Enter`
+3. Enter your root password (which you set during installation) 
 
 ## Setup required database
 
