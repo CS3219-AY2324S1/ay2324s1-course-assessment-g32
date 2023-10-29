@@ -6,6 +6,7 @@ import { defaultKeymap, indentWithTab } from '@codemirror/commands';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
+import { javascript } from '@codemirror/lang-javascript';
 import { executeCode } from '../../api/ExecutionApi';
 import { Language, Event } from '../../constants';
 import '../../css/CodeEditor.css';
@@ -32,6 +33,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
         return java();
       case Language.CPP:
         return cpp();
+      case Language.JS:
+        return javascript();
       default:
         return python();
     }
@@ -51,7 +54,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   const handleCodeExecution = async () => {
     try {
       const result = await executeCode(language, code);
-      console.log(result);
+      console.log(result)
       setResult(result);
 
       // Send execution results to the server
@@ -141,6 +144,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
             <option value='Python'>Python</option>
             <option value='Java'>Java</option>
             <option value='C++'>C++</option>
+            <option value='Javascript'>Javascript</option>
           </select>
           <button type='button' onClick={handleCodeExecution}>
             Run code

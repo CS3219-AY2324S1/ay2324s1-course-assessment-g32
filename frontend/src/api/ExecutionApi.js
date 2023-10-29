@@ -21,9 +21,12 @@ export const executeCode = async (language, code) => {
     case 'C++':
       console.log("case cpp")
       return await executeCpp(codeObject);
-    default:
+    case 'Javascript':
       console.log("case js")
       return await executeJs(codeObject);
+    default:
+      console.log("case python")
+      return await executePython(codeObject);
   }
 };
 
@@ -45,7 +48,7 @@ const executePython = async (codeObject) => {
 const executeJava = async (codeObject) => {
   try {
     const response = await axiosExecution.post('/execute-java', codeObject, getConfig());
-    return response.data.message;
+    return response.data.output;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -60,7 +63,7 @@ const executeJava = async (codeObject) => {
 const executeCpp = async (codeObject) => {
   try {
     const response = await axiosExecution.post('/execute-cpp', codeObject, getConfig());
-    return response.data.message;
+    return response.data.output;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -75,7 +78,8 @@ const executeCpp = async (codeObject) => {
 const executeJs = async (codeObject) => {
   try {
     const response = await axiosExecution.post('/execute-js', codeObject, getConfig());
-    return response.data.message;
+    console.log(response.data.output)
+    return response.data.output;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
