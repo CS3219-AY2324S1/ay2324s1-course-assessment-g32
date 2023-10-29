@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import SubmissionHeatMap from '../components/Statistics/SubmissionHeatMap';
-import SubmissionPieChart from '../components/Statistics/SubmissionPieChart';
+import { SubmissionHeatMap, SubmissionPieChart } from '../components/Statistics';
 import MatchingModal from '../components/MatchMaking/MatchingModal';
 import { getUserId, getCookie } from '../utils/helpers';
 import { getUser } from '../api/UserApi';

@@ -4,13 +4,13 @@ import { ToastContainer } from 'react-toastify';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Collaboration from './pages/Collaboration';
-
-// Question pages
 import Landing from './pages/Landing';
+// Question pages
 import {
   CreateQuestion,
   EditQuestion,
   QuestionDescription,
+  QuestionsPage,
 } from './pages/Question';
 // Normal user pages
 import {
@@ -18,6 +18,11 @@ import {
   ManageUserProfile,
   NormalEditUser,
 } from './pages/User/UserProfile';
+// Submission History pages
+import {
+  SubmissionAttempt,
+  SubmissionHistory,
+} from './pages/SubmissionHistory';
 // Maintainer pages
 import {
   AddUser,
@@ -28,12 +33,6 @@ import {
 import UnauthorizedPage from './pages/UnauthorizedPage';
 // Page not found page
 import PageNotFound from './pages/PageNotFound';
-// Submission History page
-import SubmissionHistory from './pages/SubmissionHistory/SubmissionHistory';
-// Submission Attempt page
-import SubmissionAttempt from './pages/SubmissionHistory/SubmissionAttempt';
-// Question page
-import QuestionPage from './pages/Question/QuestionPage';
 // Special routes
 import NonLoggedInRoute from './utils/NonLoggedInRoute';
 import ProtectedRoute from './utils/ProtectedRoute';
@@ -60,7 +59,7 @@ function App() {
 
         {/* Question page for normal users */}
         <Route path='/ques' element={<ProtectedRoute />}>
-          <Route index element={<QuestionPage />} />
+          <Route index element={<QuestionsPage />} />
           <Route path='/ques/:id' element={<QuestionDescription />} />
         </Route>
 

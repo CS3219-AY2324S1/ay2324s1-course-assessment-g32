@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import { getCookie, getUserId } from '../../utils/helpers.js';
-import { getPieChartData } from '../../api/HistoryApi.js';
-import { errorHandler } from '../../utils/errors.js';
-import './SubmissionPieChart.css';
+import { getCookie, getUserId } from '../../utils/helpers';
+import { getPieChartData } from '../../api/HistoryApi';
+import { errorHandler } from '../../utils/errors';
+import '../../css/SubmissionPieChart.css';
 
 const SubmissionPieChart = () => {
   const [userId, setUserId] = useState('');

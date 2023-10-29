@@ -31,7 +31,6 @@ function Header() {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='me-auto'>
-              // TODO: Change Ques to Questions
               <Nav.Link href='/ques'>Questions</Nav.Link>
               <Nav.Link href="/submission-history">Submissions</Nav.Link>
               <NavDropdown title='User Setting' id='basic-nav-dropdown'>

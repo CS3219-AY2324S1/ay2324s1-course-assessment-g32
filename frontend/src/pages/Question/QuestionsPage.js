@@ -1,15 +1,13 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import QuestionList from '../../components/Question/QuestionList';
-import QuestionDescription from './QuestionDescription';
-import EditQuestion from './EditQuestion';
-import CreateQuestion from './CreateQuestion';
+import { QuestionList } from '../../components/Question';
+import { QuestionDescription, EditQuestion, CreateQuestion } from './index';
 import Header from '../../components/Header';
-import './QuestionPage.css';
+import '../../css/QuestionsPage.css';
 
-function QuestionPage() {
+function QuestionsPage() {
   return (
-    <div className='landing'>
+    <div className='questions-page'>
       <Header />
       <div className='body'>
         <Routes>
@@ -23,4 +21,4 @@ function QuestionPage() {
   );
 }
 
-export default QuestionPage;
+export default QuestionsPage;

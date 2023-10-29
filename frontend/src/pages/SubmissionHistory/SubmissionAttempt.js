@@ -5,9 +5,9 @@ import { getQuestionDetails } from '../../api/QuestionApi';
 import { getCookie } from '../../utils/helpers';
 import { errorHandler } from '../../utils/errors';
 import Header from '../../components/Header';
-import SubmissionCode from '../../components/SubmissionHistory/SubmissionCode';
-import QuestionContent from '../../components/Question/QuestionContent';
-import './SubmissionAttempt.css';
+import { SubmissionCode } from '../../components/SubmissionHistory';
+import { QuestionContent } from '../../components/Question';
+import '../../css/SubmissionAttempt.css';
 
 function SubmissionAttempt() {
 

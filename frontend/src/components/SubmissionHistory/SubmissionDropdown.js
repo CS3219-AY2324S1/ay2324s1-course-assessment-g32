@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCookie, getUserId, parseDatetime } from '../../utils/helpers';
 import { getAttemptsByQuestionAndUser } from '../../api/HistoryApi';
+import { getCookie, getUserId, parseDatetime } from '../../utils/helpers';
 import { errorHandler } from '../../utils/errors';
-import './SubmissionDropdown.css';
+import '../../css/SubmissionDropdown.css';
 
 const SubmissionDropdown = ({ question }) => {
 

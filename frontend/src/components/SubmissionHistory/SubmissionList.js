@@ -4,11 +4,11 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import Spinner from '../../components/Spinner.js';
-import { getCookie, getUserId, parseDatetime } from '../../utils/helpers.js';
-import { errorHandler } from '../../utils/errors.js';
-import { getSubmissionHistory } from '../../api/HistoryApi.js';
-import { appendQuestionTitle } from '../../api/QuestionApi.js';
+import Spinner from '../../components/Spinner';
+import { getCookie, getUserId, parseDatetime } from '../../utils/helpers';
+import { errorHandler } from '../../utils/errors';
+import { getSubmissionHistory } from '../../api/HistoryApi';
+import { appendQuestionTitle } from '../../api/QuestionApi';
 
 const SubmissionList = () => {
   const [isLoading, setIsLoading] = useState(true);

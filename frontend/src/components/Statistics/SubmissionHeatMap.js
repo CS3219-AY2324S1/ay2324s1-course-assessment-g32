@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import HeatMap from '@uiw/react-heat-map';
 import Tooltip from '@uiw/react-tooltip';
-import { getCookie, getUserId } from '../../utils/helpers.js';
-import { getHeatMapData } from '../../api/HistoryApi.js';
-import { errorHandler } from '../../utils/errors.js';
+import { getCookie, getUserId } from '../../utils/helpers';
+import { getHeatMapData } from '../../api/HistoryApi';
+import { errorHandler } from '../../utils/errors';
 
 const SubmissionHeatMap = () => {
   const [userId, setUserId] = useState('');

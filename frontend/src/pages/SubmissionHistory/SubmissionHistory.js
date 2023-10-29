@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../../components/Header';
-import SubmissionList from '../../components/SubmissionHistory/SubmissionList';
-import './SubmissionHistory.css';
+import { SubmissionList } from '../../components/SubmissionHistory';
+import '../../css/SubmissionHistory.css';
 
 function SubmissionHistory() {
   return (

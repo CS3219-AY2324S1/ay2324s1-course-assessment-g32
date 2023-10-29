@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { parseDatetime } from '../../utils/helpers';
 import CodeMirror from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view"
 import { EditorState } from "@codemirror/state"
@@ -7,6 +6,7 @@ import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
+import { parseDatetime } from '../../utils/helpers';
 
 
 const SubmissionCode = ({ attempt }) => {
