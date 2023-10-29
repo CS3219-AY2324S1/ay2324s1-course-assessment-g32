@@ -7,7 +7,7 @@ const env = require('./loadEnvironment');
 const logger = require('./Log');
 
 logger.register({
-  serviceName: "Question Service",
+  serviceName: "History Service",
   logLevel: logger.LOG_LEVELS.all
 });
 
