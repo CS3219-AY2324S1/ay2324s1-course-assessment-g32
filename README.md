@@ -1,6 +1,10 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
 
-# Setup
+# Containerization (Assignment 4)
+
+For instruction to start via Docker, see [here](docs/Containerization.md).
+
+# Setup (Local)
 
 ## Software Requirements
 
@@ -46,7 +50,7 @@ Note the root password used, as it would be needed in the later parts.
 npm run install-all
 ```
 
-# Start Application
+# Start Application (Local)
 
 Ensure that MySQL Server service has started.
 (How to check? Click [here](docs/SetupLocalMySql.md#start-mysql-service).)
@@ -76,7 +80,7 @@ For development, you may also want to install:
 
 You can start individual services separately to test them.
 
-However, as there are dependancies among the services,
+However, as there are dependencies among the services,
 they might not function normally standalone.
 
 Run them in different terminals:
