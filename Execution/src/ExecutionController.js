@@ -1,13 +1,24 @@
-const PythonShell = require('python-shell')
+const { PythonShell } = require('python-shell');
+const { exec } = require('child_process');
 
 // execute python
 const executePython = async (req, res) => {
   try {
-    console.log(req.body)
-    res.json({ message: "python code executed"})
+    const pythonCode = req.body.code;
+
+    exec(`python -c "${pythonCode.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
+      if (error) {
+        console.log("code giving error");
+        res.json({ output: stderr });
+      } else {
+        console.log("code executed");
+        console.log(stdout);
+        res.json({ output: stdout });
+      }
+    });
   } catch (err) {
-    throw err;
-  }
+    console.log(err);
+  };
 };
 
 // execute java

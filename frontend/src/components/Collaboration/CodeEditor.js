@@ -49,19 +49,20 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   };
 
   const handleCodeExecution = async () => {
-    const result = await executeCode(language, code);
-    setResult(result);
+    try {
+      const result = await executeCode(language, code);
+      console.log(result);
+      setResult(result);
 
-    // Send execution results to the server
-    socket.emit(Event.Collaboration.RESULT_CHANGE, {
-      room: roomId,
-      updatedResult: result,
-    });
+      // Send execution results to the server
+      socket.emit(Event.Collaboration.RESULT_CHANGE, {
+        room: roomId,
+        updatedResult: result,
+      });
+    } catch (err) {
+      throw err;
+    }
   };
-
-  const handleTestExecution = async () => {
-    console.log("you clicked to run tests")
-  }
 
   // Send code changes to the server
   useEffect(() => {
@@ -141,11 +142,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
             <option value='Java'>Java</option>
             <option value='C++'>C++</option>
           </select>
-          <button type='button' className='btn btn-primary me-2' onClick={handleCodeExecution}>
+          <button type='button' onClick={handleCodeExecution}>
             Run code
-          </button>
-          <button type='button' className='btn btn-primary me-2' onClick={handleTestExecution}>
-            Run tests
           </button>
         </div>
       </div>

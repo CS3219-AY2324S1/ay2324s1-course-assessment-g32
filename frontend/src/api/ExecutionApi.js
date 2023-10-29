@@ -33,8 +33,8 @@ const executePython = async (codeObject) => {
   try {
     console.log("posting python in api")
     const response = await axiosExecution.post('/execute-python', codeObject, getConfig());
-    console.log(response.data.message)
-    return response.data.message;
+    console.log(response.data.output)
+    return response.data.output;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
