@@ -20,6 +20,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/user', userRoutes);
+app.listen(env.USER_PORT, () => {
+  logger.log(`Running on port: ${env.USER_PORT}`);
+});
 
 const checkMySqlConnection = async () => {
   const pool = mysql.createPool({
@@ -32,8 +35,9 @@ const checkMySqlConnection = async () => {
   for (let i = 0; i < MAX_CONNECTION_ATTEMPTS; i++) {
     try {
       // Attempt to connect to MySQL
-      await pool.promise().query('SELECT 1');
+      await pool.promise().query('SELECT display_name FROM users LIMIT 1;');
       isMySqlRunning = true;
+      logger.logSuccess('Connected to MySQL database');
       break;
     } catch (err) {
       logger.error('MySQL connection error:', err);
@@ -41,14 +45,8 @@ const checkMySqlConnection = async () => {
     }
   }
 
-  if (isMySqlRunning) {
-    app.listen(env.USER_PORT, () => {
-      logger.log(`Running on port: ${env.USER_PORT}`);
-    });
-  } else {
-    logger.error(
-      `${env.USER_STORAGE_CONTAINER_NAME} is not running on ${env.mysqlCreds.port}`
-    );
+  if (!isMySqlRunning) {
+    logger.error('Could not connect to MySQL. Exiting ...');
     process.exit(1);
   }
 
