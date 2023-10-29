@@ -91,7 +91,7 @@ const authorizeMaintainer = async (req, res) => {
           .json({ error: 'Invalid JWT token' });
       }
 
-      if (!decodedJwtToken.isMaintainer) {
+      if (decodedJwtToken.isMaintainer !== 1) {
         logger.warn('Not Authorized (User not maintainer)');
         return res
           .status(Status.UNAUTHORIZED)

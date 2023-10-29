@@ -122,7 +122,15 @@ export const editQuestion = async (
       description: description,
       tags: tags,
     };
+<<<<<<< HEAD
     return await axiosQuestion.put('/edit', questionData, getConfig(jwtToken));
+=======
+    return await axios.put(
+      questionRootUrl + '/edit',
+      questionData,
+      getConfig(jwtToken)
+    );
+>>>>>>> dev
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {

@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { authorize } from '../api/AuthApi';
+import { authorize, authorizeMaintainer } from '../api/AuthApi';
 
 export const getCookie = () => {
   try {
@@ -16,14 +16,10 @@ export const removeCookie = () => {
 export const getUserInfo = async () => {
   try {
     const token = getCookie();
-    if (token) {
-      const response = await authorize(token);
-      return response;
-    } else {
-      return null;
-    }
+    const response = await authorize(token);
+    return response;
   } catch (error) {
-    return null;
+    return error;
   }
 };
 
@@ -38,13 +34,19 @@ export const getUserId = async () => {
   return response?.data?.userInfo?.userId;
 };
 
+export const getIsMaintainerForMaintainerPage = async () => {
+  try {
+    const token = getCookie();
+    const response = await authorizeMaintainer(token);
+    return response?.data?.userInfo?.isMaintainer ? true : false;
+  } catch (error) {
+    return false;
+  }
+};
+
 export const getIsMaintainer = async () => {
   const response = await getUserInfo();
-  if (!response?.data?.userInfo || !response?.data?.userInfo?.isMaintainer) {
-    return false;
-  } else {
-    return true;
-  }
+  return response?.data?.userInfo?.isMaintainer ? true : false;
 };
 
 export const parseDatetime = (datetime) => {
