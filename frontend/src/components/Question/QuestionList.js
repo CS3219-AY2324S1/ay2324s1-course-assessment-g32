@@ -47,13 +47,11 @@ const QuestionList = () => {
 
   const navigate = useNavigate();
   const handleRowClick = (id) => {
-    // TODO: Change Ques to Questions
-    navigate('/ques/' + id);
+    navigate('/question/' + id);
   };
 
   const handleNewQuestionClick = () => {
-    // TODO: Change Ques to Questions
-    navigate('/ques/new');
+    navigate('/question/new');
   };
 
   const RenderTags = (tags) => {

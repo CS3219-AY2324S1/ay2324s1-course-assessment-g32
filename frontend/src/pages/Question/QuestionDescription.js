@@ -47,7 +47,7 @@ const QuestionDescription = () => {
   };
 
   const handleEditClick = () => {
-    navigate('../edit/' + id);
+    navigate('./edit');
   };
 
   const handleDeleteClick = () => {
