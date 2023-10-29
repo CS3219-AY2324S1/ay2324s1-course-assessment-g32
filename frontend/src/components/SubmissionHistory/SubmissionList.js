@@ -9,6 +9,7 @@ import { getCookie, getUserId, parseDatetime } from '../../utils/helpers';
 import { errorHandler } from '../../utils/errors';
 import { getSubmissionHistory } from '../../api/HistoryApi';
 import { appendQuestionTitle } from '../../api/QuestionApi';
+import '../../css/SubmissionList.css'
 
 const SubmissionList = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -59,32 +60,36 @@ const SubmissionList = () => {
     </tr>
   ));
 
-  return isLoading ? (
-    <Spinner className='spinner' />
-  ) : (
+  return (
     <div className='container'>
-      <h1>Submission History</h1>
-      <table ref={tableRef} className='table table-hover table-striped'>
-        <thead className='table-dark'>
-          <tr>
-            <th scope='col' width='50'>
-              No.
-            </th>
-            <th scope='col' width='400'>
-              Question Title
-            </th>
-            <th scope='col' width='200'>
-              Time of Submission
-            </th>
-            <th scope='col' width='100'>
-              Language
-            </th>
-          </tr>
-        </thead>
-        <tbody key={submissionList} className='table-group-divider'>
-          {submissionList}
-        </tbody>
-      </table>
+      {isLoading ? (
+        <Spinner className='spinner-border' />
+      ) : (
+        <>
+          <h1>Submission History</h1>
+          <table ref={tableRef} className='table table-hover table-striped'>
+            <thead className='table-dark'>
+              <tr>
+                <th scope='col' width='50'>
+                  No.
+                </th>
+                <th scope='col' width='400'>
+                  Question Title
+                </th>
+                <th scope='col' width='200'>
+                  Time of Submission
+                </th>
+                <th scope='col' width='100'>
+                  Language
+                </th>
+              </tr>
+            </thead>
+            <tbody key={submissionList} className='table-group-divider'>
+              {submissionList}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   );
 };
