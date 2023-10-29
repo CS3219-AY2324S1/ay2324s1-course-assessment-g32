@@ -17,6 +17,7 @@ const Language = {
   PYTHON: 'Python',
   JAVA: 'Java',
   CPP: 'C++',
+  JS: 'Javascript',
 };
 
 const Event = {
