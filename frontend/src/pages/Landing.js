@@ -23,7 +23,7 @@ function Landing() {
       try {
         const userId = await getUserId();
         const response = await getUser(userId, getCookie());
-        setUser(response.username);
+        setUser(response.displayName);
       } catch (error) {
         errorHandler(error);
       }
