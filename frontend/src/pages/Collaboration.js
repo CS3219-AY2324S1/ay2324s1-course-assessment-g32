@@ -72,7 +72,7 @@ const Collaboration = () => {
 
   const submitAttempt = async () => {
     try {
-      const response = await attemptQuestion(jwtToken, userId, question._id, code, selectedLanguage);
+      const response = await attemptQuestion(jwtToken, userId, selectedQuestion._id, code, selectedLanguage);
       showSuccessToast(response.data.message);
     } catch (err) {
       errorHandler(err);
