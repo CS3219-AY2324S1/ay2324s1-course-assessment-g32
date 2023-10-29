@@ -8,11 +8,8 @@ const executePython = async (req, res) => {
 
     exec(`python -c "${pythonCode.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
       if (error) {
-        console.log("code giving error");
         res.json({ output: stderr });
       } else {
-        console.log("code executed");
-        console.log(stdout);
         res.json({ output: stdout });
       }
     });

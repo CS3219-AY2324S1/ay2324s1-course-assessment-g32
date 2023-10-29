@@ -9,8 +9,6 @@ const getConfig = () => {
 };
 
 export const executeCode = async (language, code) => {
-  console.log("in execution api")
-
   const codeObject = { code: code };
 
   switch (language) {
@@ -31,9 +29,7 @@ export const executeCode = async (language, code) => {
 
 const executePython = async (codeObject) => {
   try {
-    console.log("posting python in api")
     const response = await axiosExecution.post('/execute-python', codeObject, getConfig());
-    console.log(response.data.output)
     return response.data.output;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
