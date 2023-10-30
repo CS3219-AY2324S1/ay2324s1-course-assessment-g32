@@ -15,10 +15,12 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
 
+  // Update the code state when the user types
   const onUpdate = EditorView.updateListener.of((update) => {
     if (update.docChanged) {
       const updatedCode = update.state.doc.toString();
       setCode(updatedCode);
+      sessionStorage.setItem(`codeEditorContent_${roomId}`, updatedCode); // Store the code in session storage
     }
   });
 
@@ -35,16 +37,13 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
     }
   };
 
-  const handleLanguageChange = (e) => {
-    const selectedLanguage = e.target.value;
-    setLanguage(selectedLanguage);
-
-    // Send language changes to the server
-    socket.emit(Event.Collaboration.LANGUAGE_CHANGE, {
-      room: roomId,
-      updatedLanguage: selectedLanguage,
-    });
-  };
+  // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
+  useEffect(() => {
+    const storedContent = sessionStorage.getItem();
+    if (storedContent) {
+      setCode(storedContent);
+    }
+  }, []);
 
   // Send code changes to the server
   useEffect(() => {
@@ -53,6 +52,16 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
       updatedCode: code,
     });
   }, [code, roomId, socket]);
+
+  // Send language changes to the server
+  const handleLanguageChange = (e) => {
+    const selectedLanguage = e.target.value;
+    setLanguage(selectedLanguage);
+    socket.emit(Event.Collaboration.LANGUAGE_CHANGE, {
+      room: roomId,
+      updatedLanguage: selectedLanguage,
+    });
+  };
 
   // Receive code changes from the server
   useEffect(() => {
