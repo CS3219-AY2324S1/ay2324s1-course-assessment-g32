@@ -37,6 +37,16 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
     }
   };
 
+  // Send language changes to the server
+  const handleLanguageChange = (e) => {
+    const selectedLanguage = e.target.value;
+    setLanguage(selectedLanguage);
+    socket.emit(Event.Collaboration.LANGUAGE_CHANGE, {
+      room: roomId,
+      updatedLanguage: selectedLanguage,
+    });
+  };
+
   // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
   useEffect(() => {
     const storedContent = sessionStorage.getItem(`codeEditorContent_${roomId}`);
@@ -53,28 +63,21 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
     });
   }, [code, roomId, socket]);
 
-  // Send language changes to the server
-  const handleLanguageChange = (e) => {
-    const selectedLanguage = e.target.value;
-    setLanguage(selectedLanguage);
-    socket.emit(Event.Collaboration.LANGUAGE_CHANGE, {
-      room: roomId,
-      updatedLanguage: selectedLanguage,
-    });
-  };
-
   // Receive code changes from the server
   useEffect(() => {
     socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
+      if (updatedCode === code) return;
       if (viewRef.current) {
-        viewRef.current.dispatch({
-          // Replace the entire document with the updated code
-          changes: {
-            from: 0,
-            to: viewRef.current.state.doc.length,
-            insert: updatedCode,
-          },
-          selection: viewRef.current.state.selection, // Preserve the user's cursor position
+        const { state, dispatch } = viewRef.current;
+        const changes = state.changes({
+          from: 0,
+          to: state.doc.length,
+          insert: updatedCode,
+        });
+
+        dispatch({
+          changes, // Apply the changes to the editor
+          selection: state.selection, // Preserve the user's selection
           scrollIntoView: true, // Preserve the user's scroll position
         });
       }
@@ -84,11 +87,10 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   // Receive language changes from the server
   useEffect(() => {
     socket.on(Event.Collaboration.LANGUAGE_UPDATE, (updatedLanguage) => {
-      const languageSelect = document.getElementById('languageSelect');
-      if (languageSelect.value !== updatedLanguage) {
-        languageSelect.value = updatedLanguage;
-        setLanguage(updatedLanguage);
-      }
+      const languageSelect = document.getElementById('languageSelect').value;
+      if (updatedLanguage === languageSelect) return;
+      languageSelect.value = updatedLanguage;
+      setLanguage(updatedLanguage);
     });
   }, []);
 
