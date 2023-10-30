@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../../../components/Header.js';
-import Spinner from '../../../components/Spinner.js';
-import { Container, Grid } from '@mui/material';
-import { ViewUserTopPane } from '../../../components/User/ViewUser.js';
-import EditUser from '../../../components/User/EditUser.js';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Header from '../../../components/Header';
+import Spinner from '../../../components/Spinner';
+import { EditUser, ViewUserTopPane } from '../../../components/User';
+import { Container, Grid } from '@mui/material';
 
 const NormalEditUser = () => {
   const [user, setUser] = useState({});

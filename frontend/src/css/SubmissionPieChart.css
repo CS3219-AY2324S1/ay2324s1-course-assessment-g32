@@ -1,0 +1,24 @@
+.bar {
+  width: 40em;
+  margin: 1em;
+}
+
+.bold-text {
+  font-weight: bold;
+  margin: 0.5em;
+}
+
+.green-background {
+  --bs-bg-opacity: 0.1;
+  background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.orange-background {
+  --bs-bg-opacity: 0.1;
+  background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.red-background {
+  --bs-bg-opacity: 0.1;
+  background-color: rgba(var(--bs-danger-rgb), var(--bs-bg-opacity)) !important;
+}

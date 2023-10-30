@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
-import { getIsMaintainer } from '../utils/helpers.js';
+import { getIsMaintainerForMaintainerPage } from '../utils/helpers';
 
 const MaintainerRoute = () => {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ const MaintainerRoute = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const isMaintainer = await getIsMaintainer();
+      const isMaintainer = await getIsMaintainerForMaintainerPage();
       setIsAuthorized(isMaintainer);
       if (!isMaintainer) {
         navigate('/unauthorized');

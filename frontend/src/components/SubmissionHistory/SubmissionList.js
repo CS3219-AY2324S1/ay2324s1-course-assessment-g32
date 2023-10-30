@@ -4,14 +4,14 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import Spinner from '../../components/Spinner.js';
-import { getCookie, getUserId, parseDatetime } from '../../utils/helpers.js';
-import { errorHandler } from '../../utils/errors.js';
-import { getSubmissionHistory } from '../../api/HistoryApi.js';
-import { appendQuestionTitle } from '../../api/QuestionApi.js';
+import Spinner from '../../components/Spinner';
+import { getCookie, getUserId, parseDatetime } from '../../utils/helpers';
+import { errorHandler } from '../../utils/errors';
+import { getSubmissionHistory } from '../../api/HistoryApi';
+import { appendQuestionTitle } from '../../api/QuestionApi';
+import '../../css/SubmissionList.css'
 
 const SubmissionList = () => {
-  const [userId, setUserId] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
 
@@ -23,8 +23,7 @@ const SubmissionList = () => {
   const fetchData = async () => {
     try {
       const historyResponse = await getSubmissionHistory(await getCookie(), await getUserId());
-      const questionResponse = await appendQuestionTitle(await getCookie(), historyResponse.data.attempts);
-      setTableData(questionResponse.data.attemptsWithTitles);
+      setTableData(historyResponse.data.attemptsWithTitles);
       setIsLoading(false);
     } catch (error) {
       errorHandler(error);
@@ -53,35 +52,44 @@ const SubmissionList = () => {
   };
 
   const submissionList = tableData.map((submission, index) => (
-    <tr key={submission.id} onClick={() => handleRowClick(submission.id)}>
+    <tr key={submission.id} onClick={() => handleRowClick(submission._id)}>
       <th scope='row'>{index + 1}</th>
       <td>{submission.title}</td>
-      <td>{parseDatetime(submission.timeStamp)}</td>
+      <td>{parseDatetime(submission.createdAt)}</td>
+      <td>{submission.language}</td>
     </tr>
   ));
 
-  return isLoading ? (
-    <Spinner className='spinner' />
-  ) : (
+  return (
     <div className='container'>
-      <table ref={tableRef} className='table table-hover table-striped'>
-        <thead className='table-dark'>
-          <tr>
-            <th scope='col' width='50'>
-              No.
-            </th>
-            <th scope='col' width='400'>
-              Question Title
-            </th>
-            <th scope='col' width='400'>
-              Time of Submission
-            </th>
-          </tr>
-        </thead>
-        <tbody key={submissionList} className='table-group-divider'>
-          {submissionList}
-        </tbody>
-      </table>
+      {isLoading ? (
+        <Spinner className='spinner-border' />
+      ) : (
+        <>
+          <h1>Submission History</h1>
+          <table ref={tableRef} className='table table-hover table-striped'>
+            <thead className='table-dark'>
+              <tr>
+                <th scope='col' width='50'>
+                  No.
+                </th>
+                <th scope='col' width='400'>
+                  Question Title
+                </th>
+                <th scope='col' width='200'>
+                  Time of Submission
+                </th>
+                <th scope='col' width='100'>
+                  Language
+                </th>
+              </tr>
+            </thead>
+            <tbody key={submissionList} className='table-group-divider'>
+              {submissionList}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   );
 };

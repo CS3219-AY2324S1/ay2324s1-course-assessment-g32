@@ -1,11 +1,10 @@
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { getIsMaintainer, removeCookie } from '../utils/helpers.js';
+import { getIsMaintainer, removeCookie } from '../utils/helpers';
 
 function Header() {
   const navigate = useNavigate();
@@ -32,6 +31,7 @@ function Header() {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='me-auto'>
+              <Nav.Link href='/questions'>Questions</Nav.Link>
               <Nav.Link href="/submission-history">Submissions</Nav.Link>
               <NavDropdown title='User Setting' id='basic-nav-dropdown'>
                 {isMaintainerHeader ? (

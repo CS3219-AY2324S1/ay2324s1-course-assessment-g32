@@ -3,15 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import MatchingModal from '../MatchMaking/MatchingModal.js';
-import Spinner from '../Spinner.js';
-import { getQuestions } from '../../api/QuestionApi.js';
-import { errorHandler } from '../../utils/errors.js';
-import { getIsMaintainer, getCookie } from '../../utils/helpers.js';
+import Spinner from '../Spinner';
+import MatchingModal from '../MatchMaking/MatchingModal';
+import { getQuestions } from '../../api/QuestionApi';
+import { errorHandler } from '../../utils/errors';
+import { getIsMaintainer, getCookie } from '../../utils/helpers';
 
 const QuestionList = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isMatchingModalOpen, setMatchingModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [isMaintainer, setIsMaintainer] = React.useState(false);
   const tableRef = useRef(null);
@@ -48,15 +47,11 @@ const QuestionList = () => {
 
   const navigate = useNavigate();
   const handleRowClick = (id) => {
-    navigate('/landing/question/' + id);
+    navigate('/question/' + id);
   };
 
   const handleNewQuestionClick = () => {
-    navigate('/landing/new');
-  };
-
-  const handleToggleModal = () => {
-    setMatchingModalOpen(!isMatchingModalOpen);
+    navigate('/question/new');
   };
 
   const RenderTags = (tags) => {
@@ -91,7 +86,7 @@ const QuestionList = () => {
       <td>{RenderTags(question.tags)}</td>
       <td>
         <span className={`badge ${getComplexityColor(question?.complexity)}`}>
-          {question.complexity}{' '}
+          {question.complexity}
         </span>
       </td>
     </tr>
@@ -132,21 +127,6 @@ const QuestionList = () => {
           </button>
         ) : null}
       </div>
-      <div className='text-md-end'>
-        <button
-          type='button'
-          className='btn btn-primary'
-          onClick={handleToggleModal}
-        >
-          Match
-        </button>
-      </div>
-      {isMatchingModalOpen && (
-        <MatchingModal
-          isOpen={isMatchingModalOpen}
-          onClose={handleToggleModal}
-        />
-      )}
     </div>
   );
 };

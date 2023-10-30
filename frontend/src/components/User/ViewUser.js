@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Card, Box, Typography, Button } from '@mui/material';
 import Cookies from 'js-cookie';
-import { deleteUser } from '../../api/UserApi.js';
-import { showSuccessToast } from '../../utils/toast.js';
-import { DeregisterWindow } from '../ConfirmationWindow/ConfirmationWindows.js';
-import { errorHandler } from '../../utils/errors.js';
-import { getCookie } from '../../utils/helpers.js';
+import { DeregisterWindow } from '../ConfirmationWindows';
+import { deleteUser } from '../../api/UserApi';
+import { showSuccessToast } from '../../utils/toast';
+import { errorHandler } from '../../utils/errors';
+import { getCookie } from '../../utils/helpers';
+import { Grid, Card, Box, Typography, Button } from '@mui/material';
 
 export const ViewUserTopPane = ({ user }) => {
   const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
@@ -50,7 +50,7 @@ export const ViewUserTopPane = ({ user }) => {
         justifyContent='center'
         padding={2}>
         <Typography variant='h4' sx={{ fontWeight: 'bold' }}>
-          {user.username}
+          {user.displayName}
         </Typography>
         <Typography variant='string'>{user.email}</Typography>
         <Box m={2} justifyContent='center'>
@@ -81,7 +81,7 @@ export const ViewUserTopPane = ({ user }) => {
 export const ViewUserBottomPane = ({ user }) => {
   const navigate = useNavigate();
 
-  const handleEditUsernameClick = () => {
+  const handleEditDisplayNameClick = () => {
     navigate('/user-profile/edit/', { state: { user: user } });
   };
 
@@ -92,14 +92,14 @@ export const ViewUserBottomPane = ({ user }) => {
           <Grid container alignItems='center'>
             <Grid item xs={2}>
               <Typography variant='body1' sx={{ fontWeight: 'bold' }}>
-                Username
+                Display Name
               </Typography>
             </Grid>
             <Grid item xs={9}>
-              <Typography variant='string'>{user.username}</Typography>
+              <Typography variant='string'>{user.displayName}</Typography>
             </Grid>
             <Grid item xs={1}>
-              <Button variant='contained' onClick={handleEditUsernameClick}>
+              <Button variant='contained' onClick={handleEditDisplayNameClick}>
                 Edit
               </Button>
             </Grid>
