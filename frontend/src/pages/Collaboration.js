@@ -36,8 +36,8 @@ const Collaboration = () => {
   }, []);
 
   const handleLeaveRoom = () => {
-    socket.emit(Event.LEAVE_ROOM, { room: roomId, host: hostId });
     sessionStorage.removeItem(`codeEditorContent_${roomId}`); // Remove CodeMirror content from session storage when leaving the room
+    socket.emit(Event.LEAVE_ROOM, { room: roomId, host: hostId });
     navigate('/landing');
   };
 
@@ -62,7 +62,7 @@ const Collaboration = () => {
         setSelectedQuestion(updatedQuestion);
       }
     });
-  }, [selectedQuestion]);
+  }, [selectedQuestion, socket]);
 
   return (
     <div>

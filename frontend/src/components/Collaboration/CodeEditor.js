@@ -39,7 +39,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
 
   // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
   useEffect(() => {
-    const storedContent = sessionStorage.getItem();
+    const storedContent = sessionStorage.getItem(`codeEditorContent_${roomId}`);
     if (storedContent) {
       setCode(storedContent);
     }
