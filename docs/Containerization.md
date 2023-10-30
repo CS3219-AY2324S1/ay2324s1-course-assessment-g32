@@ -145,3 +145,6 @@ to stop and remove the containers of the micro-services.
 ```shell
 docker compose down
 ```
+
+---
+[Go to README](../README.md)

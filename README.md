@@ -1,65 +1,12 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
 
-# Containerization (Assignment 4)
+# Application Installation and Setup
 
-For instruction to start via Docker, see [here](docs/Containerization.md).
+We have 2 modes of running:
+- [Running Locally](docs/LocalHosting.md)
+- [Running via Docker](docs/Containerization.md)
 
-# Setup (Local)
-
-## Software Requirements
-
-Download and install these software if you do not have them locally.
-
-- [NodeJS](https://nodejs.org/en/download)
-- [MySQL](https://dev.mysql.com/downloads/mysql/)
-
-## Internet Access
-
-Ensure that you are connected to the internet.
-
-> Note!\
-> Do **not** connect to NUS Wifi/Network.\
-> The application would be unable to connect to MongoDB Atlas.
-
-## Setup MySQL locally
-
-Follow the steps in [Setup MySQL locally](docs/SetupLocalMySql.md).
-
-Note the root password used, as it would be needed in the later parts.
-
-## Setup environment variables
-
-1. At the root directory, open a terminal
-2. Duplicate `template.env` as `.env`
-   ```
-   cp template.env .env
-   ```
-3. Open `.env` file
-4. Fill up the MYSQL root password
-   (previously configured when installing MySQL)  
-   - Example: if your root password is "password1234",
-     `MYSQL_ROOT_PASSWORD=password1234`
-5. Fill up a JWT token password
-   (for generating and decoding JWT tokens)  
-   - Example: if you want to set the password to "password",
-     `JWT_SECRET_KEY=password`
-
-## Install NodeJS packages
-
-```
-npm run install-all
-```
-
-# Start Application (Local)
-
-Ensure that MySQL Server service has started.
-(How to check? Click [here](docs/SetupLocalMySql.md#start-mysql-service).)
-
-Start all services using the following commands:
-
-```
-npm run start-all
-```
+> For Assignment 4, please refer to _Running via Docker_ 
 
 # Resources for Developer / Tester
 
@@ -74,7 +21,7 @@ For development, you may also want to install:
 ## Documentation
 
 - [API Endpoints](docs/ApiEndpoints.md)
-- Assignment 4: [Containerization](docs/Containerization.md)
+- [Local MySQL Server Setup](docs/LocalMySqlSetup.md)
 
 ## Micro-services
 
