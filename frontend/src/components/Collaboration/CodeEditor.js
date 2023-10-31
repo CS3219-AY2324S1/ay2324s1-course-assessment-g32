@@ -9,6 +9,7 @@ import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { executeCode } from '../../api/ExecutionApi';
 import { Language, Event } from '../../constants';
+import { errorHandler } from '../../utils/errors';
 import '../../css/CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
@@ -63,7 +64,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
         updatedResult: result,
       });
     } catch (err) {
-      throw err;
+      errorHandler(err);
     }
   };
 

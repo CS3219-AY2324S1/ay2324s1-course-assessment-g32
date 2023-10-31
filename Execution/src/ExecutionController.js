@@ -1,18 +1,30 @@
 const { PythonShell } = require('python-shell');
+const JSCPP = require('JSCPP');
 const { exec } = require('child_process');
 
 // execute python
 const executePython = async (req, res) => {
+  // Set a maximum execution time (in milliseconds)
+  const maxExecutionTime = 5000; // 5 seconds
+
   try {
     const pythonCode = req.body.code;
 
-    exec(`python -c "${pythonCode.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
+    const scriptProcess = exec(`python -c "${pythonCode.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
       if (error) {
         res.json({ output: stderr });
       } else {
         res.json({ output: stdout });
       }
     });
+
+    // Set a timeout to kill the script if it runs for too long
+    const timeout = setTimeout(() => {
+      console.error('Python script execution timed out. Killing the script...');
+      scriptProcess.kill();
+      res.json({ output: "TimeoutError" });
+    }, maxExecutionTime);
+
   } catch (err) {
     console.log(err);
   };
@@ -32,6 +44,21 @@ const executeJava = async (req, res) => {
 const executeCpp = async (req, res) => {
   try {
     console.log(req.body)
+
+    var code = "#include <iostream>"
+            + "using namespace std;"
+            + "int main() {"
+            + "    int a;"
+            + "    cin >> a;"
+            + "    cout << a << endl;"
+            + "    return 0;"
+            + "}"
+    ;
+
+    var input = "4321";
+    var exitcode = JSCPP.run(code, input);
+    console.info("program exited with code " + exitcode);
+
     res.json({ message: "cpp code executed"})
   } catch (err) {
     throw err;
