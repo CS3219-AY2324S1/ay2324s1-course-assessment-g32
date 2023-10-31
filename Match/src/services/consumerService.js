@@ -1,5 +1,11 @@
 const { v4: uuidv4 } = require('uuid');
 const { TIMEOUT } = require('../constants');
+const logger = require('../Log');
+
+logger.register({
+  serviceName: 'Match Service',
+  logLevel: logger.LOG_LEVELS.all,
+});
 
 const waitingHosts = new Map();
 
@@ -27,6 +33,8 @@ const handleExitRequest = (request, channel, queueName, message) => {
   if (waitingHost !== undefined) {
     const waitingHostRequest = JSON.parse(waitingHost.content.toString());
     if (waitingHostRequest.sessionID === request.sessionID) {
+      logger.log(`Host ${waitingHostRequest.id} exited the ${queueName} queue`);
+
       const response = { message: `You have exited the queue` };
       channel.sendToQueue(waitingHostRequest.replyTo, bufferData(response), {
         correlationId: waitingHostRequest.correlationId,
@@ -40,6 +48,8 @@ const handleExitRequest = (request, channel, queueName, message) => {
 
 // Handle request when the host in current queue times out
 const handleTimeoutRequest = (request, channel, message) => {
+  logger.log(`Host ${request.id} timed out`);
+
   const response = { message: `You have timed out!` };
   channel.sendToQueue(request.replyTo, bufferData(response), {
     correlationId: request.correlationId,
@@ -55,6 +65,8 @@ const checkMultipleTabsRequest = (request, channel, queueName) => {
     const waitingHostResponse = {
       message: `You are waiting in multiple tabs!`,
     };
+    logger.log(`Host ${waitingHostRequest.id} is waiting in multiple tabs`);
+
     // Send the response to waiting host
     channel.sendToQueue(
       waitingHostRequest.replyTo,
@@ -71,6 +83,8 @@ const checkMultipleTabsRequest = (request, channel, queueName) => {
 // Handle request when 2 unique users are matched
 const handleMatchedRequest = (request, channel, queueName, message, waitingHost) => {
   const waitingHostRequest = JSON.parse(waitingHost.content.toString());
+  logger.log(`Matched Host ${waitingHostRequest.id} with Host ${request.id}`);
+
   const roomId = generateUniqueRoomId();
   const response = {
     message: `You found a match!`,
@@ -108,6 +122,8 @@ const handleNoMatchRequest = (request, channel, queueName, message) => {
 
     // Ensure that there is no match before sending the timeout response
     if (waitingHostRequest.correlationId === request.correlationId) {
+      logger.log(`Host ${waitingHostRequest.id} timed out`);
+
       const response = { message: `You have timed out!` };
       channel.sendToQueue(request.replyTo, bufferData(response), {
         correlationId: request.correlationId,
