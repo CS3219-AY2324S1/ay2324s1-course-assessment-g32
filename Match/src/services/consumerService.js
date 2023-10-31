@@ -17,6 +17,10 @@ const generateUniqueRoomId = () => {
   return uuidv4();
 };
 
+const bufferData = (data) => {
+  return Buffer.from(JSON.stringify(data));
+};
+
 // Handle request when the host exits the queue
 const handleExitRequest = (request, channel, queueName, message) => {
   const waitingHost = waitingHosts.get(queueName);
@@ -24,13 +28,9 @@ const handleExitRequest = (request, channel, queueName, message) => {
     const waitingHostRequest = JSON.parse(waitingHost.content.toString());
     if (waitingHostRequest.sessionID === request.sessionID) {
       const response = { message: `You have exited the queue` };
-      channel.sendToQueue(
-        waitingHostRequest.replyTo,
-        Buffer.from(JSON.stringify(response)),
-        {
-          correlationId: waitingHostRequest.correlationId,
-        }
-      );
+      channel.sendToQueue(waitingHostRequest.replyTo, bufferData(response), {
+        correlationId: waitingHostRequest.correlationId,
+      });
       channel.ack(waitingHost);
       waitingHosts.set(queueName, undefined);
     }
@@ -41,7 +41,7 @@ const handleExitRequest = (request, channel, queueName, message) => {
 // Handle request when the host in current queue times out
 const handleTimeoutRequest = (request, channel, message) => {
   const response = { message: `You have timed out!` };
-  channel.sendToQueue(request.replyTo, Buffer.from(JSON.stringify(response)), {
+  channel.sendToQueue(request.replyTo, bufferData(response), {
     correlationId: request.correlationId,
   });
   channel.ack(message);
@@ -52,11 +52,13 @@ const checkMultipleTabsRequest = (request, channel, queueName) => {
   const waitingHost = waitingHosts.get(queueName);
   if (waitingHost !== undefined && JSON.parse(waitingHost.content.toString()).id === request.id) {
     const waitingHostRequest = JSON.parse(waitingHost.content.toString());
-    const waitingHostResponse = { message: `You are waiting in multiple tabs!`, };
+    const waitingHostResponse = {
+      message: `You are waiting in multiple tabs!`,
+    };
     // Send the response to waiting host
     channel.sendToQueue(
       waitingHostRequest.replyTo,
-      Buffer.from(JSON.stringify(waitingHostResponse)),
+      bufferData(waitingHostResponse),
       {
         correlationId: waitingHostRequest.correlationId,
       }
@@ -70,37 +72,21 @@ const checkMultipleTabsRequest = (request, channel, queueName) => {
 const handleMatchedRequest = (request, channel, queueName, message, waitingHost) => {
   const waitingHostRequest = JSON.parse(waitingHost.content.toString());
   const roomId = generateUniqueRoomId();
-  const waitingHostResponse = {
-    message: `You have been matched with host ${request.id} in ${queueName} room!`,
+  const response = {
+    message: `You found a match!`,
     isMatch: true,
     roomId: roomId,
-    hostId: waitingHostRequest.id,
-    matchedHostId: request.id,
   };
-  // Send the match response to the waiting host
-  channel.sendToQueue(
-    waitingHostRequest.replyTo,
-    Buffer.from(JSON.stringify(waitingHostResponse)),
-    {
-      correlationId: waitingHostRequest.correlationId,
-    }
-  );
 
-  const incomingHostResponse = {
-    message: `You have been matched with host ${waitingHostRequest.id} in ${queueName} room!`,
-    isMatch: true,
-    roomId: roomId,
-    hostId: request.id,
-    matchedHostId: waitingHostRequest.id,
-  };
+  // Send the match response to the waiting host
+  channel.sendToQueue(waitingHostRequest.replyTo, bufferData(response), {
+    correlationId: waitingHostRequest.correlationId,
+  });
+
   // Send the match response to the incoming host
-  channel.sendToQueue(
-    request.replyTo,
-    Buffer.from(JSON.stringify(incomingHostResponse)),
-    {
-      correlationId: request.correlationId,
-    }
-  );
+  channel.sendToQueue(request.replyTo, bufferData(response), {
+    correlationId: request.correlationId,
+  });
 
   // Acknowledge requests
   channel.ack(waitingHost);
@@ -123,13 +109,9 @@ const handleNoMatchRequest = (request, channel, queueName, message) => {
     // Ensure that there is no match before sending the timeout response
     if (waitingHostRequest.correlationId === request.correlationId) {
       const response = { message: `You have timed out!` };
-      channel.sendToQueue(
-        request.replyTo,
-        Buffer.from(JSON.stringify(response)),
-        {
-          correlationId: request.correlationId,
-        }
-      );
+      channel.sendToQueue(request.replyTo, bufferData(response), {
+        correlationId: request.correlationId,
+      });
 
       channel.ack(waitingHost);
       waitingHosts.set(queueName, undefined);
