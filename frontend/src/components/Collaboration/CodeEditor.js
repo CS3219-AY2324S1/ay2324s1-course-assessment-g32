@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
+import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
@@ -93,6 +94,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
           className='h-full'
           value={code}
           onChange={onChange}
+          theme={vscodeDark}
           autoFocus={true}
           height='100%'
           placeholder="print('Hello world')"
