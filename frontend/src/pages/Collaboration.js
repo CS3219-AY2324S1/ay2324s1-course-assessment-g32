@@ -5,7 +5,7 @@ import { Chat, CodeEditor, QuestionPanel } from '../components/Collaboration';
 import { QuestionContent } from '../components/Question';
 import { getRandomQuestionByCriteria } from '../api/QuestionApi';
 import { showFailureToast } from '../utils/toast';
-import { Event } from '../constants';
+import { Status, Event } from '../constants';
 import env from '../loadEnvironment';
 import '../css/Collaboration.css';
 
@@ -36,7 +36,14 @@ const Collaboration = () => {
 
       if (!question) {
         // If the question is not in sessionStorage, generate and store it
-        question = await getRandomQuestionByCriteria(complexity, jwt);
+        try {
+          question = await getRandomQuestionByCriteria(complexity, jwt);
+        } catch (error) {
+          if (error.response.status === Status.UNAUTHORIZED) {
+            navigate('/unauthorized');
+          }
+        }
+
         sessionStorage.setItem(`question_${roomId}`, JSON.stringify(question));
         socket.emit(Event.Question.QUESTION_CHANGE, {
           room: roomId,
