@@ -57,16 +57,18 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
 
   useEffect(() => {
     // Receive code changes from the server
-    socket.on(Event.Collaboration.CODE_UPDATE, (update) => {
-      if (update === code) return;
-      setCode(update);
+    socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
+      if (updatedCode !== code) {
+        setCode(updatedCode);
+      }
     });
     // Receive language changes from the server
     socket.on(Event.Collaboration.LANGUAGE_UPDATE, (updatedLanguage) => {
-      const languageSelect = document.getElementById('languageSelect').value;
-      if (updatedLanguage === languageSelect) return;
-      languageSelect.value = updatedLanguage;
-      setLanguage(updatedLanguage);
+      const languageSelect = document.getElementById('languageSelect');
+      if (updatedLanguage !== languageSelect.value) {
+        languageSelect.value = updatedLanguage;
+        setLanguage(updatedLanguage);
+      }
     });
   }, [socket]);
 
