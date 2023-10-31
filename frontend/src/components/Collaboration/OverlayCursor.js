@@ -2,17 +2,18 @@ import React from 'react';
 import cursor from '../../images/cursor.png';
 import '../../css/OverlayCursor.css';
 
-const OverlayCursor = ({ position }) => {
+const OverlayCursor = ({ opponent }) => {
   const overlayStyle = {
     position: 'fixed',
-    top: position.y,
-    left: position.x,
+    top: opponent.position.y,
+    left: opponent.position.x,
     pointerEvents: 'none',
   };
 
   return (
     <div style={overlayStyle}>
       <img src={cursor} alt="cursor" className='cursor' />
+      <div className='opponent-name'>{opponent.user}</div>
     </div>
   );
 };

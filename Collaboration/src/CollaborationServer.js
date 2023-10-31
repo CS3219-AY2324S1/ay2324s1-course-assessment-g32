@@ -88,8 +88,9 @@ try {
     socket.on(Event.Collaboration.MOUSE_POSITION, (data) => {
       const room = data.room;
       const user = data.user;
+      const jwt = data.jwt;
       const mousePosition = data.position;
-      const message = {user: user, position: mousePosition};
+      const message = {user: user, jwt: jwt, position: mousePosition};
 
       io.to(room).emit(Event.Collaboration.MOUSE_POSITION, message);
     });

@@ -125,6 +125,8 @@ const Collaboration = () => {
               socket={socket}
               roomId={roomId}
               selectedLanguage={language}
+              displayName={displayName}
+              jwt={jwt}
             />
             <Chat socket={socket} roomId={roomId} user={displayName} />
           </div>

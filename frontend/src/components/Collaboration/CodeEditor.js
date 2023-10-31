@@ -9,13 +9,13 @@ import { Language, Event } from '../../constants';
 import OverlayCursor from './OverlayCursor';
 import '../../css/CodeEditor.css';
 
-const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
+const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [scrollTop, setScrollTop] = useState(0);
-  const [opponent, setOpponent] = useState({ x: 0, y: 0 });
-  const [absoluteOpponent, setAbsoluteOpponent] = useState({ x: 0, y: 0 });
+  const [opponent, setOpponent] = useState({ user: 'hello', position: { x: 0, y: 0 } });
+  const [absoluteOpponent, setAbsoluteOpponent] = useState({ user: 'hello', position: { x: 0, y: 0 } });
   const divisionRef = useRef(null);
 
   const isWithinWindow = (position) => {
@@ -34,7 +34,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
       const relativePosition = getRelativePosition();
       socket.emit(Event.Collaboration.MOUSE_POSITION, {
         room: roomId,
-        user: 'hello',
+        user: displayName,
+        jwt: jwt,
         position: relativePosition,
       });
     }
@@ -106,7 +107,14 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
   useEffect(() => {
     if (divisionRef.current) {
       const { top, left } = divisionRef.current.getBoundingClientRect();
-      setAbsoluteOpponent({ x: opponent.x + left, y: opponent.y + top - scrollTop });
+      const newOpponentCursor = {
+        user: opponent.user,
+        position: {
+          x: opponent.position.x + left,
+          y: opponent.position.y + top - scrollTop,
+        },
+      }
+      setAbsoluteOpponent(newOpponentCursor);
     }
   }, [scrollTop, opponent]);
 
@@ -135,7 +143,9 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
     });
     // Receive mouse position changes from the server
     socket.on(Event.Collaboration.MOUSE_POSITION, (data) => {
-      setOpponent(data.position);
+      if (data.jwt !== jwt) {
+        setOpponent(data);
+      }
     });
   }, [socket]);
 
@@ -166,7 +176,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
           placeholder='Enter your code here...'
           extensions={[getLanguageExtension(language)]}
         />
-        {isWithinWindow(absoluteOpponent) && <OverlayCursor position={absoluteOpponent} className='h-full'/>}
+        {isWithinWindow(absoluteOpponent.position) && <OverlayCursor opponent={absoluteOpponent} className='h-full'/>}
       </div>
     </div>
   );
