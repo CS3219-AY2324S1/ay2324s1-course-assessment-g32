@@ -16,11 +16,8 @@ const Collaboration = () => {
   const navigate = useNavigate();
 
   const socket = io(env.COLLAB_URL);
-  const roomId = location.state?.roomId;
-  const hostId = location.state?.hostId;
-  const question = location.state?.question.question;
-  const complexity = location.state?.question.complexity;
-  const language = location.state?.question.language;
+  const { roomId, displayName, questionData } = location.state || {};
+  const { question, complexity, language } = questionData || {};
 
   useEffect(() => {
     // If roomId is not present in the location state, redirect to landing page
@@ -30,7 +27,7 @@ const Collaboration = () => {
     }
 
     // Join the Socket.io room when the component mounts
-    socket.emit(Event.JOIN_ROOM, { room: roomId, host: hostId });
+    socket.emit(Event.JOIN_ROOM, { room: roomId, user: displayName });
     socket.emit(Event.Question.QUESTION_CHANGE, {
       room: roomId,
       question: question,
@@ -39,7 +36,7 @@ const Collaboration = () => {
 
   const handleLeaveRoom = () => {
     sessionStorage.removeItem(`codeEditorContent_${roomId}`); // Remove CodeMirror content from session storage when leaving the room
-    socket.emit(Event.LEAVE_ROOM, { room: roomId, host: hostId });
+    socket.emit(Event.LEAVE_ROOM, { room: roomId, user: displayName });
     navigate('/landing');
   };
 
@@ -102,7 +99,7 @@ const Collaboration = () => {
               roomId={roomId}
               selectedLanguage={language}
             />
-            <Chat socket={socket} roomId={roomId} host={hostId} />
+            <Chat socket={socket} roomId={roomId} user={displayName} />
           </div>
         </div>
       </div>

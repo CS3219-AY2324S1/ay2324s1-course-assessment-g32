@@ -30,25 +30,25 @@ try {
     // Handle room joining
     socket.on(Event.JOIN_ROOM, (data) => {
       const room = data.room;
-      const host = data.host;
+      const user = data.user;
 
       socket.join(room);
-      logger.log(`${host} joined room: ${room}`);
+      logger.log(`${user} joined room: ${room}`);
 
-      const message = { text: `${host} joined room` };
+      const message = { text: `${user} joined room` };
       io.to(room).emit(Event.Communication.CHAT_RECEIVE, message);
     });
 
     // Handle room leaving
     socket.on(Event.LEAVE_ROOM, (data) => {
       const room = data.room;
-      const host = data.host;
+      const user = data.user;
 
       socket.leave(room);
       socket.disconnect(true);
-      logger.log(`${host} left room: ${room}`);
+      logger.log(`${user} left room: ${room}`);
 
-      const message = { text: `${host} left room` };
+      const message = { text: `${user} left room` };
       io.to(room).emit(Event.Communication.CHAT_RECEIVE, message);
     });
 
