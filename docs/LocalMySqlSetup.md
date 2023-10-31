@@ -7,7 +7,7 @@
   - Port should be `3306`
   - Note the root password that you set (you will need it later)
 
-For macOS, additonal steps (to set the PATH) might be required to be able to use `mysql` in the terminal. 
+For macOS, additonal steps (to set the PATH) might be required to be able to use `mysql` in the terminal.
 You can follow the steps mentioned in this [video tutorial](https://youtu.be/-BDbOOY9jsc?t=253).
 
 ## Start MySQL Service
@@ -21,8 +21,8 @@ For Windows OS,
 5. In the Services application, search for the MySQL Service
    (eg. _MYSQL81_ for MySQL 8.1)
 6. Check _Status_ of the service
-    - Running: OK, no further action needed
-    - Blank: Need to be started, do the next step
+   - Running: OK, no further action needed
+   - Blank: Need to be started, do the next step
 7. Right click on the MySQL Service and press `Start`
 
 For macOS,
@@ -44,13 +44,13 @@ For macOS,
 
 1. Open a terminal
 2. Type `mysql -u root -p` and press `Enter`
-3. Enter your root password (which you set during installation) 
+3. Enter your root password (which you set during installation)
 
 ## Setup required database
 
 1. Run the SQL statements in `./User/initdb/01-schema.sql`
 2. Optionally, if you want sample accounts to use, run SQL statements
-   in `./User/initdb/03-sample-accts.sql` 
+   in `./User/initdb/03-sample-accts.sql`
 
 > Quick Tip!\
 > In the terminal, you can quickly run the SQL statements by doing\
@@ -59,4 +59,5 @@ For macOS,
 > `source C:\Users\User\PeerPrep\User\initdb\01-schema.sql`
 
 ---
+
 [Go to README](../README.md)

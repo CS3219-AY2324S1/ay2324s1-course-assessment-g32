@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CountdownTimer from '../CountdownTimer';
 import { joinQueue, exitQueue } from '../../api/MatchApi';
-import { getRandomQuestionByCriteria } from '../../api/QuestionApi';
+import { getUser } from '../../api/UserApi';
+import { getCookie, getUserId } from '../../utils/helpers';
 import { errorHandler } from '../../utils/errors';
 import { showFailureToast } from '../../utils/toast';
 
@@ -23,19 +24,21 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
         const isMatch = reply.data.response.isMatch;
         if (isMatch) {
           const roomId = reply.data.response.roomId;
-          const hostId = reply.data.response.hostId;
-          const matchedHostId = reply.data.response.matchedHostId;
-          const question = await getRandomQuestionByCriteria(complexity, jwt);
+          const userId = await getUserId();
+          const user = await getUser(userId, getCookie());
+          const displayName = user.displayName;
+
+          const questionData = {
+            complexity: complexity,
+            language: language,
+          };
+
           navigate('/collaboration', {
             state: {
               roomId,
-              hostId,
-              matchedHostId,
-              question: {
-                question: question,
-                complexity: complexity,
-                language: language,
-              },
+              displayName,
+              questionData,
+              jwt,
             },
           });
         }

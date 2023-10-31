@@ -1,6 +1,7 @@
 # Containerization
 
-Docker to containerize our various micro-services which serves our combined application.
+Docker is used to containerize our various micro-services
+which serves our combined application.
 
 We have various micro-services including:
 * MySQL Database
@@ -17,14 +18,13 @@ We have various micro-services including:
 
 # Requirements
 
-## Network
+## Internet Access
 
-Internet connection is required.
+Ensure that you are connected to the internet.
 
-> **[ IMPORTANT! ]**\
-> Do _not_ test while on NUS grounds or connected
-> (either directly or indirectly) to NUS Wifi.
-> (NUS networks blocks MongoDB which is required by our application.)
+> Note!\
+> Do **not** connect to NUS Wifi/Network.\
+> The application would be unable to connect to MongoDB Atlas.
 
 ## Software
 
@@ -143,3 +143,6 @@ to stop and remove the containers of the micro-services.
 ```shell
 docker compose down
 ```
+
+---
+[Go to README](../README.md)
