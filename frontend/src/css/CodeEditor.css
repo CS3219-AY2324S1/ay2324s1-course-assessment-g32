@@ -6,7 +6,6 @@
   border-radius: 5px;
   max-height: 60%;
   overflow: auto;
-  overflow-x: hidden;
 }
 
 .editor-nav-bar {

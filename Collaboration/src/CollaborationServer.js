@@ -84,6 +84,16 @@ try {
       io.to(room).emit(Event.Question.QUESTION_UPDATE, question);
     });
 
+    // Handle mouse position changes
+    socket.on(Event.Collaboration.MOUSE_POSITION, (data) => {
+      const room = data.room;
+      const user = data.user;
+      const mousePosition = data.position;
+      const message = {user: user, position: mousePosition};
+
+      io.to(room).emit(Event.Collaboration.MOUSE_POSITION, message);
+    });
+
     // Handle disconnects
     socket.on(Event.DISCONNECT, () => {
       logger.log('A user disconnected');
