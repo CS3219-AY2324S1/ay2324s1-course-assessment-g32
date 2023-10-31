@@ -3,9 +3,9 @@ import Spinner from '../Spinner';
 import { getQuestionsByComplexity, getQuestionDetails } from '../../api/QuestionApi';
 import { errorHandler } from '../../utils/errors';
 import { getCookie } from '../../utils/helpers';
-import '../../css/SlidingPanel.css';
+import '../../css/QuestionPanel.css';
 
-const SlidingPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
+const QuestionPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [questions, setQuestions] = useState([]);
 
@@ -95,4 +95,4 @@ const SlidingPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
   );
 };
 
-export default SlidingPanel;
+export default QuestionPanel;

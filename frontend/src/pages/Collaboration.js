@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import { Chat, CodeEditor, SlidingPanel } from '../components/Collaboration';
+import { Chat, CodeEditor, QuestionPanel } from '../components/Collaboration';
 import { QuestionContent } from '../components/Question';
 import { getRandomQuestionByCriteria } from '../api/QuestionApi';
 import { showFailureToast } from '../utils/toast';
@@ -124,7 +124,7 @@ const Collaboration = () => {
         </div>
       </div>
       {isPanelOpen && (
-        <SlidingPanel
+        <QuestionPanel
           isOpen={isPanelOpen}
           onClose={handleClosePanel}
           onChangeQuestion={handleQuestionChange}
