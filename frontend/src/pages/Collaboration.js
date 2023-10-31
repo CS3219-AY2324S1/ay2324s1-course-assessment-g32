@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { Chat, CodeEditor, SlidingPanel } from '../components/Collaboration';
 import { QuestionContent } from '../components/Question';
+import { getRandomQuestionByCriteria } from '../api/QuestionApi';
 import { showFailureToast } from '../utils/toast';
 import { Event } from '../constants';
 import env from '../loadEnvironment';
@@ -10,28 +11,41 @@ import '../css/Collaboration.css';
 
 const Collaboration = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [selectedQuestion, setSelectedQuestion] = useState({});
 
   const location = useLocation();
   const navigate = useNavigate();
 
   const socket = io(env.COLLAB_URL);
-  const { roomId, displayName, questionData } = location.state || {};
-  const { question, complexity, language } = questionData || {};
+  const { roomId, displayName, questionData, jwt } = location.state || {};
+  const { complexity, language } = questionData || {};
 
   useEffect(() => {
-    // If roomId is not present in the location state, redirect to landing page
-    if (!roomId) {
-      showFailureToast('Invalid Room');
-      navigate('/landing');
-    }
+    const initializeRoom = async () => {
+      // If roomId is not present in the location state, redirect to landing page
+      if (!roomId) {
+        showFailureToast('Invalid Room');
+        navigate('/landing');
+      }
 
-    // Join the Socket.io room when the component mounts
-    socket.emit(Event.JOIN_ROOM, { room: roomId, user: displayName });
-    socket.emit(Event.Question.QUESTION_CHANGE, {
-      room: roomId,
-      question: question,
-    });
+      // Join the Socket.io room when the component mounts
+      socket.emit(Event.JOIN_ROOM, { room: roomId, user: displayName });
+
+      const storedQuestion = sessionStorage.getItem(`question_${roomId}`);
+      let question = JSON.parse(storedQuestion);
+
+      if (!question) {
+        // If the question is not in sessionStorage, generate and store it
+        question = await getRandomQuestionByCriteria(complexity, jwt);
+        sessionStorage.setItem(`question_${roomId}`, JSON.stringify(question));
+        socket.emit(Event.Question.QUESTION_CHANGE, {
+          room: roomId,
+          question: question,
+        });
+      }
+      setSelectedQuestion(question);
+    };
+    initializeRoom();
   }, []);
 
   const handleLeaveRoom = () => {
@@ -50,21 +64,27 @@ const Collaboration = () => {
 
   // Send question changes to the server
   const handleQuestionChange = (question) => {
-    setSelectedQuestion(question);
-    socket.emit(Event.Question.QUESTION_CHANGE, {
-      room: roomId,
-      question: question,
-    });
+    if (question !== selectedQuestion) {
+      setSelectedQuestion(question);
+      socket.emit(Event.Question.QUESTION_CHANGE, {
+        room: roomId,
+        question: question,
+      });
+    }
   };
 
   // Receive question changes from the server
   useEffect(() => {
     socket.on(Event.Question.QUESTION_UPDATE, (updatedQuestion) => {
-      if (selectedQuestion !== updatedQuestion) {
+      if (updatedQuestion !== selectedQuestion) {
         setSelectedQuestion(updatedQuestion);
+        sessionStorage.setItem(
+          `question_${roomId}`,
+          JSON.stringify(updatedQuestion)
+        );
       }
     });
-  }, [selectedQuestion, socket]);
+  }, [socket, selectedQuestion]);
 
   return (
     <div>

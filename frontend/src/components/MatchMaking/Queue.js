@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import CountdownTimer from '../CountdownTimer';
 import { joinQueue, exitQueue } from '../../api/MatchApi';
 import { getUser } from '../../api/UserApi';
-import { getRandomQuestionByCriteria } from '../../api/QuestionApi';
 import { getCookie, getUserId } from '../../utils/helpers';
 import { errorHandler } from '../../utils/errors';
 import { showFailureToast } from '../../utils/toast';
@@ -28,10 +27,8 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
           const userId = await getUserId();
           const user = await getUser(userId, getCookie());
           const displayName = user.displayName;
-          const question = await getRandomQuestionByCriteria(complexity, jwt);
 
           const questionData = {
-            question: question,
             complexity: complexity,
             language: language,
           };
@@ -41,6 +38,7 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
               roomId,
               displayName,
               questionData,
+              jwt,
             },
           });
         }
