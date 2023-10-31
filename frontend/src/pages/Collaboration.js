@@ -18,21 +18,23 @@ const Collaboration = () => {
   const socket = io(env.COLLAB_URL);
   const roomId = location.state?.roomId;
   const hostId = location.state?.hostId;
-  const matchedHostId = location.state?.matchedHostId;
   const question = location.state?.question.question;
   const complexity = location.state?.question.complexity;
   const language = location.state?.question.language;
 
   useEffect(() => {
-
     // If roomId is not present in the location state, redirect to landing page
     if (!roomId) {
       showFailureToast('Invalid Room');
       navigate('/landing');
     }
+
     // Join the Socket.io room when the component mounts
     socket.emit(Event.JOIN_ROOM, { room: roomId, host: hostId });
-    socket.emit(Event.Question.QUESTION_CHANGE, { room: roomId, question: question });
+    socket.emit(Event.Question.QUESTION_CHANGE, {
+      room: roomId,
+      question: question,
+    });
   }, []);
 
   const handleLeaveRoom = () => {
@@ -52,7 +54,10 @@ const Collaboration = () => {
   // Send question changes to the server
   const handleQuestionChange = (question) => {
     setSelectedQuestion(question);
-    socket.emit(Event.Question.QUESTION_CHANGE, { room: roomId, question: question });
+    socket.emit(Event.Question.QUESTION_CHANGE, {
+      room: roomId,
+      question: question,
+    });
   };
 
   // Receive question changes from the server
@@ -69,8 +74,20 @@ const Collaboration = () => {
       <div className='collaboration-container'>
         <div className='collaboration-header'>
           <div className='d-flex justify-content-between'>
-            <button type='button' className='btn btn-primary me-2' onClick={handleOpenPanel}>Change Question</button>
-            <button type='button' className='btn btn-danger' onClick={handleLeaveRoom}>Leave Room</button>
+            <button
+              type='button'
+              className='btn btn-primary me-2'
+              onClick={handleOpenPanel}
+            >
+              Change Question
+            </button>
+            <button
+              type='button'
+              className='btn btn-danger'
+              onClick={handleLeaveRoom}
+            >
+              Leave Room
+            </button>
           </div>
         </div>
         <div className='content'>
@@ -80,7 +97,11 @@ const Collaboration = () => {
             )}
           </div>
           <div className='right'>
-            <CodeEditor socket={socket} roomId={roomId} selectedLanguage={language} />
+            <CodeEditor
+              socket={socket}
+              roomId={roomId}
+              selectedLanguage={language}
+            />
             <Chat socket={socket} roomId={roomId} host={hostId} />
           </div>
         </div>

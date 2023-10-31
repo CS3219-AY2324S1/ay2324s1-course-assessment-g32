@@ -24,13 +24,11 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
         if (isMatch) {
           const roomId = reply.data.response.roomId;
           const hostId = reply.data.response.hostId;
-          const matchedHostId = reply.data.response.matchedHostId;
           const question = await getRandomQuestionByCriteria(complexity, jwt);
           navigate('/collaboration', {
             state: {
               roomId,
               hostId,
-              matchedHostId,
               question: {
                 question: question,
                 complexity: complexity,
