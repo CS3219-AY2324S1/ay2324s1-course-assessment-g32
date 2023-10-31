@@ -74,7 +74,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
 
   return (
     <div className='editor-container'>
-      <div className='row'>
+      <div className='row editor-nav-bar'>
         <div className='col-sm-2'>
           <select
             className='form-select-sm'
