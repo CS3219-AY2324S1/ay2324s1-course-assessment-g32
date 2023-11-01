@@ -37,13 +37,12 @@ const UserSchema = new Schema({
   },
 });
 
-// Create a model named "User", which represents a collection in the database
-const User = mongoose.model('User', UserSchema);
-
-// Define a pre-save middleware to update the updatedAt field before saving the document
-UserSchema.pre('save', function (next) {
-  this.updatedAt = new Date();
+// Define a pre-update middleware to update the updatedAt field before updating the document
+UserSchema.pre('findOneAndUpdate', function (next) {
+  this._update.updatedAt = new Date();
   next();
 });
 
+// Create a model named "User", which represents a collection in the database
+const User = mongoose.model('User', UserSchema);
 module.exports = User;

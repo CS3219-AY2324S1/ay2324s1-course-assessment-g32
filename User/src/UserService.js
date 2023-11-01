@@ -40,7 +40,7 @@ const loginUser = async (email, password) => {
     }
 
     // Compare the entered password with the hashed password stored in the database
-    if (!(await verifyPassword(userInfo.userId, password))) {
+    if (!(await verifyPassword(userInfo.id, password))) {
       throw Object.assign(new Error('Incorrect password'), {
         status: Status.UNAUTHORIZED,
       });

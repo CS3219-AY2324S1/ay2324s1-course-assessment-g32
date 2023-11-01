@@ -8,9 +8,7 @@ const logger = require('./Log');
 const generate = async (req, res) => {
   try {
     const userInfo = req.body;
-    if (
-      Object.keys(userInfo).join(',') == ['isMaintainer', 'userId'].join(',')
-    ) {
+    if (Object.keys(userInfo).join(',') == ['isMaintainer', 'id'].join(',')) {
       const jwtToken = getJwtToken(userInfo);
       logger.logSuccess('Generated JWT');
       res.json({ message: 'Generated JWT successfully', token: jwtToken });

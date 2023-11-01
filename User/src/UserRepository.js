@@ -1,7 +1,6 @@
 const userModel = require('./UserModel');
 
 const createUser = async (email, password) => {
-  // await password.then((x) => (_password = x));
   const hashedPassword = await password;
 
   try {
@@ -39,7 +38,7 @@ const findByEmail = async (email) => {
       .findOne({ email: email }, '_id isMaintainer')
       .lean();
     if (result) {
-      result.userId = result._id;
+      result.id = result._id;
       delete result._id;
     }
     return result;
@@ -67,7 +66,7 @@ const getUserInfoById = async (id) => {
   try {
     const result = await userModel.findById(id).lean();
     if (result) {
-      result.userId = result._id;
+      result.id = result._id;
       delete result._id;
     } else {
       throw 'No user with id ' + id;
@@ -84,7 +83,7 @@ const getAllUserInfo = async () => {
       .find({}, 'displayName createdAt updatedAt isMaintainer')
       .lean();
     result = result.map((user) => {
-      user.userId = user._id;
+      user.id = user._id;
       delete user._id;
       return user;
     });

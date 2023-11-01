@@ -4,7 +4,7 @@ const { JWT_ALGORITHM } = require('../constants');
 
 const getJwtToken = (userInfo) => {
   const payload = {
-    userId: userInfo.userId,
+    userId: userInfo.id,
     isMaintainer: userInfo.isMaintainer,
   };
 
