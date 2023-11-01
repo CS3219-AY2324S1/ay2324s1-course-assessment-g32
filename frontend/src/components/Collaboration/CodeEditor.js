@@ -166,6 +166,15 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
 
   }, [socket]);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowCursor(false);
+    }, 5000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [showCursor]);
+
   return (
     <div className='editor-container'>
       <div className='row editor-nav-bar'>
