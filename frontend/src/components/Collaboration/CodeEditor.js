@@ -16,6 +16,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const [scrollTop, setScrollTop] = useState(0);
   const [opponent, setOpponent] = useState({ user: 'hello', position: { x: 0, y: 0 } });
   const [absoluteOpponent, setAbsoluteOpponent] = useState({ user: 'hello', position: { x: 0, y: 0 } });
+  const [showCursor, setShowCursor] = useState(false);
   const divisionRef = useRef(null);
 
   const isWithinWindow = (position) => {
@@ -60,6 +61,13 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const handleMouseMove = (e) => {
     setPosition({ x: e.clientX, y: e.clientY });
     broadcastMousePosition();
+  };
+
+  const handleMouseLeave = () => {
+    socket.emit(Event.Collaboration.MOUSE_LEAVE, {
+      room: roomId,
+      jwt: jwt,
+    });
   };
 
   const handleScroll = (event) => {
@@ -144,9 +152,18 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     // Receive mouse position changes from the server
     socket.on(Event.Collaboration.MOUSE_POSITION, (data) => {
       if (data.jwt !== jwt) {
+        setShowCursor(true);
         setOpponent(data);
       }
     });
+
+    // Receive mouse leave events from the server
+    socket.on(Event.Collaboration.MOUSE_LEAVE, (data) => {
+      if (data.jwt !== jwt) {
+        setShowCursor(false);
+      }
+    });
+
   }, [socket]);
 
   return (
@@ -165,7 +182,12 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
           </select>
         </div>
       </div>
-      <div className='code-editor' onScroll={handleScroll} onMouseMove={handleMouseMove} ref={divisionRef}  >
+      <div className='code-editor'
+        onScroll={handleScroll}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        ref={divisionRef}
+      >
         <CodeMirror
           className='h-full'
           value={code}
@@ -176,7 +198,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
           placeholder='Enter your code here...'
           extensions={[getLanguageExtension(language)]}
         />
-        {isWithinWindow(absoluteOpponent.position) && <OverlayCursor opponent={absoluteOpponent} className='h-full'/>}
+        {isWithinWindow(absoluteOpponent.position) && showCursor &&
+          <OverlayCursor opponent={absoluteOpponent} className='h-full'/>}
       </div>
     </div>
   );

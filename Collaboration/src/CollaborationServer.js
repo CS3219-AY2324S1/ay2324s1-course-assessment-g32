@@ -95,6 +95,16 @@ try {
       io.to(room).emit(Event.Collaboration.MOUSE_POSITION, message);
     });
 
+
+    // Handle mouse leave
+    socket.on(Event.Collaboration.MOUSE_LEAVE, (data) => {
+      const room = data.room;
+      const jwt = data.jwt;
+      console.log("mouse leave");
+
+      io.to(room).emit(Event.Collaboration.MOUSE_LEAVE, jwt);
+    });
+
     // Handle disconnects
     socket.on(Event.DISCONNECT, () => {
       logger.log('A user disconnected');
