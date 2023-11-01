@@ -1,7 +1,7 @@
 import axios from 'axios';
 const env = require('../loadEnvironment');
 
-const userRootUrl = env.SERVER_URL + '/user';
+const userRootUrl = env.USER_URL + '/user';
 
 const getConfig = () => {
   return {
