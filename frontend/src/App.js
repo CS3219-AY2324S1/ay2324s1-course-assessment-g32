@@ -34,7 +34,6 @@ import UnauthorizedPage from './pages/UnauthorizedPage';
 // Page not found page
 import PageNotFound from './pages/PageNotFound';
 // Special routes
-import NonLoggedInRoute from './utils/NonLoggedInRoute';
 import ProtectedRoute from './utils/ProtectedRoute';
 import MaintainerRoute from './utils/MaintainerRoute';
 
@@ -45,12 +44,10 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<NonLoggedInRoute />}>
-          {/* Display Login component by default */}
-          <Route index element={<Login />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
-        </Route>
+        {/* Display Login component by default */}
+        <Route path='/' element={<Login />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
 
         {/* Landing for normal users */}
         <Route path='/landing' element={<ProtectedRoute />}>
@@ -81,21 +78,29 @@ function App() {
         <Route path='/user-profile' element={<ProtectedRoute />}>
           <Route index element={<ManageUserProfile />} />
           <Route path='/user-profile/edit' element={<NormalEditUser />} />
-          <Route path='/user-profile/change-password' element={<ChangeUserPassword />} />
+          <Route
+            path='/user-profile/change-password'
+            element={<ChangeUserPassword />}
+          />
         </Route>
 
         {/* Profile management for maintainers only */}
         <Route path='/users-management' element={<MaintainerRoute />}>
           <Route index element={<ManageUserProfiles />} />
-          <Route path='/users-management/edit' element={<MaintainerEditUser />} />
+          <Route
+            path='/users-management/edit'
+            element={<MaintainerEditUser />}
+          />
           <Route path='/users-management/new' element={<AddUser />} />
         </Route>
-
 
         {/* Submission History for normal users */}
         <Route path='/submission-history' element={<ProtectedRoute />}>
           <Route index element={<SubmissionHistory />} />
-          <Route path='/submission-history/:id' element={<SubmissionAttempt />} />
+          <Route
+            path='/submission-history/:id'
+            element={<SubmissionAttempt />}
+          />
         </Route>
 
         {/* Collaboration page for normal users*/}

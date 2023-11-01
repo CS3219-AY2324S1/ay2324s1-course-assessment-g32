@@ -8,18 +8,11 @@ const AUTH_HOST = process.env.AUTH_HOST || 'localhost';
 const AUTH_PORT = process.env.AUTH_PORT || 5001;
 const AUTH_URL = 'http://' + AUTH_HOST + ':' + AUTH_PORT;
 
-// Dependency Config: MySQL
-const mysqlDbName = process.env.MYSQL_DB_NAME || '';
-const mysqlCreds = {
-  port: process.env.MYSQL_PORT || 3306,
-  host: process.env.MYSQL_HOST || 'localhost',
-  user: process.env.MYSQL_USER || 'root',
-  password: process.env.MYSQL_ROOT_PASSWORD || '',
-};
+// Dependency Config: MongoDB
+const MONGO_CLIENT = process.env.ATLAS_URI || '';
 
 module.exports = {
   USER_PORT,
-  mysqlDbName,
-  mysqlCreds,
+  MONGO_CLIENT,
   AUTH_URL,
 };
