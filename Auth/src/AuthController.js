@@ -9,7 +9,7 @@ const generate = async (req, res) => {
   try {
     const userInfo = req.body;
     if (
-      Object.keys(userInfo).join(',') == ['userId', 'isMaintainer'].join(',')
+      Object.keys(userInfo).join(',') == ['isMaintainer', 'userId'].join(',')
     ) {
       const jwtToken = getJwtToken(userInfo);
       logger.logSuccess('Generated JWT');
@@ -91,7 +91,7 @@ const authorizeMaintainer = async (req, res) => {
           .json({ error: 'Invalid JWT token' });
       }
 
-      if (decodedJwtToken.isMaintainer !== 1) {
+      if (decodedJwtToken.isMaintainer !== true) {
         logger.warn('Not Authorized (User not maintainer)');
         return res
           .status(Status.UNAUTHORIZED)
