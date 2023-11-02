@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Spinner from '../Spinner';
-import { getQuestionsByComplexity, getQuestionDetails } from '../../api/QuestionApi';
+import { getQuestionsByCriteria, getQuestionDetails } from '../../api/QuestionApi';
 import { errorHandler } from '../../utils/errors';
 import { getCookie } from '../../utils/helpers';
 import { Complexity, Topics } from '../../constants';
@@ -19,8 +19,9 @@ const QuestionPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const questions = await getQuestionsByComplexity(
-          complexity,
+        const questions = await getQuestionsByCriteria(
+          selectedComplexity,
+          selectedTopics,
           getCookie()
         );
         setQuestions(questions);
@@ -31,7 +32,7 @@ const QuestionPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
     };
 
     fetchData();
-  }, []);
+  }, [selectedComplexity, selectedTopics]);
 
   const handleOverlayClick = () => {
     onClose();
@@ -55,16 +56,11 @@ const QuestionPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
       // If the topic is already selected, remove it
       // Add 'All' to the selected topics if there are no other topics selected
       const updatedTopics = selectedTopics.filter((t) => t !== topic);
-      setSelectedTopics(
-        updatedTopics.length === 0 ? [Topics.ALL] : updatedTopics
-      );
+      setSelectedTopics(updatedTopics.length === 0 ? [Topics.ALL] : updatedTopics);
     } else {
       // If the topic is not selected, add it
       // Remove 'All' from the selected topics
-      setSelectedTopics([
-        ...selectedTopics.filter((t) => t !== Topics.ALL),
-        topic,
-      ]);
+      setSelectedTopics([...selectedTopics.filter((t) => t !== Topics.ALL), topic]);
     }
   };
 
@@ -99,8 +95,7 @@ const QuestionPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
     (complexity, index) => (
       <button
         key={index}
-        className={`badge ${selectedComplexity === complexity ? 'bg-primary' : 'bg-secondary'
-          }`}
+        className={`badge ${selectedComplexity === complexity ? 'bg-primary' : 'bg-secondary'}`}
         onClick={() => handleComplexityClick(complexity)}
       >
         {complexity}
@@ -111,8 +106,7 @@ const QuestionPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
   const topicButtons = topics.map((topic, index) => (
     <button
       key={index}
-      className={`badge ${selectedTopics.includes(topic) ? 'bg-primary' : 'bg-secondary'
-        }`}
+      className={`badge ${selectedTopics.includes(topic) ? 'bg-primary' : 'bg-secondary'}`}
       onClick={() => handleTopicClick(topic)}
     >
       {topic}

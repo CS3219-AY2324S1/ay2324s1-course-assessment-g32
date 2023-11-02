@@ -55,11 +55,11 @@ export const getQuestions = async (jwtToken) => {
   }
 };
 
-export const getQuestionsByComplexity = async (complexity, jwtToken) => {
+export const getQuestionsByCriteria = async (complexity, tags, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
-    config.params = { complexity: complexity };
-    const response = await axiosQuestion.get('/read-all-by-complexity', config);
+    config.params = { complexity: complexity, tags: tags };
+    const response = await axiosQuestion.get('/read-all-by-criteria', config);
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
