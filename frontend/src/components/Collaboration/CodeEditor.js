@@ -1,28 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { basicSetup } from 'codemirror';
-import { EditorState } from '@codemirror/state';
-import { EditorView, keymap } from '@codemirror/view';
-import { defaultKeymap, indentWithTab } from '@codemirror/commands';
+import React, { useState, useEffect } from 'react';
+import CodeMirror from '@uiw/react-codemirror';
+import { EditorView } from '@codemirror/view';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
-import { executeCode } from '../../api/ExecutionApi';
 import { Language, Event } from '../../constants';
 import '../../css/CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
-  const editor = useRef(null);
-  const viewRef = useRef(null);
   const [code, setCode] = useState('');
-  const [result, setResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
-
-  const onUpdate = EditorView.updateListener.of((update) => {
-    if (update.docChanged) {
-      const updatedCode = update.state.doc.toString();
-      setCode(updatedCode);
-    }
-  });
 
   const getLanguageExtension = (selectedLanguage) => {
     switch (selectedLanguage) {
@@ -37,6 +24,18 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
     }
   };
 
+  // Update the code state when the user types
+  const onChange = (update) => {
+    setCode(update);
+    sessionStorage.setItem(`codeEditorContent_${roomId}`, update); // Store the code in session storage
+
+    // Send code changes to the server
+    socket.emit(Event.Collaboration.CODE_CHANGE, {
+      room: roomId,
+      updatedCode: update,
+    });
+  };
+
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
@@ -48,88 +47,34 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
     });
   };
 
-  const handleCodeExecution = async () => {
-    const result = await executeCode(language, code);
-    setResult(result);
-
-    // Send execution results to the server
-    socket.emit(Event.Collaboration.RESULT_CHANGE, {
-      room: roomId,
-      updatedResult: result,
-    });
-  };
-
-  const handleTestExecution = async () => {
-    console.log("you clicked to run tests")
-  }
-
-  // Send code changes to the server
+  // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
   useEffect(() => {
-    socket.emit(Event.Collaboration.CODE_CHANGE, {
-      room: roomId,
-      updatedCode: code,
-    });
-  }, [code, roomId, socket]);
-
-  // Receive code changes from the server
-  useEffect(() => {
-    socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
-      if (viewRef.current) {
-        viewRef.current.dispatch({
-          // Replace the entire document with the updated code
-          changes: {
-            from: 0,
-            to: viewRef.current.state.doc.length,
-            insert: updatedCode,
-          },
-          selection: viewRef.current.state.selection, // Preserve the user's cursor position
-          scrollIntoView: true, // Preserve the user's scroll position
-        });
-      }
-    });
+    const storedContent = sessionStorage.getItem(`codeEditorContent_${roomId}`);
+    if (storedContent) {
+      setCode(storedContent);
+    }
   }, []);
 
-  // Receive result update from the server
   useEffect(() => {
-    socket.on(Event.Collaboration.RESULT_UPDATE, (updatedResult) => {
-      setResult(updatedResult);
+    // Receive code changes from the server
+    socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
+      if (updatedCode !== code) {
+        setCode(updatedCode);
+      }
     });
-  }, [result]);
-
-  // Receive language changes from the server
-  useEffect(() => {
+    // Receive language changes from the server
     socket.on(Event.Collaboration.LANGUAGE_UPDATE, (updatedLanguage) => {
       const languageSelect = document.getElementById('languageSelect');
-      if (languageSelect.value !== updatedLanguage) {
+      if (updatedLanguage !== languageSelect.value) {
         languageSelect.value = updatedLanguage;
         setLanguage(updatedLanguage);
       }
     });
-  }, []);
-
-  // Initialize the editor
-  useEffect(() => {
-    const state = EditorState.create({
-      doc: code,
-      extensions: [
-        basicSetup,
-        keymap.of([...defaultKeymap, indentWithTab]),
-        onUpdate,
-        getLanguageExtension(language),
-      ],
-    });
-
-    const view = new EditorView({ state, parent: editor.current });
-    viewRef.current = view;
-
-    return () => {
-      view.destroy();
-    };
-  }, [language]);
+  }, [socket]);
 
   return (
     <div className='editor-container'>
-      <div className='row'>
+      <div className='row editor-nav-bar'>
         <div className='col-sm-2'>
           <select
             className='form-select-sm'
@@ -141,24 +86,17 @@ const CodeEditor = ({ socket, roomId, selectedLanguage }) => {
             <option value='Java'>Java</option>
             <option value='C++'>C++</option>
           </select>
-          <button type='button' className='btn btn-primary me-2' onClick={handleCodeExecution}>
-            Run code
-          </button>
-          <button type='button' className='btn btn-primary me-2' onClick={handleTestExecution}>
-            Run tests
-          </button>
         </div>
       </div>
       <div className='code-editor'>
-        <div ref={editor}></div>
-      </div>
-      <div className='output-container'>
-        <textarea
-          className='form-control'
-          rows='2'
-          readOnly
-          placeholder='Code execution results will appear here'
-          value={result}
+        <CodeMirror
+          className='h-full'
+          value={code}
+          onChange={onChange}
+          autoFocus={true}
+          height='100%'
+          placeholder="print('Hello world')"
+          extensions={[getLanguageExtension(language), EditorView.lineWrapping]}
         />
       </div>
     </div>

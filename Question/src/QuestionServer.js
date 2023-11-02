@@ -4,15 +4,19 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const questionRoutes = require('./QuestionRoutes');
 const env = require('./loadEnvironment');
+const logger = require('./Log');
 
-console.log('Starting QuestionServer ...');
+logger.register({
+  serviceName: 'Question Service',
+  logLevel: logger.LOG_LEVELS.all,
+});
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/question', questionRoutes);
 app.listen(env.QUESTION_PORT, () => {
-  console.log(`QuestionServer is running on port: ${env.QUESTION_PORT}`);
+  logger.log(`Running on port: ${env.QUESTION_PORT}`);
 });
 
 try {
@@ -23,11 +27,12 @@ try {
 
   const mongoDb = mongoose.connection;
   mongoDb.once('open', () => {
-    console.log('SUCCESS: Connected to the MongoDB database');
+    logger.logSuccess('Connected to the MongoDB database');
   });
   mongoDb.on('error', (error) => {
-    console.error('MongoDB database connection error:', error);
+    logger.error('Could not connect to MongoDB:', error, '\nExiting ...');
+    process.exit(1);
   });
 } catch (err) {
-  console.error(err);
+  logger.error(err);
 }

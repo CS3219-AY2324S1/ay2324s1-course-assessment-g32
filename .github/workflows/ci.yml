@@ -3,7 +3,7 @@ name: CI Pipeline
 on: push
 jobs:
   build:
-    timeout-minutes: 5
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

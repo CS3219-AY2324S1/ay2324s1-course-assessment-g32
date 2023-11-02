@@ -128,12 +128,12 @@ const getUserInfo = async (userId, email) => {
 
 /**
  * Update user info of speficied userId.
- * Only supports changing of username and password.
+ * Only supports changing of displayName and password.
  *
  * @param {int|string} userId ID of user in DB. Read-only.
- * @param {string} username New Username
+ * @param {string} displayName New displayName
  */
-const updateUser = async (userId, username) => {
+const updateUser = async (userId, displayName) => {
   try {
     if (!userId) {
       throw Object.assign(new Error('Missing userId'), {
@@ -141,13 +141,13 @@ const updateUser = async (userId, username) => {
       });
     }
 
-    if (!username) {
+    if (!displayName) {
       throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
         status: Status.BAD_REQUEST,
       });
     }
 
-    return userDatabase.updateUser(userId, username);
+    return userDatabase.updateUser(userId, displayName);
   } catch (err) {
     throw err;
   }
@@ -245,6 +245,22 @@ const changeUserPassword = async (
   }
 };
 
+/**
+ * Toggles the role of the user. Throws error if no parameters.
+ * @param {string | number} id User ID
+ */
+const toggleUserRole = async (id) => {
+  try {
+    if (!id) {
+      throw Object.assign(new Error('Missing user id'), { status: 400 });
+    }
+
+    return userDatabase.toggleUserRole(id);
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   loginUser,
   createUser,
@@ -253,4 +269,5 @@ module.exports = {
   updateUser, // Update
   deleteUser, // Delete
   changeUserPassword, // Update
+  toggleUserRole, // Update
 };

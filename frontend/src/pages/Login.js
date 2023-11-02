@@ -80,8 +80,7 @@ const Login = () => {
             <button
               type='submit'
               className='btn btn-primary'
-              onClick={handleLoginSubmit}
-            >
+              onClick={handleLoginSubmit}>
               Submit
             </button>
           </div>

@@ -1,5 +1,6 @@
 const queueService = require('./services/producerService');
 const { Status } = require('./constants');
+const logger = require('./Log');
 
 const joinQueue = async (req, res) => {
   try {
@@ -7,6 +8,7 @@ const joinQueue = async (req, res) => {
     const response = await queueService.joinQueue(jwt, queueName, sessionID);
     res.json({ message: 'Joined queue successfully', response });
   } catch (err) {
+    logger.logFailure('Cannot join queue:', err?.message || err);
     res
       .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
@@ -19,6 +21,7 @@ const exitQueue = async (req, res) => {
     await queueService.exitQueue(jwt, queueName, sessionID);
     res.json({ message: 'Exited queue successfully' });
   } catch (err) {
+    logger.logFailure('Cannot exit queue:', err?.message || err);
     res
       .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });

@@ -8,6 +8,10 @@
   overflow: auto;
 }
 
+.editor-nav-bar {
+  padding-bottom: 2px;
+}
+
 .code-editor {
   flex-grow: 1;
   overflow-y: scroll;
