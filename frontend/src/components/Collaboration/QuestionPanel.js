@@ -8,9 +8,13 @@ import '../../css/QuestionPanel.css';
 
 const QuestionPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isTopicExpanded, setIsTopicExpanded] = useState(false);
   const [selectedComplexity, setSelectedComplexity] = useState(complexity);
   const [selectedTopics, setSelectedTopics] = useState([Topics.ALL]);
   const [questions, setQuestions] = useState([]);
+
+  const firstFiveTopics = Object.values(Topics).slice(0, 5);
+  const topics = isTopicExpanded ? Object.values(Topics) : firstFiveTopics;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,13 +55,21 @@ const QuestionPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
       // If the topic is already selected, remove it
       // Add 'All' to the selected topics if there are no other topics selected
       const updatedTopics = selectedTopics.filter((t) => t !== topic);
-      setSelectedTopics(updatedTopics.length === 0 ? [Topics.ALL] : updatedTopics);
-
+      setSelectedTopics(
+        updatedTopics.length === 0 ? [Topics.ALL] : updatedTopics
+      );
     } else {
       // If the topic is not selected, add it
       // Remove 'All' from the selected topics
-      setSelectedTopics([...selectedTopics.filter((t) => t !== Topics.ALL), topic]);
+      setSelectedTopics([
+        ...selectedTopics.filter((t) => t !== Topics.ALL),
+        topic,
+      ]);
     }
+  };
+
+  const toggleExpandTopics = () => {
+    setIsTopicExpanded(!isTopicExpanded);
   };
 
   const RenderTags = (tags) => {
@@ -83,21 +95,24 @@ const QuestionPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
     }
   };
 
-  const complexityButtons = Object.values(Complexity).map((complexity, index) => (
-    <button
-      key={index}
-      className={`badge ${selectedComplexity === complexity ? 'bg-primary' : 'bg-secondary'}`}
-      onClick={() => handleComplexityClick(complexity)}
-    >
-      {complexity}
-    </button>
-  )
+  const complexityButtons = Object.values(Complexity).map(
+    (complexity, index) => (
+      <button
+        key={index}
+        className={`badge ${selectedComplexity === complexity ? 'bg-primary' : 'bg-secondary'
+          }`}
+        onClick={() => handleComplexityClick(complexity)}
+      >
+        {complexity}
+      </button>
+    )
   );
 
-  const topicButtons = Object.values(Topics).map((topic, index) => (
+  const topicButtons = topics.map((topic, index) => (
     <button
       key={index}
-      className={`badge ${selectedTopics.includes(topic) ? 'bg-primary' : 'bg-secondary'}`}
+      className={`badge ${selectedTopics.includes(topic) ? 'bg-primary' : 'bg-secondary'
+        }`}
       onClick={() => handleTopicClick(topic)}
     >
       {topic}
@@ -131,11 +146,19 @@ const QuestionPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
         className={`overlay ${isOpen ? 'open' : ''}`}
         onClick={handleOverlayClick}
       />
-      <div className={`sliding-panel ${isOpen ? 'open' : ''}`}>
+      <div className={`question-panel ${isOpen ? 'open' : ''}`}>
         <div className='panel-content'>
-          <h2>Question List</h2>
-          <div className='d-flex flex-wrap gap-1'>{complexityButtons}</div>
-          <div className='d-flex flex-wrap gap-1'>{topicButtons}</div>
+          <div className='d-flex flex-wrap gap-1' style={{ marginBottom: '5px' }}>
+            <b>Complexity:</b>
+            {complexityButtons}
+          </div>
+          <div className='d-flex flex-wrap gap-1' style={{ marginBottom: '5px' }}>
+            <b>Topics:</b>
+            {topicButtons}
+            <span onClick={toggleExpandTopics} style={{ color: 'blue' }}>
+              {isTopicExpanded ? 'Collapse' : 'Expand'}
+            </span>
+          </div>
           <table className='table table-hover table-striped'>
             <tbody className='table-group-divider'>{questionList}</tbody>
           </table>
