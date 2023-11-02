@@ -19,6 +19,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
 
   // Initialize cursor position for code editor
   const [scrollTop, setScrollTop] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [opponent, setOpponent] = useState({});
   const [renderOpponent, setRenderOpponent] = useState({});
@@ -53,7 +54,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const getAbsolutePosition = (relativePosition) => {
     if (editorBoxRef.current) {
       const { top, left } = editorBoxRef.current.getBoundingClientRect();
-      return { x: relativePosition.x + left, y: relativePosition.y + top - scrollTop };
+      return { x: relativePosition.x + left - scrollLeft, y: relativePosition.y + top - scrollTop };
     }
   };
 
@@ -61,7 +62,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const getRelativePosition = (absolutePosition) => {
     if (editorBoxRef.current) {
       const { top, left } = editorBoxRef.current.getBoundingClientRect();
-      return { x: absolutePosition.x - left, y: absolutePosition.y - top + scrollTop };
+      return { x: absolutePosition.x - left + scrollLeft, y: absolutePosition.y - top + scrollTop };
     }
   };
 
@@ -78,8 +79,9 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   };
 
   const handleScroll = (event) => {
-    const { scrollTop } = event.target;
+    const { scrollTop, scrollLeft } = event.target;
     setScrollTop(scrollTop);
+    setScrollLeft(scrollLeft);
     broadcastMousePosition();
   };
 
@@ -114,13 +116,13 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
       const newOpponentCursor = {
         user: opponent.user,
         position: {
-          x: opponent?.position?.x + left,
+          x: opponent?.position?.x + left - scrollLeft,
           y: opponent?.position?.y + top - scrollTop,
         },
       }
       setRenderOpponent(newOpponentCursor);
     }
-  }, [scrollTop, opponent]);
+  }, [scrollTop, scrollLeft, opponent]);
 
   // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
   useEffect(() => {
@@ -196,19 +198,17 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
         onMouseLeave={handleMouseLeave}
         ref={editorBoxRef}
       >
-        <div className='code-mirror' >
-          <CodeMirror
-            value={code}
-            onChange={onChange}
-            theme={vscodeDark}
-            autoFocus={true}
-            height='100vh'
-            placeholder='Enter your code here...'
-            extensions={[getLanguageExtension(language)]}
-          />
-          {isWithinWindow(renderOpponent.position, editorBoxRef) && showCursor &&
-            <OverlayCursor opponent={renderOpponent} />}
-        </div>
+        <CodeMirror
+          value={code}
+          onChange={onChange}
+          theme={vscodeDark}
+          autoFocus={true}
+          height='100%'
+          placeholder='Enter your code here...'
+          extensions={[getLanguageExtension(language)]}
+        />
+        {isWithinWindow(renderOpponent.position, editorBoxRef) && showCursor &&
+          <OverlayCursor opponent={renderOpponent} />}
       </div>
     </div>
   );

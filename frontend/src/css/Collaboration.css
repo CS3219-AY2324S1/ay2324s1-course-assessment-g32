@@ -25,6 +25,7 @@
   flex-direction: column;
   padding: 5px 2.5px 5px 5px;
   width: 50%;
+  min-width: 30%;
 }
 
 .right {
