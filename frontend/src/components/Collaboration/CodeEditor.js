@@ -135,7 +135,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   useEffect(() => {
     // Receive code changes from the server
     socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
-      if (updatedCode !== code) {
+      if (updatedCode.length === 0 || updatedCode !== code) {
         setCode(updatedCode);
         sessionStorage.setItem(`codeEditorContent_${roomId}`, updatedCode);
       }
@@ -156,7 +156,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
         setOpponent(data);
       }
     });
-
     // Receive mouse leave events from the server
     socket.on(Event.Collaboration.MOUSE_LEAVE, (data) => {
       if (data.jwt !== jwt) {
