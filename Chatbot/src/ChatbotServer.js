@@ -15,7 +15,7 @@ logger.log('Starting ...');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/chatbot', chatbotRoutes);
+app.use('/chat', chatbotRoutes);
 app.listen(env.CHATBOT_PORT, () => {
   logger.log(`Running on port: ${env.CHATBOT_PORT}`);
 });

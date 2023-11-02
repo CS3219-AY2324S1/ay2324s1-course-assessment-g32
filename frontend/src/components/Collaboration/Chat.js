@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Event } from '../../constants';
+import { getResponse } from '../../api/ChatbotApi';
 import '../../css/Chat.css';
 
 const Chat = ({ socket, roomId, user }) => {
@@ -25,28 +26,51 @@ const Chat = ({ socket, roomId, user }) => {
 
   const handleSendMessage = () => {
     if (!isChatbotActive) {
-      if (inputMessage) {
-        const message = {
-          text: inputMessage,
-          sender: user,
-          timestamp: getTimestamp(),
-        }
-        socket.emit(Event.Communication.CHAT_SEND, {
-          room: roomId,
-          message: message,
-        });
-      }
+      sendToRoomChat();
     } else {
-      if (inputMessage) {
-        const chatbotMessage = {
-          text: inputMessage,
-          sender: 'chatbot',
-          timestamp: getTimestamp(),
-        };
-        setChatbotMessages((prevChatbotMessages) => [...prevChatbotMessages, chatbotMessage]);
-      }
+      sendToAIChatbot();
     }
     setInputMessage('');
+  };
+
+  const sendToRoomChat = () => {
+    if (inputMessage) {
+      const message = {
+        text: inputMessage,
+        sender: user,
+        timestamp: getTimestamp(),
+      }
+      socket.emit(Event.Communication.CHAT_SEND, {
+        room: roomId,
+        message: message,
+      });
+    }
+  };
+
+  const sendToAIChatbot = async () => {
+    if (inputMessage) {
+      const chatbotMessage = {
+        text: inputMessage,
+        sender: 'user',
+        timestamp: getTimestamp(),
+      };
+
+      // Add the user's message to the chat messages
+      setMessages((prevMessages) => [...prevMessages, chatbotMessage]);
+
+      // Call getResponse() method to obtain the chatbot's response
+      const chatbotResponse = await getResponse(inputMessage);
+
+      // Create a chatbot message from the response
+      const chatbotResponseMessage = {
+        text: chatbotResponse,
+        sender: 'other', // Set the sender as 'other' for the chatbot's response
+        timestamp: getTimestamp(),
+      };
+
+      // Add the chatbot's response to the chatbot messages
+      setChatbotMessages((prevChatbotMessages) => [...prevChatbotMessages, chatbotResponseMessage]);
+    }
   };
 
   useEffect(() => {

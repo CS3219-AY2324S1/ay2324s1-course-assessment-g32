@@ -17,9 +17,13 @@ const QUESTION_URL = SERVER_HOST + ':' + QUESTION_PORT;
 const MATCH_PORT = process.env.REACT_APP_MATCH_PORT || 7001;
 const MATCH_URL = SERVER_HOST + ':' + MATCH_PORT;
 
-// // Dependency Config: Collaboration Service
+// Dependency Config: Collaboration Service
 const COLLAB_PORT = process.env.REACT_APP_COLLAB_PORT || 8001;
 const COLLAB_URL = SERVER_HOST + ':' + COLLAB_PORT;
+
+// Dependency Config: Chatbot Service
+const CHATBOT_PORT = process.env.REACT_APP_CHATBOT_PORT || 8002;
+const CHATBOT_URL = SERVER_HOST + ':' + CHATBOT_PORT;
 
 module.exports = {
   USER_URL,
@@ -27,4 +31,5 @@ module.exports = {
   QUESTION_URL,
   MATCH_URL,
   COLLAB_URL,
+  CHATBOT_URL,
 };
