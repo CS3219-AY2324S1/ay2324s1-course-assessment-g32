@@ -4,7 +4,13 @@ import '../../css/Chat.css';
 
 const Chat = ({ socket, roomId, user }) => {
   const [messages, setMessages] = useState([]);
+  const [chatbotMessages, setChatbotMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isChatbotActive, setChatbotActive] = useState(false);
+
+  const toggleChatbot = () => {
+    setChatbotActive(!isChatbotActive);
+  };
 
   const getTimestamp = () => {
     const date = new Date();
@@ -18,18 +24,29 @@ const Chat = ({ socket, roomId, user }) => {
   };
 
   const handleSendMessage = () => {
-    if (inputMessage) {
-      const message = {
-        text: inputMessage,
-        sender: user,
-        timestamp: getTimestamp(),
-      };
-      socket.emit(Event.Communication.CHAT_SEND, {
-        room: roomId,
-        message: message,
-      });
-      setInputMessage('');
+    if (!isChatbotActive) {
+      if (inputMessage) {
+        const message = {
+          text: inputMessage,
+          sender: user,
+          timestamp: getTimestamp(),
+        }
+        socket.emit(Event.Communication.CHAT_SEND, {
+          room: roomId,
+          message: message,
+        });
+      }
+    } else {
+      if (inputMessage) {
+        const chatbotMessage = {
+          text: inputMessage,
+          sender: 'chatbot',
+          timestamp: getTimestamp(),
+        };
+        setChatbotMessages((prevChatbotMessages) => [...prevChatbotMessages, chatbotMessage]);
+      }
     }
+    setInputMessage('');
   };
 
   useEffect(() => {
@@ -38,20 +55,38 @@ const Chat = ({ socket, roomId, user }) => {
     });
   }, []);
 
+  useEffect(() => {
+
+  }, []);
+
   return (
     <div className='chat-container'>
       <div className='chat-messages'>
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message ${msg.sender === user ? 'self' : 'other'}`}
-          >
-            {msg.text}
-            {msg.timestamp && (
-              <small className='timestamp'>{msg.timestamp}</small>
-            )}
-          </div>
-        ))}
+        {isChatbotActive ? (
+          chatbotMessages.map((msg, index) => (
+            <div
+              key={index}
+              className={`message ${msg.sender === 'user' ? 'self' : 'other'}`}
+            >
+              {msg.text}
+              {msg.timestamp && (
+                <small className='timestamp'>{msg.timestamp}</small>
+              )}
+            </div>
+          ))
+        ) : (
+          messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`message ${msg.sender === 'user' ? 'self' : 'other'}`}
+            >
+              {msg.text}
+              {msg.timestamp && (
+                <small className='timestamp'>{msg.timestamp}</small>
+              )}
+            </div>
+          ))
+        )}
       </div>
       <div className='chat-input'>
         <input
@@ -61,6 +96,11 @@ const Chat = ({ socket, roomId, user }) => {
           onChange={handleInputChange}
         />
         <button onClick={handleSendMessage}>Send</button>
+        {isChatbotActive ? (
+          <button onClick={toggleChatbot}>Chat with Friends</button>
+        ) : (
+          <button onClick={toggleChatbot}>Chat with AI bot</button>
+        )}
       </div>
     </div>
   );
