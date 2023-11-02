@@ -21,15 +21,10 @@ const MATCH_URL = SERVER_HOST + ':' + MATCH_PORT;
 const COLLAB_PORT = process.env.REACT_APP_COLLAB_PORT || 8001;
 const COLLAB_URL = SERVER_HOST + ':' + COLLAB_PORT;
 
-// // Dependency Config: Execution   Service
-const EXECUTION_PORT = process.env.REACT_APP_EXECUTION_PORT || 9001;
-const EXECUTION_URL = SERVER_HOST + ':' + EXECUTION_PORT;
-
 module.exports = {
   USER_URL,
   AUTH_URL,
   QUESTION_URL,
   MATCH_URL,
   COLLAB_URL,
-  EXECUTION_URL,
 };

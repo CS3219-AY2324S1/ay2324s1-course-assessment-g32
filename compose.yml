@@ -1,15 +1,4 @@
 services:
-  svc-execution:
-    container_name: execution-service
-    build: ./Execution
-    env_file: .env
-    ports: ['9001:9001']
-    depends_on:
-      svc-match:
-        condition: service_started
-        restart: true
-      svc-auth:
-        condition: service_started
   nginx:
     container_name: nginx
     image: nginx:latest

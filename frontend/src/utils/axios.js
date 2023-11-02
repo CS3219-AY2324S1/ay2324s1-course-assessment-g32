@@ -16,7 +16,3 @@ export const axiosQuestion = axios.create({
 export const axiosMatch = axios.create({
   baseURL: env.MATCH_URL + '/queue',
 });
-
-export const axiosExecution = axios.create({
-  baseURL: env.EXECUTION_URL + '/execute',
-});
