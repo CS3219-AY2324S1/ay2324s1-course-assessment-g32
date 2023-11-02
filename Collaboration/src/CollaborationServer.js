@@ -100,7 +100,6 @@ try {
     socket.on(Event.Collaboration.MOUSE_LEAVE, (data) => {
       const room = data.room;
       const jwt = data.jwt;
-      console.log("mouse leave");
 
       io.to(room).emit(Event.Collaboration.MOUSE_LEAVE, jwt);
     });
