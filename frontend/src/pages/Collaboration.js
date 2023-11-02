@@ -80,6 +80,12 @@ const Collaboration = () => {
     }
   };
 
+  // Retrieve last language used from session storage
+  const retrieveLanguage = () => {
+    const storedLanguage = sessionStorage.getItem(`codeEditorLanguage_${roomId}`);
+    return storedLanguage ? storedLanguage : language;
+  };
+
   // Receive question changes from the server
   useEffect(() => {
     socket.on(Event.Question.QUESTION_UPDATE, (updatedQuestion) => {
@@ -124,7 +130,7 @@ const Collaboration = () => {
             <CodeEditor
               socket={socket}
               roomId={roomId}
-              selectedLanguage={language}
+              selectedLanguage={retrieveLanguage()}
               displayName={displayName}
               jwt={jwt}
             />

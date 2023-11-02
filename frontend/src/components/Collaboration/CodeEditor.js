@@ -7,32 +7,39 @@ import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
 import { Language, Event } from '../../constants';
 import OverlayCursor from './OverlayCursor';
+import { isWithinWindow } from '../../utils/helpers';
 import '../../css/CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
+  const editorBoxRef = useRef(null);
+
+  // Initialize code editor content
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [scrollTop, setScrollTop] = useState(0);
-  const [opponent, setOpponent] = useState({ user: 'hello', position: { x: 0, y: 0 } });
-  const [absoluteOpponent, setAbsoluteOpponent] = useState({ user: 'hello', position: { x: 0, y: 0 } });
-  const [showCursor, setShowCursor] = useState(false);
-  const divisionRef = useRef(null);
 
-  const isWithinWindow = (position) => {
-    if (divisionRef.current) {
-      const { x, y } = position;
-      const { top, left, width, height } = divisionRef.current.getBoundingClientRect();
-      if (x > left && x < left + width - 10 && y > top && y < top + height - 10) {
-        return true;
-      }
+  // Initialize cursor position for code editor
+  const [scrollTop, setScrollTop] = useState(0);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [opponent, setOpponent] = useState({});
+  const [renderOpponent, setRenderOpponent] = useState({});
+  const [showCursor, setShowCursor] = useState(false);
+
+  const getLanguageExtension = (selectedLanguage) => {
+    switch (selectedLanguage) {
+      case Language.PYTHON:
+        return python();
+      case Language.JAVA:
+        return java();
+      case Language.CPP:
+        return cpp();
+      default:
+        return python();
     }
-    return false;
-  }
+  };
 
   const broadcastMousePosition = () => {
-    if (divisionRef.current) {
-      const relativePosition = getRelativePosition();
+    if (editorBoxRef.current) {
+      const relativePosition = getRelativePosition(position);
       socket.emit(Event.Collaboration.MOUSE_POSITION, {
         room: roomId,
         user: displayName,
@@ -42,19 +49,19 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     }
   };
 
-
-
+  // Convert relative position to absolute position
   const getAbsolutePosition = (relativePosition) => {
-    if (divisionRef.current) {
-      const { top, left } = divisionRef.current.getBoundingClientRect();
+    if (editorBoxRef.current) {
+      const { top, left } = editorBoxRef.current.getBoundingClientRect();
       return { x: relativePosition.x + left, y: relativePosition.y + top - scrollTop };
     }
   };
 
-  const getRelativePosition = () => {
-    if (divisionRef.current) {
-      const { top, left } = divisionRef.current.getBoundingClientRect();
-      return { x: position.x - left, y: position.y - top + scrollTop };
+  // Convert absolute position to relative position
+  const getRelativePosition = (absolutePosition) => {
+    if (editorBoxRef.current) {
+      const { top, left } = editorBoxRef.current.getBoundingClientRect();
+      return { x: absolutePosition.x - left, y: absolutePosition.y - top + scrollTop };
     }
   };
 
@@ -76,19 +83,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     broadcastMousePosition();
   };
 
-  const getLanguageExtension = (selectedLanguage) => {
-    switch (selectedLanguage) {
-      case Language.PYTHON:
-        return python();
-      case Language.JAVA:
-        return java();
-      case Language.CPP:
-        return cpp();
-      default:
-        return python();
-    }
-  };
-
   // Update the code state when the user types
   const onChange = (update) => {
     setCode(update);
@@ -104,6 +98,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
+    sessionStorage.setItem(`codeEditorLanguage_${roomId}`, selectedLanguage); // Store the language in session storage
 
     // Send language changes to the server
     socket.emit(Event.Collaboration.LANGUAGE_CHANGE, {
@@ -112,17 +107,18 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     });
   };
 
+  // Render the opponent's cursor
   useEffect(() => {
-    if (divisionRef.current) {
-      const { top, left } = divisionRef.current.getBoundingClientRect();
+    if (editorBoxRef.current) {
+      const { top, left } = editorBoxRef.current.getBoundingClientRect();
       const newOpponentCursor = {
         user: opponent.user,
         position: {
-          x: opponent.position.x + left,
-          y: opponent.position.y + top - scrollTop,
+          x: opponent?.position?.x + left,
+          y: opponent?.position?.y + top - scrollTop,
         },
       }
-      setAbsoluteOpponent(newOpponentCursor);
+      setRenderOpponent(newOpponentCursor);
     }
   }, [scrollTop, opponent]);
 
@@ -139,6 +135,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
       if (updatedCode !== code) {
         setCode(updatedCode);
+        sessionStorage.setItem(`codeEditorContent_${roomId}`, updatedCode);
       }
     });
     // Receive language changes from the server
@@ -147,6 +144,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
       if (updatedLanguage !== languageSelect.value) {
         languageSelect.value = updatedLanguage;
         setLanguage(updatedLanguage);
+        sessionStorage.setItem(`codeEditorLanguage_${roomId}`, updatedLanguage);
       }
     });
     // Receive mouse position changes from the server
@@ -166,6 +164,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
 
   }, [socket]);
 
+  // Hide the opponent's cursor after 5 seconds of inactivity
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowCursor(false);
@@ -195,20 +194,21 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
         onScroll={handleScroll}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        ref={divisionRef}
+        ref={editorBoxRef}
       >
-        <CodeMirror
-          className='h-full'
-          value={code}
-          onChange={onChange}
-          theme={vscodeDark}
-          autoFocus={true}
-          height='100%'
-          placeholder='Enter your code here...'
-          extensions={[getLanguageExtension(language)]}
-        />
-        {isWithinWindow(absoluteOpponent.position) && showCursor &&
-          <OverlayCursor opponent={absoluteOpponent} className='h-full'/>}
+        <div className='code-mirror' >
+          <CodeMirror
+            value={code}
+            onChange={onChange}
+            theme={vscodeDark}
+            autoFocus={true}
+            height='100vh'
+            placeholder='Enter your code here...'
+            extensions={[getLanguageExtension(language)]}
+          />
+          {isWithinWindow(renderOpponent.position, editorBoxRef) && showCursor &&
+            <OverlayCursor opponent={renderOpponent} />}
+        </div>
       </div>
     </div>
   );
