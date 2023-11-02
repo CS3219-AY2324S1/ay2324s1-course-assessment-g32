@@ -24,7 +24,7 @@ function Header() {
   };
 
   return (
-      <Navbar expand='lg' className='navbar navbar-dark bg-dark mb-5'>
+    <Navbar expand='lg' className='navbar navbar-dark bg-dark mb-5'>
       <Container>
         <Navbar.Brand href='/landing'>PeerPrep</Navbar.Brand>
         <div className='Navbar'>
