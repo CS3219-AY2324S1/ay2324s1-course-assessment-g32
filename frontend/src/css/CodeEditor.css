@@ -5,7 +5,6 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   max-height: 60%;
-  overflow: auto;
 }
 
 .editor-nav-bar {
