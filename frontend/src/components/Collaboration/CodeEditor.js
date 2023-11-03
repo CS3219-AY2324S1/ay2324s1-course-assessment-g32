@@ -21,8 +21,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const [scrollTop, setScrollTop] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [opponent, setOpponent] = useState({});
-  const [renderOpponent, setRenderOpponent] = useState({});
+  const [partner, setPartner] = useState({});
+  const [renderPartner, setRenderPartner] = useState({});
   const [showCursor, setShowCursor] = useState(false);
 
   const getLanguageExtension = (selectedLanguage) => {
@@ -109,20 +109,20 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     });
   };
 
-  // Render the opponent's cursor
+  // Render the partner's cursor
   useEffect(() => {
     if (editorBoxRef.current) {
       const { top, left } = editorBoxRef.current.getBoundingClientRect();
-      const newOpponentCursor = {
-        user: opponent.user,
+      const newPartnerCursor = {
+        user: partner.user,
         position: {
-          x: opponent?.position?.x + left - scrollLeft,
-          y: opponent?.position?.y + top - scrollTop,
+          x: partner?.position?.x + left - scrollLeft,
+          y: partner?.position?.y + top - scrollTop,
         },
       }
-      setRenderOpponent(newOpponentCursor);
+      setRenderPartner(newPartnerCursor);
     }
-  }, [scrollTop, scrollLeft, opponent]);
+  }, [scrollTop, scrollLeft, partner]);
 
   // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
   useEffect(() => {
@@ -153,7 +153,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     socket.on(Event.Collaboration.MOUSE_POSITION, (data) => {
       if (data.jwt !== jwt) {
         setShowCursor(true);
-        setOpponent(data);
+        setPartner(data);
       }
     });
     // Receive mouse leave events from the server
@@ -165,7 +165,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
 
   }, [socket]);
 
-  // Hide the opponent's cursor after 5 seconds of inactivity
+  // Hide the partner's cursor after 5 seconds of inactivity
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowCursor(false);
@@ -206,8 +206,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
           placeholder='Enter your code here...'
           extensions={[getLanguageExtension(language)]}
         />
-        {isWithinWindow(renderOpponent.position, editorBoxRef) && showCursor &&
-          <OverlayCursor opponent={renderOpponent} />}
+        {isWithinWindow(renderPartner.position, editorBoxRef) && showCursor &&
+          <OverlayCursor partner={renderPartner} />}
       </div>
     </div>
   );
