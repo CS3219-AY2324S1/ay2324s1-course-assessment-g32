@@ -11,6 +11,7 @@ const executePython = async (req, res) => {
     const pythonCode = req.body.code;
 
     const scriptProcess = exec(`python -c "${pythonCode.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
+      clearTimeout(timeout); // Clear the timeout since the script completed
       if (error) {
         res.json({ output: stderr });
       } else {
@@ -22,7 +23,7 @@ const executePython = async (req, res) => {
     const timeout = setTimeout(() => {
       console.error('Python script execution timed out. Killing the script...');
       scriptProcess.kill();
-      res.json({ output: "TimeoutError" });
+      // res.json({ output: "TimeoutError" });
     }, maxExecutionTime);
 
   } catch (err) {
@@ -44,48 +45,32 @@ const executeJava = async (req, res) => {
 const executeCpp = async (req, res) => {
   try {
     console.log(req.body)
-
-    var code = "#include <iostream>"
-            + "using namespace std;"
-            + "int main() {"
-            + "    int a;"
-            + "    cin >> a;"
-            + "    cout << a << endl;"
-            + "    return 0;"
-            + "}"
-    ;
-
-    var input = "4321";
-    var exitcode = JSCPP.run(code, input);
-    console.info("program exited with code " + exitcode);
-
     res.json({ message: "cpp code executed"})
   } catch (err) {
     throw err;
   };
 };
 
-// // execute js
-// const capturedLogs = [];
-
-// // Intercept console.log and redirect it to an array
-// const originalLog = console.log;
-// console.log = function () {
-//   capturedLogs.push(Array.from(arguments));
-//   originalLog.apply(console, arguments);
-// };
-
 const executeJs = async (req, res) => {
   try {
-    const JScode = req.body.code;
-    // console.log("printing js code:", JScode)
-    const result = eval(JScode);
+    const maxExecutionTime = 5000; // 5 seconds
+    const javascriptCode = req.body.code;
 
-    // if (capturedLogs.length() !== 0) {
+    const scriptProcess = exec(`node -e "${javascriptCode.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
+      clearTimeout(timeout); // Clear the timeout since the script completed
+      if (error) {
+        res.json({ output: stderr });
+      } else {
+        res.json({ output: stdout });
+      }
+    });
 
-    // }
-    // console.log("printing result from eval: ", result)
-    res.json({ output: result });
+    const timeout = setTimeout(() => {
+      console.error('JavaScript script execution timed out. Killing the script...');
+      scriptProcess.kill();
+      // res.json({ output: "TimeoutError" });
+    }, maxExecutionTime);
+
   } catch (err) {
     console.log(err);
   };
