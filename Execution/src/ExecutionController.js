@@ -1,5 +1,3 @@
-const { PythonShell } = require('python-shell');
-const JSCPP = require('JSCPP');
 const { exec } = require('child_process');
 
 // execute python
