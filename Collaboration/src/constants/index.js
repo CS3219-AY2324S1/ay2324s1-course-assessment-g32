@@ -1,11 +1,11 @@
 const Event = {
   CONNECTION: 'connection',
   DISCONNECT: 'disconnect',
-  JOIN_ROOM: 'joinRoom',
-  LEAVE_ROOM: 'leaveRoom',
+  JOIN_ROOM: 'join-room',
+  LEAVE_ROOM: 'leave-room',
   Question: {
-    QUESTION_CHANGE: 'questionChange',
-    QUESTION_UPDATE: 'questionUpdate',
+    QUESTION_CHANGE: 'question-change',
+    QUESTION_UPDATE: 'question-update',
   },
   Collaboration: {
     CODE_CHANGE: 'codeChange',
@@ -16,8 +16,8 @@ const Event = {
     RESULT_UPDATE: 'resultUpdate',
   },
   Communication: {
-    CHAT_SEND: 'chatMessage',
-    CHAT_RECEIVE: 'message',
+    CHAT_SEND: 'chat-send',
+    CHAT_RECEIVE: 'chat-receive',
   },
 };
 

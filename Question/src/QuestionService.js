@@ -39,9 +39,13 @@ const getQuestions = async () => {
   }
 };
 
-const getQuestionsByComplexity = async (complexity) => {
+const getQuestionsByCriteria = async (complexity, tags) => {
   try {
-    return await questionRepository.getQuestionsByComplexity(complexity);
+    if (tags.length === 1 && tags[0] === 'All') {
+      return await questionRepository.getQuestionsByComplexity(complexity);
+    } else {
+      return await questionRepository.getQuestionsByCriteria(complexity, tags);
+    }
   } catch (err) {
     throw err;
   }
@@ -96,6 +100,10 @@ const editQuestion = async (id, title, complexity, description, tags) => {
 };
 
 const deleteQuestion = async (id) => {
+  if (!id) {
+    throw { status: 410, message: 'No question id is given' };
+  }
+
   try {
     await questionRepository.deleteQuestion(id);
   } catch (err) {
@@ -106,7 +114,7 @@ const deleteQuestion = async (id) => {
 module.exports = {
   createQuestion,
   getQuestions,
-  getQuestionsByComplexity,
+  getQuestionsByCriteria,
   getQuestionDetails,
   getRandomQuestionByComplexity,
   editQuestion,

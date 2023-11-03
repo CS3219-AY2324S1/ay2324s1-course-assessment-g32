@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Grid, Container } from '@mui/material';
 import Header from '../../../components/Header';
 import Spinner from '../../../components/Spinner';
 import { ViewUserTopPane, ViewUserBottomPane } from '../../../components/User';
 import { getUser } from '../../../api/UserApi';
 import { errorHandler } from '../../../utils/errors';
-import { Grid, Container } from '@mui/material';
 import { getCookie, getUserId } from '../../../utils/helpers';
 
 function ManageUserProfile() {

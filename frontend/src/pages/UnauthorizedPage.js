@@ -6,8 +6,8 @@ const UnauthorizedPage = () => {
   return (
     <div className='page'>
       <img src={logo} alt='Unauthorized access' width='30%' />
-      <h4>Error 401</h4>
-      <h3>You have no authorisation to access this page.</h3>
+      <h3>Error</h3>
+      <h4>You have no rights to access this page.</h4>
     </div>
   );
 };

@@ -48,7 +48,7 @@ export const login = async (userData) => {
 
 export const getAllUsers = async (jwtToken) => {
   try {
-    const res = await axiosUser.get('/readAll', getTokenConfig(jwtToken));
+    const res = await axiosUser.get('/read-all', getTokenConfig(jwtToken));
     return res.data.info;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -63,7 +63,9 @@ export const getAllUsers = async (jwtToken) => {
 
 export const getUser = async (id, jwtToken) => {
   try {
-    const res = await axiosUser.post('/read', { id }, getTokenConfig(jwtToken));
+    let config = getTokenConfig(jwtToken);
+    config.params = { id: id };
+    const res = await axiosUser.get('/read', config);
     return res.data.info;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -76,11 +78,11 @@ export const getUser = async (id, jwtToken) => {
   }
 };
 
-export const updateUsername = async (id, newUsername, jwtToken) => {
+export const updateDisplayName = async (id, newDisplayName, jwtToken) => {
   try {
-    const res = await axiosUser.post(
+    const res = await axiosUser.put(
       '/update',
-      { id: id, username: newUsername },
+      { id: id, displayName: newDisplayName },
       getTokenConfig(jwtToken)
     );
     return res;
@@ -103,7 +105,7 @@ export const updatePassword = async (
   jwtToken
 ) => {
   try {
-    return await axiosUser.post(
+    return await axiosUser.put(
       '/change-password',
       {
         id: id,
@@ -126,7 +128,27 @@ export const updatePassword = async (
 
 export const deleteUser = async (id, jwtToken) => {
   try {
-    return await axiosUser.post('/delete', { id }, getTokenConfig(jwtToken));
+    let config = getTokenConfig(jwtToken);
+    config.params = { id: id };
+    return await axiosUser.delete('/delete', config);
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: Status.REQUEST_TIMEOUT },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+export const toggleUserRole = async (id, jwtToken) => {
+  try {
+    return await axiosUser.put(
+      '/toggle-user-role',
+      { id },
+      getTokenConfig(jwtToken)
+    );
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
