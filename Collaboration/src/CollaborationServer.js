@@ -84,6 +84,26 @@ try {
       io.to(room).emit(Event.Question.QUESTION_UPDATE, question);
     });
 
+    // Handle mouse position changes
+    socket.on(Event.Collaboration.MOUSE_POSITION, (data) => {
+      const room = data.room;
+      const user = data.user;
+      const jwt = data.jwt;
+      const mousePosition = data.position;
+      const message = {user: user, jwt: jwt, position: mousePosition};
+
+      io.to(room).emit(Event.Collaboration.MOUSE_POSITION, message);
+    });
+
+
+    // Handle mouse leave
+    socket.on(Event.Collaboration.MOUSE_LEAVE, (data) => {
+      const room = data.room;
+      const jwt = data.jwt;
+
+      io.to(room).emit(Event.Collaboration.MOUSE_LEAVE, jwt);
+    });
+
     // Handle disconnects
     socket.on(Event.DISCONNECT, () => {
       logger.log('A user disconnected');

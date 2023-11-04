@@ -43,6 +43,7 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
           });
         }
       } catch (error) {
+        onCancel();
         errorHandler(error);
       }
     };
@@ -61,9 +62,9 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
     }, 32000);
   });
 
-  const handleCancelClick = () => {
+  const handleCancelClick = async () => {
     try {
-      exitQueue(jwt, queueName, sessionID);
+      await exitQueue(jwt, queueName, sessionID);
       onCancel();
     } catch (error) {
       errorHandler(error);
