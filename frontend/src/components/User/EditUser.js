@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { updateUsername } from '../../api/UserApi.js';
+import { updateDisplayName } from '../../api/UserApi.js';
 import { showSuccessToast } from '../../utils/toast.js';
 import { errorHandler } from '../../utils/errors.js';
 import { getCookie } from '../../utils/helpers.js';
 
 const EditUser = ({ user, isMaintainerPage }) => {
   const [id, setId] = useState('');
-  const [newUsername, setUsername] = useState('');
+  const [newDisplayName, setDisplayName] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     setId(user.id);
-    setUsername(user.username);
+    setDisplayName(user.displayName);
   }, [user]);
 
   const handleUpdateClick = async (e) => {
     e.preventDefault();
 
     try {
-      await updateUsername(id, newUsername, getCookie());
+      await updateDisplayName(id, newDisplayName, getCookie());
       navigate(-1);
-      showSuccessToast('Username updated successfully!');
+      showSuccessToast('Display name updated successfully!');
     } catch (error) {
       errorHandler(error);
     }
   };
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
+  const handleDisplayNameChange = (event) => {
+    setDisplayName(event.target.value);
   };
 
   const handleBackClick = () => {
@@ -58,20 +58,20 @@ const EditUser = ({ user, isMaintainerPage }) => {
       </div>
 
       <form
-        className='edit-username needs-validation'
+        className='edit-display-name needs-validation'
         onSubmit={handleUpdateClick}
         noValidate>
         <div className='form-floating mb-3'>
           <input
             type='text'
             className='form-control'
-            id='editUsername'
-            placeholder='username'
-            value={newUsername}
-            onChange={handleUsernameChange}
+            id='editDisplayName'
+            placeholder='Display Name'
+            value={newDisplayName}
+            onChange={handleDisplayNameChange}
             required
           />
-          <label htmlFor='editUsername'>Username</label>
+          <label htmlFor='editDisplayName'>Display Name</label>
         </div>
         <div className='d-flex justify-content-between'>
           <button

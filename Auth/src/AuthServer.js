@@ -7,7 +7,7 @@ const logger = require('./Log.js');
 
 logger.register({
   serviceName: "Auth Service",
-  logLevel: logger.LOG_LEVELS.all
+  logLevel: logger.LOG_LEVELS.warn
 });
 
 logger.log('Starting ...');

@@ -10,7 +10,7 @@ router.post(
   middleware.checkTokenMaintainer,
   questionController.create
 );
-router.post('/edit', middleware.checkTokenMaintainer, questionController.edit);
+router.put('/edit', middleware.checkTokenMaintainer, questionController.edit);
 router.delete(
   '/delete',
   middleware.checkTokenMaintainer,
@@ -18,9 +18,9 @@ router.delete(
 );
 
 // User and maintainer can access the remaining routes
-router.get('/getAll', middleware.checkToken, questionController.getAll);
+router.get('/read-all', middleware.checkToken, questionController.getAll);
 router.get(
-  '/getQuestionDetails',
+  '/read',
   middleware.checkToken,
   questionController.getQuestionDetails
 );

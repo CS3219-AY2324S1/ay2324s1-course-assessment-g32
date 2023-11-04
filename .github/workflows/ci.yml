@@ -1,17 +1,6 @@
 name: CI Pipeline
 
-on:
-  push:
-    branches:
-      - master
-      - dev
-      - assignment-?
-  pull_request_target:
-    branches:
-      - master
-      - dev
-      - assignment-?
-
+on: push
 jobs:
   build:
     timeout-minutes: 10
