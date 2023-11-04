@@ -5,7 +5,6 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   max-height: 60%;
-  overflow: auto;
 }
 
 .editor-nav-bar {
@@ -15,4 +14,5 @@
 .code-editor {
   flex-grow: 1;
   overflow-y: scroll;
+  background-color: #1e1e1e;
 }
