@@ -2,3 +2,4 @@
 USE mysql;
 UPDATE user SET host='%' WHERE user='root';
 FLUSH PRIVILEGES;
+
