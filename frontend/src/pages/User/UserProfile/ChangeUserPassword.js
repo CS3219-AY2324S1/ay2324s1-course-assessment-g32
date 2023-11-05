@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { showSuccessToast } from '../../../utils/toast.js';
-import { updatePassword } from '../../../api/UserApi.js';
-import { errorHandler } from '../../../utils/errors.js';
-import Header from '../../../components/Header.js';
+import Header from '../../../components/Header';
+import Spinner from '../../../components/Spinner';
+import { ViewUserTopPane } from '../../../components/User';
+import { updatePassword } from '../../../api/UserApi';
+import { showSuccessToast } from '../../../utils/toast';
+import { errorHandler } from '../../../utils/errors';
+import { getCookie } from '../../../utils/helpers';
 import { Container, Grid } from '@mui/material';
-import { ViewUserTopPane } from '../../../components/User/ViewUser.js';
-import { getCookie } from '../../../utils/helpers.js';
 
 const ChangeUserPassword = () => {
   const [user, setUser] = useState({});
@@ -63,9 +64,7 @@ const ChangeUserPassword = () => {
   };
 
   return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
-    </div>
+    <Spinner />
   ) : (
     <div>
       <Header />

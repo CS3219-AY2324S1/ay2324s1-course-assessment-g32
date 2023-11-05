@@ -1,11 +1,14 @@
 const axios = require('axios');
-const env = require('../loadEnvironment.js');
+const env = require('../loadEnvironment');
+const { Status } = require('../constants');
 
-const authRootUrl = env.AUTH_URL + '/auth';
+const axiosAuth = axios.create({
+  baseURL: env.AUTH_URL + '/auth',
+});
 
 const authorize = async (token) => {
   try {
-    return await axios.get(authRootUrl + '/authorize', {
+    return await axiosAuth.get('/authorize', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token,
@@ -14,7 +17,7 @@ const authorize = async (token) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -24,7 +27,7 @@ const authorize = async (token) => {
 
 const authorizeMaintainer = async (token) => {
   try {
-    return await axios.get(authRootUrl + '/authorize-maintainer', {
+    return await axiosAuth.get('/authorize-maintainer', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token,
@@ -33,7 +36,7 @@ const authorizeMaintainer = async (token) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }

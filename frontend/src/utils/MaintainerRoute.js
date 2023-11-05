@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
-import { getIsMaintainerForMaintainerPage } from '../utils/helpers.js';
+import { getIsMaintainerForMaintainerPage } from '../utils/helpers';
 
 const MaintainerRoute = () => {
   const navigate = useNavigate();

@@ -1,5 +1,6 @@
-const userService = require('./UserService.js');
-const logger = require('./Log.js');
+const userService = require('./UserService');
+const { Status } = require('./constants');
+const logger = require('./Log');
 
 const login = async (req, res, next) => {
   try {
@@ -10,7 +11,9 @@ const login = async (req, res, next) => {
     next();
   } catch (err) {
     logger.logFailure('Cannot login:', err?.message || err);
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -22,8 +25,9 @@ const signup = async (req, res) => {
     logger.logSuccess('Registered new user', email);
   } catch (err) {
     logger.logFailure('Cannot signup new user:', err?.message || err);
-    res.status(err?.status || 500).json({ error: err?.message || err });
-    
+    res
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -34,7 +38,9 @@ const getAllUserInfo = async (req, res) => {
     res.json({ message: 'SUCCESS', info });
   } catch (err) {
     logger.logFailure('Cannot retrieve all user info:', err?.message || err);
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -42,11 +48,13 @@ const getUserInfo = async (req, res) => {
   try {
     const { id, email } = req.query;
     const info = await userService.getUserInfo(id, email);
-    logger.logSuccess('Retrieved user info for', id ? 'user ' + id: email);
+    logger.logSuccess('Retrieved user info for', id ? 'user ' + id : email);
     res.json({ message: 'SUCCESS', info });
   } catch (err) {
     logger.logFailure('Cannot retrieve user info:', err?.message || err);
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -58,7 +66,9 @@ const updateUser = async (req, res) => {
     res.json({ message: 'SUCCESS: User info updated' });
   } catch (err) {
     logger.logFailure('Cannot update username of user:', err?.message || err);
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -70,7 +80,9 @@ const deleteUser = async (req, res) => {
     res.json({ message: 'SUCCESS: User deleted' });
   } catch (err) {
     logger.logFailure('Cannot delete user:', err?.message || err);
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -87,7 +99,9 @@ const changePassword = async (req, res) => {
     res.json({ message: 'SUCCESS: Password changed' });
   } catch (err) {
     logger.logFailure('Cannot change password:', err?.message || err);
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -99,7 +113,9 @@ const toggleUserRole = async (req, res) => {
     res.json({ message: 'SUCCESS: User role toggled' });
   } catch (err) {
     logger.logFailure('Cannot toggle user role:', err?.message || err);
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 

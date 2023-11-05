@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import { getQuestions } from '../../api/QuestionApi.js';
-import { errorHandler } from '../../utils/errors.js';
-import { getIsMaintainer, getCookie } from '../../utils/helpers.js';
+import Spinner from '../Spinner';
+import MatchingModal from '../MatchMaking/MatchingModal';
+import { getQuestions } from '../../api/QuestionApi';
+import { errorHandler } from '../../utils/errors';
+import { getIsMaintainer, getCookie } from '../../utils/helpers';
 
 const QuestionList = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isMatchingModalOpen, setMatchingModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [isMaintainer, setIsMaintainer] = React.useState(false);
   const tableRef = useRef(null);
@@ -52,6 +55,20 @@ const QuestionList = () => {
     navigate('/landing/new');
   };
 
+  const handleToggleModal = () => {
+    setMatchingModalOpen(!isMatchingModalOpen);
+  };
+
+  const RenderTags = (tags) => {
+    return tags?.map((tag, index) => {
+      return (
+        <span key={index} className='badge bg-secondary'>
+          {tag}
+        </span>
+      );
+    });
+  };
+
   const getComplexityColor = (complexity) => {
     switch (complexity) {
       case 'Easy':
@@ -71,18 +88,17 @@ const QuestionList = () => {
       <td style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
         {question.title}
       </td>
+      <td>{RenderTags(question.tags)}</td>
       <td>
         <span className={`badge ${getComplexityColor(question?.complexity)}`}>
-          {question.complexity}{' '}
+          {question.complexity}
         </span>
       </td>
     </tr>
   ));
 
   return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
-    </div>
+    <Spinner />
   ) : (
     <div className='container'>
       <h1>Question List</h1>
@@ -96,6 +112,9 @@ const QuestionList = () => {
               Title
             </th>
             <th scope='col' width='200'>
+              Tag
+            </th>
+            <th scope='col' width='200'>
               Complexity
             </th>
           </tr>
@@ -107,11 +126,27 @@ const QuestionList = () => {
           <button
             type='button'
             className='btn btn-success'
-            onClick={handleNewQuestionClick}>
+            onClick={handleNewQuestionClick}
+          >
             Add
           </button>
         ) : null}
       </div>
+      <div className='text-md-end'>
+        <button
+          type='button'
+          className='btn btn-primary'
+          onClick={handleToggleModal}
+        >
+          Match
+        </button>
+      </div>
+      {isMatchingModalOpen && (
+        <MatchingModal
+          isOpen={isMatchingModalOpen}
+          onClose={handleToggleModal}
+        />
+      )}
     </div>
   );
 };

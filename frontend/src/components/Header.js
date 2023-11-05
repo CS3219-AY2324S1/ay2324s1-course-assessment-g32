@@ -1,11 +1,10 @@
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { getIsMaintainer, removeCookie } from '../utils/helpers.js';
+import { getIsMaintainer, removeCookie } from '../utils/helpers';
 
 function Header() {
   const navigate = useNavigate();
@@ -25,7 +24,7 @@ function Header() {
   };
 
   return (
-    <Navbar expand='lg' className='bg-body-tertiary'>
+    <Navbar expand='lg' className='navbar navbar-dark bg-dark mb-5'>
       <Container>
         <Navbar.Brand href='/landing'>PeerPrep</Navbar.Brand>
         <div className='Navbar'>

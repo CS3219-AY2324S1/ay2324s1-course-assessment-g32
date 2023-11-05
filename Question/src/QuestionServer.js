@@ -4,14 +4,13 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const questionRoutes = require('./QuestionRoutes');
 const env = require('./loadEnvironment');
-const logger = require('./Log.js');
+const logger = require('./Log');
 
 logger.register({
   serviceName: 'Question Service',
   logLevel: logger.LOG_LEVELS.all,
 });
 
-// start the Express (web) server
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
