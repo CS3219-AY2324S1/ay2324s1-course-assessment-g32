@@ -32,7 +32,7 @@ const executePython = (req, res) => {
     });
 
     pythonProcess.stderr.on('data', (data) => {
-      errorOutput = 'Error: ';
+      errorOutput += data.toString();
     });
 
     pythonProcess.on('exit', (code) => {
@@ -50,7 +50,7 @@ const executePython = (req, res) => {
       fs.unlinkSync(scriptPath);
     });
   } catch (err) {
-    console.log(err);
+    logger.log(err);
   }
 };
 
@@ -76,30 +76,51 @@ const executeCpp = async (req, res) => {
 
 const executeJs = async (req, res) => {
   try {
-    const maxExecutionTime = 5000; // 5 seconds
     const javascriptCode = req.body.code;
+    const scriptPath = 'temp_script.js';
+    fs.writeFileSync(scriptPath, javascriptCode); // Write the code to a temporary javascript file
 
-    const scriptProcess = exec(
-      `node -e "${javascriptCode.replace(/"/g, '\\"')}"`,
-      (error, stdout, stderr) => {
-        clearTimeout(timeout); // Clear the timeout since the script completed
-        if (error) {
-          res.json({ output: stderr });
+    const jsProcess = spawn('node', [scriptPath]); // Command to execute the script
+    let hasResponded = false;
+
+    const scriptTimeout = setTimeout(() => {
+      logger.error('Javascript script execution timed out. Killing the script...');
+      jsProcess.kill('SIGINT'); // Send an interrupt signal to the Python process
+      if (!hasResponded) {
+        hasResponded = true;
+        res.json({
+          output: `${TIMEOUT_ERROR}: Your program has timed out. Please try again.`,
+        });
+      }
+    }, MAX_EXECUTION_TIME);
+
+    const output = [];
+    let errorOutput = '';
+
+    jsProcess.stdout.on('data', (data) => {
+      output.push(data.toString());
+    });
+
+    jsProcess.stderr.on('data', (data) => {
+      errorOutput += data.toString();
+    });
+
+    jsProcess.on('exit', (code) => {
+      clearTimeout(scriptTimeout);
+
+      if (!hasResponded) {
+        hasResponded = true;
+        if (code === 0) {
+          res.json({ output: output.join('') });
         } else {
-          res.json({ output: stdout });
+          res.json({ output: errorOutput });
         }
       }
-    );
 
-    const timeout = setTimeout(() => {
-      console.error(
-        'JavaScript script execution timed out. Killing the script...'
-      );
-      scriptProcess.kill();
-      // res.json({ output: "TimeoutError" });
-    }, maxExecutionTime);
+      fs.unlinkSync(scriptPath);
+    });
   } catch (err) {
-    console.log(err);
+    logger.log(err);
   }
 };
 
