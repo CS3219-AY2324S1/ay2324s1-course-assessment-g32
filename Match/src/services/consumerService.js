@@ -50,7 +50,7 @@ const handleExitRequest = (request, channel, queueName, message) => {
 const handleTimeoutRequest = (request, channel, message) => {
   logger.log(`Host ${request.id} timed out`);
 
-  const response = { message: `You have timed out!` };
+  const response = { message: `No match found. You have timed out!` };
   channel.sendToQueue(request.replyTo, bufferData(response), {
     correlationId: request.correlationId,
   });
@@ -124,7 +124,7 @@ const handleNoMatchRequest = (request, channel, queueName, message) => {
     if (waitingHostRequest.correlationId === request.correlationId) {
       logger.log(`Host ${waitingHostRequest.id} timed out`);
 
-      const response = { message: `You have timed out!` };
+      const response = { message: `No match found. You have timed out!` };
       channel.sendToQueue(request.replyTo, bufferData(response), {
         correlationId: request.correlationId,
       });
