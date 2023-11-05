@@ -103,11 +103,6 @@ try {
 
       io.to(room).emit(Event.Collaboration.MOUSE_LEAVE, jwt);
     });
-
-    // Handle disconnects
-    socket.on(Event.DISCONNECT, () => {
-      logger.log('A user disconnected');
-    });
   });
 
   httpServer.listen(env.COLLAB_PORT, () => {
