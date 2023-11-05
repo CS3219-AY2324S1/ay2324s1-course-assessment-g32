@@ -20,7 +20,6 @@
 }
 
 .scrollable-div {
-    max-height: 400px; /* Adjust the maximum height as needed */
     overflow-y: auto; /* This enables the vertical scrollbar when content overflows */
 }
 
