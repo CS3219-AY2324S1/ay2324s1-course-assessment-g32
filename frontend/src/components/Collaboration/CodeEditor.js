@@ -5,7 +5,10 @@ import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
+import { javascript } from '@codemirror/lang-javascript';
+import { executeCode } from '../../api/ExecutionApi';
 import { Language, Event } from '../../constants';
+import { errorHandler } from '../../utils/errors';
 import OverlayCursor from './OverlayCursor';
 import { isWithinWindow } from '../../utils/helpers';
 import '../../css/CodeEditor.css';
@@ -15,6 +18,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
 
   // Initialize code editor content
   const [code, setCode] = useState('');
+  const [result, setResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
 
   // Initialize cursor position for code editor
@@ -33,6 +37,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
         return java();
       case Language.CPP:
         return cpp();
+      case Language.JS:
+        return javascript();
       default:
         return python();
     }
@@ -109,6 +115,23 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     });
   };
 
+  const handleCodeExecution = async () => {
+    try {
+      const result = await executeCode(language, code);
+      console.log(result)
+      setResult(result);
+
+      // Send execution results to the server
+      socket.emit(Event.Collaboration.RESULT_CHANGE, {
+        room: roomId,
+        updatedResult: result,
+      });
+    } catch (err) {
+      errorHandler(err);
+    }
+  };
+
+  // Send code changes to the server
   // Render the partner's cursor
   useEffect(() => {
     if (editorBoxRef.current) {
@@ -132,6 +155,14 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     }
   }, []);
 
+  // Receive result update from the server
+  useEffect(() => {
+    socket.on(Event.Collaboration.RESULT_UPDATE, (updatedResult) => {
+      setResult(updatedResult);
+    });
+  }, [result]);
+
+  // Receive language changes from the server
   useEffect(() => {
     // Receive code changes from the server
     socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
@@ -188,7 +219,11 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
             <option value='Python'>Python</option>
             <option value='Java'>Java</option>
             <option value='C++'>C++</option>
+            <option value='Javascript'>Javascript</option>
           </select>
+          <button type='button' onClick={handleCodeExecution}>
+            Run code
+          </button>
         </div>
       </div>
       <div className='code-editor'
@@ -208,6 +243,15 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
         />
         {isWithinWindow(renderPartner.position, editorBoxRef) && showCursor &&
           <OverlayCursor partner={renderPartner} />}
+      </div>
+      <div className='output-container'>
+        <textarea
+          className='form-control'
+          rows='2'
+          readOnly
+          placeholder='Code execution results will appear here'
+          value={result}
+        />
       </div>
     </div>
   );

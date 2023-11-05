@@ -14,6 +14,8 @@ const Event = {
     LANGUAGE_UPDATE: 'language-update',
     MOUSE_POSITION: 'mouse-position',
     MOUSE_LEAVE: 'mouse-leave',
+    RESULT_CHANGE: 'result-change',
+    RESULT_UPDATE: 'result-update',
   },
   Communication: {
     CHAT_SEND: 'chat-send',

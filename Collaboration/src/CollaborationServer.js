@@ -68,6 +68,11 @@ try {
       io.to(room).emit(Event.Collaboration.CODE_UPDATE, code);
     });
 
+    // Handle code results
+    socket.on(Event.Collaboration.RESULT_CHANGE, (data) => {
+      io.to(data.room).emit(Event.Collaboration.RESULT_UPDATE, data.updatedResult);
+    });
+
     // Handle language changes
     socket.on(Event.Collaboration.LANGUAGE_CHANGE, (data) => {
       const room = data.room;

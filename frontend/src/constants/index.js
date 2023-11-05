@@ -17,6 +17,7 @@ const Language = {
   PYTHON: 'Python',
   JAVA: 'Java',
   CPP: 'C++',
+  JS: 'Javascript',
 };
 
 const Event = {
@@ -27,6 +28,8 @@ const Event = {
     QUESTION_UPDATE: 'question-update',
   },
   Collaboration: {
+    RESULT_CHANGE: 'result-change',
+    RESULT_UPDATE: 'result-update',
     CODE_CHANGE: 'code-change',
     CODE_UPDATE: 'code-update',
     LANGUAGE_CHANGE: 'language-change',
