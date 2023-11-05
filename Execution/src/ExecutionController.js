@@ -1,54 +1,52 @@
 const fs = require('fs');
-const { exec, spawn } = require('child_process');
+const { spawn } = require('child_process');
 const { MAX_EXECUTION_TIME, TIMEOUT_ERROR } = require('./constants');
 const logger = require('./Log');
 
+const executeScript = (scriptPath, childProcess) => {
+  return new Promise((resolve, reject) => {
+    const scriptTimeout = setTimeout(() => {
+      logger.error('Script execution timed out. Killing the script...');
+      childProcess.kill('SIGINT'); // Send an interrupt signal to the Python process
+      resolve(
+        `${TIMEOUT_ERROR}: Your program has timed out. Please try again.`
+      );
+    }, MAX_EXECUTION_TIME);
+
+    const output = [];
+    let errorOutput = '';
+
+    childProcess.stdout.on('data', (data) => {
+      output.push(data.toString());
+    });
+
+    childProcess.stderr.on('data', (data) => {
+      errorOutput += data.toString();
+    });
+
+    childProcess.on('exit', (code) => {
+      clearTimeout(scriptTimeout);
+      if (code === 0) {
+        resolve(output.join(''));
+      } else {
+        resolve(errorOutput);
+      }
+      fs.unlinkSync(scriptPath);
+    });
+  });
+};
+
 // Execute python code
-const executePython = (req, res) => {
+const executePython = async (req, res) => {
   try {
     const pythonCode = req.body.code;
     const scriptPath = 'temp_script.py';
     fs.writeFileSync(scriptPath, pythonCode); // Write the code to a temporary python file
 
     const pythonProcess = spawn('python', [scriptPath]); // Command to execute the script
-    let hasResponded = false;
+    const result = await executeScript(scriptPath, pythonProcess);
 
-    const scriptTimeout = setTimeout(() => {
-      logger.error('Python script execution timed out. Killing the script...');
-      pythonProcess.kill('SIGINT'); // Send an interrupt signal to the Python process
-      if (!hasResponded) {
-        hasResponded = true;
-        res.json({
-          output: `${TIMEOUT_ERROR}: Your program has timed out. Please try again.`,
-        });
-      }
-    }, MAX_EXECUTION_TIME);
-
-    const output = [];
-    let errorOutput = '';
-
-    pythonProcess.stdout.on('data', (data) => {
-      output.push(data.toString());
-    });
-
-    pythonProcess.stderr.on('data', (data) => {
-      errorOutput += data.toString();
-    });
-
-    pythonProcess.on('exit', (code) => {
-      clearTimeout(scriptTimeout);
-
-      if (!hasResponded) {
-        hasResponded = true;
-        if (code === 0) {
-          res.json({ output: output.join('') });
-        } else {
-          res.json({ output: errorOutput });
-        }
-      }
-
-      fs.unlinkSync(scriptPath);
-    });
+    res.json({ output: result });
   } catch (err) {
     logger.log(err);
   }
@@ -81,44 +79,9 @@ const executeJs = async (req, res) => {
     fs.writeFileSync(scriptPath, javascriptCode); // Write the code to a temporary javascript file
 
     const jsProcess = spawn('node', [scriptPath]); // Command to execute the script
-    let hasResponded = false;
+    const result = await executeScript(scriptPath, jsProcess);
 
-    const scriptTimeout = setTimeout(() => {
-      logger.error('Javascript script execution timed out. Killing the script...');
-      jsProcess.kill('SIGINT'); // Send an interrupt signal to the Python process
-      if (!hasResponded) {
-        hasResponded = true;
-        res.json({
-          output: `${TIMEOUT_ERROR}: Your program has timed out. Please try again.`,
-        });
-      }
-    }, MAX_EXECUTION_TIME);
-
-    const output = [];
-    let errorOutput = '';
-
-    jsProcess.stdout.on('data', (data) => {
-      output.push(data.toString());
-    });
-
-    jsProcess.stderr.on('data', (data) => {
-      errorOutput += data.toString();
-    });
-
-    jsProcess.on('exit', (code) => {
-      clearTimeout(scriptTimeout);
-
-      if (!hasResponded) {
-        hasResponded = true;
-        if (code === 0) {
-          res.json({ output: output.join('') });
-        } else {
-          res.json({ output: errorOutput });
-        }
-      }
-
-      fs.unlinkSync(scriptPath);
-    });
+    res.json({ output: result });
   } catch (err) {
     logger.log(err);
   }
