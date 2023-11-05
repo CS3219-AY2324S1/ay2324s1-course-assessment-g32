@@ -1,4 +1,5 @@
 import { axiosExecution } from '../utils/axios';
+import { Language } from '../constants';
 
 const getConfig = () => {
   return {
@@ -12,27 +13,31 @@ export const executeCode = async (language, code) => {
   const codeObject = { code: code };
 
   switch (language) {
-    case 'Python':
-      console.log("case python")
+    case Language.PYTHON:
+      console.log('case python');
       return await executePython(codeObject);
-    case 'Java':
-      console.log("case java")
+    case Language.JAVA:
+      console.log('case java');
       return await executeJava(codeObject);
-    case 'C++':
-      console.log("case cpp")
+    case Language.CPP:
+      console.log('case cpp');
       return await executeCpp(codeObject);
-    case 'Javascript':
-      console.log("case js")
+    case Language.JS:
+      console.log('case js');
       return await executeJs(codeObject);
     default:
-      console.log("case python")
+      console.log('case python');
       return await executePython(codeObject);
   }
 };
 
 const executePython = async (codeObject) => {
   try {
-    const response = await axiosExecution.post('/execute-python', codeObject, getConfig());
+    const response = await axiosExecution.post(
+      '/execute-python',
+      codeObject,
+      getConfig()
+    );
     return response.data.output;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -43,11 +48,15 @@ const executePython = async (codeObject) => {
     }
     throw err;
   }
-}
+};
 
 const executeJava = async (codeObject) => {
   try {
-    const response = await axiosExecution.post('/execute-java', codeObject, getConfig());
+    const response = await axiosExecution.post(
+      '/execute-java',
+      codeObject,
+      getConfig()
+    );
     return response.data.output;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -62,7 +71,11 @@ const executeJava = async (codeObject) => {
 
 const executeCpp = async (codeObject) => {
   try {
-    const response = await axiosExecution.post('/execute-cpp', codeObject, getConfig());
+    const response = await axiosExecution.post(
+      '/execute-cpp',
+      codeObject,
+      getConfig()
+    );
     return response.data.output;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -77,8 +90,12 @@ const executeCpp = async (codeObject) => {
 
 const executeJs = async (codeObject) => {
   try {
-    const response = await axiosExecution.post('/execute-js', codeObject, getConfig());
-    console.log(response.data.output)
+    const response = await axiosExecution.post(
+      '/execute-js',
+      codeObject,
+      getConfig()
+    );
+    console.log(response.data.output);
     return response.data.output;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
