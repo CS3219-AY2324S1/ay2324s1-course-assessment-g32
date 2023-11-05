@@ -2,6 +2,12 @@ const amqp = require('amqplib');
 const { v4: uuidv4 } = require('uuid');
 const authApi = require('../helpers/callsToAuth');
 const env = require('../loadEnvironment');
+const logger = require('../Log');
+
+logger.register({
+  serviceName: 'Match Service',
+  logLevel: logger.LOG_LEVELS.all,
+});
 
 // Generate a unique id
 const generateUuid = () => {
@@ -21,9 +27,9 @@ const joinQueue = async (jwt, queueName, sessionID) => {
   const requestQueue = queueName;
   const responseQueue = queueName + 'Response';
 
-  await channel.assertQueue('commonQueue', { durable: false, });
-  await channel.assertQueue(requestQueue, { durable: false, autoDelete: true, });
-  await channel.assertQueue(responseQueue, { durable: false, autoDelete: true, });
+  await channel.assertQueue('commonQueue', { durable: false });
+  await channel.assertQueue(requestQueue, { durable: false, autoDelete: true });
+  await channel.assertQueue(responseQueue, { durable: false, autoDelete: true });
 
   // Send the names of the request and response queues to the common queue for the server to create the queues
   channel.sendToQueue(
@@ -50,6 +56,8 @@ const joinQueue = async (jwt, queueName, sessionID) => {
     isExit: false,
     sessionID: sessionID,
   };
+
+  logger.debug(`Host ${userId} joined ${queueName} queue successfully`);
 
   // Send the message to the request queue with the queue name as a property
   channel.sendToQueue(requestQueue, Buffer.from(JSON.stringify(message)), {
@@ -84,7 +92,7 @@ const exitQueue = async (jwt, queueName, sessionID) => {
   const channel = await connection.createChannel();
 
   const requestQueue = queueName;
-  await channel.assertQueue(requestQueue, { durable: false, autoDelete: true, });
+  await channel.assertQueue(requestQueue, { durable: false, autoDelete: true });
 
   // Decrypt the userId from the jwt
   const decryptedUser = await authApi.authorize(jwt);

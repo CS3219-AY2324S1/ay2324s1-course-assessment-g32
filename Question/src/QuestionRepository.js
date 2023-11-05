@@ -28,6 +28,18 @@ const getQuestions = async () => {
   }
 };
 
+const getQuestionsByCriteria = async (complexity, tags) => {
+  try {
+    // Return all questions that match the criteria without the description
+    return await questionModel.find(
+      { complexity: complexity, tags: { $all: tags } },
+      { description: 0 }
+    );
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getQuestionsByComplexity = async (complexity) => {
   try {
     // Return all questions without the description
@@ -136,6 +148,7 @@ const getQuestionStatistics = async (questionsId) => {
 module.exports = {
   createQuestion,
   getQuestions,
+  getQuestionsByCriteria,
   getQuestionsByComplexity,
   getQuestionDetails,
   getRandomQuestionByComplexity,

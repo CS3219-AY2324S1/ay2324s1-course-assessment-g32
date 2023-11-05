@@ -29,43 +29,79 @@ try {
   io.on(Event.CONNECTION, (socket) => {
     // Handle room joining
     socket.on(Event.JOIN_ROOM, (data) => {
-      socket.join(data.room);
-      logger.log(`${data.host} joined room: ${data.room}`);
+      const room = data.room;
+      const user = data.user;
 
-      const message = { text: `${data.host} joined room` };
-      io.to(data.room).emit(Event.Communication.CHAT_RECEIVE, message); // Broadcast a message to the room when someone joins
+      socket.join(room);
+      logger.log(`${user} joined room: ${room}`);
+
+      const message = { text: `${user} joined room` };
+      io.to(room).emit(Event.Communication.CHAT_RECEIVE, message);
     });
 
     // Handle room leaving
     socket.on(Event.LEAVE_ROOM, (data) => {
-      socket.leave(data.room);
-      logger.log(`${data.host} left room: ${data.room}`);
+      const room = data.room;
+      const user = data.user;
 
-      const message = { text: `${data.host} left room` };
-      io.to(data.room).emit(Event.Communication.CHAT_RECEIVE, message); // Broadcast a message to the room when someone leaves
+      socket.leave(room);
+      socket.disconnect(true);
+      logger.log(`${user} left room: ${room}`);
+
+      const message = { text: `${user} left room` };
+      io.to(room).emit(Event.Communication.CHAT_RECEIVE, message);
     });
 
     // Handle chat messages
     socket.on(Event.Communication.CHAT_SEND, (data) => {
-      io.to(data.room).emit(Event.Communication.CHAT_RECEIVE, data.message); // Broadcast message to everyone in the room
+      const room = data.room;
+      const message = data.message;
+
+      io.to(room).emit(Event.Communication.CHAT_RECEIVE, message);
     });
 
     // Handle code changes
     socket.on(Event.Collaboration.CODE_CHANGE, (data) => {
-      io.to(data.room).emit(Event.Collaboration.CODE_UPDATE, data.updatedCode); // Broadcast code to everyone in the room
+      const room = data.room;
+      const code = data.updatedCode;
+
+      io.to(room).emit(Event.Collaboration.CODE_UPDATE, code);
     });
 
     // Handle language changes
     socket.on(Event.Collaboration.LANGUAGE_CHANGE, (data) => {
-      io.to(data.room).emit(
-        Event.Collaboration.LANGUAGE_UPDATE,
-        data.updatedLanguage
-      ); // Broadcast language to everyone in the room
+      const room = data.room;
+      const language = data.updatedLanguage;
+
+      io.to(room).emit(Event.Collaboration.LANGUAGE_UPDATE, language);
     });
 
     // Handle question changes
     socket.on(Event.Question.QUESTION_CHANGE, (data) => {
-      io.to(data.room).emit(Event.Question.QUESTION_UPDATE, data.question); // Broadcast question to everyone in the room
+      const room = data.room;
+      const question = data.question;
+
+      io.to(room).emit(Event.Question.QUESTION_UPDATE, question);
+    });
+
+    // Handle mouse position changes
+    socket.on(Event.Collaboration.MOUSE_POSITION, (data) => {
+      const room = data.room;
+      const user = data.user;
+      const jwt = data.jwt;
+      const mousePosition = data.position;
+      const message = {user: user, jwt: jwt, position: mousePosition};
+
+      io.to(room).emit(Event.Collaboration.MOUSE_POSITION, message);
+    });
+
+
+    // Handle mouse leave
+    socket.on(Event.Collaboration.MOUSE_LEAVE, (data) => {
+      const room = data.room;
+      const jwt = data.jwt;
+
+      io.to(room).emit(Event.Collaboration.MOUSE_LEAVE, jwt);
     });
 
     // Handle disconnects

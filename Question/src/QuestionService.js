@@ -39,9 +39,13 @@ const getQuestions = async () => {
   }
 };
 
-const getQuestionsByComplexity = async (complexity) => {
+const getQuestionsByCriteria = async (complexity, tags) => {
   try {
-    return await questionRepository.getQuestionsByComplexity(complexity);
+    if (tags.length === 1 && tags[0] === 'All') {
+      return await questionRepository.getQuestionsByComplexity(complexity);
+    } else {
+      return await questionRepository.getQuestionsByCriteria(complexity, tags);
+    }
   } catch (err) {
     throw err;
   }
@@ -151,7 +155,7 @@ const getQuestionStatistics = async () => {
 module.exports = {
   createQuestion,
   getQuestions,
-  getQuestionsByComplexity,
+  getQuestionsByCriteria,
   getQuestionDetails,
   getRandomQuestionByComplexity,
   editQuestion,

@@ -13,20 +13,23 @@ const SubmissionCode = ({ attempt }) => {
 
   const [extensions, setExtensions] = useState([]);
 
-  useEffect(() => {
-    switch (attempt.language) {
+  const getLanguageExtension = (selectedLanguage) => {
+    switch (selectedLanguage) {
       case 'Python':
-        setExtensions([python(), EditorView.editable.of(false), EditorState.readOnly.of(true)]);
-        break;
+        return python();
       case 'Java':
-        setExtensions([java(), EditorView.editable.of(false), EditorState.readOnly.of(true)]);
-        break;
+        return java();
       case 'C++':
-        setExtensions([cpp(), EditorView.editable.of(false), EditorState.readOnly.of(true)]);
-        break;
+        return cpp();
       default:
-        setExtensions([EditorView.editable.of(false), EditorState.readOnly.of(true)]);
+        return python();
     }
+  };
+
+  useEffect(() => {
+    const languageExtension = getLanguageExtension(attempt.language);
+    setExtensions([languageExtension, EditorView.editable.of(false),
+      EditorState.readOnly.of(true), EditorView.lineWrapping]);
   }, [attempt]);
 
   return (

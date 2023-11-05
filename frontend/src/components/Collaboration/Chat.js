@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Event } from '../../constants';
-import '../../css/Chat.css'
+import '../../css/Chat.css';
 
-const Chat = ({ socket, roomId, host }) => {
+const Chat = ({ socket, roomId, user }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
 
@@ -21,10 +21,13 @@ const Chat = ({ socket, roomId, host }) => {
     if (inputMessage) {
       const message = {
         text: inputMessage,
-        sender: host,
+        sender: user,
         timestamp: getTimestamp(),
       };
-      socket.emit(Event.Communication.CHAT_SEND, { room: roomId, message: message });
+      socket.emit(Event.Communication.CHAT_SEND, {
+        room: roomId,
+        message: message,
+      });
       setInputMessage('');
     }
   };
@@ -41,7 +44,7 @@ const Chat = ({ socket, roomId, host }) => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`message ${msg.sender === host ? 'self' : 'other'}`}
+            className={`message ${msg.sender === user ? 'self' : 'other'}`}
           >
             {msg.text}
             {msg.timestamp && (
