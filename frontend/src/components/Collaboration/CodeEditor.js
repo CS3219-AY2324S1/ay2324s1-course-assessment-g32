@@ -20,6 +20,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const [code, setCode] = useState('');
   const [result, setResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
+  const [isExecuting, setIsExecuting] = useState(false);
 
   // Initialize cursor position for code editor
   const [scrollTop, setScrollTop] = useState(0);
@@ -123,6 +124,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
 
   const handleCodeExecution = async () => {
     try {
+      setIsExecuting(true);
+
       const result = await executeCode(language, code);
       console.log(result);
       setResult(result);
@@ -134,6 +137,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
       });
     } catch (err) {
       errorHandler(err);
+    } finally {
+      setIsExecuting(false);
     }
   };
 
@@ -223,8 +228,9 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
           </select>
           <button
             type='button'
-            className='btn btn-success me-2'
+            className={`btn ${isExecuting ? 'btn-secondary' : 'btn-success'} me-2`}
             onClick={handleCodeExecution}
+            disabled={isExecuting}
           >
             ▶ Run
           </button>
