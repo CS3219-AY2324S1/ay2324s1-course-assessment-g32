@@ -57,7 +57,7 @@ const joinQueue = async (jwt, queueName, sessionID) => {
     sessionID: sessionID,
   };
 
-  logger.logSuccess(`Host ${userId} joined ${queueName} queue successfully`);
+  logger.debug(`Host ${userId} joined ${queueName} queue successfully`);
 
   // Send the message to the request queue with the queue name as a property
   channel.sendToQueue(requestQueue, Buffer.from(JSON.stringify(message)), {
@@ -103,8 +103,6 @@ const exitQueue = async (jwt, queueName, sessionID) => {
     isExit: true,
     sessionID: sessionID,
   };
-
-  logger.logSuccess(`Host ${userId} leaved ${queueName} queue successfully`);
 
   // Send the message to the request queue
   channel.sendToQueue(requestQueue, Buffer.from(JSON.stringify(message)));

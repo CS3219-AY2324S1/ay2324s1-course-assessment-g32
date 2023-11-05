@@ -33,7 +33,7 @@ const handleExitRequest = (request, channel, queueName, message) => {
   if (waitingHost !== undefined) {
     const waitingHostRequest = JSON.parse(waitingHost.content.toString());
     if (waitingHostRequest.sessionID === request.sessionID) {
-      logger.log(`Host ${waitingHostRequest.id} exited the ${queueName} queue`);
+      logger.debug(`Host ${waitingHostRequest.id} has exited ${queueName} queue`);
 
       const response = { message: `You have exited the queue` };
       channel.sendToQueue(waitingHostRequest.replyTo, bufferData(response), {
@@ -48,7 +48,7 @@ const handleExitRequest = (request, channel, queueName, message) => {
 
 // Handle request when the host in current queue times out
 const handleTimeoutRequest = (request, channel, message) => {
-  logger.log(`Host ${request.id} timed out`);
+  logger.debug(`Host ${request.id} timed out`);
 
   const response = { message: `No match found. You have timed out!` };
   channel.sendToQueue(request.replyTo, bufferData(response), {
@@ -65,7 +65,7 @@ const checkMultipleTabsRequest = (request, channel, queueName) => {
     const waitingHostResponse = {
       message: `You are waiting in multiple tabs!`,
     };
-    logger.log(`Host ${waitingHostRequest.id} is waiting in multiple tabs`);
+    logger.debug(`Host ${waitingHostRequest.id} is waiting in multiple tabs, removing earlier session from queue`);
 
     // Send the response to waiting host
     channel.sendToQueue(
@@ -83,7 +83,7 @@ const checkMultipleTabsRequest = (request, channel, queueName) => {
 // Handle request when 2 unique users are matched
 const handleMatchedRequest = (request, channel, queueName, message, waitingHost) => {
   const waitingHostRequest = JSON.parse(waitingHost.content.toString());
-  logger.log(`Matched Host ${waitingHostRequest.id} with Host ${request.id}`);
+  logger.logSuccess(`Matched Host ${waitingHostRequest.id} with Host ${request.id}`);
 
   const roomId = generateUniqueRoomId();
   const response = {
@@ -91,6 +91,9 @@ const handleMatchedRequest = (request, channel, queueName, message, waitingHost)
     isMatch: true,
     roomId: roomId,
   };
+
+  logger.debug(`Removed host ${waitingHostRequest.id} from ${queueName} queue`);
+  logger.debug(`Removed host ${request.id} from ${queueName} queue`);
 
   // Send the match response to the waiting host
   channel.sendToQueue(waitingHostRequest.replyTo, bufferData(response), {
@@ -122,7 +125,7 @@ const handleNoMatchRequest = (request, channel, queueName, message) => {
 
     // Ensure that there is no match before sending the timeout response
     if (waitingHostRequest.correlationId === request.correlationId) {
-      logger.log(`Host ${waitingHostRequest.id} timed out`);
+      logger.debug(`Host ${waitingHostRequest.id} timed out`);
 
       const response = { message: `No match found. You have timed out!` };
       channel.sendToQueue(request.replyTo, bufferData(response), {
