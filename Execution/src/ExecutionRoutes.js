@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const executionController = require('./ExecutionController.js');
+const executionController = require('./ExecutionController');
 
 router.post('/execute-python', executionController.executePython);
 router.post('/execute-java', executionController.executeJava);
