@@ -5,26 +5,27 @@ import {
   showUserNotAuthorizedErrorToast,
   showDuplicateRecordErrorToast,
   showRecordNotFoundErrorToast,
-} from './toast.js';
+} from './toast';
+import { Status } from '../constants';
 
 export const errorHandler = (error) => {
   switch (error.response.status) {
-    case 400:
+    case Status.BAD_REQUEST:
       showValidationErrorToast(error);
       break;
-    case 401:
+    case Status.UNAUTHORIZED:
       showUserNotAuthorizedErrorToast(error);
       break;
-    case 408:
+    case Status.REQUEST_TIMEOUT:
       showServerErrorToast(error);
       break;
-    case 409:
+    case Status.CONFLICT:
       showDuplicateRecordErrorToast(error);
       break;
-    case 410:
+    case Status.GONE:
       showRecordNotFoundErrorToast(error);
       break;
-    case 500:
+    case Status.INTERNAL_SERVER_ERROR:
       showServerErrorToast(error);
       break;
     default:

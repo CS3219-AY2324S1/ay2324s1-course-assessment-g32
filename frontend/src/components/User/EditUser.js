@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { updateDisplayName } from '../../api/UserApi.js';
-import { showSuccessToast } from '../../utils/toast.js';
-import { errorHandler } from '../../utils/errors.js';
-import { getCookie } from '../../utils/helpers.js';
+import { updateDisplayName } from '../../api/UserApi';
+import { showSuccessToast } from '../../utils/toast';
+import { errorHandler } from '../../utils/errors';
+import { getCookie } from '../../utils/helpers';
 
 const EditUser = ({ user, isMaintainerPage }) => {
   const [id, setId] = useState('');
@@ -49,7 +49,8 @@ const EditUser = ({ user, isMaintainerPage }) => {
               <li
                 className='breadcrumb-item active'
                 aria-current='page'
-                style={{ fontWeight: 'bold' }}>
+                style={{ fontWeight: 'bold' }}
+              >
                 Edit User Information
               </li>
             </ol>
@@ -60,7 +61,8 @@ const EditUser = ({ user, isMaintainerPage }) => {
       <form
         className='edit-display-name needs-validation'
         onSubmit={handleUpdateClick}
-        noValidate>
+        noValidate
+      >
         <div className='form-floating mb-3'>
           <input
             type='text'
@@ -77,7 +79,8 @@ const EditUser = ({ user, isMaintainerPage }) => {
           <button
             type='button'
             className='btn btn-secondary'
-            onClick={handleBackClick}>
+            onClick={handleBackClick}
+          >
             Back
           </button>
           <button type='submit' className='btn btn-success'>

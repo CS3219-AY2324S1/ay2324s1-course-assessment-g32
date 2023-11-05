@@ -12,8 +12,6 @@ Click for instructions for the respective modes:
 - [Running Locally](docs/LocalHosting.md)
 - [Running via Docker](docs/Containerization.md)
 
-> For Assignment 4, please refer to _Running via Docker_ 
-
 # Resources for Developer / Tester
 
 ## Software
@@ -28,6 +26,7 @@ For development, you may also want to install:
 
 - [API Endpoints](docs/ApiEndpoints.md)
 - [Local Setup for MySQL Server](docs/LocalMySqlSetup.md)
+- [Local Setup for RabbitMQ Server](docs/LocalRabbitMqSetup.md)
 - [Containerization](docs/Containerization.md)
 
 ## Micro-services
@@ -42,7 +41,10 @@ Run them in different terminals:
 - Auth service: `npm run start:auth`
 - User service: `npm run start:user`
 - Question service: `npm run start:question`
+- Match service: `npm run start:match`
+- Collaboration Service: `npm run start:collab`
 - Frontend: `npm run start:frontend`
 
 ---
+
 **For clarifications, do leave your questions at [Feedback PR](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32/pull/1) created in our repository.**

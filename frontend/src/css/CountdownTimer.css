@@ -1,0 +1,16 @@
+/* Center the text inside the circle */
+.countdown-timer-container {
+    text-align: center;
+    position: relative;
+}
+
+/* Style for the Typography component */
+.countdown-timer-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    color: #000000;
+    /* Customize the color as needed */
+}

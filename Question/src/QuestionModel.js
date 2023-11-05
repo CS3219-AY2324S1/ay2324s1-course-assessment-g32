@@ -6,24 +6,24 @@ const Schema = mongoose.Schema;
 const QuestionSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   complexity: {
     type: String,
     enum: ['Easy', 'Medium', 'Hard'], // Define the allowed values here
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   tags: {
     type: [String],
-    required: false
-  }
+    required: false,
+  },
 });
 
 // Create a model named "Question", which represents a collection in the database
-const Question = mongoose.model("Question", QuestionSchema);
+const Question = mongoose.model('Question', QuestionSchema);
 
 module.exports = Question;

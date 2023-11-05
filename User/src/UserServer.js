@@ -1,13 +1,11 @@
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
-const userRoutes = require('./UserRoutes.js');
-const env = require('./loadEnvironment.js');
-const logger = require('./Log.js');
 const mysql = require('mysql2');
-
-const MAX_CONNECTION_ATTEMPTS = 10;
-const CONNECTION_INTERVAL = 5000;
+const userRoutes = require('./UserRoutes');
+const env = require('./loadEnvironment');
+const logger = require('./Log');
+const { MAX_CONNECTION_ATTEMPTS, CONNECTION_INTERVAL } = require('./constants');
 
 logger.register({
   serviceName: 'User Service',

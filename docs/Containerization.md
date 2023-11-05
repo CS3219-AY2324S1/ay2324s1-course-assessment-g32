@@ -1,17 +1,15 @@
-# Containerization (Assignment 4)
+# Containerization
 
 Docker is used to containerize our various micro-services
 which serves our combined application.
-
-The combined application contains qualities of:
-* Question Repository Application
-* User Profile Management Application
 
 We have various micro-services including:
 * MySQL Database
 * User Service
 * Auth Service
 * Question Service
+* Match Service
+* Collaboration Service
 * Frontend Service (Web UI)
 
 > Additional Note:\
@@ -34,7 +32,7 @@ Download and install these software if you do not have them locally.
 
 - [Docker Desktop](https://www.docker.com/get-started/)
 
-**Ensure that MySQL Server is NOT running locally.** 
+**Ensure that MySQL and RabbitMQ Server is NOT running locally.** 
 
 # Testing
 

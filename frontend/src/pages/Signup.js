@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signup } from '../api/UserApi.js';
-import { showSuccessToast } from '../utils/toast.js';
-import { errorHandler } from '../utils/errors.js';
+import { signup } from '../api/UserApi';
+import { showSuccessToast } from '../utils/toast';
+import { errorHandler } from '../utils/errors';
 
 function Signup() {
   const [email, setEmail] = useState('');

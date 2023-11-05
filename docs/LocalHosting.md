@@ -6,6 +6,8 @@ Download and install these software if you do not have them locally.
 
 - [NodeJS](https://nodejs.org/en/download)
 - [MySQL](https://dev.mysql.com/downloads/mysql/)
+- [Erlang](https://www.erlang.org/downloads)
+- [RabbitMQ](https://www.rabbitmq.com/download.html)
 
 ## Internet Access
 
@@ -21,6 +23,10 @@ Follow the steps in [Setup MySQL locally](LocalMySqlSetup.md).
 
 Note the root password used, as it would be needed in the later parts.
 
+## Setup RabbitMQ locally
+
+Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md).
+
 ## Setup environment variables
 
 1. At the root directory, open a terminal
@@ -30,11 +36,11 @@ Note the root password used, as it would be needed in the later parts.
    ```
 3. Open `.env` file
 4. Fill up the MYSQL root password
-   (previously configured when installing MySQL)  
+   (previously configured when installing MySQL)
    - Example: if your root password is "password1234",
      `MYSQL_ROOT_PASSWORD=password1234`
 5. Fill up a JWT token password
-   (for generating and decoding JWT tokens)  
+   (for generating and decoding JWT tokens)
    - Example: if you want to set the password to "password",
      `JWT_SECRET_KEY=password`
 
@@ -56,4 +62,5 @@ npm run start-all
 ```
 
 ---
+
 [Go to README](../README.md)

@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { authorize, authorizeMaintainer } from '../api/AuthApi.js';
+import { authorize, authorizeMaintainer } from '../api/AuthApi';
 
 export const getCookie = () => {
   try {
@@ -63,4 +63,15 @@ export const parseDatetime = (datetime) => {
   };
 
   return date.toLocaleString(undefined, options);
+};
+
+export const isWithinWindow = (position, editorBoxRef) => {
+  if (editorBoxRef.current) {
+    const { x, y } = position;
+    const { top, left, width, height } = editorBoxRef.current.getBoundingClientRect();
+    if (x > left && x < left + width - 10 && y > top && y < top + height - 10) {
+      return true;
+    }
+  }
+  return false;
 };

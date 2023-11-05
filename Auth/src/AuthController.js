@@ -1,7 +1,8 @@
-const { getJwtToken } = require('./helpers/jwt.js');
 const jwt = require('jsonwebtoken');
-const env = require('./loadEnvironment.js');
-const logger = require('./Log.js');
+const env = require('./loadEnvironment');
+const { getJwtToken } = require('./helpers/jwt');
+const { Status } = require('./constants');
+const logger = require('./Log');
 
 // Used by login requests
 const generate = async (req, res) => {
@@ -13,16 +14,17 @@ const generate = async (req, res) => {
       const jwtToken = getJwtToken(userInfo);
       logger.logSuccess('Generated JWT');
       res.json({ message: 'Generated JWT successfully', token: jwtToken });
-      
     } else {
       logger.log('Invalid user information provided, cannot generate JWT');
       return res
-        .status(400)
+        .status(Status.BAD_REQUEST)
         .json({ error: 'Invalid user information provided' });
     }
   } catch (err) {
     logger.error('Cannot generate JWT', err?.message || err);
-    res.status(err?.status || 500).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -36,14 +38,18 @@ const authorize = async (req, res) => {
     // No JWT token found
     if (token === 'undefined') {
       logger.warn('Not Authorized (No JWT token found)');
-      return res.status(401).json({ error: 'No JWT token found' });
+      return res
+        .status(Status.UNAUTHORIZED)
+        .json({ error: 'No JWT token found' });
     }
 
     // Verify and decode jwtToken
     jwt.verify(token, env.JWT_SECRET_KEY, (err, decodedJwtToken) => {
       if (err) {
         logger.warn('Not Authorized (Invalid JWT token)');
-        return res.status(401).json({ error: 'Invalid JWT token' });
+        return res
+          .status(Status.UNAUTHORIZED)
+          .json({ error: 'Invalid JWT token' });
       }
       // Return userId and isMaintainer to user to use at frontend
       const userInfo = {
@@ -55,7 +61,9 @@ const authorize = async (req, res) => {
     });
   } catch (err) {
     logger.error('Cannot authorize user', err?.message || err);
-    res.status(err?.status || 500).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
+      .json({ error: err?.message || err });
   }
 };
 
@@ -69,19 +77,25 @@ const authorizeMaintainer = async (req, res) => {
     // No JWT token found
     if (token === 'undefined') {
       logger.log('Not Authorized (No JWT token found)');
-      return res.status(401).json({ error: 'No JWT token found' });
+      return res
+        .status(Status.UNAUTHORIZED)
+        .json({ error: 'No JWT token found' });
     }
 
     // Verify and decode jwtToken
     jwt.verify(token, env.JWT_SECRET_KEY, (err, decodedJwtToken) => {
       if (err) {
         logger.log('Not Authorized (Invalid JWT token)');
-        return res.status(401).json({ error: 'Invalid JWT token' });
+        return res
+          .status(Status.UNAUTHORIZED)
+          .json({ error: 'Invalid JWT token' });
       }
 
       if (decodedJwtToken.isMaintainer !== 1) {
         logger.warn('Not Authorized (User not maintainer)');
-        return res.status(403).json({ error: 'Not Maintainer' });
+        return res
+          .status(Status.UNAUTHORIZED)
+          .json({ error: 'Not Maintainer' });
       }
 
       // Return userId and isMaintainer to user to use at frontend
@@ -97,7 +111,9 @@ const authorizeMaintainer = async (req, res) => {
     });
   } catch (err) {
     logger.error('Cannot authorize maintainer', err?.message || err);
-    res.status(err?.status || 500).json({ error: err?.message || err });
+    res
+      .status(err?.status || Status.INTERNAL_SERVER_ERROR)
+      .json({ error: err?.message || err });
   }
 };
 

@@ -1,13 +1,13 @@
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
-const authRoutes = require('./AuthRoutes.js');
-const env = require('./loadEnvironment.js');
-const logger = require('./Log.js');
+const authRoutes = require('./AuthRoutes');
+const env = require('./loadEnvironment');
+const logger = require('./Log');
 
 logger.register({
-  serviceName: "Auth Service",
-  logLevel: logger.LOG_LEVELS.warn
+  serviceName: 'Auth Service',
+  logLevel: logger.LOG_LEVELS.warn,
 });
 
 logger.log('Starting ...');
