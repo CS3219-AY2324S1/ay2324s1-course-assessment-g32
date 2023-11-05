@@ -32,7 +32,7 @@ Download and install these software if you do not have them locally.
 
 - [Docker Desktop](https://www.docker.com/get-started/)
 
-**Ensure that MySQL Server is NOT running locally.** 
+**Ensure that MySQL and RabbitMQ Server is NOT running locally.** 
 
 # Testing
 

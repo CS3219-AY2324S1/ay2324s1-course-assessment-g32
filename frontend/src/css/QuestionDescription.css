@@ -18,3 +18,15 @@
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+
+.scrollable-div {
+    max-height: 400px; /* Adjust the maximum height as needed */
+    overflow-y: auto; /* This enables the vertical scrollbar when content overflows */
+}
+
+.spinner-border {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
