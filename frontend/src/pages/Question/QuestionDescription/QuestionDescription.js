@@ -100,68 +100,70 @@ const QuestionDescription = () => {
     });
   };
 
-  return isLoading ? (
-    <div className='spinner-border text-primary' role='status'>
-      <span className='visually-hidden'>Loading...</span>
-    </div>
-  ) : (
-    <div className='landing'>
+  return (
+    <div>
       <Header />
-      <div className='body'>
-        <div className='container'>
-          <div className='card text-center'>
-            <div className='card-header'>
-              <div className='d-flex justify-content-between'>
-                <button
-                  type='button'
-                  className='btn btn-secondary'
-                  onClick={handleBackClick}>
-                  Back
-                </button>
-                {isMaintainer ? (
-                  <div>
-                    <button
-                      type='button'
-                      className='btn btn-primary me-2'
-                      onClick={handleEditClick}>
-                      Edit
-                    </button>
-                    <button
-                      type='button'
-                      className='btn btn-danger'
-                      onClick={handleDeleteClick}>
-                      Delete
-                    </button>
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </div>
-            </div>
-            <div className='card-body'>
-              <h1 className='card-title'>{titleValue}</h1>
-              <div
-                className='scrollable-div'
-                dangerouslySetInnerHTML={{ __html: descriptionValue }}></div>
-            </div>
-            <div className='card-footer d-flex'>
-              <div className='d-flex flex-wrap gap-1'>{RenderTags()}</div>
-              <div className='ms-auto'>
-                <span
-                  className={`badge ${getComplexityColor(complexityValue)}`}>
-                  {complexityValue}
-                </span>
-              </div>
-            </div>
-          </div>
-          {isDeletionWindowOpen && (
-            <DeletionWindow
-              onConfirm={handleConfirmDeletion}
-              onClose={handleDeletionWindowClose}
-            />
-          )}
+      {isLoading ? (
+        <div className='spinner-border text-primary' role='status'>
+          <span className='visually-hidden'>Loading...</span>
         </div>
-      </div>
+      ) : (
+        <div className='body'>
+          <div className='container'>
+            <div className='card text-center'>
+              <div className='card-header'>
+                <div className='d-flex justify-content-between'>
+                  <button
+                    type='button'
+                    className='btn btn-secondary'
+                    onClick={handleBackClick}>
+                    Back
+                  </button>
+                  {isMaintainer ? (
+                    <div>
+                      <button
+                        type='button'
+                        className='btn btn-primary me-2'
+                        onClick={handleEditClick}>
+                        Edit
+                      </button>
+                      <button
+                        type='button'
+                        className='btn btn-danger'
+                        onClick={handleDeleteClick}>
+                        Delete
+                      </button>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </div>
+              <div className='card-body'>
+                <h1 className='card-title'>{titleValue}</h1>
+                <div
+                  className='scrollable-div'
+                  dangerouslySetInnerHTML={{ __html: descriptionValue }}></div>
+              </div>
+              <div className='card-footer d-flex'>
+                <div className='d-flex flex-wrap gap-1'>{RenderTags()}</div>
+                <div className='ms-auto'>
+                  <span
+                    className={`badge ${getComplexityColor(complexityValue)}`}>
+                    {complexityValue}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {isDeletionWindowOpen && (
+              <DeletionWindow
+                onConfirm={handleConfirmDeletion}
+                onClose={handleDeletionWindowClose}
+              />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

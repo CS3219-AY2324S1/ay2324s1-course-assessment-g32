@@ -21,8 +21,8 @@ const generate = async (req, res) => {
         .json({ error: 'Invalid user information provided' });
     }
   } catch (err) {
-    logger.logFailure('Cannot generate JWT', err?.message || err);
-    res.status(err?.status || 400).json({ error: err?.message || err });
+    logger.error('Cannot generate JWT', err?.message || err);
+    res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };
 
@@ -35,14 +35,14 @@ const authorize = async (req, res) => {
 
     // No JWT token found
     if (token === 'undefined') {
-      logger.log('Not Authorized (No JWT token found)');
+      logger.warn('Not Authorized (No JWT token found)');
       return res.status(401).json({ error: 'No JWT token found' });
     }
 
     // Verify and decode jwtToken
     jwt.verify(token, env.JWT_SECRET_KEY, (err, decodedJwtToken) => {
       if (err) {
-        logger.log('Not Authorized (Invalid JWT token)');
+        logger.warn('Not Authorized (Invalid JWT token)');
         return res.status(401).json({ error: 'Invalid JWT token' });
       }
       // Return userId and isMaintainer to user to use at frontend
@@ -54,7 +54,7 @@ const authorize = async (req, res) => {
       res.json({ message: 'User is authorized', userInfo: userInfo });
     });
   } catch (err) {
-    logger.logFailure('Cannot authorize user', err?.message || err);
+    logger.error('Cannot authorize user', err?.message || err);
     res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };
@@ -79,9 +79,9 @@ const authorizeMaintainer = async (req, res) => {
         return res.status(401).json({ error: 'Invalid JWT token' });
       }
 
-      if (!decodedJwtToken.isMaintainer) {
-        logger.log('Not Authorized (User not maintainer)');
-        return res.status(401).json({ error: 'Not Maintainer' });
+      if (decodedJwtToken.isMaintainer !== 1) {
+        logger.warn('Not Authorized (User not maintainer)');
+        return res.status(403).json({ error: 'Not Maintainer' });
       }
 
       // Return userId and isMaintainer to user to use at frontend
@@ -96,7 +96,7 @@ const authorizeMaintainer = async (req, res) => {
       });
     });
   } catch (err) {
-    logger.logFailure('Cannot authorize maintainer', err?.message || err);
+    logger.error('Cannot authorize maintainer', err?.message || err);
     res.status(err?.status || 500).json({ error: err?.message || err });
   }
 };

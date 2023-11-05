@@ -2,7 +2,7 @@
     "name": "auth",
     "version": "1.0.0",
     "description": "",
-    "main": "AuthServer.js",
+    "main": "src/AuthServer.js",
     "scripts": {
         "dev": "nodemon src/AuthServer.js",
         "start": "node src/AuthServer.js"

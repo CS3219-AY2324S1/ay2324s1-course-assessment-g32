@@ -1,8 +1,7 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
+# Containerization (Assignment 4)
 
-# Assignment 4 - Containerization
-
-We used Docker to containerize our various micro-services which serves our combined application.
+Docker is used to containerize our various micro-services
+which serves our combined application.
 
 The combined application contains qualities of:
 * Question Repository Application
@@ -15,35 +14,34 @@ We have various micro-services including:
 * Question Service
 * Frontend Service (Web UI)
 
-Additional Notes:
-
-If you are not using Windows OS, and would like a equivalent instruction for a differnt OS, do reach out to us for clarification.
-
-**For clarifications, do leave your questions at [Feedback PR](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32/pull/1) created in our repository.**
+> Additional Note:\
+> The instructions we have are based on Windows OS.
+> Do reach out to us for clarification for other OS.
 
 # Requirements
 
-## Network
+## Internet Access
 
-Internet connection is required.
+Ensure that you are connected to the internet.
 
-**[ IMPORTANT! ]** Do _not_ test while on NUS grounds or connected
-(either directly or indirectly) to NUS Wifi.
-(NUS networks blocks MongoDB which is required by our application.)
+> Note!\
+> Do **not** connect to NUS Wifi/Network.\
+> The application would be unable to connect to MongoDB Atlas.
 
 ## Software
+
 Download and install these software if you do not have them locally.
 
 - [Docker Desktop](https://www.docker.com/get-started/)
 
-**Ensure that MySQL Server is NOT running locally.**
+**Ensure that MySQL Server is NOT running locally.** 
 
 # Testing
 
-For clarity, the commands given below should be executed at the root directory if not specified otherwise.
+Unless specified otherwise, the commands given below should be executed at the root directory.
 
-_The commands below are provided for convenience and may be incorrect.
-Do reach out to us for clarification if necessary._
+> _The commands below are provided for convenience and may be incorrect.
+> Do reach out to us for clarification if necessary._
 
 ## Pre-testing Set up
 
@@ -112,14 +110,14 @@ Server: Docker Desktop 4.24.2 (124339)
 
 ### Dockered Microservices
 
-At the root directory, open a terminal
+At the root directory, open a terminal 
 to create and start containers of the micro-services.
 
 ```shell
 docker compose up -d
 ```
 
-It may take a few minutes for the inital build as it needs to download the images online.
+It may take a few minutes for the inital build as it needs to download the images online. 
 The frontend would only be available after the containers are running.
 
 ### Frontend Application
@@ -135,17 +133,18 @@ By default, we have created 2 accounts as part of the fresh database. These acco
 | admin@test.com | password | Has admin rights. Regard as a superuser. |
 | user@test.com  | password | Normal user. Cannot manage other users.  |
 
-Note: if you delete these accounts via the user profile management functionalities, you may have from restart the pre-testing steps to get back the accounts.
-
-### Optional Testing of API endpoints
-
-If you wish to test individual microservice's API, you can refer to our [API endpoints](API_Endpoints.md).
+> Note: if you delete these accounts via the user profile management
+> functionalities, you may have from restart the pre-testing steps to
+> get back the accounts.
 
 ## Post-testing
 
-After testing, open a terminal at the root directory
+After testing, open a terminal at the root directory 
 to stop and remove the containers of the micro-services.
 
 ```shell
 docker compose down
 ```
+
+---
+[Go to README](../README.md)
