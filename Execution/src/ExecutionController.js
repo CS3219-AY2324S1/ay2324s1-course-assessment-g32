@@ -3,7 +3,7 @@ const { spawn } = require('child_process');
 const { MAX_EXECUTION_TIME, TIMEOUT_ERROR } = require('./constants');
 const logger = require('./Log');
 
-const executeScript = (scriptPath, childProcess, isRunningJavaClass) => {
+const executeScript = (scriptPath, childProcess) => {
   return new Promise((resolve, reject) => {
     const scriptTimeout = setTimeout(() => {
       logger.error('Script execution timed out. Killing the script...');
@@ -31,11 +31,7 @@ const executeScript = (scriptPath, childProcess, isRunningJavaClass) => {
       } else {
         resolve(errorOutput);
       }
-      if (isRunningJavaClass) {
-        fs.unlinkSync(scriptPath + '.class');
-      } else {
-        fs.unlinkSync(scriptPath);
-      }
+      fs.unlinkSync(scriptPath);
     });
   });
 };
@@ -48,13 +44,13 @@ const executePython = async (req, res) => {
     fs.writeFileSync(scriptPath, pythonCode); // Write the code to a temporary python file
 
     const pythonProcess = spawn('python', [scriptPath]); // Command to execute the script
-    const result = await executeScript(scriptPath, pythonProcess, false);
+    const result = await executeScript(scriptPath, pythonProcess);
 
     logger.logSuccess("Program executed successfully.");
 
     res.json({ output: result });
   } catch (err) {
-    logger.log(err);
+    logger.error(err);
   }
 };
 
@@ -69,7 +65,7 @@ const executeJava = async (req, res) => {
 
     // Compile the Java source code
     const compileProcess = spawn('javac', [javaFilename]);
-    const compileResult = await executeScript(javaFilename, compileProcess, false);
+    const compileResult = await executeScript(javaFilename, compileProcess);
 
     if (compileResult.includes('error')) {
       logger.error('Compilation failed.');
@@ -78,14 +74,14 @@ const executeJava = async (req, res) => {
       logger.logSuccess("Program compiled successfully.");
 
       const javaProcess = spawn('java', [javaClassName]);
-      const result = await executeScript(javaClassName, javaProcess, true);
+      const result = await executeScript(javaClassName + '.class', javaProcess);
 
       logger.logSuccess("Program executed successfully.");
 
       res.json({ output: result });
     }
   } catch (err) {
-    logger.log(err);
+    logger.error(err);
   }
 };
 
@@ -96,13 +92,13 @@ const executeJs = async (req, res) => {
     fs.writeFileSync(scriptPath, javascriptCode); // Write the code to a temporary javascript file
 
     const jsProcess = spawn('node', [scriptPath]); // Command to execute the script
-    const result = await executeScript(scriptPath, jsProcess, false);
+    const result = await executeScript(scriptPath, jsProcess);
 
     logger.logSuccess("Program executed successfully.");
 
     res.json({ output: result });
   } catch (err) {
-    logger.log(err);
+    logger.error(err);
   }
 };
 
