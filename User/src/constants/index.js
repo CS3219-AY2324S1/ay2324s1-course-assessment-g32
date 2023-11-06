@@ -7,6 +7,10 @@ const Status = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+// MySQL connection
+const MAX_CONNECTION_ATTEMPTS = 20;
+const CONNECTION_INTERVAL = 5000;
+
 // Email validation regex
 const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 

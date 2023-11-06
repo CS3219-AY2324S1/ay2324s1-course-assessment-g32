@@ -8,7 +8,7 @@ const Status = {
 };
 
 const TIMEOUT = 30000; // 30 seconds
-const MAX_CONNECTION_ATTEMPTS = 10;
+const MAX_CONNECTION_ATTEMPTS = 20;
 const CONNECTION_INTERVAL = 5000; // 5 seconds
 
 module.exports = {
