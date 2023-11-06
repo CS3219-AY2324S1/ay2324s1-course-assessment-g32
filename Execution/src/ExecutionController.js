@@ -46,29 +46,42 @@ const executePython = async (req, res) => {
     const pythonProcess = spawn('python', [scriptPath]); // Command to execute the script
     const result = await executeScript(scriptPath, pythonProcess);
 
+    logger.logSuccess("Program executed successfully.");
+
     res.json({ output: result });
   } catch (err) {
-    logger.log(err);
+    logger.error(err);
   }
 };
 
-// execute java
 const executeJava = async (req, res) => {
   try {
-    console.log(req.body);
-    res.json({ message: 'java code executed' });
-  } catch (err) {
-    throw err;
-  }
-};
+    const javaCode = req.body.code;
+    const javaFilename = 'Main.java';
+    const javaClassName = 'Main';
 
-// execute cpp
-const executeCpp = async (req, res) => {
-  try {
-    console.log(req.body);
-    res.json({ message: 'cpp code executed' });
+    // Write the Java source code to a .java file
+    fs.writeFileSync(javaFilename, javaCode);
+
+    // Compile the Java source code
+    const compileProcess = spawn('javac', [javaFilename]);
+    const compileResult = await executeScript(javaFilename, compileProcess);
+
+    if (compileResult.includes('error')) {
+      logger.error('Compilation failed.');
+      res.json({ output: compileResult });
+    } else {
+      logger.logSuccess("Program compiled successfully.");
+
+      const javaProcess = spawn('java', [javaClassName]);
+      const result = await executeScript(javaClassName + '.class', javaProcess);
+
+      logger.logSuccess("Program executed successfully.");
+
+      res.json({ output: result });
+    }
   } catch (err) {
-    throw err;
+    logger.error(err);
   }
 };
 
@@ -81,15 +94,16 @@ const executeJs = async (req, res) => {
     const jsProcess = spawn('node', [scriptPath]); // Command to execute the script
     const result = await executeScript(scriptPath, jsProcess);
 
+    logger.logSuccess("Program executed successfully.");
+
     res.json({ output: result });
   } catch (err) {
-    logger.log(err);
+    logger.error(err);
   }
 };
 
 module.exports = {
   executePython,
   executeJava,
-  executeCpp,
   executeJs,
 };

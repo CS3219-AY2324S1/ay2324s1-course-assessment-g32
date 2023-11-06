@@ -16,7 +16,6 @@ const Complexity = {
 const Language = {
   PYTHON: 'Python',
   JAVA: 'Java',
-  CPP: 'C++',
   JS: 'Javascript',
 };
 

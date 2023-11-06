@@ -4,7 +4,6 @@ import { EditorView } from '@codemirror/view';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
-import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { executeCode } from '../../api/ExecutionApi';
 import { Language, Event } from '../../constants';
@@ -30,14 +29,23 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const [renderPartner, setRenderPartner] = useState({});
   const [showCursor, setShowCursor] = useState(false);
 
+  const javaBoilerplate = `
+public class Main {
+  public static void main(String[] args) {
+    // Write your code here
+
+  }
+
+  // You may implement your methods here
+
+}`;
+
   const getLanguageExtension = (selectedLanguage) => {
     switch (selectedLanguage) {
       case Language.PYTHON:
         return python();
       case Language.JAVA:
         return java();
-      case Language.CPP:
-        return cpp();
       case Language.JS:
         return javascript();
       default:
@@ -113,6 +121,9 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
+    if (selectedLanguage ===  Language.JAVA) {
+      setCode(javaBoilerplate);
+    } 
     sessionStorage.setItem(`codeEditorLanguage_${roomId}`, selectedLanguage); // Store the language in session storage
 
     // Send language changes to the server
@@ -223,7 +234,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
           >
             <option value='Python'>Python</option>
             <option value='Java'>Java</option>
-            <option value='C++'>C++</option>
             <option value='Javascript'>Javascript</option>
           </select>
           <button

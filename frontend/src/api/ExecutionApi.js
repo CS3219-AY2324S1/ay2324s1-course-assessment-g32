@@ -19,9 +19,6 @@ export const executeCode = async (language, code) => {
     case Language.JAVA:
       console.log('case java');
       return await executeJava(codeObject);
-    case Language.CPP:
-      console.log('case cpp');
-      return await executeCpp(codeObject);
     case Language.JS:
       console.log('case js');
       return await executeJs(codeObject);
@@ -34,7 +31,7 @@ export const executeCode = async (language, code) => {
 const executePython = async (codeObject) => {
   try {
     const response = await axiosExecution.post(
-      '/execute-python',
+      '/python',
       codeObject,
       getConfig()
     );
@@ -53,26 +50,7 @@ const executePython = async (codeObject) => {
 const executeJava = async (codeObject) => {
   try {
     const response = await axiosExecution.post(
-      '/execute-java',
-      codeObject,
-      getConfig()
-    );
-    return response.data.output;
-  } catch (err) {
-    if (err.code === 'ERR_NETWORK') {
-      throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
-        message: 'Network Error',
-      });
-    }
-    throw err;
-  }
-};
-
-const executeCpp = async (codeObject) => {
-  try {
-    const response = await axiosExecution.post(
-      '/execute-cpp',
+      '/java',
       codeObject,
       getConfig()
     );
@@ -91,7 +69,7 @@ const executeCpp = async (codeObject) => {
 const executeJs = async (codeObject) => {
   try {
     const response = await axiosExecution.post(
-      '/execute-js',
+      '/js',
       codeObject,
       getConfig()
     );

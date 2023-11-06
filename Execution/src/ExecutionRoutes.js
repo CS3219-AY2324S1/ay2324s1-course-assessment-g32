@@ -3,9 +3,8 @@ const router = express.Router();
 
 const executionController = require('./ExecutionController');
 
-router.post('/execute-python', executionController.executePython);
-router.post('/execute-java', executionController.executeJava);
-router.post('/execute-cpp', executionController.executeCpp);
-router.post('/execute-js', executionController.executeJs);
+router.post('/python', executionController.executePython);
+router.post('/java', executionController.executeJava);
+router.post('/js', executionController.executeJs);
 
 module.exports = router;
