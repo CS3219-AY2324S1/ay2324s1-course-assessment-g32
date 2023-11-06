@@ -123,6 +123,11 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
       room: roomId,
       updatedLanguage: selectedLanguage,
     });
+    // Send code changes to the server
+    socket.emit(Event.Collaboration.CODE_CHANGE, {
+      room: roomId,
+      updatedCode: codeToStore,
+    });
   };
 
   const handleCodeExecution = async () => {
@@ -170,10 +175,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   useEffect(() => {
     // Receive code changes from the server
     socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
-      if (updatedCode.length === 0 || updatedCode !== code) {
-        setCode(updatedCode);
-        sessionStorage.setItem(`codeEditorContent_${roomId}`, updatedCode);
-      }
+      setCode(updatedCode);
+      sessionStorage.setItem(`codeEditorContent_${roomId}`, updatedCode);
     });
     // Receive language changes from the server
     socket.on(Event.Collaboration.LANGUAGE_UPDATE, (updatedLanguage) => {
