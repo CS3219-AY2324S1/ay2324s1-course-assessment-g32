@@ -110,9 +110,12 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
-    if (selectedLanguage === Language.JAVA) {
-      setCode(JAVA_BOILERPLATE);
-    }
+
+    // Set the code to boilerplate code if Java; else, set it to empty string
+    const codeToStore = selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '';
+    setCode(codeToStore);
+
+    sessionStorage.setItem(`codeEditorContent_${roomId}`, codeToStore);
     sessionStorage.setItem(`codeEditorLanguage_${roomId}`, selectedLanguage); // Store the language in session storage
 
     // Send language changes to the server
@@ -127,7 +130,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
       setIsExecuting(true);
 
       const result = await executeCode(language, code);
-      console.log(result);
       setResult(result);
 
       // Send execution results to the server
@@ -227,7 +229,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
           </select>
           <button
             type='button'
-            className={`btn ${isExecuting ? 'btn-secondary' : 'btn-success'} me-2`}
+            className={`btn ${isExecuting ? 'btn-secondary' : 'btn-success'
+              } me-2`}
             onClick={handleCodeExecution}
             disabled={isExecuting}
           >
