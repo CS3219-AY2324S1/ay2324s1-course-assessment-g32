@@ -57,13 +57,14 @@ const executeJava = async (req, res) => {
     const maxExecutionTime = 5000; // 5 seconds
     const javaCode = req.body.code;
     const javaFilename = 'Main.java';
-    const javaClassName = 'Main.class';
+    const javaClassName = 'Main';
 
     // Write the Java source code to a .java file
     fs.writeFileSync(javaFilename, javaCode);
 
     // Compile the Java source code
     const compileProcess = spawn('javac', [javaFilename]);
+
     compileProcess.on('error', (err) => {
       res.json({ output: err.message });
     });
@@ -92,23 +93,25 @@ const executeJava = async (req, res) => {
           clearTimeout(timeout);
 
           if (code !== 0) {
-            res.json({ output: `Execution failed with code ${code}` });
+            logger.log('Java program timedout');
+            res.json({ output: `Timeout: Your code ran longer than 5 seconds.` });
           } else {
-            console.log('Java program executed successfully:');
+            logger.log('Java program executed successfully:');
+            fs.unlinkSync(javaFilename);
+            fs.unlinkSync('Main.class');
             res.json({ output: programOutput });
           }
         });
 
         // Set a timeout to kill the script if it runs for too long
         const timeout = setTimeout(() => {
-          console.error('Java script execution timed out. Killing the script...');
+          logger.error('Script execution timed out. Killing the script...');
           executeProcess.kill();
-          res.json({ output: 'TimeoutError' });
         }, maxExecutionTime);
       }
     });
   } catch (err) {
-    console.log(err);
+    logger.log(err);
   }
 };
 
