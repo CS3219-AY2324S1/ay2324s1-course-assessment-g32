@@ -9,7 +9,7 @@ const {
 const logger = require('./Log');
 
 const isCodeEmpty = (code) => {
-  return !code;
+  return !code.trim();
 };
 
 const handleEmptyCode = (res) => {

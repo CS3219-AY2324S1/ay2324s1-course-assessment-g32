@@ -20,7 +20,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const [code, setCode] = useState(selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '');
   const [result, setResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
-  const [isExecuting, setIsExecuting] = useState(false);
 
   // Initialize cursor position for code editor
   const [scrollTop, setScrollTop] = useState(0);
@@ -29,6 +28,10 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const [partner, setPartner] = useState({});
   const [renderPartner, setRenderPartner] = useState({});
   const [showCursor, setShowCursor] = useState(false);
+
+  // Initialize states for code execution
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [isOutputCollapsed, setIsOutputCollapsed] = useState(false);
 
   const getLanguageExtension = (selectedLanguage) => {
     switch (selectedLanguage) {
@@ -113,7 +116,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     setLanguage(selectedLanguage);
 
     // Set the code to boilerplate code if Java; else, set it to empty string
-    const codeToStore = selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '';
+    const codeToStore =
+      selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '';
     setCode(codeToStore);
 
     sessionStorage.setItem(`codeEditorContent_${roomId}`, codeToStore);
@@ -148,6 +152,10 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     } finally {
       setIsExecuting(false);
     }
+  };
+
+  const handleToggleOutputCollapse = () => {
+    setIsOutputCollapsed(!isOutputCollapsed);
   };
 
   // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
@@ -232,9 +240,9 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
             <option value='Javascript'>Javascript</option>
           </select>
           <button
-            type='button'
-            className={`btn ${isExecuting ? 'btn-secondary' : 'btn-success'
-              } me-2`}
+            className={`btn ${
+              isExecuting ? 'btn-secondary' : 'btn-success'
+            } me-2`}
             onClick={handleCodeExecution}
             disabled={isExecuting}
           >
@@ -262,7 +270,19 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
           <OverlayCursor partner={renderPartner} />
         )}
       </div>
-      <OutputTextArea result={result} />
+      <button
+        className='btn btn-secondary'
+        onClick={handleToggleOutputCollapse}
+      >
+        <span style={{ float: 'left' }}>Result</span>
+        <span style={{ float: 'right' }}>{isOutputCollapsed ? '+' : '-'}</span>
+      </button>
+      <div
+        className={`collapse ${isOutputCollapsed ? '' : 'show'}`}
+        id='collapseExample'
+      >
+        <OutputTextArea result={result} />
+      </div>
     </div>
   );
 };
