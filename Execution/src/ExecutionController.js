@@ -3,6 +3,15 @@ const { spawn } = require('child_process');
 const { MAX_EXECUTION_TIME, TIMEOUT_ERROR } = require('./constants');
 const logger = require('./Log');
 
+const isCodeEmpty = (code) => {
+  return !code;
+};
+
+const handleEmptyCode = (res) => {
+  logger.error('No code provided.');
+  res.json({ output: 'No code provided.' });
+};
+
 const executeScript = (scriptPath, childProcess) => {
   return new Promise((resolve, reject) => {
     const scriptTimeout = setTimeout(() => {
@@ -41,6 +50,13 @@ const executePython = async (req, res) => {
   try {
     const pythonCode = req.body.code;
     const scriptPath = 'temp_script.py';
+
+    // Check if pythonCode is empty
+    if (isCodeEmpty(pythonCode)) {
+      handleEmptyCode(res);
+      return;
+    }
+
     fs.writeFileSync(scriptPath, pythonCode); // Write the code to a temporary python file
 
     const pythonProcess = spawn('python', [scriptPath]); // Command to execute the script
@@ -61,9 +77,8 @@ const executeJava = async (req, res) => {
     const javaClassName = 'Main';
 
     // Check if javaCode is empty
-    if (!javaCode) {
-      logger.error('No code provided.');
-      res.json({ output: 'No code provided.' });
+    if (isCodeEmpty(javaCode)) {
+      handleEmptyCode(res);
       return;
     }
 
@@ -96,6 +111,13 @@ const executeJs = async (req, res) => {
   try {
     const javascriptCode = req.body.code;
     const scriptPath = 'temp_script.js';
+
+    // Check if javascriptCode is empty
+    if (isCodeEmpty(javascriptCode)) {
+      handleEmptyCode(res);
+      return;
+    }
+
     fs.writeFileSync(scriptPath, javascriptCode); // Write the code to a temporary javascript file
 
     const jsProcess = spawn('node', [scriptPath]); // Command to execute the script
