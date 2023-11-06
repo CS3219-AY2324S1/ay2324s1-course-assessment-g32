@@ -1,6 +1,11 @@
 const fs = require('fs');
 const { spawn } = require('child_process');
-const { MAX_EXECUTION_TIME, TIMEOUT_ERROR } = require('./constants');
+const {
+  MAX_EXECUTION_TIME,
+  TIMEOUT_ERROR,
+  SIGNAL_INTERRUPT,
+  SUCCESS_CODE,
+} = require('./constants');
 const logger = require('./Log');
 
 const isCodeEmpty = (code) => {
@@ -16,7 +21,7 @@ const executeScript = (scriptPath, childProcess) => {
   return new Promise((resolve, reject) => {
     const scriptTimeout = setTimeout(() => {
       logger.error('Script execution timed out. Killing the script...');
-      childProcess.kill('SIGINT'); // Send an interrupt signal to the Python process
+      childProcess.kill(SIGNAL_INTERRUPT); // Send an interrupt signal to the Python process
       resolve(
         `${TIMEOUT_ERROR}: Your program has timed out. Please try again.`
       );
@@ -35,7 +40,7 @@ const executeScript = (scriptPath, childProcess) => {
 
     childProcess.on('exit', (code) => {
       clearTimeout(scriptTimeout);
-      if (code === 0) {
+      if (code === SUCCESS_CODE) {
         resolve(output.join(''));
       } else {
         resolve(errorOutput);
