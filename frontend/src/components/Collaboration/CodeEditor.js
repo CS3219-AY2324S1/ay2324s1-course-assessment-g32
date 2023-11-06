@@ -12,6 +12,7 @@ import '../../css/CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handleCodeChange, handleLanguageToggle }) => {
   const editorBoxRef = useRef(null);
+  const codeMirrorRef = useRef(null);
 
   // Initialize code editor content
   const [code, setCode] = useState('');
@@ -104,6 +105,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
     });
   };
 
+  // Update the language state when the user changes the language
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     handleLanguageToggle(selectedLanguage);
@@ -116,6 +118,14 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
       updatedLanguage: selectedLanguage,
     });
   };
+
+  // Add event listeners for scroll events in the code editor
+  useEffect(() => {
+    if (codeMirrorRef.current) {
+      const view = codeMirrorRef.current.view;
+      view?.scrollDOM.addEventListener('scroll', handleScroll);
+    }
+  }, [codeMirrorRef?.current?.view]);
 
   // Render the partner's cursor
   useEffect(() => {
@@ -203,13 +213,13 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
       </div>
       <div
         className='code-editor'
-        onScroll={handleScroll}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         ref={editorBoxRef}
       >
         <CodeMirror
           className='code-mirror'
+          ref={codeMirrorRef}
           value={code}
           onChange={onChange}
           theme={vscodeDark}
