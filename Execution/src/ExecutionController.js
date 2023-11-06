@@ -50,6 +50,8 @@ const executePython = async (req, res) => {
     const pythonProcess = spawn('python', [scriptPath]); // Command to execute the script
     const result = await executeScript(scriptPath, pythonProcess, false);
 
+    logger.logSuccess("Program executed successfully.");
+
     res.json({ output: result });
   } catch (err) {
     logger.log(err);
@@ -69,8 +71,12 @@ const executeJava = async (req, res) => {
     const compileProcess = spawn('javac', [javaFilename]);
     const compileResult = await executeScript(javaFilename, compileProcess, false);
 
+    logger.logSuccess("Program compiled successfully.");
+
     const javaProcess = spawn('java', [javaClassName]);
     const result = await executeScript(javaClassName, javaProcess, true);
+
+    logger.logSuccess("Program executed successfully.");
 
     res.json({ output: result });
   } catch (err) {
@@ -96,6 +102,8 @@ const executeJs = async (req, res) => {
 
     const jsProcess = spawn('node', [scriptPath]); // Command to execute the script
     const result = await executeScript(scriptPath, jsProcess, false);
+
+    logger.logSuccess("Program executed successfully.");
 
     res.json({ output: result });
   } catch (err) {
