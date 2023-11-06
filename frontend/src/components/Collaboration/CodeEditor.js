@@ -16,7 +16,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const editorBoxRef = useRef(null);
 
   // Initialize code editor content
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '');
   const [result, setResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
   const [isExecuting, setIsExecuting] = useState(false);
