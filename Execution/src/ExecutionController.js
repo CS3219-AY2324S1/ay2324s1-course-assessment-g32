@@ -46,7 +46,7 @@ const executePython = async (req, res) => {
     const pythonProcess = spawn('python', [scriptPath]); // Command to execute the script
     const result = await executeScript(scriptPath, pythonProcess);
 
-    logger.logSuccess("Program executed successfully.");
+    logger.logSuccess('Program executed successfully.');
 
     res.json({ output: result });
   } catch (err) {
@@ -60,6 +60,13 @@ const executeJava = async (req, res) => {
     const javaFilename = 'Main.java';
     const javaClassName = 'Main';
 
+    // Check if javaCode is empty
+    if (!javaCode) {
+      logger.error('No code provided.');
+      res.json({ output: 'No code provided.' });
+      return;
+    }
+
     // Write the Java source code to a .java file
     fs.writeFileSync(javaFilename, javaCode);
 
@@ -71,12 +78,12 @@ const executeJava = async (req, res) => {
       logger.error('Compilation failed.');
       res.json({ output: compileResult });
     } else {
-      logger.logSuccess("Program compiled successfully.");
+      logger.logSuccess('Program compiled successfully.');
 
       const javaProcess = spawn('java', [javaClassName]);
       const result = await executeScript(javaClassName + '.class', javaProcess);
 
-      logger.logSuccess("Program executed successfully.");
+      logger.logSuccess('Program executed successfully.');
 
       res.json({ output: result });
     }
@@ -94,7 +101,7 @@ const executeJs = async (req, res) => {
     const jsProcess = spawn('node', [scriptPath]); // Command to execute the script
     const result = await executeScript(scriptPath, jsProcess);
 
-    logger.logSuccess("Program executed successfully.");
+    logger.logSuccess('Program executed successfully.');
 
     res.json({ output: result });
   } catch (err) {
