@@ -226,6 +226,9 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
           autoFocus={true}
           height='100%'
           placeholder='Enter your code here...'
+          basicSetup={{
+            foldGutter: false
+          }}
           extensions={[getLanguageExtension(language)]}
         />
         {isWithinWindow(renderPartner.position, editorBoxRef) && showCursor && (
