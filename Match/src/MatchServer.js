@@ -37,7 +37,7 @@ const rabbitMQserver = async () => {
       connection = await amqp.connect(env.RABBITMQ_URL);
       break;
     } catch (error) {
-      logger.error(`Connection attempt ${i + 1} of 10 to RabbitMQ server: ${env.RABBITMQ_URL} failed`);
+      logger.error(`Connection attempt ${i + 1} of ${MAX_CONNECTION_ATTEMPTS} to RabbitMQ: ${env.RABBITMQ_URL} failed`);
       await new Promise(resolve => setTimeout(resolve, CONNECTION_INTERVAL));
     }
   }

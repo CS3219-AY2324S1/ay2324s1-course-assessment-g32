@@ -21,8 +21,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const [scrollTop, setScrollTop] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [partner, setPartner] = useState({});
-  const [renderPartner, setRenderPartner] = useState({});
+  const [partner, setPartner] = useState({user: '', position: { x: 0, y: 0 }});
+  const [renderPartner, setRenderPartner] = useState({user: '', position: { x: 0, y: 0 }});
   const [showCursor, setShowCursor] = useState(false);
 
   const getLanguageExtension = (selectedLanguage) => {
