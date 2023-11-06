@@ -1,77 +1,90 @@
-const { exec } = require('child_process');
+const fs = require('fs');
+const { spawn } = require('child_process');
+const { MAX_EXECUTION_TIME, TIMEOUT_ERROR } = require('./constants');
+const logger = require('./Log');
 
-// execute python
-const executePython = async (req, res) => {
-  // Set a maximum execution time (in milliseconds)
-  const maxExecutionTime = 5000; // 5 seconds
+const executeScript = (scriptPath, childProcess) => {
+  return new Promise((resolve, reject) => {
+    const scriptTimeout = setTimeout(() => {
+      logger.error('Script execution timed out. Killing the script...');
+      childProcess.kill('SIGINT'); // Send an interrupt signal to the Python process
+      resolve(
+        `${TIMEOUT_ERROR}: Your program has timed out. Please try again.`
+      );
+    }, MAX_EXECUTION_TIME);
 
-  try {
-    const pythonCode = req.body.code;
+    const output = [];
+    let errorOutput = '';
 
-    const scriptProcess = exec(`python -c "${pythonCode.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
-      clearTimeout(timeout); // Clear the timeout since the script completed
-      if (error) {
-        res.json({ output: stderr });
-      } else {
-        res.json({ output: stdout });
-      }
+    childProcess.stdout.on('data', (data) => {
+      output.push(data.toString());
     });
 
-    // Set a timeout to kill the script if it runs for too long
-    const timeout = setTimeout(() => {
-      console.error('Python script execution timed out. Killing the script...');
-      scriptProcess.kill();
-      // res.json({ output: "TimeoutError" });
-    }, maxExecutionTime);
+    childProcess.stderr.on('data', (data) => {
+      errorOutput += data.toString();
+    });
 
+    childProcess.on('exit', (code) => {
+      clearTimeout(scriptTimeout);
+      if (code === 0) {
+        resolve(output.join(''));
+      } else {
+        resolve(errorOutput);
+      }
+      fs.unlinkSync(scriptPath);
+    });
+  });
+};
+
+// Execute python code
+const executePython = async (req, res) => {
+  try {
+    const pythonCode = req.body.code;
+    const scriptPath = 'temp_script.py';
+    fs.writeFileSync(scriptPath, pythonCode); // Write the code to a temporary python file
+
+    const pythonProcess = spawn('python', [scriptPath]); // Command to execute the script
+    const result = await executeScript(scriptPath, pythonProcess);
+
+    res.json({ output: result });
   } catch (err) {
-    console.log(err);
-  };
+    logger.log(err);
+  }
 };
 
 // execute java
 const executeJava = async (req, res) => {
   try {
-    console.log(req.body)
-    res.json({ message: "java code executed"})
+    console.log(req.body);
+    res.json({ message: 'java code executed' });
   } catch (err) {
     throw err;
-  };
+  }
 };
 
 // execute cpp
 const executeCpp = async (req, res) => {
   try {
-    console.log(req.body)
-    res.json({ message: "cpp code executed"})
+    console.log(req.body);
+    res.json({ message: 'cpp code executed' });
   } catch (err) {
     throw err;
-  };
+  }
 };
 
 const executeJs = async (req, res) => {
   try {
-    const maxExecutionTime = 5000; // 5 seconds
     const javascriptCode = req.body.code;
+    const scriptPath = 'temp_script.js';
+    fs.writeFileSync(scriptPath, javascriptCode); // Write the code to a temporary javascript file
 
-    const scriptProcess = exec(`node -e "${javascriptCode.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
-      clearTimeout(timeout); // Clear the timeout since the script completed
-      if (error) {
-        res.json({ output: stderr });
-      } else {
-        res.json({ output: stdout });
-      }
-    });
+    const jsProcess = spawn('node', [scriptPath]); // Command to execute the script
+    const result = await executeScript(scriptPath, jsProcess);
 
-    const timeout = setTimeout(() => {
-      console.error('JavaScript script execution timed out. Killing the script...');
-      scriptProcess.kill();
-      // res.json({ output: "TimeoutError" });
-    }, maxExecutionTime);
-
+    res.json({ output: result });
   } catch (err) {
-    console.log(err);
-  };
+    logger.log(err);
+  }
 };
 
 module.exports = {
