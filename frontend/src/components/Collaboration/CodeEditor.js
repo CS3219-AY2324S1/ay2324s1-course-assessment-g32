@@ -4,6 +4,7 @@ import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { javascript } from '@codemirror/lang-javascript';
+import OutputTextArea from './OutputTextArea';
 import { executeCode } from '../../api/ExecutionApi';
 import { Language, Event } from '../../constants';
 import { errorHandler } from '../../utils/errors';
@@ -261,15 +262,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
           <OverlayCursor partner={renderPartner} />
         )}
       </div>
-      <div className='output-container'>
-        <textarea
-          className='form-control'
-          rows='2'
-          readOnly
-          placeholder='Code execution results will appear here'
-          value={result}
-        />
-      </div>
+      <OutputTextArea result={result} />
     </div>
   );
 };
