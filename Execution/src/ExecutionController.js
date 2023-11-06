@@ -3,7 +3,7 @@ const { spawn } = require('child_process');
 const { MAX_EXECUTION_TIME, TIMEOUT_ERROR } = require('./constants');
 const logger = require('./Log');
 
-const executeScript = (scriptPath, childProcess) => {
+const executeScript = (scriptPath, childProcess, isRunningJavaClass) => {
   return new Promise((resolve, reject) => {
     const scriptTimeout = setTimeout(() => {
       logger.error('Script execution timed out. Killing the script...');
@@ -31,7 +31,11 @@ const executeScript = (scriptPath, childProcess) => {
       } else {
         resolve(errorOutput);
       }
-      fs.unlinkSync(scriptPath);
+      if (isRunningJavaClass) {
+        fs.unlinkSync(scriptPath + '.class');
+      } else {
+        fs.unlinkSync(scriptPath);
+      }
     });
   });
 };
@@ -44,7 +48,7 @@ const executePython = async (req, res) => {
     fs.writeFileSync(scriptPath, pythonCode); // Write the code to a temporary python file
 
     const pythonProcess = spawn('python', [scriptPath]); // Command to execute the script
-    const result = await executeScript(scriptPath, pythonProcess);
+    const result = await executeScript(scriptPath, pythonProcess, false);
 
     res.json({ output: result });
   } catch (err) {
@@ -54,7 +58,6 @@ const executePython = async (req, res) => {
 
 const executeJava = async (req, res) => {
   try {
-    const maxExecutionTime = 5000; // 5 seconds
     const javaCode = req.body.code;
     const javaFilename = 'Main.java';
     const javaClassName = 'Main';
@@ -64,52 +67,12 @@ const executeJava = async (req, res) => {
 
     // Compile the Java source code
     const compileProcess = spawn('javac', [javaFilename]);
+    const compileResult = await executeScript(javaFilename, compileProcess, false);
 
-    compileProcess.on('error', (err) => {
-      res.json({ output: err.message });
-    });
+    const javaProcess = spawn('java', [javaClassName]);
+    const result = await executeScript(javaClassName, javaProcess, true);
 
-    compileProcess.on('exit', (code) => {
-      if (code !== 0) {
-        res.json({ output: `Compilation failed with code ${code}` });
-      } else {
-        // Execute the compiled Java program
-        const executeProcess = spawn('java', [javaClassName]);
-        let programOutput = '';
-
-        executeProcess.stdout.on('data', (data) => {
-          programOutput += data.toString();
-        });
-
-        executeProcess.stderr.on('data', (data) => {
-          res.json({ output: data.toString() });
-        });
-
-        executeProcess.on('error', (err) => {
-          res.json({ output: err.message });
-        });
-
-        executeProcess.on('exit', (code) => {
-          clearTimeout(timeout);
-
-          if (code !== 0) {
-            logger.log('Java program timedout');
-            res.json({ output: `Timeout: Your code ran longer than 5 seconds.` });
-          } else {
-            logger.log('Java program executed successfully:');
-            fs.unlinkSync(javaFilename);
-            fs.unlinkSync('Main.class');
-            res.json({ output: programOutput });
-          }
-        });
-
-        // Set a timeout to kill the script if it runs for too long
-        const timeout = setTimeout(() => {
-          logger.error('Script execution timed out. Killing the script...');
-          executeProcess.kill();
-        }, maxExecutionTime);
-      }
-    });
+    res.json({ output: result });
   } catch (err) {
     logger.log(err);
   }
@@ -132,7 +95,7 @@ const executeJs = async (req, res) => {
     fs.writeFileSync(scriptPath, javascriptCode); // Write the code to a temporary javascript file
 
     const jsProcess = spawn('node', [scriptPath]); // Command to execute the script
-    const result = await executeScript(scriptPath, jsProcess);
+    const result = await executeScript(scriptPath, jsProcess, false);
 
     res.json({ output: result });
   } catch (err) {
