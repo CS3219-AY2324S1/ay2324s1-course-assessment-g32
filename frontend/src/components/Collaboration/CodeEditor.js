@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { EditorView } from '@codemirror/view';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
@@ -10,6 +9,7 @@ import { Language, Event } from '../../constants';
 import { errorHandler } from '../../utils/errors';
 import OverlayCursor from './OverlayCursor';
 import { isWithinWindow } from '../../utils/helpers';
+import { JAVA_BOILERPLATE } from '../../constants';
 import '../../css/CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
@@ -28,17 +28,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const [partner, setPartner] = useState({});
   const [renderPartner, setRenderPartner] = useState({});
   const [showCursor, setShowCursor] = useState(false);
-
-  const javaBoilerplate = `
-public class Main {
-  public static void main(String[] args) {
-    // Write your code here
-
-  }
-
-  // You may implement your methods here
-
-}`;
 
   const getLanguageExtension = (selectedLanguage) => {
     switch (selectedLanguage) {
@@ -121,9 +110,9 @@ public class Main {
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
-    if (selectedLanguage ===  Language.JAVA) {
-      setCode(javaBoilerplate);
-    } 
+    if (selectedLanguage === Language.JAVA) {
+      setCode(JAVA_BOILERPLATE);
+    }
     sessionStorage.setItem(`codeEditorLanguage_${roomId}`, selectedLanguage); // Store the language in session storage
 
     // Send language changes to the server

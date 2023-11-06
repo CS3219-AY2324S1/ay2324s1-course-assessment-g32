@@ -19,6 +19,17 @@ const Language = {
   JS: 'Javascript',
 };
 
+const JAVA_BOILERPLATE = `
+public class Main {
+  public static void main(String[] args) {
+    // Write your code here
+
+  }
+
+  // You may implement your methods here
+
+}`;
+
 const Event = {
   JOIN_ROOM: 'join-room',
   LEAVE_ROOM: 'leave-room',
@@ -104,7 +115,7 @@ const Topics = {
   SLIDING_WINDOW: 'Sliding Window',
   SORTING: 'Sorting',
   STACK: 'Stack',
-  STRING: 'String', 
+  STRING: 'String',
   STRING_MATCHING: 'String Matching',
   STRONGLY_CONNECTED_COMPONENT: 'Strongly Connected Component',
   TOPOLOGICAL_SORT: 'Topological Sort',
@@ -118,6 +129,7 @@ module.exports = {
   Status,
   Complexity,
   Language,
+  JAVA_BOILERPLATE,
   Event,
   Topics,
 };
