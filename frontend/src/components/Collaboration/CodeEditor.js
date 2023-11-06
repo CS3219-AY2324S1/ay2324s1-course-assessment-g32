@@ -124,7 +124,7 @@ public class Main {
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
-    if (language ===  Language.JAVA) {
+    if (selectedLanguage ===  Language.JAVA) {
       setCode(javaBoilerplate);
     } 
     sessionStorage.setItem(`codeEditorLanguage_${roomId}`, selectedLanguage); // Store the language in session storage

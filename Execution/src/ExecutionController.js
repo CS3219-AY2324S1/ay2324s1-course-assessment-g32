@@ -71,14 +71,19 @@ const executeJava = async (req, res) => {
     const compileProcess = spawn('javac', [javaFilename]);
     const compileResult = await executeScript(javaFilename, compileProcess, false);
 
-    logger.logSuccess("Program compiled successfully.");
+    if (compileResult.includes('error')) {
+      logger.error('Compilation failed.');
+      res.json({ output: compileResult });
+    } else {
+      logger.logSuccess("Program compiled successfully.");
 
-    const javaProcess = spawn('java', [javaClassName]);
-    const result = await executeScript(javaClassName, javaProcess, true);
+      const javaProcess = spawn('java', [javaClassName]);
+      const result = await executeScript(javaClassName, javaProcess, true);
 
-    logger.logSuccess("Program executed successfully.");
+      logger.logSuccess("Program executed successfully.");
 
-    res.json({ output: result });
+      res.json({ output: result });
+    }
   } catch (err) {
     logger.log(err);
   }
