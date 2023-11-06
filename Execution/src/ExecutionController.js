@@ -89,16 +89,6 @@ const executeJava = async (req, res) => {
   }
 };
 
-// execute cpp
-const executeCpp = async (req, res) => {
-  try {
-    console.log(req.body);
-    res.json({ message: 'cpp code executed' });
-  } catch (err) {
-    throw err;
-  }
-};
-
 const executeJs = async (req, res) => {
   try {
     const javascriptCode = req.body.code;
@@ -119,6 +109,5 @@ const executeJs = async (req, res) => {
 module.exports = {
   executePython,
   executeJava,
-  executeCpp,
   executeJs,
 };

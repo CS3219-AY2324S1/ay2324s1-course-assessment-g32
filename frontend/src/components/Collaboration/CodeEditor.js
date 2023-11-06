@@ -4,7 +4,6 @@ import { EditorView } from '@codemirror/view';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
-import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { executeCode } from '../../api/ExecutionApi';
 import { Language, Event } from '../../constants';
@@ -47,8 +46,6 @@ public class Main {
         return python();
       case Language.JAVA:
         return java();
-      case Language.CPP:
-        return cpp();
       case Language.JS:
         return javascript();
       default:
@@ -237,7 +234,6 @@ public class Main {
           >
             <option value='Python'>Python</option>
             <option value='Java'>Java</option>
-            <option value='C++'>C++</option>
             <option value='Javascript'>Javascript</option>
           </select>
           <button
