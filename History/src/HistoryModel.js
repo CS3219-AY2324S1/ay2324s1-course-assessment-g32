@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const HistorySchema = new Schema(
   {
     userId: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: true,
     },
     questionId: {

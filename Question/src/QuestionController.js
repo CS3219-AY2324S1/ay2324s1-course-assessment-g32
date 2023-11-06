@@ -36,15 +36,14 @@ const getAll = async (req, res) => {
   }
 };
 
-// Define a controller function for getting all questions by complexity
-const getAllByComplexity = async (req, res) => {
+const getAllByCriteria = async (req, res) => {
   try {
-    const { complexity } = req.query;
-    const questions = await questionService.getQuestionsByComplexity(complexity);
-    logger.logSuccess('Questions retrieved by complexity');
+    const { complexity, tags } = req.query;
+    const questions = await questionService.getQuestionsByCriteria(complexity, tags);
+    logger.logSuccess('Questions retrieved by criteria');
     res.json({ message: 'Questions retrieved successfully', questions });
   } catch (err) {
-    logger.error('Cannot retrieve questions:', err?.message || err);
+    logger.error('Cannot retrieve questions by criteria:', err?.message || err);
     res
       .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
@@ -154,7 +153,7 @@ const getQuestionStatistics = async (req, res) => {
 module.exports = {
   create,
   getAll,
-  getAllByComplexity,
+  getAllByCriteria,
   getQuestionDetails,
   getRandomQuestionByCriteria,
   edit,

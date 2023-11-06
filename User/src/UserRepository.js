@@ -80,7 +80,7 @@ const getUserInfoById = async (id) => {
 const getAllUserInfo = async () => {
   try {
     let result = await userModel
-      .find({}, 'displayName createdAt updatedAt isMaintainer')
+      .find({}, 'displayName email createdAt updatedAt isMaintainer')
       .lean();
     result = result.map((user) => {
       user.id = user._id;

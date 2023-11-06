@@ -1,27 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { basicSetup } from 'codemirror';
-import { EditorState } from '@codemirror/state';
-import { EditorView, keymap } from '@codemirror/view';
-import { defaultKeymap, indentWithTab } from '@codemirror/commands';
+import CodeMirror from '@uiw/react-codemirror';
+import { EditorView } from '@codemirror/view';
+import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
 import { Language, Event } from '../../constants';
+import OverlayCursor from './OverlayCursor';
+import { isWithinWindow } from '../../utils/helpers';
 import '../../css/CodeEditor.css';
 
-const CodeEditor = ({ socket, roomId, selectedLanguage, handleCodeChange, handleLanguageToggle }) => {
-  const editor = useRef(null);
-  const viewRef = useRef(null);
+const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handleCodeChange, handleLanguageToggle }) => {
+  const editorBoxRef = useRef(null);
+
+  // Initialize code editor content
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
 
-  const onUpdate = EditorView.updateListener.of((update) => {
-    if (update.docChanged) {
-      const updatedCode = update.state.doc.toString();
-      setCode(updatedCode);
-      handleCodeChange(updatedCode);
-    }
-  });
+  // Initialize cursor position for code editor
+  const [scrollTop, setScrollTop] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [partner, setPartner] = useState({user: '', position: { x: 0, y: 0 }});
+  const [renderPartner, setRenderPartner] = useState({user: '', position: { x: 0, y: 0 }});
+  const [showCursor, setShowCursor] = useState(false);
 
   const getLanguageExtension = (selectedLanguage) => {
     switch (selectedLanguage) {
@@ -36,10 +38,71 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, handleCodeChange, handle
     }
   };
 
+  const broadcastMousePosition = () => {
+    if (editorBoxRef.current) {
+      const relativePosition = getRelativePosition(position);
+      socket.emit(Event.Collaboration.MOUSE_POSITION, {
+        room: roomId,
+        user: displayName,
+        jwt: jwt,
+        position: relativePosition,
+      });
+    }
+  };
+
+  // Convert relative position to absolute position
+  const getAbsolutePosition = (relativePosition) => {
+    if (editorBoxRef.current) {
+      const { top, left } = editorBoxRef.current.getBoundingClientRect();
+      return { x: relativePosition.x + left - scrollLeft, y: relativePosition.y + top - scrollTop };
+    }
+  };
+
+  // Convert absolute position to relative position
+  const getRelativePosition = (absolutePosition) => {
+    if (editorBoxRef.current) {
+      const { top, left } = editorBoxRef.current.getBoundingClientRect();
+      return { x: absolutePosition.x - left + scrollLeft, y: absolutePosition.y - top + scrollTop };
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    setPosition({ x: e.clientX, y: e.clientY });
+    broadcastMousePosition();
+  };
+
+  const handleMouseLeave = () => {
+    socket.emit(Event.Collaboration.MOUSE_LEAVE, {
+      room: roomId,
+      jwt: jwt,
+    });
+  };
+
+  const handleScroll = (event) => {
+    const { scrollTop, scrollLeft } = event.target;
+    setScrollTop(scrollTop);
+    setScrollLeft(scrollLeft);
+    broadcastMousePosition();
+  };
+
+  // Update the code state when the user types
+  const onChange = (update) => {
+    setCode(update);
+    handleCodeChange(update);
+    sessionStorage.setItem(`codeEditorContent_${roomId}`, update); // Store the code in session storage
+
+    // Send code changes to the server
+    socket.emit(Event.Collaboration.CODE_CHANGE, {
+      room: roomId,
+      updatedCode: update,
+    });
+  };
+
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     handleLanguageToggle(selectedLanguage);
     setLanguage(selectedLanguage);
+    sessionStorage.setItem(`codeEditorLanguage_${roomId}`, selectedLanguage); // Store the language in session storage
 
     // Send language changes to the server
     socket.emit(Event.Collaboration.LANGUAGE_CHANGE, {
@@ -48,67 +111,78 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, handleCodeChange, handle
     });
   };
 
-  // Send code changes to the server
+  // Render the partner's cursor
   useEffect(() => {
-    socket.emit(Event.Collaboration.CODE_CHANGE, {
-      room: roomId,
-      updatedCode: code,
-    });
-  }, [code, roomId, socket]);
-
-  // Receive code changes from the server
-  useEffect(() => {
-    socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
-      if (viewRef.current) {
-        viewRef.current.dispatch({
-          // Replace the entire document with the updated code
-          changes: {
-            from: 0,
-            to: viewRef.current.state.doc.length,
-            insert: updatedCode,
-          },
-          selection: viewRef.current.state.selection, // Preserve the user's cursor position
-          scrollIntoView: true, // Preserve the user's scroll position
-        });
+    if (editorBoxRef.current) {
+      const { top, left } = editorBoxRef.current.getBoundingClientRect();
+      const newPartnerCursor = {
+        user: partner.user,
+        position: {
+          x: partner?.position?.x + left - scrollLeft,
+          y: partner?.position?.y + top - scrollTop,
+        },
       }
-    });
+      setRenderPartner(newPartnerCursor);
+    }
+  }, [scrollTop, scrollLeft, partner]);
+
+  // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
+  useEffect(() => {
+    const storedContent = sessionStorage.getItem(`codeEditorContent_${roomId}`);
+    if (storedContent) {
+      setCode(storedContent);
+      handleCodeChange(storedContent);
+    }
   }, []);
 
-  // Receive language changes from the server
   useEffect(() => {
+    // Receive code changes from the server
+    socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
+      if (updatedCode.length === 0 || updatedCode !== code) {
+        setCode(updatedCode);
+        handleCodeChange(updatedCode);
+        sessionStorage.setItem(`codeEditorContent_${roomId}`, updatedCode);
+      }
+    });
+    // Receive language changes from the server
     socket.on(Event.Collaboration.LANGUAGE_UPDATE, (updatedLanguage) => {
       const languageSelect = document.getElementById('languageSelect');
-      if (languageSelect.value !== updatedLanguage) {
+      if (updatedLanguage !== languageSelect.value) {
         languageSelect.value = updatedLanguage;
         handleLanguageToggle(updatedLanguage);
         setLanguage(updatedLanguage);
+        sessionStorage.setItem(`codeEditorLanguage_${roomId}`, updatedLanguage);
       }
     });
-  }, []);
-
-  // Initialize the editor
-  useEffect(() => {
-    const state = EditorState.create({
-      doc: code,
-      extensions: [
-        basicSetup,
-        keymap.of([...defaultKeymap, indentWithTab]),
-        onUpdate,
-        getLanguageExtension(language),
-      ],
+    // Receive mouse position changes from the server
+    socket.on(Event.Collaboration.MOUSE_POSITION, (data) => {
+      if (data.jwt !== jwt) {
+        setShowCursor(true);
+        setPartner(data);
+      }
+    });
+    // Receive mouse leave events from the server
+    socket.on(Event.Collaboration.MOUSE_LEAVE, (data) => {
+      if (data.jwt !== jwt) {
+        setShowCursor(false);
+      }
     });
 
-    const view = new EditorView({ state, parent: editor.current });
-    viewRef.current = view;
+  }, [socket]);
 
+  // Hide the partner's cursor after 5 seconds of inactivity
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowCursor(false);
+    }, 5000);
     return () => {
-      view.destroy();
+      clearTimeout(timeout);
     };
-  }, [language]);
+  }, [showCursor]);
 
   return (
     <div className='editor-container'>
-      <div className='row'>
+      <div className='row editor-nav-bar'>
         <div className='col-sm-2'>
           <select
             className='form-select-sm'
@@ -122,8 +196,23 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, handleCodeChange, handle
           </select>
         </div>
       </div>
-      <div className='code-editor'>
-        <div ref={editor}></div>
+      <div className='code-editor'
+        onScroll={handleScroll}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        ref={editorBoxRef}
+      >
+        <CodeMirror
+          value={code}
+          onChange={onChange}
+          theme={vscodeDark}
+          autoFocus={true}
+          height='100%'
+          placeholder='Enter your code here...'
+          extensions={[getLanguageExtension(language)]}
+        />
+        {isWithinWindow(renderPartner.position, editorBoxRef) && showCursor &&
+          <OverlayCursor partner={renderPartner} />}
       </div>
     </div>
   );

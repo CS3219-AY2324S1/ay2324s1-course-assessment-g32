@@ -8,7 +8,7 @@ const addAttempt = async (req, res) => {
     const { userId, questionId, code, language } = req.body;
     await historyService.addAttempt(userId, questionId, code, language);
     logger.logSuccess('Attempt added');
-    res.json({ message: 'SUCCESS: History attempt added' });
+    res.json({ message: 'Submitted Attempt!' });
   } catch (err) {
     logger.error('Cannot add attempt:', err?.message || err);
     res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });

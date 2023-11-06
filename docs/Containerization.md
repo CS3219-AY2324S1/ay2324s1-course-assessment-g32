@@ -1,6 +1,7 @@
 # Containerization
 
-Docker to containerize our various micro-services which serves our combined application.
+Docker is used to containerize our various micro-services
+which serves our combined application.
 
 We have various micro-services including:
 * MySQL Database
@@ -9,6 +10,7 @@ We have various micro-services including:
 * Question Service
 * Match Service
 * Collaboration Service
+* History Service
 * Frontend Service (Web UI)
 
 > Additional Note:\
@@ -17,14 +19,13 @@ We have various micro-services including:
 
 # Requirements
 
-## Network
+## Internet Access
 
-Internet connection is required.
+Ensure that you are connected to the internet.
 
-> **[ IMPORTANT! ]**\
-> Do _not_ test while on NUS grounds or connected
-> (either directly or indirectly) to NUS Wifi.
-> (NUS networks blocks MongoDB which is required by our application.)
+> Note!\
+> Do **not** connect to NUS Wifi/Network.\
+> The application would be unable to connect to MongoDB Atlas.
 
 ## Software
 
@@ -32,7 +33,7 @@ Download and install these software if you do not have them locally.
 
 - [Docker Desktop](https://www.docker.com/get-started/)
 
-**Ensure that MySQL Server is NOT running locally.** 
+**Ensure that RabbitMQ Server is NOT running locally.**
 
 # Testing
 
@@ -108,14 +109,14 @@ Server: Docker Desktop 4.24.2 (124339)
 
 ### Dockered Microservices
 
-At the root directory, open a terminal 
+At the root directory, open a terminal
 to create and start containers of the micro-services.
 
 ```shell
 docker compose up -d
 ```
 
-It may take a few minutes for the inital build as it needs to download the images online. 
+It may take a few minutes for the inital build as it needs to download the images online.
 The frontend would only be available after the containers are running.
 
 ### Frontend Application
@@ -137,9 +138,12 @@ By default, we have created 2 accounts as part of the fresh database. These acco
 
 ## Post-testing
 
-After testing, open a terminal at the root directory 
+After testing, open a terminal at the root directory
 to stop and remove the containers of the micro-services.
 
 ```shell
 docker compose down
 ```
+
+---
+[Go to README](../README.md)

@@ -11,7 +11,7 @@ router.delete('/delete', middleware.checkTokenMaintainer, questionController.del
 
 // User and maintainer can access the remaining routes
 router.get('/read-all', middleware.checkToken, questionController.getAll);
-router.get('/read-all-by-complexity', middleware.checkToken, questionController.getAllByComplexity);
+router.get('/read-all-by-criteria', middleware.checkToken, questionController.getAllByCriteria);
 router.get('/read', middleware.checkToken, questionController.getQuestionDetails);
 router.get('/read-random', middleware.checkToken, questionController.getRandomQuestionByCriteria);
 router.post('/appendQuestionTitle', middleware.checkToken, questionController.appendQuestionTitle);

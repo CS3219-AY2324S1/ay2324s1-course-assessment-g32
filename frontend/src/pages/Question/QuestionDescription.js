@@ -28,7 +28,7 @@ const QuestionDescription = () => {
         setQuestion(question);
         setIsLoading(false);
       } catch (error) {
-        navigate('../');
+        navigate('../questions');
         errorHandler(error);
       }
     };
@@ -43,7 +43,7 @@ const QuestionDescription = () => {
   }, [id, navigate]);
 
   const handleBackClick = () => {
-    navigate('../');
+    navigate('../questions');
   };
 
   const handleEditClick = () => {
@@ -59,7 +59,7 @@ const QuestionDescription = () => {
     try {
       await deleteQuestion(id, getCookie());
       showSuccessToast('Successfully Deleted!');
-      navigate('../');
+      navigate('../questions');
     } catch (error) {
       errorHandler(error);
     }
