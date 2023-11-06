@@ -1,103 +1,140 @@
-const { exec } = require('child_process');
+const fs = require('fs');
+const { spawn } = require('child_process');
+const { MAX_EXECUTION_TIME, TIMEOUT_ERROR } = require('./constants');
+const logger = require('./Log');
 
-// execute python
-const executePython = async (req, res) => {
-  try {
-    const maxExecutionTime = 5000; // 5 seconds
-    const pythonCode = req.body.code;
-    const scriptProcess = exec(`python -c "${pythonCode.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
-      clearTimeout(timeout); // Clear the timeout since the script completed
-      if (error) {
-        res.json({ output: stderr });
-      } else {
-        res.json({ output: stdout });
-      }
+const executeScript = (scriptPath, childProcess) => {
+  return new Promise((resolve, reject) => {
+    const scriptTimeout = setTimeout(() => {
+      logger.error('Script execution timed out. Killing the script...');
+      childProcess.kill('SIGINT'); // Send an interrupt signal to the Python process
+      resolve(
+        `${TIMEOUT_ERROR}: Your program has timed out. Please try again.`
+      );
+    }, MAX_EXECUTION_TIME);
+
+    const output = [];
+    let errorOutput = '';
+
+    childProcess.stdout.on('data', (data) => {
+      output.push(data.toString());
     });
 
-    // Set a timeout to kill the script if it runs for too long
-    const timeout = setTimeout(() => {
-      console.error('Python script execution timed out. Killing the script...');
-      scriptProcess.kill();
-    }, maxExecutionTime);
+    childProcess.stderr.on('data', (data) => {
+      errorOutput += data.toString();
+    });
 
-  } catch (err) {
-    console.log(err);
-  };
+    childProcess.on('exit', (code) => {
+      clearTimeout(scriptTimeout);
+      if (code === 0) {
+        resolve(output.join(''));
+      } else {
+        resolve(errorOutput);
+      }
+      fs.unlinkSync(scriptPath);
+    });
+  });
 };
 
-// execute java
+// Execute python code
+const executePython = async (req, res) => {
+  try {
+    const pythonCode = req.body.code;
+    const scriptPath = 'temp_script.py';
+    fs.writeFileSync(scriptPath, pythonCode); // Write the code to a temporary python file
+
+    const pythonProcess = spawn('python', [scriptPath]); // Command to execute the script
+    const result = await executeScript(scriptPath, pythonProcess);
+
+    res.json({ output: result });
+  } catch (err) {
+    logger.log(err);
+  }
+};
+
 const executeJava = async (req, res) => {
   try {
     const maxExecutionTime = 5000; // 5 seconds
     const javaCode = req.body.code;
+    const javaFilename = 'Main.java';
+    const javaClassName = 'Main.class';
 
     // Write the Java source code to a .java file
-    const javaFilename = 'Main.java';
-
-    const fs = require('fs');
     fs.writeFileSync(javaFilename, javaCode);
 
     // Compile the Java source code
-    exec(`javac ${javaFilename}`, (error, stdout, stderr) => {
-      if (error) {
-          res.json({ output: error.message });
+    const compileProcess = spawn('javac', [javaFilename]);
+    compileProcess.on('error', (err) => {
+      res.json({ output: err.message });
+    });
+
+    compileProcess.on('exit', (code) => {
+      if (code !== 0) {
+        res.json({ output: `Compilation failed with code ${code}` });
       } else {
         // Execute the compiled Java program
-        const scriptProcess = exec(`java Main`, (error, stdout, stderr) => {
+        const executeProcess = spawn('java', [javaClassName]);
+        let programOutput = '';
+
+        executeProcess.stdout.on('data', (data) => {
+          programOutput += data.toString();
+        });
+
+        executeProcess.stderr.on('data', (data) => {
+          res.json({ output: data.toString() });
+        });
+
+        executeProcess.on('error', (err) => {
+          res.json({ output: err.message });
+        });
+
+        executeProcess.on('exit', (code) => {
           clearTimeout(timeout);
-          if (error) {
-              res.json({ output: error.message });
+
+          if (code !== 0) {
+            res.json({ output: `Execution failed with code ${code}` });
           } else {
             console.log('Java program executed successfully:');
-            res.json({ output: stdout });
+            res.json({ output: programOutput });
           }
         });
 
         // Set a timeout to kill the script if it runs for too long
         const timeout = setTimeout(() => {
           console.error('Java script execution timed out. Killing the script...');
-          scriptProcess.kill();
+          executeProcess.kill();
+          res.json({ output: 'TimeoutError' });
         }, maxExecutionTime);
-
       }
     });
   } catch (err) {
     console.log(err);
-  };
+  }
 };
 
 // execute cpp
 const executeCpp = async (req, res) => {
   try {
-    console.log(req.body)
-    res.json({ message: "cpp code executed"})
+    console.log(req.body);
+    res.json({ message: 'cpp code executed' });
   } catch (err) {
     throw err;
-  };
+  }
 };
 
 const executeJs = async (req, res) => {
   try {
-    const maxExecutionTime = 5000; // 5 seconds
     const javascriptCode = req.body.code;
+    const scriptPath = 'temp_script.js';
+    fs.writeFileSync(scriptPath, javascriptCode); // Write the code to a temporary javascript file
 
-    const scriptProcess = exec(`node -e "${javascriptCode.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
-      clearTimeout(timeout); // Clear the timeout since the script completed
-      if (error) {
-        res.json({ output: stderr });
-      } else {
-        res.json({ output: stdout });
-      }
-    });
+    const jsProcess = spawn('node', [scriptPath]); // Command to execute the script
+    const result = await executeScript(scriptPath, jsProcess);
 
-    const timeout = setTimeout(() => {
-      console.error('JavaScript script execution timed out. Killing the script...');
-      scriptProcess.kill();
-    }, maxExecutionTime);
-
+    res.json({ output: result });
   } catch (err) {
-    console.log(err);
-  };
+    logger.log(err);
+  }
 };
 
 module.exports = {

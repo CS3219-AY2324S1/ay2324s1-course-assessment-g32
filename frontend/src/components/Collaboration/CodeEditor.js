@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
-import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { cpp } from '@codemirror/lang-cpp';
@@ -20,6 +20,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const [code, setCode] = useState('');
   const [result, setResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
+  const [isExecuting, setIsExecuting] = useState(false);
 
   // Initialize cursor position for code editor
   const [scrollTop, setScrollTop] = useState(0);
@@ -74,7 +75,10 @@ public class Main {
   const getAbsolutePosition = (relativePosition) => {
     if (editorBoxRef.current) {
       const { top, left } = editorBoxRef.current.getBoundingClientRect();
-      return { x: relativePosition.x + left - scrollLeft, y: relativePosition.y + top - scrollTop };
+      return {
+        x: relativePosition.x + left - scrollLeft,
+        y: relativePosition.y + top - scrollTop,
+      };
     }
   };
 
@@ -82,7 +86,10 @@ public class Main {
   const getRelativePosition = (absolutePosition) => {
     if (editorBoxRef.current) {
       const { top, left } = editorBoxRef.current.getBoundingClientRect();
-      return { x: absolutePosition.x - left + scrollLeft, y: absolutePosition.y - top + scrollTop };
+      return {
+        x: absolutePosition.x - left + scrollLeft,
+        y: absolutePosition.y - top + scrollTop,
+      };
     }
   };
 
@@ -134,8 +141,10 @@ public class Main {
 
   const handleCodeExecution = async () => {
     try {
+      setIsExecuting(true);
+
       const result = await executeCode(language, code);
-      console.log(result)
+      console.log(result);
       setResult(result);
 
       // Send execution results to the server
@@ -145,10 +154,19 @@ public class Main {
       });
     } catch (err) {
       errorHandler(err);
+    } finally {
+      setIsExecuting(false);
     }
   };
 
-  // Send code changes to the server
+  // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
+  useEffect(() => {
+    const storedContent = sessionStorage.getItem(`codeEditorContent_${roomId}`);
+    if (storedContent) {
+      setCode(storedContent);
+    }
+  }, []);
+
   // Render the partner's cursor
   useEffect(() => {
     if (editorBoxRef.current) {
@@ -159,27 +177,11 @@ public class Main {
           x: partner?.position?.x + left - scrollLeft,
           y: partner?.position?.y + top - scrollTop,
         },
-      }
+      };
       setRenderPartner(newPartnerCursor);
     }
   }, [scrollTop, scrollLeft, partner]);
 
-  // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
-  useEffect(() => {
-    const storedContent = sessionStorage.getItem(`codeEditorContent_${roomId}`);
-    if (storedContent) {
-      setCode(storedContent);
-    }
-  }, []);
-
-  // Receive result update from the server
-  useEffect(() => {
-    socket.on(Event.Collaboration.RESULT_UPDATE, (updatedResult) => {
-      setResult(updatedResult);
-    });
-  }, [result]);
-
-  // Receive language changes from the server
   useEffect(() => {
     // Receive code changes from the server
     socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
@@ -210,7 +212,10 @@ public class Main {
         setShowCursor(false);
       }
     });
-
+    // Receive result changes from the server
+    socket.on(Event.Collaboration.RESULT_UPDATE, (updatedResult) => {
+      setResult(updatedResult);
+    });
   }, [socket]);
 
   // Hide the partner's cursor after 5 seconds of inactivity
@@ -226,7 +231,7 @@ public class Main {
   return (
     <div className='editor-container'>
       <div className='row editor-nav-bar'>
-        <div className='col-sm-2'>
+        <div className='d-flex flex-wrap gap-1'>
           <select
             className='form-select-sm'
             id='languageSelect'
@@ -238,12 +243,18 @@ public class Main {
             <option value='C++'>C++</option>
             <option value='Javascript'>Javascript</option>
           </select>
-          <button type='button' onClick={handleCodeExecution}>
-            Run code
+          <button
+            type='button'
+            className={`btn ${isExecuting ? 'btn-secondary' : 'btn-success'} me-2`}
+            onClick={handleCodeExecution}
+            disabled={isExecuting}
+          >
+            ▶ Run
           </button>
         </div>
       </div>
-      <div className='code-editor'
+      <div
+        className='code-editor'
         onScroll={handleScroll}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -258,8 +269,9 @@ public class Main {
           placeholder='Enter your code here...'
           extensions={[getLanguageExtension(language)]}
         />
-        {isWithinWindow(renderPartner.position, editorBoxRef) && showCursor &&
-          <OverlayCursor partner={renderPartner} />}
+        {isWithinWindow(renderPartner.position, editorBoxRef) && showCursor && (
+          <OverlayCursor partner={renderPartner} />
+        )}
       </div>
       <div className='output-container'>
         <textarea
