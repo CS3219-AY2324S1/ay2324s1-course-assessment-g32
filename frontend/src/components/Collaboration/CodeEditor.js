@@ -17,9 +17,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const editorBoxRef = useRef(null);
 
   // Initialize code editor content
-  const [code, setCode] = useState(
-    selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : ''
-  );
+  const [code, setCode] = useState(selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '');
   const [result, setResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
 
@@ -50,7 +48,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const broadcastMousePosition = () => {
     if (editorBoxRef.current) {
       const relativePosition = getRelativePosition(position);
-      socket.emit(Event.Collaboration.MOUSE_POSITION, {
+      socket.emit(Event.Mouse.POSITION, {
         room: roomId,
         user: displayName,
         jwt: jwt,
@@ -87,7 +85,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   };
 
   const handleMouseLeave = () => {
-    socket.emit(Event.Collaboration.MOUSE_LEAVE, {
+    socket.emit(Event.Mouse.LEAVE, {
       room: roomId,
       jwt: jwt,
     });
@@ -106,7 +104,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     sessionStorage.setItem(`codeEditorContent_${roomId}`, update); // Store the code in session storage
 
     // Send code changes to the server
-    socket.emit(Event.Collaboration.CODE_CHANGE, {
+    socket.emit(Event.Code.CHANGE, {
       room: roomId,
       updatedCode: update,
     });
@@ -117,20 +115,19 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     setLanguage(selectedLanguage);
 
     // Set the code to boilerplate code if Java; else, set it to empty string
-    const codeToStore =
-      selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '';
+    const codeToStore = selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '';
     setCode(codeToStore);
 
     sessionStorage.setItem(`codeEditorContent_${roomId}`, codeToStore);
     sessionStorage.setItem(`codeEditorLanguage_${roomId}`, selectedLanguage); // Store the language in session storage
 
     // Send language changes to the server
-    socket.emit(Event.Collaboration.LANGUAGE_CHANGE, {
+    socket.emit(Event.Language.CHANGE, {
       room: roomId,
       updatedLanguage: selectedLanguage,
     });
     // Send code changes to the server
-    socket.emit(Event.Collaboration.CODE_CHANGE, {
+    socket.emit(Event.Code.CHANGE, {
       room: roomId,
       updatedCode: codeToStore,
     });
@@ -139,12 +136,17 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const handleCodeExecution = async () => {
     try {
       setIsExecuting(true);
+      // Send button disabling signal to the server
+      socket.emit(Event.Button.DISABLE_EXEC, {
+        roomId: roomId,
+        isButtonDisabled: true,
+      });
 
       const result = await executeCode(language, code);
       setResult(result);
 
       // Send execution results to the server
-      socket.emit(Event.Collaboration.RESULT_CHANGE, {
+      socket.emit(Event.Result.CHANGE, {
         room: roomId,
         updatedResult: result,
       });
@@ -152,6 +154,11 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
       errorHandler(err);
     } finally {
       setIsExecuting(false);
+      // Send button un-disabling signal to the server
+      socket.emit(Event.Button.DISABLE_EXEC, {
+        roomId: roomId,
+        isButtonDisabled: false,
+      });
     }
   };
 
@@ -180,12 +187,12 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
 
   useEffect(() => {
     // Receive code changes from the server
-    socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
+    socket.on(Event.Code.UPDATE, (updatedCode) => {
       setCode(updatedCode);
       sessionStorage.setItem(`codeEditorContent_${roomId}`, updatedCode);
     });
     // Receive language changes from the server
-    socket.on(Event.Collaboration.LANGUAGE_UPDATE, (updatedLanguage) => {
+    socket.on(Event.Language.UPDATE, (updatedLanguage) => {
       const languageSelect = document.getElementById('languageSelect');
       if (updatedLanguage !== languageSelect.value) {
         languageSelect.value = updatedLanguage;
@@ -193,22 +200,26 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
         sessionStorage.setItem(`codeEditorLanguage_${roomId}`, updatedLanguage);
       }
     });
+    // Receive result changes from the server
+    socket.on(Event.Result.UPDATE, (updatedResult) => {
+      setResult(updatedResult);
+    });
+    // Receive button disabling signal from the server
+    socket.on(Event.Button.UPDATE_EXEC, (isButtonDisabled) => {
+      setIsExecuting(isButtonDisabled);
+    });
     // Receive mouse position changes from the server
-    socket.on(Event.Collaboration.MOUSE_POSITION, (data) => {
+    socket.on(Event.Mouse.POSITION, (data) => {
       if (data.jwt !== jwt) {
         setShowCursor(true);
         setPartner(data);
       }
     });
     // Receive mouse leave events from the server
-    socket.on(Event.Collaboration.MOUSE_LEAVE, (data) => {
+    socket.on(Event.Mouse.LEAVE, (data) => {
       if (data.jwt !== jwt) {
         setShowCursor(false);
       }
-    });
-    // Receive result changes from the server
-    socket.on(Event.Collaboration.RESULT_UPDATE, (updatedResult) => {
-      setResult(updatedResult);
     });
   }, [socket]);
 
@@ -237,9 +248,8 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
             <option value='Javascript'>Javascript</option>
           </select>
           <button
-            className={`btn ${
-              isExecuting ? 'btn-secondary' : 'btn-success'
-            } me-2`}
+            className={`btn ${isExecuting ? 'btn-secondary' : 'btn-success'
+              } me-2`}
             onClick={handleCodeExecution}
             disabled={isExecuting}
           >
