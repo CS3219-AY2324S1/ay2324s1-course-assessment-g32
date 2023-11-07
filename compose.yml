@@ -1,15 +1,4 @@
 services:
-  svc-execution:
-    container_name: execution-service
-    build: ./Execution
-    env_file: .env
-    ports: ['9001:9001']
-    depends_on:
-      svc-match:
-        condition: service_started
-        restart: true
-      svc-auth:
-        condition: service_started
   nginx:
     container_name: nginx
     image: nginx:latest
@@ -76,6 +65,17 @@ services:
     build: ./Collaboration
     env_file: .env
     ports: ['8001:8001']
+  svc-execution:
+    container_name: execution-service
+    build: ./Execution
+    env_file: .env
+    ports: ['9001:9001']
+    depends_on:
+      svc-match:
+        condition: service_started
+        restart: true
+      svc-auth:
+        condition: service_started
   svc-web-ui:
     container_name: web-ui
     build: ./frontend
@@ -86,3 +86,4 @@ services:
       - svc-question
       - svc-match
       - svc-collab
+      - svc-execution

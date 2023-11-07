@@ -119,7 +119,7 @@ const executePython = async (req, res) => {
 
     fs.writeFileSync(scriptPath, pythonCode); // Write the code to a temporary python file
 
-    const pythonProcess = spawn('python', [scriptPath]); // Command to execute the script
+    const pythonProcess = spawn('python3', [scriptPath]); // Command to execute the script
     const result = await executeScript(scriptPath, pythonProcess);
 
     logger.logSuccess('Program executed successfully.');

@@ -5,6 +5,12 @@ FROM node:18
 # Create app directory to hold application code inside the image.
 WORKDIR /usr/src/app
 
+# Install Python3 and Java.
+RUN apt-get update && apt-get install -y \
+    python3 \
+    openjdk-17-jdk-headless \
+    curl
+
 # The image comes with Node.js and NPM already installed.
 # We just need to install the rest of our dependencies.
 # Copy package.json and package-lock.json to the app directory on the image.
