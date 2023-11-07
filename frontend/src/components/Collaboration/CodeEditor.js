@@ -4,7 +4,7 @@ import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { javascript } from '@codemirror/lang-javascript';
-import OutputTextArea from './OutputTextArea';
+import CollapsibleOutput from './CollapsibleOutput';
 import { executeCode } from '../../api/ExecutionApi';
 import { Language, Event } from '../../constants';
 import { errorHandler } from '../../utils/errors';
@@ -17,7 +17,9 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   const editorBoxRef = useRef(null);
 
   // Initialize code editor content
-  const [code, setCode] = useState(selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '');
+  const [code, setCode] = useState(
+    selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : ''
+  );
   const [result, setResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
 
@@ -31,7 +33,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
 
   // Initialize states for code execution
   const [isExecuting, setIsExecuting] = useState(false);
-  const [isOutputCollapsed, setIsOutputCollapsed] = useState(false);
 
   const getLanguageExtension = (selectedLanguage) => {
     switch (selectedLanguage) {
@@ -154,10 +155,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     }
   };
 
-  const handleToggleOutputCollapse = () => {
-    setIsOutputCollapsed(!isOutputCollapsed);
-  };
-
   // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
   useEffect(() => {
     const storedContent = sessionStorage.getItem(`codeEditorContent_${roomId}`);
@@ -270,19 +267,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
           <OverlayCursor partner={renderPartner} />
         )}
       </div>
-      <button
-        className='btn btn-secondary'
-        onClick={handleToggleOutputCollapse}
-      >
-        <span style={{ float: 'left' }}>Result</span>
-        <span style={{ float: 'right' }}>{isOutputCollapsed ? '+' : '-'}</span>
-      </button>
-      <div
-        className={`collapse ${isOutputCollapsed ? '' : 'show'}`}
-        id='collapseExample'
-      >
-        <OutputTextArea result={result} />
-      </div>
+      <CollapsibleOutput result={result} />
     </div>
   );
 };
