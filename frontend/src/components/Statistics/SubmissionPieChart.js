@@ -53,22 +53,22 @@ const SubmissionPieChart = () => {
         <>
           <div>
             <div className='d-flex align-items-center'>
-              <ProgressBar className='bar green-background' variant="success" now={attemptedQuestionsData.Easy / allQuestionsData.Easy * 100}/>
-              <span>
+              <ProgressBar className='bar green opacity-10' variant="success" now={attemptedQuestionsData.Easy / allQuestionsData.Easy * 100}/>
+              <span className='fixed-width'>
                 <span className='bold-text'> Easy </span>
                 {attemptedQuestionsData.Easy} / {allQuestionsData.Easy}
               </span>
             </div>
             <div className='d-flex align-items-center'>
-              <ProgressBar className='bar orange-background' variant="warning" now={attemptedQuestionsData.Medium / allQuestionsData.Medium * 100}/>
-              <span>
+              <ProgressBar className='bar orange opacity-10' variant="warning" now={attemptedQuestionsData.Medium / allQuestionsData.Medium * 100}/>
+              <span className='fixed-width'>
                 <span className='bold-text'> Medium </span>
                 {attemptedQuestionsData.Medium} / {allQuestionsData.Medium}
               </span>
             </div>
             <div className='d-flex align-items-center'>
-              <ProgressBar className='bar red-background' variant="danger" now={attemptedQuestionsData.Hard / allQuestionsData.Hard * 100}/>
-              <span>
+              <ProgressBar className='bar red opacity-10' variant="danger" now={attemptedQuestionsData.Hard / allQuestionsData.Hard * 100}/>
+              <span className='fixed-width'>
                 <span className='bold-text'> Hard </span>
                 {attemptedQuestionsData.Hard} / {allQuestionsData.Hard}
               </span>
