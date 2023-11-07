@@ -19,7 +19,7 @@ RUN npm install
 COPY . .
 
 # Expose ports so they can be mapped by Docker daemon.
-# Should expose ${AUTH_PORT}
+# Should expose ${EXECUTION_PORT}
 EXPOSE 9001
 
 # Define the command to run your app using CMD which defines your runtime.

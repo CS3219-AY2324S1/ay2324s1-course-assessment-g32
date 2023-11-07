@@ -19,8 +19,7 @@ const Language = {
   JS: 'Javascript',
 };
 
-const JAVA_BOILERPLATE = `
-public class Main {
+const JAVA_BOILERPLATE = `public class Main {
   public static void main(String[] args) {
     // Write your code here
 
