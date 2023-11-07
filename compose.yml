@@ -7,13 +7,6 @@ services:
       - ./Nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - svc-web-ui
-  db-user:
-    container_name: user-storage
-    image: mysql/mysql-server:8.0
-    env_file: .env
-    ports: ['3306:3306']
-    volumes:
-      - ./User/initdb:/docker-entrypoint-initdb.d
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:latest
@@ -23,13 +16,9 @@ services:
     build: ./User
     env_file: .env
     environment:
-      - MYSQL_HOST=db-user
       - AUTH_HOST=svc-auth
     ports: ['4001:4001']
     depends_on:
-      db-user:
-        condition: service_started
-        restart: true
       svc-auth:
         condition: service_started
   svc-auth:

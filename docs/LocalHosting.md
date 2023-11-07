@@ -27,12 +27,8 @@ Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md).
    ```
    cp template.env .env
    ```
-3. Open `.env` file
-4. Fill up the MYSQL root password
-   (previously configured when installing MySQL)
-    - Example: if your root password is "password1234",
-      `MYSQL_ROOT_PASSWORD=password1234`
-5. Fill up a JWT token password
+3. Open `.env` file 
+4. Fill up a JWT token password
    (for generating and decoding JWT tokens)
     - Example: if you want to set the password to "password",
       `JWT_SECRET_KEY=password`
