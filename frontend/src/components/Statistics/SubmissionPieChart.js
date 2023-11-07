@@ -55,21 +55,21 @@ const SubmissionPieChart = () => {
             <div className='d-flex align-items-center'>
               <ProgressBar className='bar green-background' variant="success" now={attemptedQuestionsData.Easy / allQuestionsData.Easy * 100}/>
               <span>
-                <span class='bold-text'> Easy </span>
+                <span className='bold-text'> Easy </span>
                 {attemptedQuestionsData.Easy} / {allQuestionsData.Easy}
               </span>
             </div>
             <div className='d-flex align-items-center'>
               <ProgressBar className='bar orange-background' variant="warning" now={attemptedQuestionsData.Medium / allQuestionsData.Medium * 100}/>
               <span>
-                <span class='bold-text'> Medium </span>
+                <span className='bold-text'> Medium </span>
                 {attemptedQuestionsData.Medium} / {allQuestionsData.Medium}
               </span>
             </div>
             <div className='d-flex align-items-center'>
               <ProgressBar className='bar red-background' variant="danger" now={attemptedQuestionsData.Hard / allQuestionsData.Hard * 100}/>
               <span>
-                <span class='bold-text'> Hard </span>
+                <span className='bold-text'> Hard </span>
                 {attemptedQuestionsData.Hard} / {allQuestionsData.Hard}
               </span>
             </div>

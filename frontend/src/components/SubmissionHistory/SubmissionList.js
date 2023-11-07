@@ -52,7 +52,7 @@ const SubmissionList = () => {
   };
 
   const submissionList = tableData.map((submission, index) => (
-    <tr key={submission.id} onClick={() => handleRowClick(submission._id)}>
+    <tr key={submission._id} onClick={() => handleRowClick(submission._id)}>
       <th scope='row'>{index + 1}</th>
       <td>{submission.title}</td>
       <td>{parseDatetime(submission.createdAt)}</td>
@@ -84,7 +84,7 @@ const SubmissionList = () => {
                 </th>
               </tr>
             </thead>
-            <tbody key={submissionList} className='table-group-divider'>
+            <tbody className='table-group-divider'>
               {submissionList}
             </tbody>
           </table>
