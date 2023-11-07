@@ -38,7 +38,7 @@ const executeScript = (scriptPath, childProcess, executionDirectory = null) => {
       errorOutput += data.toString();
     });
 
-    childProcess.on('exit', async (code) => {
+    childProcess.on('exit', (code) => {
       clearTimeout(scriptTimeout);
       if (code === SUCCESS_CODE) {
         resolve(output.join(''));
@@ -55,7 +55,7 @@ const executeScript = (scriptPath, childProcess, executionDirectory = null) => {
 
           // JAVA: Directory is not removed until after the .class file is executed
           if (scriptPath.endsWith('.class')) {
-            await fs.promises.rmdir(executionDirectory, { recursive: true });
+            fs.rmSync(executionDirectory, { recursive: true });
             logger.logSuccess('Temporary directory removed.');
           }
         } else {
@@ -161,7 +161,7 @@ const executeJava = async (req, res) => {
     if (compileResult.includes('error')) {
       logger.error('Compilation failed.');
       res.json({ output: compileResult });
-      fs.rmdirSync(executionDirectory, { recursive: true });
+      fs.rmSync(executionDirectory, { recursive: true });
     } else {
       logger.logSuccess('Program compiled successfully.');
 
