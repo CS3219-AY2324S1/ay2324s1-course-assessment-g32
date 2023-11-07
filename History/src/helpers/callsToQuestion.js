@@ -1,5 +1,5 @@
 const axios = require('axios');
-const env = require('../loadEnvironment.js');
+const env = require('../loadEnvironment');
 
 const questionRootUrl = env.QUESTION_URL + '/question';
 

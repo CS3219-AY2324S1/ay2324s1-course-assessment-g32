@@ -7,10 +7,10 @@ const addAttempt = async (req, res) => {
   try {
     const { userId, questionId, code, language } = req.body;
     await historyService.addAttempt(userId, questionId, code, language);
-    logger.logSuccess('Attempt added');
+    logger.logSuccess(`Attempt added for user ${userId}`);
     res.json({ message: 'Submitted Attempt!' });
   } catch (err) {
-    logger.error('Cannot add attempt:', err?.message || err);
+    logger.error(`Cannot add attempt for ${userId}: `, err?.message || err);
     res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
   }
 };
@@ -28,9 +28,9 @@ const getAttempts = async (req, res) => {
       const attemptsWithTitles = questionResponse.data.attemptsWithTitles;
       res.json({ message: 'SUCCESS', attemptsWithTitles });
     }
-    logger.logSuccess('Attempts retrieved');
+    logger.logSuccess(`Attempts retrieved for user ${userId}`);
   } catch (err) {
-    logger.error('Cannot retrieve attempts:', err?.message || err);
+    logger.error(`Cannot retrieve attempts for ${userId}: `, err?.message || err);
     res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
   }
 };
@@ -39,10 +39,10 @@ const getHeatMapData = async (req, res) => {
   try {
     const { userId } = req.query;
     const heatMapData = await historyService.getHeatMapData(userId);
-    logger.logSuccess('Heatmap data retrieved');
+    logger.logSuccess(`Heatmap data retrieved for user ${userId}`);
     res.json({ message: 'SUCCESS', heatMapData });
   } catch (err) {
-    logger.error('Cannot retrieve heatmap data:', err?.message || err);
+    logger.error(`Cannot retrieve heatmap data for ${userId}: `, err?.message || err);
     res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
   }
 };
@@ -62,10 +62,10 @@ const getPieChartData = async (req, res) => {
       allQuestionsStats: allQuestionsStats.data.questionStatistics,
       unattemptedQuestionsStats: unattemptedQuestionsStats,
     };
-    logger.logSuccess('Pie chart data retrieved');
+    logger.logSuccess(`Pie chart data retrieved for user ${userId}`);
     res.json({ message: 'SUCCESS', pieChartData });
   } catch (err) {
-    logger.error('Cannot retrieve pie chart data:', err?.message || err);
+    logger.error(`Cannot retrieve pie chart data for ${userId}: `, err?.message || err);
     res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
   }
 };
@@ -74,10 +74,10 @@ const getAttempt = async (req, res) => {
   try {
     const { attemptId } = req.query;
     const attempt = await historyService.getAttempt(attemptId);
-    logger.logSuccess('Attempt retrieved');
+    logger.logSuccess(`Attempt details retrieved for attempt ${attemptId}`);
     res.json({ message: 'SUCCESS', attempt });
   } catch (err) {
-    logger.error('Cannot retrieve attempt:', err?.message || err);
+    logger.error(`Cannot retrieve ${attemptId} attempt: `, err?.message || err);
     res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
   }
 };
