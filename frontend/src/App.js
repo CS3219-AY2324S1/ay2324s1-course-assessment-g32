@@ -37,7 +37,7 @@ import PageNotFound from './pages/PageNotFound';
 import ProtectedRoute from './utils/ProtectedRoute';
 import MaintainerRoute from './utils/MaintainerRoute';
 
-import './App.css';
+import './css/App.css';
 import './css/Auth.css';
 
 function App() {
