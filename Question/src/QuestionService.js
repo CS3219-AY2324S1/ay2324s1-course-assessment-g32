@@ -111,6 +111,47 @@ const deleteQuestion = async (id) => {
   }
 };
 
+const appendQuestionTitle = async (attempts) => {
+  try {
+    const attemptsWithTitles = await Promise.all(attempts.map(async (entry) => {
+      const question = await questionRepository.getQuestionDetails(entry.questionId);
+      if (question === null) {
+        return { ...entry, title: null };
+      }
+      return { ...entry, title: question.title };
+    }));
+    return attemptsWithTitles.filter((entry) => entry.title !== null);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getQuestionCountByDifficulty = async (questionsId) => {
+  try {
+    const difficultyCount = await questionRepository.getQuestionsDifficultyCount(questionsId);
+    const stats = difficultyCount.reduce((acc, item) => {
+        acc[item._id] = item.count;
+        return acc;
+    }, { 'Easy': 0, 'Medium': 0, 'Hard': 0 });
+    return stats;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getQuestionStatistics = async () => {
+  try {
+    const difficultyCount = await questionRepository.getQuestionStatistics();
+    const stats = difficultyCount.reduce((acc, item) => {
+        acc[item._id] = item.count;
+        return acc;
+    }, { 'Easy': 0, 'Medium': 0, 'Hard': 0 });
+    return stats;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   createQuestion,
   getQuestions,
@@ -119,4 +160,7 @@ module.exports = {
   getRandomQuestionByComplexity,
   editQuestion,
   deleteQuestion,
+  appendQuestionTitle,
+  getQuestionCountByDifficulty,
+  getQuestionStatistics,
 };

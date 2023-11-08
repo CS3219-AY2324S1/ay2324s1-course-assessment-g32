@@ -11,7 +11,6 @@ import { getIsMaintainer, getCookie } from '../../utils/helpers';
 
 const QuestionList = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isMatchingModalOpen, setMatchingModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [isMaintainer, setIsMaintainer] = React.useState(false);
   const tableRef = useRef(null);
@@ -48,15 +47,11 @@ const QuestionList = () => {
 
   const navigate = useNavigate();
   const handleRowClick = (id) => {
-    navigate('/landing/question/' + id);
+    navigate('/question/' + id);
   };
 
   const handleNewQuestionClick = () => {
-    navigate('/landing/new');
-  };
-
-  const handleToggleModal = () => {
-    setMatchingModalOpen(!isMatchingModalOpen);
+    navigate('/question/new');
   };
 
   const RenderTags = (tags) => {
@@ -132,21 +127,6 @@ const QuestionList = () => {
           </button>
         ) : null}
       </div>
-      <div className='text-md-end'>
-        <button
-          type='button'
-          className='btn btn-primary'
-          onClick={handleToggleModal}
-        >
-          Match
-        </button>
-      </div>
-      {isMatchingModalOpen && (
-        <MatchingModal
-          isOpen={isMatchingModalOpen}
-          onClose={handleToggleModal}
-        />
-      )}
     </div>
   );
 };

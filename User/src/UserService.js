@@ -1,6 +1,11 @@
 const bcrypt = require('bcrypt');
 const userDatabase = require('./UserRepository');
-const { Status, EMAIL_REGEX, MIN_PASSWORD_LENGTH, BCRYPT_SALT_ROUNDS } = require('./constants');
+const {
+  Status,
+  EMAIL_REGEX,
+  MIN_PASSWORD_LENGTH,
+  BCRYPT_SALT_ROUNDS,
+} = require('./constants');
 
 const verifyPassword = async (userId, givenPassword) => {
   const storedPassword = (await userDatabase.getUserInfoById(userId)).password;
@@ -28,14 +33,14 @@ const loginUser = async (email, password) => {
     // Check if a user with the given email exists
     await userDatabase.findByEmail(email).then((info) => (userInfo = info));
 
-    if (!userInfo.userId && !userInfo.isMaintainer) {
+    if (!userInfo) {
       throw Object.assign(new Error('Email not registered with any user'), {
         status: Status.GONE,
       });
     }
 
     // Compare the entered password with the hashed password stored in the database
-    if (!(await verifyPassword(userInfo.userId, password))) {
+    if (!(await verifyPassword(userInfo.id, password))) {
       throw Object.assign(new Error('Incorrect password'), {
         status: Status.UNAUTHORIZED,
       });
@@ -66,9 +71,11 @@ const createUser = async (email, password, confirmPassword) => {
     }
 
     // Check if a user with the given email already exists
-    const existingUserCheck = userDatabase.findByEmail(email).then((userId) => {
-      passExistingUserCheck = userId['userId'] === null;
-    });
+    const existingUserCheck = userDatabase
+      .findByEmail(email)
+      .then((userInfo) => {
+        passExistingUserCheck = userInfo === null;
+      });
 
     // Check if the password is at least 8 characters long
     if (password.length < MIN_PASSWORD_LENGTH) {
@@ -87,17 +94,19 @@ const createUser = async (email, password, confirmPassword) => {
 
     // Check results of existingUserCheck
     await existingUserCheck;
-    if (passExistingUserCheck === undefined) {
+    if (passExistingUserCheck) {
       console.error('No results from existingUserCheck');
-    }
-    if (!passExistingUserCheck) {
+    } else {
       throw Object.assign(new Error('User already exists'), {
         status: Status.CONFLICT,
       });
     }
 
     // Create using with email and hashed password
-    await userDatabase.createUser(email, bcrypt.hash(password, BCRYPT_SALT_ROUNDS));
+    await userDatabase.createUser(
+      email,
+      bcrypt.hash(password, BCRYPT_SALT_ROUNDS)
+    );
   } catch (err) {
     throw err;
   }
@@ -136,7 +145,7 @@ const getUserInfo = async (userId, email) => {
 const updateUser = async (userId, displayName) => {
   try {
     if (!userId) {
-      throw Object.assign(new Error('Missing userId'), {
+      throw Object.assign(new Error('Missing id'), {
         status: Status.BAD_REQUEST,
       });
     }
@@ -219,7 +228,10 @@ const changeUserPassword = async (
     }
 
     // Check if the password is at least 8 characters long
-    if (newPassword.length < MIN_PASSWORD_LENGTH || confirmPassword.length < MIN_PASSWORD_LENGTH) {
+    if (
+      newPassword.length < MIN_PASSWORD_LENGTH ||
+      confirmPassword.length < MIN_PASSWORD_LENGTH
+    ) {
       throw Object.assign(
         new Error('Password must be at least 8 characters long'),
         { status: Status.BAD_REQUEST }

@@ -119,6 +119,37 @@ const deleteQuestion = async (req, res) => {
   }
 };
 
+// Define a controller function for appending question title
+const appendQuestionTitle = async (req, res) => {
+  try {
+    const { attempts } = req.body;
+    const attemptsWithTitles = await questionService.appendQuestionTitle(attempts);
+    res.json({ message: 'Question title appended successfully', attemptsWithTitles });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
+const getQuestionDifficultyCount = async (req, res) => {
+  try {
+    const { questionsId } = req.body;
+    const questionCountByDifficulty = await questionService.getQuestionCountByDifficulty(questionsId);
+    res.json({ message: 'Question count by difficulty retrieved successfully', questionCountByDifficulty });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
+const getQuestionStatistics = async (req, res) => {
+  try {
+    const questionStatistics = await questionService.getQuestionStatistics();
+    res.json({ message: 'Question statistics retrieved successfully', questionStatistics });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
+
 module.exports = {
   create,
   getAll,
@@ -127,4 +158,7 @@ module.exports = {
   getRandomQuestionByCriteria,
   edit,
   deleteQuestion,
+  appendQuestionTitle,
+  getQuestionDifficultyCount,
+  getQuestionStatistics,
 };

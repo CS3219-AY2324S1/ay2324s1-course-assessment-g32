@@ -5,6 +5,10 @@ import { Chat, CodeEditor, QuestionPanel } from '../components/Collaboration';
 import { QuestionContent } from '../components/Question';
 import { getRandomQuestionByCriteria } from '../api/QuestionApi';
 import { showFailureToast } from '../utils/toast';
+import { attemptQuestion } from '../api/HistoryApi';
+import { showSuccessToast } from '../utils/toast';
+import { errorHandler } from '../utils/errors';
+import { getCookie, getUserId } from '../utils/helpers';
 import { Status, Event } from '../constants';
 import env from '../loadEnvironment';
 import '../css/Collaboration.css';
@@ -15,6 +19,10 @@ const Collaboration = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const [userId, setUserId] = useState('');
+  const [jwtToken, setJwtToken] = useState('');
+  const [code, setCode] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState('Python');
 
   const socket = io(env.COLLAB_URL);
   const { roomId, displayName, questionData, jwt } = location.state || {};
@@ -27,6 +35,9 @@ const Collaboration = () => {
         showFailureToast('Invalid Room');
         navigate('/landing');
       }
+
+      setJwtToken(await getCookie());
+      setUserId(await getUserId());
 
       // Join the Socket.io room when the component mounts
       socket.emit(Event.JOIN_ROOM, { room: roomId, user: displayName });
@@ -86,6 +97,15 @@ const Collaboration = () => {
     return storedLanguage ? storedLanguage : language;
   };
 
+  const submitAttempt = async () => {
+    try {
+      const response = await attemptQuestion(jwtToken, userId, selectedQuestion._id, code, selectedLanguage);
+      showSuccessToast(response.data.message);
+    } catch (err) {
+      errorHandler(err);
+    }
+  };
+
   // Receive question changes from the server
   useEffect(() => {
     socket.on(Event.Question.QUESTION_UPDATE, (updatedQuestion) => {
@@ -118,6 +138,13 @@ const Collaboration = () => {
             >
               Leave Room
             </button>
+            <button
+              type='button'
+              className='btn btn-success'
+              onClick={submitAttempt}
+            >
+              Submit
+            </button>
           </div>
         </div>
         <div className='content'>
@@ -133,6 +160,8 @@ const Collaboration = () => {
               selectedLanguage={retrieveLanguage()}
               displayName={displayName}
               jwt={jwt}
+              handleCodeChange={setCode}
+              handleLanguageToggle={setSelectedLanguage}
             />
             <Chat socket={socket} roomId={roomId} user={displayName} />
           </div>

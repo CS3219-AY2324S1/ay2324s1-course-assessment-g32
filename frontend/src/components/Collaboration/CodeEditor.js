@@ -10,8 +10,9 @@ import OverlayCursor from './OverlayCursor';
 import { isWithinWindow } from '../../utils/helpers';
 import '../../css/CodeEditor.css';
 
-const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
+const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handleCodeChange, handleLanguageToggle }) => {
   const editorBoxRef = useRef(null);
+  const codeMirrorRef = useRef(null);
 
   // Initialize code editor content
   const [code, setCode] = useState('');
@@ -94,6 +95,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
   // Update the code state when the user types
   const onChange = (update) => {
     setCode(update);
+    handleCodeChange(update);
     sessionStorage.setItem(`codeEditorContent_${roomId}`, update); // Store the code in session storage
 
     // Send code changes to the server
@@ -103,8 +105,10 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     });
   };
 
+  // Update the language state when the user changes the language
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
+    handleLanguageToggle(selectedLanguage);
     setLanguage(selectedLanguage);
     sessionStorage.setItem(`codeEditorLanguage_${roomId}`, selectedLanguage); // Store the language in session storage
 
@@ -114,6 +118,14 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
       updatedLanguage: selectedLanguage,
     });
   };
+
+  // Add event listeners for scroll events in the code editor
+  useEffect(() => {
+    if (codeMirrorRef.current) {
+      const view = codeMirrorRef.current.view;
+      view?.scrollDOM.addEventListener('scroll', handleScroll);
+    }
+  }, [codeMirrorRef?.current?.view]);
 
   // Render the partner's cursor
   useEffect(() => {
@@ -135,6 +147,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     const storedContent = sessionStorage.getItem(`codeEditorContent_${roomId}`);
     if (storedContent) {
       setCode(storedContent);
+      handleCodeChange(storedContent);
     }
   }, []);
 
@@ -143,6 +156,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
     socket.on(Event.Collaboration.CODE_UPDATE, (updatedCode) => {
       if (updatedCode.length === 0 || updatedCode !== code) {
         setCode(updatedCode);
+        handleCodeChange(updatedCode);
         sessionStorage.setItem(`codeEditorContent_${roomId}`, updatedCode);
       }
     });
@@ -151,6 +165,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
       const languageSelect = document.getElementById('languageSelect');
       if (updatedLanguage !== languageSelect.value) {
         languageSelect.value = updatedLanguage;
+        handleLanguageToggle(updatedLanguage);
         setLanguage(updatedLanguage);
         sessionStorage.setItem(`codeEditorLanguage_${roomId}`, updatedLanguage);
       }
@@ -198,19 +213,22 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt }) => {
       </div>
       <div
         className='code-editor'
-        onScroll={handleScroll}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         ref={editorBoxRef}
       >
         <CodeMirror
           className='code-mirror'
+          ref={codeMirrorRef}
           value={code}
           onChange={onChange}
           theme={vscodeDark}
           autoFocus={true}
           height='100%'
           placeholder='Enter your code here...'
+          basicSetup={{
+            foldGutter: false
+          }}
           extensions={[getLanguageExtension(language)]}
         />
         {isWithinWindow(renderPartner.position, editorBoxRef) && showCursor && (

@@ -19,9 +19,11 @@ const UserList = () => {
   const [tableData, setTableData] = useState([]);
   const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
   const [deregisterId, setDeregisterId] = useState(null);
-  const [isToggleUserRoleWindowOpen, setToggleUserRoleWindowOpen] = useState(false);
+  const [isToggleUserRoleWindowOpen, setToggleUserRoleWindowOpen] =
+    useState(false);
   const [toggleUserRoleId, setToggleUserRoleId] = useState(null);
-  const [toggleUserRoleIsMaintainer, setToggleUserRoleIsMaintainer] = useState(null);
+  const [toggleUserRoleIsMaintainer, setToggleUserRoleIsMaintainer] =
+    useState(null);
 
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
@@ -130,12 +132,35 @@ const UserList = () => {
         <td />
       ) : (
         <td>
-          <Button variant='contained' onClick={() => handleEditClick(user.id, user.displayName)}>Edit</Button>
-          <Button variant='contained' color='error' onClick={() => handleDeregisterClick(user.id)}>Deregister</Button>
-          {user.isMaintainer === 1 ? (
-            <Button variant='contained' color='secondary' onClick={() => handleToggleUserRoleClick(user.id, user.isMaintainer)}>Demote to normal user</Button>
+          <Button
+            variant='contained'
+            onClick={() => handleEditClick(user.id, user.displayName)}>
+            Edit
+          </Button>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={() => handleDeregisterClick(user.id)}>
+            Deregister
+          </Button>
+          {user.isMaintainer === true ? (
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={() =>
+                handleToggleUserRoleClick(user.id, user.isMaintainer)
+              }>
+              Demote to normal user
+            </Button>
           ) : (
-            <Button variant='contained' color='success' onClick={() => handleToggleUserRoleClick(user.id, user.isMaintainer)}>Promote to maintainer</Button>
+            <Button
+              variant='contained'
+              color='success'
+              onClick={() =>
+                handleToggleUserRoleClick(user.id, user.isMaintainer)
+              }>
+              Promote to maintainer
+            </Button>
           )}
         </td>
       )}
@@ -179,8 +204,7 @@ const UserList = () => {
           type='button'
           className='btn btn-success'
           style={{ margin: '5px' }}
-          onClick={handleNewUserClick}
-        >
+          onClick={handleNewUserClick}>
           Register New User
         </button>
       </div>

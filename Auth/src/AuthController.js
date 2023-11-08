@@ -8,9 +8,7 @@ const logger = require('./Log');
 const generate = async (req, res) => {
   try {
     const userInfo = req.body;
-    if (
-      Object.keys(userInfo).join(',') == ['userId', 'isMaintainer'].join(',')
-    ) {
+    if (Object.keys(userInfo).join(',') == ['isMaintainer', 'id'].join(',')) {
       const jwtToken = getJwtToken(userInfo);
       logger.logSuccess('Generated JWT');
       res.json({ message: 'Generated JWT successfully', token: jwtToken });
@@ -91,7 +89,7 @@ const authorizeMaintainer = async (req, res) => {
           .json({ error: 'Invalid JWT token' });
       }
 
-      if (decodedJwtToken.isMaintainer !== 1) {
+      if (decodedJwtToken.isMaintainer !== true) {
         logger.warn('Not Authorized (User not maintainer)');
         return res
           .status(Status.UNAUTHORIZED)

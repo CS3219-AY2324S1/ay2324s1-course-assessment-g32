@@ -25,7 +25,6 @@ For development, you may also want to install:
 ## Documentation
 
 - [API Endpoints](docs/ApiEndpoints.md)
-- [Local Setup for MySQL Server](docs/LocalMySqlSetup.md)
 - [Local Setup for RabbitMQ Server](docs/LocalRabbitMqSetup.md)
 - [Containerization](docs/Containerization.md)
 
@@ -43,6 +42,7 @@ Run them in different terminals:
 - Question service: `npm run start:question`
 - Match service: `npm run start:match`
 - Collaboration Service: `npm run start:collab`
+- History Service: `npm run start:history`
 - Frontend: `npm run start:frontend`
 
 ---

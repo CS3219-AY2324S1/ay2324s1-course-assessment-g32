@@ -1,4 +1,5 @@
 const questionModel = require('./QuestionModel');
+const { ObjectId } = require('mongodb');
 
 const createQuestion = async (title, complexity, description, tags) => {
   try {
@@ -109,6 +110,41 @@ const deleteQuestion = async (id) => {
   }
 };
 
+const getQuestionsDifficultyCount = async (questionsId) => {
+
+  try {
+    const objectIdArray = questionsId.map((s) => new ObjectId(s));
+    const result = await questionModel.aggregate([
+      { $match: { _id: { $in: objectIdArray } } },
+      {
+        $group: {
+          _id: "$complexity",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+    return result
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getQuestionStatistics = async (questionsId) => {
+  try {
+    const result = await questionModel.aggregate([
+      {
+       $group: {
+          _id: "$complexity",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+    return result
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   createQuestion,
   getQuestions,
@@ -120,4 +156,6 @@ module.exports = {
   findByTitle,
   editQuestion,
   deleteQuestion,
+  getQuestionsDifficultyCount,
+  getQuestionStatistics,
 };

@@ -1,11 +1,10 @@
 const cors = require('cors');
 const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const mysql = require('mysql2');
 const userRoutes = require('./UserRoutes');
 const env = require('./loadEnvironment');
 const logger = require('./Log');
-const { MAX_CONNECTION_ATTEMPTS, CONNECTION_INTERVAL } = require('./constants');
 
 logger.register({
   serviceName: 'User Service',
@@ -22,33 +21,20 @@ app.listen(env.USER_PORT, () => {
   logger.log(`Running on port: ${env.USER_PORT}`);
 });
 
-const checkMySqlConnection = async () => {
-  const pool = mysql.createPool({
-    ...env.mysqlCreds,
-    ...{ database: env.mysqlDbName },
+try {
+  mongoose.connect(env.MONGO_CLIENT, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   });
 
-  let isMySqlRunning = false;
-
-  for (let i = 0; i < MAX_CONNECTION_ATTEMPTS; i++) {
-    try {
-      // Attempt to connect to MySQL
-      await pool.promise().query('SELECT display_name FROM users LIMIT 1;');
-      isMySqlRunning = true;
-      logger.logSuccess('Connected to MySQL database');
-      break;
-    } catch (err) {
-      logger.error('MySQL connection error:', err);
-      await new Promise((resolve) => setTimeout(resolve, CONNECTION_INTERVAL));
-    }
-  }
-
-  if (!isMySqlRunning) {
-    logger.error('Could not connect to MySQL. Exiting ...');
+  const mongoDb = mongoose.connection;
+  mongoDb.once('open', () => {
+    logger.logSuccess('Connected to the MongoDB database');
+  });
+  mongoDb.on('error', (error) => {
+    logger.error('Could not connect to MongoDB:', error, '\nExiting ...');
     process.exit(1);
-  }
-
-  pool.end();
-};
-
-checkMySqlConnection();
+  });
+} catch (err) {
+  logger.error(err);
+}
