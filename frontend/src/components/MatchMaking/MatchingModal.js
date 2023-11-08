@@ -9,10 +9,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../../css/Modal.css';
 
-const MatchingModal = ({ isOpen, onClose }) => {
+const MatchingModal = ({ user, isOpen, onClose }) => {
   const [isFindingMatch, setIsFindingMatch] = useState(false);
-  const [complexity, setComplexity] = useState(Complexity.EASY);
-  const [language, setLanguage] = useState(Language.PYTHON);
+  const [complexity, setComplexity] = useState('');
+  const [language, setLanguage] = useState('');
   const [sessionID, setSessionID] = useState('');
   const [jwt, setJwt] = useState('');
   const queueName = `${complexity}-${language}`;
@@ -107,7 +107,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
                       <select
                         className='form-select mb-3'
                         id='matchingQuestitonComplexity'
-                        defaultValue={complexity}
+                        defaultValue={complexity || user.complexity || Complexity.EASY}
                         onChange={handleComplexityChange}
                       >
                         <option value={Complexity.EASY}>{Complexity.EASY}</option>
@@ -122,7 +122,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
                       <select
                         className='form-select mb-3'
                         id='matchingQuestitonLanguage'
-                        defaultValue={language}
+                        defaultValue={language || user.language || Language.PYTHON}
                         onChange={handleLanguageChange}
                       >
                         <option value={Language.PYTHON}>{Language.PYTHON}</option>

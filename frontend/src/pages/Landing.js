@@ -23,7 +23,7 @@ function Landing() {
       try {
         const userId = await getUserId();
         const response = await getUser(userId, getCookie());
-        setUser(response.displayName);
+        setUser(response);
       } catch (error) {
         errorHandler(error);
       }
@@ -35,7 +35,7 @@ function Landing() {
   return (
     <div className='landing'>
       <Header />
-      <h1 className='title m-5'>Welcome, {user}</h1>
+      <h1 className='title m-5'>Welcome, {user.displayName}</h1>
       <SubmissionPieChart />
       <SubmissionHeatMap />
       <div className='d-flex align-items-center justify-content-center'>
@@ -49,6 +49,7 @@ function Landing() {
       </div>
       {isMatchingModalOpen && (
         <MatchingModal
+          user={user}
           isOpen={isMatchingModalOpen}
           onClose={handleToggleModal}
         />
