@@ -172,6 +172,15 @@ const UserList = () => {
   ) : (
     <div className='container'>
       <h1>Manage User Profiles</h1>
+      <div className='text-md-end'>
+        <button
+          type='button'
+          className='btn btn-success'
+          style={{ margin: '5px' }}
+          onClick={handleNewUserClick}>
+          Register New User
+        </button>
+      </div>
       <table ref={tableRef} className='table table-hover table-striped'>
         <thead className='table-dark'>
           <tr>
@@ -199,15 +208,6 @@ const UserList = () => {
           {userList}
         </tbody>
       </table>
-      <div className='text-md-end'>
-        <button
-          type='button'
-          className='btn btn-success'
-          style={{ margin: '5px' }}
-          onClick={handleNewUserClick}>
-          Register New User
-        </button>
-      </div>
       {isDeregisterWindowOpen && (
         <DeregisterWindow
           onConfirm={handleDeregisterConfirm}

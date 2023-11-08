@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import $ from 'jquery';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Spinner from '../Spinner';
-import MatchingModal from '../MatchMaking/MatchingModal';
 import { getQuestions } from '../../api/QuestionApi';
 import { errorHandler } from '../../utils/errors';
 import { getIsMaintainer, getCookie } from '../../utils/helpers';
@@ -97,6 +97,18 @@ const QuestionList = () => {
   ) : (
     <div className='container'>
       <h1>Question List</h1>
+      <div className='text-md-end'>
+        {isMaintainer ? (
+          <button
+            type='button'
+            className='btn btn-success'
+            onClick={handleNewQuestionClick}
+            style={{margin:'5px 0px'}}
+          >
+            Create New Question
+          </button>
+        ) : null}
+      </div>
       <table ref={tableRef} className='table table-hover table-striped'>
         <thead className='table-dark'>
           <tr>
@@ -116,17 +128,6 @@ const QuestionList = () => {
         </thead>
         <tbody className='table-group-divider'>{questionList}</tbody>
       </table>
-      <div className='text-md-end'>
-        {isMaintainer ? (
-          <button
-            type='button'
-            className='btn btn-success'
-            onClick={handleNewQuestionClick}
-          >
-            Add
-          </button>
-        ) : null}
-      </div>
     </div>
   );
 };
