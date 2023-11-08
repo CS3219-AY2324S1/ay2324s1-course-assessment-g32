@@ -49,7 +49,7 @@ const findByEmail = async (email) => {
 
 const getUserInfoByEmail = async (email) => {
   var _userId = String();
-  await findByEmail(email).then((userInfo) => (_userId = userInfo.userId));
+  await findByEmail(email).then((userInfo) => (_userId = userInfo.id));
 
   if (!_userId) throw 'No user is using ' + email;
 
@@ -103,10 +103,34 @@ const getAllUserInfo = async () => {
  * @param {string} displayName
  * @returns {Boolean} Success or failure
  */
-const updateUser = async (id, displayName) => {
+const updateDisplayName = async (id, displayName) => {
   try {
     const update = {
       displayName: displayName,
+    };
+    const result = await userModel.findByIdAndUpdate(id, update, { new: true });
+    return result !== null;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const updateProgrammingLanguage = async (id, programmingLanguage) => {
+  try {
+    const update = {
+      language: programmingLanguage,
+    };
+    const result = await userModel.findByIdAndUpdate(id, update, { new: true });
+    return result !== null;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const updateComplexity = async (id, newComplexity) => {
+  try {
+    const update = {
+      complexity: newComplexity,
     };
     const result = await userModel.findByIdAndUpdate(id, update, { new: true });
     return result !== null;
@@ -166,7 +190,9 @@ const deleteUser = async (id) => {
 module.exports = {
   findByEmail,
   createUser,
-  updateUser,
+  updateDisplayName,
+  updateProgrammingLanguage,
+  updateComplexity,
   updatePassword,
   deleteUser,
   getAllUserInfo,

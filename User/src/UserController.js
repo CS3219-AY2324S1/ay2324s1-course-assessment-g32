@@ -58,14 +58,42 @@ const getUserInfo = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const updateDisplayName = async (req, res) => {
   try {
     const { id, displayName } = req.body;
-    await userService.updateUser(id, displayName);
+    await userService.updateDisplayName(id, displayName);
     logger.logSuccess('User', id, 'has updated username to', displayName);
     res.json({ message: 'SUCCESS: User info updated' });
   } catch (err) {
     logger.logFailure('Cannot update username of user:', err?.message || err);
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
+  }
+};
+
+const updateProgrammingLanguage = async (req, res) => {
+  try {
+    const { id, programmingLanguage } = req.body;
+    await userService.updateProgrammingLanguage(id, programmingLanguage);
+    logger.logSuccess('User', id, 'has updated language to', programmingLanguage);
+    res.json({ message: 'SUCCESS: User info updated' });
+  } catch (err) {
+    logger.logFailure('Cannot update programming language of user:', err?.message || err);
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
+  }
+};
+
+const updateComplexity = async (req, res) => {
+  try {
+    const { id, complexity } = req.body;
+    await userService.updateComplexity(id, complexity);
+    logger.logSuccess('User', id, 'has updated complexity to', complexity);
+    res.json({ message: 'SUCCESS: User info updated' });
+  } catch (err) {
+    logger.logFailure('Cannot update complexity of user:', err?.message || err);
     res
       .status(err?.status || Status.BAD_REQUEST)
       .json({ error: err?.message || err });
@@ -124,7 +152,9 @@ module.exports = {
   login,
   getAllUserInfo,
   getUserInfo,
-  updateUser,
+  updateDisplayName,
+  updateProgrammingLanguage,
+  updateComplexity,
   deleteUser,
   changePassword,
   toggleUserRole,

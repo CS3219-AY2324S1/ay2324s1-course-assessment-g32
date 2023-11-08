@@ -25,6 +25,16 @@ const UserSchema = new Schema({
     required: true,
     default: false,
   },
+  language: {
+    type: String,
+    required: false,
+    maxlength: 10,
+  },
+  complexity: {
+    type: String,
+    required: false,
+    maxlength: 10,
+  },
   createdAt: {
     type: Date,
     required: true,

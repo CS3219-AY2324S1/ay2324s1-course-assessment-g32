@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Collaboration from './pages/Collaboration';
 import Landing from './pages/Landing';
+
 // Question pages
 import {
   CreateQuestion,
@@ -12,32 +13,38 @@ import {
   QuestionDescription,
   QuestionsPage,
 } from './pages/Question';
+
 // Normal user pages
 import {
   ChangeUserPassword,
   ManageUserProfile,
   NormalEditUser,
 } from './pages/User/UserProfile';
+
 // Submission History pages
 import {
   SubmissionAttempt,
   SubmissionHistory,
 } from './pages/SubmissionHistory';
+
 // Maintainer pages
 import {
   AddUser,
   MaintainerEditUser,
   ManageUserProfiles,
 } from './pages/User/UsersManagement';
+
 // Unauthorized page
 import UnauthorizedPage from './pages/UnauthorizedPage';
+
 // Page not found page
 import PageNotFound from './pages/PageNotFound';
+
 // Special routes
 import ProtectedRoute from './utils/ProtectedRoute';
 import MaintainerRoute from './utils/MaintainerRoute';
 
-import './App.css';
+import './css/App.css';
 import './css/Auth.css';
 
 function App() {
