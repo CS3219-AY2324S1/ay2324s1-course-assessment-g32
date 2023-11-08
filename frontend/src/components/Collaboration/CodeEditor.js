@@ -7,13 +7,14 @@ import { javascript } from '@codemirror/lang-javascript';
 import CollapsibleOutput from './CollapsibleOutput';
 import OverlayCursor from './OverlayCursor';
 import { executeCode } from '../../api/ExecutionApi';
-import { Language, Event } from '../../constants';
+import { attemptQuestion } from '../../api/HistoryApi';
+import { showSuccessToast } from '../../utils/toast';
 import { errorHandler } from '../../utils/errors';
 import { isWithinWindow } from '../../utils/helpers';
-import { JAVA_BOILERPLATE } from '../../constants';
+import { Language, JAVA_BOILERPLATE, Event } from '../../constants';
 import '../../css/CodeEditor.css';
 
-const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handleCodeChange, handleLanguageToggle }) => {
+const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage, selectedQuestion }) => {
   const editorBoxRef = useRef(null);
   const codeMirrorRef = useRef(null);
 
@@ -26,8 +27,14 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
   const [scrollTop, setScrollTop] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [partner, setPartner] = useState({ user: '', position: { x: 0, y: 0 } });
-  const [renderPartner, setRenderPartner] = useState({ user: '', position: { x: 0, y: 0 } });
+  const [partner, setPartner] = useState({
+    user: '',
+    position: { x: 0, y: 0 },
+  });
+  const [renderPartner, setRenderPartner] = useState({
+    user: '',
+    position: { x: 0, y: 0 },
+  });
   const [showCursor, setShowCursor] = useState(false);
 
   // Initialize states for code execution
@@ -55,17 +62,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
         jwt: jwt,
         position: relativePosition,
       });
-    }
-  };
-
-  // Convert relative position to absolute position
-  const getAbsolutePosition = (relativePosition) => {
-    if (editorBoxRef.current) {
-      const { top, left } = editorBoxRef.current.getBoundingClientRect();
-      return {
-        x: relativePosition.x + left - scrollLeft,
-        y: relativePosition.y + top - scrollTop,
-      };
     }
   };
 
@@ -102,7 +98,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
   // Update the code state when the user types
   const onChange = (update) => {
     setCode(update);
-    handleCodeChange(update);
     sessionStorage.setItem(`codeEditorContent_${roomId}`, update); // Store the code in session storage
 
     // Send code changes to the server
@@ -115,7 +110,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
   // Update the language state when the user changes the language
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
-    handleLanguageToggle(selectedLanguage);
     setLanguage(selectedLanguage);
 
     // Set the code to boilerplate code if Java; else, set it to empty string
@@ -166,6 +160,16 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
     }
   };
 
+  const handleSubmitAttempt = async () => {
+    try {
+      const questionId = selectedQuestion._id;
+      const response = await attemptQuestion(jwt, userId, questionId, code, language);
+      showSuccessToast(response.data.message);
+    } catch (err) {
+      errorHandler(err);
+    }
+  };
+
   // Add event listeners for scroll events in the code editor
   useEffect(() => {
     if (codeMirrorRef.current) {
@@ -173,7 +177,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
       view?.scrollDOM.addEventListener('scroll', handleScroll);
     }
   }, [codeMirrorRef?.current?.view]);
-
 
   // Render the partner's cursor
   useEffect(() => {
@@ -195,7 +198,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
     const storedContent = sessionStorage.getItem(`codeEditorContent_${roomId}`);
     if (storedContent) {
       setCode(storedContent);
-      handleCodeChange(storedContent);
     }
   }, []);
 
@@ -210,7 +212,6 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
       const languageSelect = document.getElementById('languageSelect');
       if (updatedLanguage !== languageSelect.value) {
         languageSelect.value = updatedLanguage;
-        handleLanguageToggle(updatedLanguage);
         setLanguage(updatedLanguage);
         sessionStorage.setItem(`codeEditorLanguage_${roomId}`, updatedLanguage);
       }
@@ -251,7 +252,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
   return (
     <div className='editor-container'>
       <div className='row editor-nav-bar'>
-        <div className='d-flex flex-wrap gap-1'>
+        <div className='d-flex justify-content-between'>
           <select
             className='form-select-sm'
             id='languageSelect'
@@ -262,14 +263,21 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
             <option value='Java'>Java</option>
             <option value='Javascript'>Javascript</option>
           </select>
-          <button
-            className={`btn ${isExecuting ? 'btn-secondary' : 'btn-success'
-              } me-2`}
-            onClick={handleCodeExecution}
-            disabled={isExecuting}
-          >
-            ▶ Run
-          </button>
+          <div>
+            <button
+              className={`btn ${isExecuting ? 'btn-secondary' : 'btn-primary'} me-2`}
+              onClick={handleCodeExecution}
+              disabled={isExecuting}
+            >
+              ▶ Run
+            </button>
+            <button
+              className='btn btn-success me-2'
+              onClick={handleSubmitAttempt}
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </div>
       <div
@@ -288,7 +296,7 @@ const CodeEditor = ({ socket, roomId, selectedLanguage, displayName, jwt, handle
           height='100%'
           placeholder='Enter your code here...'
           basicSetup={{
-            foldGutter: false
+            foldGutter: false,
           }}
           extensions={[getLanguageExtension(language)]}
         />

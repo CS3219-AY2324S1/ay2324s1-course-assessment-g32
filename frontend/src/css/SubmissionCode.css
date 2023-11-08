@@ -1,0 +1,7 @@
+.submission-code-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #1e1e1e;
+  overflow: auto;
+}

@@ -5,29 +5,22 @@ import { Chat, CodeEditor, QuestionPanel } from '../components/Collaboration';
 import { QuestionContent } from '../components/Question';
 import { getRandomQuestionByCriteria } from '../api/QuestionApi';
 import { showFailureToast } from '../utils/toast';
-import { attemptQuestion } from '../api/HistoryApi';
-import { showSuccessToast } from '../utils/toast';
-import { errorHandler } from '../utils/errors';
-import { getCookie, getUserId } from '../utils/helpers';
+import { getUserId } from '../utils/helpers';
 import { Status, Event } from '../constants';
 import env from '../loadEnvironment';
 import '../css/Collaboration.css';
 
 const Collaboration = () => {
+  const [userId, setUserId] = useState('');
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState({});
+
   const location = useLocation();
   const navigate = useNavigate();
 
   const socket = io(env.COLLAB_URL);
   const { roomId, displayName, questionData, jwt } = location.state || {};
   const { complexity, language } = questionData || {};
-
-  const [userId, setUserId] = useState('');
-  const [jwtToken, setJwtToken] = useState('');
-  const [code, setCode] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState(language);
-
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState({});
 
   useEffect(() => {
     const initializeRoom = async () => {
@@ -37,7 +30,6 @@ const Collaboration = () => {
         navigate('/landing');
       }
 
-      setJwtToken(await getCookie());
       setUserId(await getUserId());
 
       // Join the Socket.io room when the component mounts
@@ -98,16 +90,6 @@ const Collaboration = () => {
     return storedLanguage ? storedLanguage : language;
   };
 
-  const submitAttempt = async () => {
-    try {
-      const questionId = selectedQuestion._id;
-      const response = await attemptQuestion(jwtToken, userId, questionId, code, selectedLanguage);
-      showSuccessToast(response.data.message);
-    } catch (err) {
-      errorHandler(err);
-    }
-  };
-
   // Receive question changes from the server
   useEffect(() => {
     socket.on(Event.Question.UPDATE, (updatedQuestion) => {
@@ -140,30 +122,23 @@ const Collaboration = () => {
             >
               Leave Room
             </button>
-            <button
-              type='button'
-              className='btn btn-success'
-              onClick={submitAttempt}
-            >
-              Submit
-            </button>
           </div>
         </div>
-        <div className='content'>
-          <div className='left'>
+        <div className='collaboration-content'>
+          <div className='collaboration-left'>
             {selectedQuestion && (
               <QuestionContent question={selectedQuestion} />
             )}
           </div>
-          <div className='right'>
+          <div className='collaboration-right'>
             <CodeEditor
               socket={socket}
               roomId={roomId}
-              selectedLanguage={retrieveLanguage()}
+              userId={userId}
               displayName={displayName}
               jwt={jwt}
-              handleCodeChange={setCode}
-              handleLanguageToggle={setSelectedLanguage}
+              selectedLanguage={retrieveLanguage()}
+              selectedQuestion={selectedQuestion}
             />
             <Chat socket={socket} roomId={roomId} user={displayName} />
           </div>

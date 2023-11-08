@@ -9,7 +9,7 @@
   padding: 5px 5px 0px 5px;
 }
 
-.content {
+.collaboration-content {
   flex: 1;
   display: flex;
   flex-direction: row;
@@ -19,7 +19,7 @@
   overflow: auto;
 }
 
-.left {
+.collaboration-left {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -28,7 +28,7 @@
   min-width: 30%;
 }
 
-.right {
+.collaboration-right {
   flex: 1;
   display: flex;
   flex-direction: column;

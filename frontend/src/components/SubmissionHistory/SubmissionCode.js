@@ -8,6 +8,7 @@ import { java } from '@codemirror/lang-java';
 import { javascript } from '@codemirror/lang-javascript';
 import { parseDatetime } from '../../utils/helpers';
 import { Language } from '../../constants';
+import '../../css/SubmissionCode.css';
 
 const SubmissionCode = ({ attempt }) => {
   const [extensions, setExtensions] = useState([]);
@@ -36,21 +37,23 @@ const SubmissionCode = ({ attempt }) => {
   }, [attempt]);
 
   return (
-    <div>
-      <CodeMirror
-        value={attempt.code}
-        extensions={extensions}
-        height='90vh'
-        theme={vscodeDark}
-        options={{
-          lineNumbers: true,
-        }}
-      />
+    <>
+      <div className='submission-code-container'>
+        <CodeMirror
+          value={attempt.code}
+          extensions={extensions}
+          height='100%'
+          theme={vscodeDark}
+          options={{
+            lineNumbers: true,
+          }}
+        />
+      </div>
       <div>
         <span className='m-3 '>Language: {attempt.language} |</span>
         <span>Submitted on: {parseDatetime(attempt.createdAt)}</span>
       </div>
-    </div>
+    </>
   );
 };
 
