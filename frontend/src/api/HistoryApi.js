@@ -1,7 +1,5 @@
-import axios from 'axios';
-const env = require('../loadEnvironment');
-
-const historyRootUrl = env.HISTORY_URL + '/history';
+import { axiosHistory } from '../utils/axios';
+import { Status } from '../constants';
 
 const getConfig = (jwtToken) => {
   return {
@@ -20,15 +18,12 @@ export const attemptQuestion = async (jwtToken, userId, questionId, code, langua
       code: code,
       language: language,
     };
-    return await axios.post(
-      historyRootUrl + '/attempts',
-      attemptData,
-      getConfig(jwtToken)
-    );
+    console.log(attemptData)
+    return await axiosHistory.post('/attempt', attemptData, getConfig(jwtToken));
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -40,14 +35,11 @@ export const getSubmissionHistory = async (jwtToken, userId) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { userId: userId };
-    return await axios.get(
-      historyRootUrl + '/attempts',
-      config
-    );
+    return await axiosHistory.get('/attempts', config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -59,14 +51,11 @@ export const getHeatMapData = async (jwtToken, userId) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { userId: userId };
-    return await axios.get(
-      historyRootUrl + '/heatmap',
-      config
-    );
+    return await axiosHistory.get('/heatmap', config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -78,14 +67,11 @@ export const getPieChartData = async (jwtToken, userId) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { userId: userId };
-    return await axios.get(
-      historyRootUrl + '/piechart',
-      config
-    );
+    return await axiosHistory.get('/piechart', config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -97,14 +83,11 @@ export const getAttempt = async (jwtToken, attemptId) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { attemptId: attemptId };
-    return await axios.get(
-      historyRootUrl + '/attempt',
-      config
-    );
+    return await axiosHistory.get('/attempt', config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -116,14 +99,11 @@ export const getAttemptsByQuestionAndUser = async (jwtToken, questionId, userId)
   try {
     let config = getConfig(jwtToken);
     config.params = { questionId: questionId, userId: userId };
-    return await axios.get(
-      historyRootUrl + '/attempts',
-      config
-    );
+    return await axiosHistory.get('/attempts', config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }

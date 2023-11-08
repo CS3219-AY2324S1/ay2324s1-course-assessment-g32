@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import HeatMap from '@uiw/react-heat-map';
 import Tooltip from '@uiw/react-tooltip';
 import Spinner from '../../components/Spinner';
-import { getCookie, getUserId } from '../../utils/helpers';
 import { getHeatMapData } from '../../api/HistoryApi';
+import { getCookie, getUserId } from '../../utils/helpers';
 import { errorHandler } from '../../utils/errors';
 
 const SubmissionHeatMap = () => {
-  const [userId, setUserId] = useState('');
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true);
 
@@ -17,7 +16,9 @@ const SubmissionHeatMap = () => {
   useEffect(() => {
     const fetchDataAndInitializeHeatMap = async () => {
       try {
-        const historyResponse = await getHeatMapData(await getCookie(), await getUserId());
+        const jwt = getCookie();
+        const userId = await getUserId();
+        const historyResponse = await getHeatMapData(jwt, userId);
         setData(historyResponse.data.heatMapData);
         setIsLoading(false);
       } catch (error) {

@@ -12,6 +12,11 @@ const addAttempt = async (userId, questionId, code, language) => {
       throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
     }
 
+    // Check if code is empty
+    if (!code) {
+      throw { status: Status.BAD_REQUEST, message: 'Code cannot be empty' };
+    }
+
     // Create using with userId and questionId
     await historyDatabase.addAttempt(userId, questionId, code, language);
   } catch (err) {

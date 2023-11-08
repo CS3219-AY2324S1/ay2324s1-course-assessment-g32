@@ -189,7 +189,7 @@ export const ViewUserBottomPane = ({ user }) => {
               >
                 <MenuItem value={Language.PYTHON}>{Language.PYTHON}</MenuItem>
                 <MenuItem value={Language.JAVA}>{Language.JAVA}</MenuItem>
-                <MenuItem value={Language.CPP}>{Language.CPP}</MenuItem>
+                <MenuItem value={Language.JS}>{Language.JS}</MenuItem>
               </Select>
             </Grid>
           </Grid>

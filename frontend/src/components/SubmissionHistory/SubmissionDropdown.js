@@ -6,7 +6,6 @@ import { errorHandler } from '../../utils/errors';
 import '../../css/SubmissionDropdown.css';
 
 const SubmissionDropdown = ({ question }) => {
-
   const [attempts, setAttempts] = useState([]);
   const [selectedAttempt, setSelectedAttempt] = useState('');
   const [disabled, setDisabled] = useState(true);
@@ -36,7 +35,9 @@ const SubmissionDropdown = ({ question }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAttemptsByQuestionAndUser(await getCookie(), question, await getUserId());
+        const jwt = getCookie();
+        const userId = await getUserId();
+        const response = await getAttemptsByQuestionAndUser(jwt, question, userId);
         if (response.data.attempts && response.data.attempts.length > 0) {
           setAttempts(response.data.attempts);
           setSelectedAttempt(response.data.attempts[0]._id);
@@ -47,7 +48,7 @@ const SubmissionDropdown = ({ question }) => {
       } catch (error) {
         errorHandler(error);
       }
-    }
+    };
     fetchData();
   }, [question]);
 
@@ -63,7 +64,11 @@ const SubmissionDropdown = ({ question }) => {
         </select>
         <label>Submission Attempt</label>
       </div>
-      <button type='button' className='btn btn-success' onClick={handleViewAttemptClick} disabled={disabled}>
+      <button
+        className='btn btn-success'
+        onClick={handleViewAttemptClick}
+        disabled={disabled}
+      >
         View
       </button>
     </div>

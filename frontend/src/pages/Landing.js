@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
 import { SubmissionHeatMap, SubmissionPieChart } from '../components/Statistics';
 import MatchingModal from '../components/MatchMaking/MatchingModal';
 import { getUserId, getCookie } from '../utils/helpers';
@@ -8,9 +7,7 @@ import { errorHandler } from '../utils/errors';
 import Header from '../components/Header';
 import '../css/Landing.css';
 
-
 function Landing() {
-
   const [user, setUser] = useState('');
   const [isMatchingModalOpen, setMatchingModalOpen] = useState(false);
 
@@ -56,6 +53,6 @@ function Landing() {
       )}
     </div>
   );
-}
+};
 
 export default Landing;

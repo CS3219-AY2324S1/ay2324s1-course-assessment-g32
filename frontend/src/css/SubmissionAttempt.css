@@ -5,29 +5,34 @@
   overflow: auto;
 }
 
-.content {
+.submission-content {
   flex: 1;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   height: 100%;
   max-height: 100vh;
   overflow: auto;
 }
 
-.left {
+.submission-left {
   flex: 1;
   display: flex;
   flex-direction: column;
   background-color: #f2f2f2;
   border-radius: 5px;
   border: 1px solid #ccc;
+  height: 100%;
+  width: 50%;
 }
 
-.right {
+.submission-right {
   flex: 1;
   display: flex;
   flex-direction: column;
   background-color: #fff;
   border-radius: 5px;
+  border: 1px solid #ccc;
   height: 100%;
+  width: 50%;
 }
