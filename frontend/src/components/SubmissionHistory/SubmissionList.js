@@ -5,11 +5,10 @@ import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
+import { getSubmissionHistory } from '../../api/HistoryApi';
 import { getCookie, getUserId, parseDatetime } from '../../utils/helpers';
 import { errorHandler } from '../../utils/errors';
-import { getSubmissionHistory } from '../../api/HistoryApi';
-import { appendQuestionTitle } from '../../api/QuestionApi';
-import '../../css/SubmissionList.css'
+import '../../css/SubmissionList.css';
 
 const SubmissionList = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -20,17 +19,19 @@ const SubmissionList = () => {
 
   const navigate = useNavigate();
 
-  const fetchData = async () => {
-    try {
-      const historyResponse = await getSubmissionHistory(await getCookie(), await getUserId());
-      setTableData(historyResponse.data.attemptsWithTitles);
-      setIsLoading(false);
-    } catch (error) {
-      errorHandler(error);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const jwt = getCookie();
+        const userId = await getUserId();
+        const historyResponse = await getSubmissionHistory(jwt, userId);
+        setTableData(historyResponse.data.attemptsWithTitles);
+        setIsLoading(false);
+      } catch (error) {
+        errorHandler(error);
+      }
+    };
+
     fetchData();
   }, []);
 
@@ -84,9 +85,7 @@ const SubmissionList = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className='table-group-divider'>
-              {submissionList}
-            </tbody>
+            <tbody className='table-group-divider'>{submissionList}</tbody>
           </table>
         </>
       )}

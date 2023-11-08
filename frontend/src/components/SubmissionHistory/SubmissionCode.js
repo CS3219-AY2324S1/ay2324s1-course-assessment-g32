@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import CodeMirror from "@uiw/react-codemirror";
-import { EditorView } from "@codemirror/view"
-import { EditorState } from "@codemirror/state"
-import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+import CodeMirror from '@uiw/react-codemirror';
+import { EditorView } from '@codemirror/view';
+import { EditorState } from '@codemirror/state';
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
 import { javascript } from '@codemirror/lang-javascript';
 import { parseDatetime } from '../../utils/helpers';
 import { Language } from '../../constants';
 
-
 const SubmissionCode = ({ attempt }) => {
-
   const [extensions, setExtensions] = useState([]);
 
   const getLanguageExtension = (selectedLanguage) => {
@@ -29,8 +27,12 @@ const SubmissionCode = ({ attempt }) => {
 
   useEffect(() => {
     const languageExtension = getLanguageExtension(attempt.language);
-    setExtensions([languageExtension, EditorView.editable.of(false),
-      EditorState.readOnly.of(true), EditorView.lineWrapping]);
+    setExtensions([
+      languageExtension,
+      EditorView.editable.of(false),
+      EditorState.readOnly.of(true),
+      EditorView.lineWrapping,
+    ]);
   }, [attempt]);
 
   return (
@@ -50,6 +52,6 @@ const SubmissionCode = ({ attempt }) => {
       </div>
     </div>
   );
-}
+};
 
 export default SubmissionCode;
