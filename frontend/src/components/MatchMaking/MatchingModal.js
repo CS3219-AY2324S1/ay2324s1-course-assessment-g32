@@ -127,7 +127,6 @@ const MatchingModal = ({ isOpen, onClose }) => {
                       >
                         <option value={Language.PYTHON}>{Language.PYTHON}</option>
                         <option value={Language.JAVA}>{Language.JAVA}</option>
-                        <option value={Language.CPP}>{Language.CPP}</option>
                         <option value={Language.JS}>{Language.JS}</option>
                       </select>
                       <label htmlFor='matchingQuestitonLanguage'>

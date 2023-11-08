@@ -29,7 +29,7 @@ const Collaboration = () => {
       }
 
       // Join the Socket.io room when the component mounts
-      socket.emit(Event.JOIN_ROOM, { room: roomId, user: displayName });
+      socket.emit(Event.Socket.JOIN_ROOM, { room: roomId, user: displayName });
 
       const storedQuestion = sessionStorage.getItem(`question_${roomId}`);
       let question = JSON.parse(storedQuestion);
@@ -45,7 +45,7 @@ const Collaboration = () => {
         }
 
         sessionStorage.setItem(`question_${roomId}`, JSON.stringify(question));
-        socket.emit(Event.Question.QUESTION_CHANGE, {
+        socket.emit(Event.Question.CHANGE, {
           room: roomId,
           question: question,
         });
@@ -57,7 +57,7 @@ const Collaboration = () => {
 
   const handleLeaveRoom = () => {
     sessionStorage.removeItem(`codeEditorContent_${roomId}`); // Remove CodeMirror content from session storage when leaving the room
-    socket.emit(Event.LEAVE_ROOM, { room: roomId, user: displayName });
+    socket.emit(Event.Socket.LEAVE_ROOM, { room: roomId, user: displayName });
     navigate('/landing');
   };
 
@@ -73,7 +73,7 @@ const Collaboration = () => {
   const handleQuestionChange = (question) => {
     if (question !== selectedQuestion) {
       setSelectedQuestion(question);
-      socket.emit(Event.Question.QUESTION_CHANGE, {
+      socket.emit(Event.Question.CHANGE, {
         room: roomId,
         question: question,
       });
@@ -82,13 +82,15 @@ const Collaboration = () => {
 
   // Retrieve last language used from session storage
   const retrieveLanguage = () => {
-    const storedLanguage = sessionStorage.getItem(`codeEditorLanguage_${roomId}`);
+    const storedLanguage = sessionStorage.getItem(
+      `codeEditorLanguage_${roomId}`
+    );
     return storedLanguage ? storedLanguage : language;
   };
 
   // Receive question changes from the server
   useEffect(() => {
-    socket.on(Event.Question.QUESTION_UPDATE, (updatedQuestion) => {
+    socket.on(Event.Question.UPDATE, (updatedQuestion) => {
       if (updatedQuestion !== selectedQuestion) {
         setSelectedQuestion(updatedQuestion);
         sessionStorage.setItem(

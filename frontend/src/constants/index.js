@@ -19,22 +19,46 @@ const Language = {
   JS: 'Javascript',
 };
 
+const JAVA_BOILERPLATE = `public class Main {
+  public static void main(String[] args) {
+    // Write your code here
+
+  }
+
+  // You may implement your methods here
+
+}`;
+
 const Event = {
-  JOIN_ROOM: 'join-room',
-  LEAVE_ROOM: 'leave-room',
-  Question: {
-    QUESTION_CHANGE: 'question-change',
-    QUESTION_UPDATE: 'question-update',
+  Socket: {
+    CONNECT: 'connection',
+    DISCONNECT: 'disconnect',
+    JOIN_ROOM: 'join-room',
+    LEAVE_ROOM: 'leave-room',
   },
-  Collaboration: {
-    RESULT_CHANGE: 'result-change',
-    RESULT_UPDATE: 'result-update',
-    CODE_CHANGE: 'code-change',
-    CODE_UPDATE: 'code-update',
-    LANGUAGE_CHANGE: 'language-change',
-    LANGUAGE_UPDATE: 'language-update',
-    MOUSE_POSITION: 'mouse-position',
-    MOUSE_LEAVE: 'mouse-leave',
+  Question: {
+    CHANGE: 'question-change',
+    UPDATE: 'question-update',
+  },
+  Code: {
+    CHANGE: 'code-change',
+    UPDATE: 'code-update',
+  },
+  Language: {
+    CHANGE: 'language-change',
+    UPDATE: 'language-update',
+  },
+  Result: {
+    CHANGE: 'result-change',
+    UPDATE: 'result-update',
+  },
+  Button: {
+    DISABLE_EXEC: 'disable-exec-button',
+    UPDATE_EXEC: 'update-exec-button',
+  },
+  Mouse: {
+    POSITION: 'mouse-position',
+    LEAVE: 'mouse-leave',
   },
   Communication: {
     CHAT_SEND: 'chat-send',
@@ -104,7 +128,7 @@ const Topics = {
   SLIDING_WINDOW: 'Sliding Window',
   SORTING: 'Sorting',
   STACK: 'Stack',
-  STRING: 'String', 
+  STRING: 'String',
   STRING_MATCHING: 'String Matching',
   STRONGLY_CONNECTED_COMPONENT: 'Strongly Connected Component',
   TOPOLOGICAL_SORT: 'Topological Sort',
@@ -118,6 +142,7 @@ module.exports = {
   Status,
   Complexity,
   Language,
+  JAVA_BOILERPLATE,
   Event,
   Topics,
 };

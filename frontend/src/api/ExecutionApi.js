@@ -1,5 +1,6 @@
 import { axiosExecution } from '../utils/axios';
 import { Language } from '../constants';
+import { Status } from '../constants';
 
 const getConfig = () => {
   return {
@@ -11,19 +12,14 @@ const getConfig = () => {
 
 export const executeCode = async (language, code) => {
   const codeObject = { code: code };
-
   switch (language) {
     case Language.PYTHON:
-      console.log('case python');
       return await executePython(codeObject);
     case Language.JAVA:
-      console.log('case java');
       return await executeJava(codeObject);
     case Language.JS:
-      console.log('case js');
       return await executeJs(codeObject);
     default:
-      console.log('case python');
       return await executePython(codeObject);
   }
 };
@@ -39,7 +35,7 @@ const executePython = async (codeObject) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -58,7 +54,7 @@ const executeJava = async (codeObject) => {
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
@@ -68,17 +64,12 @@ const executeJava = async (codeObject) => {
 
 const executeJs = async (codeObject) => {
   try {
-    const response = await axiosExecution.post(
-      '/js',
-      codeObject,
-      getConfig()
-    );
-    console.log(response.data.output);
+    const response = await axiosExecution.post('/js', codeObject, getConfig());
     return response.data.output;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
-        response: { status: 408 },
+        response: { status: Status.REQUEST_TIMEOUT },
         message: 'Network Error',
       });
     }
