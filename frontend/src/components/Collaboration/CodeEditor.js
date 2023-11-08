@@ -6,6 +6,7 @@ import { java } from '@codemirror/lang-java';
 import { javascript } from '@codemirror/lang-javascript';
 import CollapsibleOutput from './CollapsibleOutput';
 import OverlayCursor from './OverlayCursor';
+import { ChangeLanguageWindow } from '../ConfirmationWindows';
 import { executeCode } from '../../api/ExecutionApi';
 import { attemptQuestion } from '../../api/HistoryApi';
 import { showSuccessToast } from '../../utils/toast';
@@ -22,6 +23,8 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
   const [code, setCode] = useState(selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '');
   const [result, setResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
+  const [newSelectedLanguage, setNewSelectedLanguage] = useState(selectedLanguage);
+  const [isChangeLanguageWindowOpen, setIsChangeLanguageWindowOpen] = useState(false);
 
   // Initialize cursor position for code editor
   const [scrollTop, setScrollTop] = useState(0);
@@ -107,28 +110,45 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
     });
   };
 
-  // Update the language state when the user changes the language
+  // Open the change language window on language change
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
-    setLanguage(selectedLanguage);
+    if (selectedLanguage !== language) {
+      setNewSelectedLanguage(selectedLanguage);
+      setIsChangeLanguageWindowOpen(true);
+    }
+  };
+
+  // Update the language state when the user changes the language on confirmation
+  const handleConfirmLanguageChange = () => {
+    setLanguage(newSelectedLanguage);
 
     // Set the code to boilerplate code if Java; else, set it to empty string
-    const codeToStore = selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '';
+    const codeToStore = newSelectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '';
     setCode(codeToStore);
 
     sessionStorage.setItem(`codeEditorContent_${roomId}`, codeToStore);
-    sessionStorage.setItem(`codeEditorLanguage_${roomId}`, selectedLanguage); // Store the language in session storage
+    sessionStorage.setItem(`codeEditorLanguage_${roomId}`, newSelectedLanguage); // Store the language in session storage
+
+    setIsChangeLanguageWindowOpen(false);
 
     // Send language changes to the server
     socket.emit(Event.Language.CHANGE, {
       room: roomId,
-      updatedLanguage: selectedLanguage,
+      updatedLanguage: newSelectedLanguage,
     });
     // Send code changes to the server
     socket.emit(Event.Code.CHANGE, {
       room: roomId,
       updatedCode: codeToStore,
     });
+  };
+
+  // Revert the language to the previous language and close the change language window on cancellation
+  const handleCancelLanguageChange = () => {
+    const languageSelect = document.getElementById('languageSelect');
+    languageSelect.value = language;
+    setIsChangeLanguageWindowOpen(false);
   };
 
   const handleCodeExecution = async () => {
@@ -250,62 +270,71 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
   }, [showCursor]);
 
   return (
-    <div className='editor-container'>
-      <div className='row editor-nav-bar'>
-        <div className='d-flex justify-content-between'>
-          <select
-            className='form-select-sm'
-            id='languageSelect'
-            defaultValue={language}
-            onChange={handleLanguageChange}
-          >
-            <option value='Python'>Python</option>
-            <option value='Java'>Java</option>
-            <option value='Javascript'>Javascript</option>
-          </select>
-          <div>
-            <button
-              className={`btn ${isExecuting ? 'btn-secondary' : 'btn-primary'} me-2`}
-              onClick={handleCodeExecution}
-              disabled={isExecuting}
+    <>
+      <div className='editor-container'>
+        <div className='row editor-nav-bar'>
+          <div className='d-flex justify-content-between'>
+            <select
+              className='form-select-sm'
+              id='languageSelect'
+              defaultValue={language}
+              onChange={handleLanguageChange}
             >
-              ▶ Run
-            </button>
-            <button
-              className='btn btn-success'
-              onClick={handleSubmitAttempt}
-            >
-              Submit
-            </button>
+              <option value='Python'>Python</option>
+              <option value='Java'>Java</option>
+              <option value='Javascript'>Javascript</option>
+            </select>
+            <div>
+              <button
+                className={`btn ${isExecuting ? 'btn-secondary' : 'btn-primary'} me-2`}
+                onClick={handleCodeExecution}
+                disabled={isExecuting}
+              >
+                ▶ Run
+              </button>
+              <button
+                className='btn btn-success'
+                onClick={handleSubmitAttempt}
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </div>
+        <div
+          className='code-editor'
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          ref={editorBoxRef}
+        >
+          <CodeMirror
+            className='code-mirror'
+            ref={codeMirrorRef}
+            value={code}
+            onChange={onChange}
+            theme={vscodeDark}
+            autoFocus={true}
+            height='100%'
+            placeholder='Enter your code here...'
+            basicSetup={{
+              foldGutter: false,
+            }}
+            extensions={[getLanguageExtension(language)]}
+          />
+          {isWithinWindow(renderPartner.position, editorBoxRef) && showCursor && (
+            <OverlayCursor partner={renderPartner} />
+          )}
+        </div>
+        <CollapsibleOutput result={result} />
       </div>
-      <div
-        className='code-editor'
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        ref={editorBoxRef}
-      >
-        <CodeMirror
-          className='code-mirror'
-          ref={codeMirrorRef}
-          value={code}
-          onChange={onChange}
-          theme={vscodeDark}
-          autoFocus={true}
-          height='100%'
-          placeholder='Enter your code here...'
-          basicSetup={{
-            foldGutter: false,
-          }}
-          extensions={[getLanguageExtension(language)]}
+      {isChangeLanguageWindowOpen && (
+        <ChangeLanguageWindow
+          onClose={handleCancelLanguageChange}
+          onConfirm={handleConfirmLanguageChange}
+          language={newSelectedLanguage}
         />
-        {isWithinWindow(renderPartner.position, editorBoxRef) && showCursor && (
-          <OverlayCursor partner={renderPartner} />
-        )}
-      </div>
-      <CollapsibleOutput result={result} />
-    </div>
+      )}
+    </>
   );
 };
 

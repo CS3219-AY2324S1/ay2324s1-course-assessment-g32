@@ -76,7 +76,7 @@ const Collaboration = () => {
     setIsPanelOpen(false);
   };
 
-  // Send question changes to the server
+  // Open the change question window on question change
   const handleQuestionChange = (selectedQuestion) => {
     if (selectedQuestion !== question) {
       setSelectedQuestion(selectedQuestion);
@@ -84,6 +84,7 @@ const Collaboration = () => {
     }
   };
 
+  // Send question changes to the server on confirmation
   const handleConfirmQuestionChange = () => {
     setQuestion(selectedQuestion);
     setIsChangeQuestionWindowOpen(false);
@@ -117,7 +118,7 @@ const Collaboration = () => {
   }, [socket, question]);
 
   return (
-    <div>
+    <>
       <div className='collaboration-container'>
         <div className='collaboration-header'>
           <div className='d-flex justify-content-between'>
@@ -172,7 +173,7 @@ const Collaboration = () => {
           questionTitle={selectedQuestion.title}
         />
       )}
-    </div>
+    </>
   );
 };
 

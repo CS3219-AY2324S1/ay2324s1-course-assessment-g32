@@ -1,4 +1,4 @@
-.overlay {
+.question-panel-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -9,7 +9,7 @@
   display: none;
 }
 
-.overlay.open {
+.question-panel-overlay.open {
   display: block;
 }
 
