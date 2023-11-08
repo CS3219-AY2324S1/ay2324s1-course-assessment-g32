@@ -72,6 +72,34 @@ const updateDisplayName = async (req, res) => {
   }
 };
 
+const updateProgrammingLanguage = async (req, res) => {
+  try {
+    const { id, programmingLanguage } = req.body;
+    await userService.updateProgrammingLanguage(id, programmingLanguage);
+    logger.logSuccess('User', id, 'has updated language to', programmingLanguage);
+    res.json({ message: 'SUCCESS: User info updated' });
+  } catch (err) {
+    logger.logFailure('Cannot update programming language of user:', err?.message || err);
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
+  }
+};
+
+const updateComplexity = async (req, res) => {
+  try {
+    const { id, complexity } = req.body;
+    await userService.updateComplexity(id, complexity);
+    logger.logSuccess('User', id, 'has updated complexity to', complexity);
+    res.json({ message: 'SUCCESS: User info updated' });
+  } catch (err) {
+    logger.logFailure('Cannot update complexity of user:', err?.message || err);
+    res
+      .status(err?.status || Status.BAD_REQUEST)
+      .json({ error: err?.message || err });
+  }
+};
+
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.query;
@@ -125,6 +153,8 @@ module.exports = {
   getAllUserInfo,
   getUserInfo,
   updateDisplayName,
+  updateProgrammingLanguage,
+  updateComplexity,
   deleteUser,
   changePassword,
   toggleUserRole,

@@ -115,6 +115,30 @@ const updateDisplayName = async (id, displayName) => {
   }
 };
 
+const updateProgrammingLanguage = async (id, programmingLanguage) => {
+  try {
+    const update = {
+      language: programmingLanguage,
+    };
+    const result = await userModel.findByIdAndUpdate(id, update, { new: true });
+    return result !== null;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const updateComplexity = async (id, newComplexity) => {
+  try {
+    const update = {
+      complexity: newComplexity,
+    };
+    const result = await userModel.findByIdAndUpdate(id, update, { new: true });
+    return result !== null;
+  } catch (err) {
+    throw err;
+  }
+};
+
 /**
  * Updates and returns user information with id.
  *
@@ -167,6 +191,8 @@ module.exports = {
   findByEmail,
   createUser,
   updateDisplayName,
+  updateProgrammingLanguage,
+  updateComplexity,
   updatePassword,
   deleteUser,
   getAllUserInfo,

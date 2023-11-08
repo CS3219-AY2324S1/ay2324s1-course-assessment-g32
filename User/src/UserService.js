@@ -162,6 +162,47 @@ const updateDisplayName = async (userId, displayName) => {
   }
 };
 
+const updateProgrammingLanguage = async (userId, programmingLanguage) => {
+  try {
+    if (!userId) {
+      throw Object.assign(new Error('Missing id'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    if (!programmingLanguage) {
+      throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    return userDatabase.updateProgrammingLanguage(userId, programmingLanguage);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const updateComplexity = async (userId, newComplexity) => {
+  try {
+    if (!userId) {
+      throw Object.assign(new Error('Missing id'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    if (!newComplexity) {
+      throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    return userDatabase.updateComplexity(userId, newComplexity);
+  } catch (err) {
+    throw err;
+  }
+};
+
+
 const deleteUser = async (id) => {
   try {
     let _success = Boolean();
@@ -276,10 +317,12 @@ const toggleUserRole = async (id) => {
 module.exports = {
   loginUser,
   createUser,
-  getAllUserInfo, // Read
-  getUserInfo, // Read
-  updateDisplayName, // Update
-  deleteUser, // Delete
-  changeUserPassword, // Update
-  toggleUserRole, // Update
+  getAllUserInfo,
+  getUserInfo,
+  updateDisplayName,
+  updateProgrammingLanguage,
+  updateComplexity,
+  deleteUser,
+  changeUserPassword,
+  toggleUserRole,
 };

@@ -97,6 +97,44 @@ export const updateDisplayName = async (id, newDisplayName, jwtToken) => {
   }
 };
 
+export const updateCodingLanguage = async (id, newLanguage, jwtToken) => {
+  try {
+    const res = await axiosUser.put(
+      '/programming-language',
+      { id: id, programmingLanguage: newLanguage },
+      getTokenConfig(jwtToken)
+    );
+    return res;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: Status.REQUEST_TIMEOUT },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+export const updateQuesionComplexity = async (id, newComplexity, jwtToken) => {
+  try {
+    const res = await axiosUser.put(
+      '/complexity',
+      { id: id, complexity: newComplexity },
+      getTokenConfig(jwtToken)
+    );
+    return res;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: Status.REQUEST_TIMEOUT },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
 export const updatePassword = async (
   id,
   currentPassword,
