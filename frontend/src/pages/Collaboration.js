@@ -14,19 +14,20 @@ import env from '../loadEnvironment';
 import '../css/Collaboration.css';
 
 const Collaboration = () => {
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState({});
-
   const location = useLocation();
   const navigate = useNavigate();
-  const [userId, setUserId] = useState('');
-  const [jwtToken, setJwtToken] = useState('');
-  const [code, setCode] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState('Python');
 
   const socket = io(env.COLLAB_URL);
   const { roomId, displayName, questionData, jwt } = location.state || {};
   const { complexity, language } = questionData || {};
+
+  const [userId, setUserId] = useState('');
+  const [jwtToken, setJwtToken] = useState('');
+  const [code, setCode] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState(language);
+
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState({});
 
   useEffect(() => {
     const initializeRoom = async () => {
@@ -40,7 +41,7 @@ const Collaboration = () => {
       setUserId(await getUserId());
 
       // Join the Socket.io room when the component mounts
-      socket.emit(Event.JOIN_ROOM, { room: roomId, user: displayName });
+      socket.emit(Event.Socket.JOIN_ROOM, { room: roomId, user: displayName });
 
       const storedQuestion = sessionStorage.getItem(`question_${roomId}`);
       let question = JSON.parse(storedQuestion);
@@ -56,7 +57,7 @@ const Collaboration = () => {
         }
 
         sessionStorage.setItem(`question_${roomId}`, JSON.stringify(question));
-        socket.emit(Event.Question.QUESTION_CHANGE, {
+        socket.emit(Event.Question.CHANGE, {
           room: roomId,
           question: question,
         });
@@ -68,7 +69,7 @@ const Collaboration = () => {
 
   const handleLeaveRoom = () => {
     sessionStorage.removeItem(`codeEditorContent_${roomId}`); // Remove CodeMirror content from session storage when leaving the room
-    socket.emit(Event.LEAVE_ROOM, { room: roomId, user: displayName });
+    socket.emit(Event.Socket.LEAVE_ROOM, { room: roomId, user: displayName });
     navigate('/landing');
   };
 
@@ -84,7 +85,7 @@ const Collaboration = () => {
   const handleQuestionChange = (question) => {
     if (question !== selectedQuestion) {
       setSelectedQuestion(question);
-      socket.emit(Event.Question.QUESTION_CHANGE, {
+      socket.emit(Event.Question.CHANGE, {
         room: roomId,
         question: question,
       });
@@ -99,7 +100,8 @@ const Collaboration = () => {
 
   const submitAttempt = async () => {
     try {
-      const response = await attemptQuestion(jwtToken, userId, selectedQuestion._id, code, selectedLanguage);
+      const questionId = selectedQuestion._id;
+      const response = await attemptQuestion(jwtToken, userId, questionId, code, selectedLanguage);
       showSuccessToast(response.data.message);
     } catch (err) {
       errorHandler(err);
@@ -108,7 +110,7 @@ const Collaboration = () => {
 
   // Receive question changes from the server
   useEffect(() => {
-    socket.on(Event.Question.QUESTION_UPDATE, (updatedQuestion) => {
+    socket.on(Event.Question.UPDATE, (updatedQuestion) => {
       if (updatedQuestion !== selectedQuestion) {
         setSelectedQuestion(updatedQuestion);
         sessionStorage.setItem(

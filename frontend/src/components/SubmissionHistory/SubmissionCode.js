@@ -5,8 +5,9 @@ import { EditorState } from "@codemirror/state"
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { python } from '@codemirror/lang-python';
 import { java } from '@codemirror/lang-java';
-import { cpp } from '@codemirror/lang-cpp';
+import { javascript } from '@codemirror/lang-javascript';
 import { parseDatetime } from '../../utils/helpers';
+import { Language } from '../../constants';
 
 
 const SubmissionCode = ({ attempt }) => {
@@ -15,12 +16,12 @@ const SubmissionCode = ({ attempt }) => {
 
   const getLanguageExtension = (selectedLanguage) => {
     switch (selectedLanguage) {
-      case 'Python':
+      case Language.PYTHON:
         return python();
-      case 'Java':
+      case Language.JAVA:
         return java();
-      case 'C++':
-        return cpp();
+      case Language.JS:
+        return javascript();
       default:
         return python();
     }

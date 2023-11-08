@@ -65,6 +65,14 @@ services:
     depends_on:
       - svc-auth
       - svc-question
+  svc-execution:
+    container_name: execution-service
+    build: ./Execution
+    env_file: .env
+    ports: ['10001:10001']
+    depends_on:
+     - svc-auth
+     - svc-match
   svc-web-ui:
     container_name: web-ui
     build: ./frontend
@@ -76,3 +84,4 @@ services:
       - svc-match
       - svc-collab
       - svc-history
+      - svc-execution

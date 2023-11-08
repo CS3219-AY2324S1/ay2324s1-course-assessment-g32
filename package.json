@@ -11,8 +11,8 @@
     "install:match": "cd Match && npm install",
     "install:collaboration": "cd Collaboration && npm install",
     "install:history": "cd History && npm install",
-
-
+    "install:execution": "cd Execution && npm install",
+    
     "start-all": "npm-run-all -p start:*",
     "start:frontend": "cd frontend && npm start",
     "start:auth": "cd Auth && npm start",
@@ -21,7 +21,8 @@
     "start:match": "cd Match && npm start",
     "start:collaboration": "cd Collaboration && npm start",
     "start:history": "cd History && npm start",
-    
+    "start:execution": "cd Execution && npm start",
+
     "dev-all": "npm-run-all -p dev:*",
     "dev:backend": "cd backend && npm run dev",
     "dev:auth": "cd Auth && npm run dev",
@@ -29,6 +30,7 @@
     "dev:user": "cd User && npm run dev",
     "dev:match": "cd Match && npm run dev",
     "dev:collaboration": "cd Collaboration && npm run dev",
-    "dev:history": "cd History && npm run dev"
+    "dev:history": "cd History && npm run dev",
+    "dev:execution": "cd Execution && npm run dev"
   }
 }
