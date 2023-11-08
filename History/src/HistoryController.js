@@ -4,8 +4,8 @@ const { Status } = require('./constants');
 const logger = require('./Log');
 
 const addAttempt = async (req, res) => {
+  const { userId, questionId, code, language } = req.body;
   try {
-    const { userId, questionId, code, language } = req.body;
     await historyService.addAttempt(userId, questionId, code, language);
     logger.logSuccess(`Attempt added for user ${userId}`);
     res.json({ message: 'Submitted Attempt!' });
@@ -16,8 +16,8 @@ const addAttempt = async (req, res) => {
 };
 
 const getAttempts = async (req, res) => {
+  const { userId, questionId } = req.query;
   try {
-    const { userId, questionId } = req.query;
     if (questionId) {
       const attempts = await historyService.getAttemptsByQuestionAndUser(questionId, userId);
       res.json({ message: 'SUCCESS', attempts });
@@ -36,8 +36,8 @@ const getAttempts = async (req, res) => {
 };
 
 const getHeatMapData = async (req, res) => {
+  const { userId } = req.query;
   try {
-    const { userId } = req.query;
     const heatMapData = await historyService.getHeatMapData(userId);
     logger.logSuccess(`Heatmap data retrieved for user ${userId}`);
     res.json({ message: 'SUCCESS', heatMapData });
@@ -48,9 +48,9 @@ const getHeatMapData = async (req, res) => {
 };
 
 const getPieChartData = async (req, res) => {
+  const { userId } = req.query;
   try {
     const jwtToken = req.headers['authorization'];
-    const { userId } = req.query;
     const attemptedQuestionsId = await historyService.getAttemptedQuestionsId(userId);
     const attemptedQuestionsStats = await questionApi.getQuestionDifficultyCount(jwtToken, attemptedQuestionsId);
     const allQuestionsStats = await questionApi.getQuestionStatistics(jwtToken);
@@ -71,8 +71,8 @@ const getPieChartData = async (req, res) => {
 };
 
 const getAttempt = async (req, res) => {
+  const { attemptId } = req.query;
   try {
-    const { attemptId } = req.query;
     const attempt = await historyService.getAttempt(attemptId);
     logger.logSuccess(`Attempt details retrieved for attempt ${attemptId}`);
     res.json({ message: 'SUCCESS', attempt });

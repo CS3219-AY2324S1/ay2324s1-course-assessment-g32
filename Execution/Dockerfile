@@ -26,7 +26,7 @@ COPY . .
 
 # Expose ports so they can be mapped by Docker daemon.
 # Should expose ${EXECUTION_PORT}
-EXPOSE 9001
+EXPOSE 10001
 
 # Define the command to run your app using CMD which defines your runtime.
 CMD ["npm", "start"]

@@ -18,8 +18,8 @@ export const attemptQuestion = async (jwtToken, userId, questionId, code, langua
       code: code,
       language: language,
     };
-    return await axiosHistory.post('/attempts', attemptData, getConfig(jwtToken)
-    );
+    console.log(attemptData)
+    return await axiosHistory.post('/attempt', attemptData, getConfig(jwtToken));
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {

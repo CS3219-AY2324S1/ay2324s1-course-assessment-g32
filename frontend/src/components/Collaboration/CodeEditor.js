@@ -183,6 +183,7 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
   const handleSubmitAttempt = async () => {
     try {
       const questionId = selectedQuestion._id;
+      console.log('userId', userId);
       const response = await attemptQuestion(jwt, userId, questionId, code, language);
       showSuccessToast(response.data.message);
     } catch (err) {
