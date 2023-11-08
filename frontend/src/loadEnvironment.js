@@ -25,7 +25,7 @@ const COLLAB_URL = SERVER_HOST + ':' + COLLAB_PORT;
 const HISTORY_PORT = process.env.REACT_APP_HISTORY_PORT || 9001;
 const HISTORY_URL = SERVER_HOST + ':' + HISTORY_PORT;
 
-// // Dependency Config: Execution   Service
+// Dependency Config: Execution Service
 const EXECUTION_PORT = process.env.REACT_APP_EXECUTION_PORT || 10001;
 const EXECUTION_URL = SERVER_HOST + ':' + EXECUTION_PORT;
 
