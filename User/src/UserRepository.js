@@ -49,7 +49,7 @@ const findByEmail = async (email) => {
 
 const getUserInfoByEmail = async (email) => {
   var _userId = String();
-  await findByEmail(email).then((userInfo) => (_userId = userInfo.userId));
+  await findByEmail(email).then((userInfo) => (_userId = userInfo.id));
 
   if (!_userId) throw 'No user is using ' + email;
 
