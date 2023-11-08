@@ -20,11 +20,11 @@
 }
 
 .scrollable-div {
-    overflow-y: auto; /* This enables the vertical scrollbar when content overflows */
+  overflow-y: auto; /* This enables the vertical scrollbar when content overflows */
 }
 
 .spinner-border {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
