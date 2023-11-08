@@ -103,7 +103,7 @@ const getAllUserInfo = async () => {
  * @param {string} displayName
  * @returns {Boolean} Success or failure
  */
-const updateUser = async (id, displayName) => {
+const updateDisplayName = async (id, displayName) => {
   try {
     const update = {
       displayName: displayName,
@@ -166,7 +166,7 @@ const deleteUser = async (id) => {
 module.exports = {
   findByEmail,
   createUser,
-  updateUser,
+  updateDisplayName,
   updatePassword,
   deleteUser,
   getAllUserInfo,

@@ -142,7 +142,7 @@ const getUserInfo = async (userId, email) => {
  * @param {int|string} userId ID of user in DB. Read-only.
  * @param {string} displayName New displayName
  */
-const updateUser = async (userId, displayName) => {
+const updateDisplayName = async (userId, displayName) => {
   try {
     if (!userId) {
       throw Object.assign(new Error('Missing id'), {
@@ -156,7 +156,7 @@ const updateUser = async (userId, displayName) => {
       });
     }
 
-    return userDatabase.updateUser(userId, displayName);
+    return userDatabase.updateDisplayName(userId, displayName);
   } catch (err) {
     throw err;
   }
@@ -278,7 +278,7 @@ module.exports = {
   createUser,
   getAllUserInfo, // Read
   getUserInfo, // Read
-  updateUser, // Update
+  updateDisplayName, // Update
   deleteUser, // Delete
   changeUserPassword, // Update
   toggleUserRole, // Update

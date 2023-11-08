@@ -81,7 +81,7 @@ export const getUser = async (id, jwtToken) => {
 export const updateDisplayName = async (id, newDisplayName, jwtToken) => {
   try {
     const res = await axiosUser.put(
-      '/update',
+      '/display-name',
       { id: id, displayName: newDisplayName },
       getTokenConfig(jwtToken)
     );

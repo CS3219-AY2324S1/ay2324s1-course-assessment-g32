@@ -58,10 +58,10 @@ const getUserInfo = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const updateDisplayName = async (req, res) => {
   try {
     const { id, displayName } = req.body;
-    await userService.updateUser(id, displayName);
+    await userService.updateDisplayName(id, displayName);
     logger.logSuccess('User', id, 'has updated username to', displayName);
     res.json({ message: 'SUCCESS: User info updated' });
   } catch (err) {
@@ -124,7 +124,7 @@ module.exports = {
   login,
   getAllUserInfo,
   getUserInfo,
-  updateUser,
+  updateDisplayName,
   deleteUser,
   changePassword,
   toggleUserRole,
