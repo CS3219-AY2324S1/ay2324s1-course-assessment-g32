@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { Chat, CodeEditor, QuestionPanel } from '../components/Collaboration';
 import { QuestionContent } from '../components/Question';
+import { ChangeQuestionWindow } from '../components/ConfirmationWindows';
 import { getRandomQuestionByCriteria } from '../api/QuestionApi';
 import { showFailureToast } from '../utils/toast';
 import { getUserId } from '../utils/helpers';
@@ -13,7 +14,9 @@ import '../css/Collaboration.css';
 const Collaboration = () => {
   const [userId, setUserId] = useState('');
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [question, setQuestion] = useState({});
   const [selectedQuestion, setSelectedQuestion] = useState({});
+  const [isChangeQuestionWindowOpen, setIsChangeQuestionWindowOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -54,7 +57,7 @@ const Collaboration = () => {
           question: question,
         });
       }
-      setSelectedQuestion(question);
+      setQuestion(question);
     };
     initializeRoom();
   }, []);
@@ -74,14 +77,24 @@ const Collaboration = () => {
   };
 
   // Send question changes to the server
-  const handleQuestionChange = (question) => {
-    if (question !== selectedQuestion) {
-      setSelectedQuestion(question);
-      socket.emit(Event.Question.CHANGE, {
-        room: roomId,
-        question: question,
-      });
+  const handleQuestionChange = (selectedQuestion) => {
+    if (selectedQuestion !== question) {
+      setSelectedQuestion(selectedQuestion);
+      setIsChangeQuestionWindowOpen(true);
     }
+  };
+
+  const handleConfirmQuestionChange = () => {
+    setQuestion(selectedQuestion);
+    setIsChangeQuestionWindowOpen(false);
+    socket.emit(Event.Question.CHANGE, {
+      room: roomId,
+      question: selectedQuestion,
+    });
+  };
+
+  const handleCancelQuestionChange = () => {
+    setIsChangeQuestionWindowOpen(false);
   };
 
   // Retrieve last language used from session storage
@@ -93,15 +106,15 @@ const Collaboration = () => {
   // Receive question changes from the server
   useEffect(() => {
     socket.on(Event.Question.UPDATE, (updatedQuestion) => {
-      if (updatedQuestion !== selectedQuestion) {
-        setSelectedQuestion(updatedQuestion);
+      if (updatedQuestion !== question) {
+        setQuestion(updatedQuestion);
         sessionStorage.setItem(
           `question_${roomId}`,
           JSON.stringify(updatedQuestion)
         );
       }
     });
-  }, [socket, selectedQuestion]);
+  }, [socket, question]);
 
   return (
     <div>
@@ -126,8 +139,8 @@ const Collaboration = () => {
         </div>
         <div className='collaboration-content'>
           <div className='collaboration-left'>
-            {selectedQuestion && (
-              <QuestionContent question={selectedQuestion} />
+            {question && (
+              <QuestionContent question={question} />
             )}
           </div>
           <div className='collaboration-right'>
@@ -138,7 +151,7 @@ const Collaboration = () => {
               displayName={displayName}
               jwt={jwt}
               selectedLanguage={retrieveLanguage()}
-              selectedQuestion={selectedQuestion}
+              selectedQuestion={question}
             />
             <Chat socket={socket} roomId={roomId} user={displayName} />
           </div>
@@ -150,6 +163,13 @@ const Collaboration = () => {
           onClose={handleClosePanel}
           onChangeQuestion={handleQuestionChange}
           complexity={complexity}
+        />
+      )}
+      {isChangeQuestionWindowOpen && (
+        <ChangeQuestionWindow
+          onConfirm={handleConfirmQuestionChange}
+          onClose={handleCancelQuestionChange}
+          questionTitle={selectedQuestion.title}
         />
       )}
     </div>
