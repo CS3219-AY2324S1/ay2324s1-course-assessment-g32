@@ -272,7 +272,7 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
               ▶ Run
             </button>
             <button
-              className='btn btn-success me-2'
+              className='btn btn-success'
               onClick={handleSubmitAttempt}
             >
               Submit
