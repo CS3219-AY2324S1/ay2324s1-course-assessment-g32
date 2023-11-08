@@ -17,6 +17,11 @@ const MatchingModal = ({ user, isOpen, onClose }) => {
   const [jwt, setJwt] = useState('');
   const queueName = `${complexity}-${language}`;
 
+  const DEFAULT = {
+    LANGUAGE: Language.PYTHON,
+    COMPLEXITY: Complexity.EASY
+  };
+
   useEffect(() => {
     try {
       setJwt(getCookie());
@@ -32,6 +37,13 @@ const MatchingModal = ({ user, isOpen, onClose }) => {
 
       // Add event listeners for closing the tab
       window.addEventListener('beforeunload', handleExitTab);
+
+      // Set local state using user's preference
+      if (!language)
+        setLanguage(user.language || DEFAULT.LANGUAGE);
+      if (!complexity)
+        setComplexity(user.complexity || DEFAULT.COMPLEXITY);
+
       return () => {
         handleExitTab();
         window.removeEventListener('beforeunload', handleExitTab);
@@ -107,7 +119,7 @@ const MatchingModal = ({ user, isOpen, onClose }) => {
                       <select
                         className='form-select mb-3'
                         id='matchingQuestitonComplexity'
-                        defaultValue={complexity || user.complexity || Complexity.EASY}
+                        defaultValue={complexity || user.complexity || DEFAULT.COMPLEXITY}
                         onChange={handleComplexityChange}
                       >
                         <option value={Complexity.EASY}>{Complexity.EASY}</option>
@@ -122,7 +134,7 @@ const MatchingModal = ({ user, isOpen, onClose }) => {
                       <select
                         className='form-select mb-3'
                         id='matchingQuestitonLanguage'
-                        defaultValue={language || user.language || Language.PYTHON}
+                        defaultValue={language || user.language || DEFAULT.LANGUAGE}
                         onChange={handleLanguageChange}
                       >
                         <option value={Language.PYTHON}>{Language.PYTHON}</option>
