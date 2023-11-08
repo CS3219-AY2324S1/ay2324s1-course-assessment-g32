@@ -9,13 +9,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../../css/Modal.css';
 
-const MatchingModal = ({ isOpen, onClose }) => {
+const MatchingModal = ({ user, isOpen, onClose }) => {
   const [isFindingMatch, setIsFindingMatch] = useState(false);
-  const [complexity, setComplexity] = useState(Complexity.EASY);
-  const [language, setLanguage] = useState(Language.PYTHON);
+  const [complexity, setComplexity] = useState('');
+  const [language, setLanguage] = useState('');
   const [sessionID, setSessionID] = useState('');
   const [jwt, setJwt] = useState('');
   const queueName = `${complexity}-${language}`;
+
+  const DEFAULT = {
+    LANGUAGE: Language.PYTHON,
+    COMPLEXITY: Complexity.EASY
+  };
 
   useEffect(() => {
     try {
@@ -32,6 +37,13 @@ const MatchingModal = ({ isOpen, onClose }) => {
 
       // Add event listeners for closing the tab
       window.addEventListener('beforeunload', handleExitTab);
+
+      // Set local state using user's preference
+      if (!language)
+        setLanguage(user.language || DEFAULT.LANGUAGE);
+      if (!complexity)
+        setComplexity(user.complexity || DEFAULT.COMPLEXITY);
+
       return () => {
         handleExitTab();
         window.removeEventListener('beforeunload', handleExitTab);
@@ -107,7 +119,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
                       <select
                         className='form-select mb-3'
                         id='matchingQuestitonComplexity'
-                        defaultValue={complexity}
+                        defaultValue={complexity || user.complexity || DEFAULT.COMPLEXITY}
                         onChange={handleComplexityChange}
                       >
                         <option value={Complexity.EASY}>{Complexity.EASY}</option>
@@ -122,7 +134,7 @@ const MatchingModal = ({ isOpen, onClose }) => {
                       <select
                         className='form-select mb-3'
                         id='matchingQuestitonLanguage'
-                        defaultValue={language}
+                        defaultValue={language || user.language || DEFAULT.LANGUAGE}
                         onChange={handleLanguageChange}
                       >
                         <option value={Language.PYTHON}>{Language.PYTHON}</option>

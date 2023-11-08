@@ -13,7 +13,9 @@ router.put('/toggle-user-role', middleware.checkTokenMaintainer, userController.
 
 // User and maintainer can access the remaining routes
 router.get('/read', middleware.checkToken, userController.getUserInfo);
-router.put('/update', middleware.checkToken, userController.updateUser);
+router.put('/display-name', middleware.checkToken, userController.updateDisplayName);
+router.put('/programming-language', middleware.checkToken, userController.updateProgrammingLanguage);
+router.put('/complexity', middleware.checkToken, userController.updateComplexity);
 router.delete('/delete', middleware.checkToken, userController.deleteUser);
 router.put('/change-password', middleware.checkToken, userController.changePassword);
 

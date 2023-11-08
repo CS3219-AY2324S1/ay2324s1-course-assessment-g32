@@ -1,7 +1,7 @@
 # API Endpoints
 
 | Method | API Endpoints                | Purpose                                                  | Parameters <br> (JSON format)                                         | Require JWT token to be in header? | Does user have to be maintainer? |
-|--------|------------------------------|----------------------------------------------------------|-----------------------------------------------------------------------|------------------------------------|----------------------------------|
+| ------ | ---------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------- | -------------------------------- |
 | GET    | `/auth/authorize`            | Used to authorize all users                              | -                                                                     | Yes                                | No                               |
 | GET    | `/auth/authorize-maintainer` | Used to authorize maintainers                            | -                                                                     | Yes                                | Yes                              |
 | POST   | `/auth/generate`             | Used to generate JWT token after user has logged in      | `userId` <br> `isMaintainer`                                          | No                                 | -                                |
@@ -16,7 +16,9 @@
 | GET    | `/user/read`                 | Used to get user information                             | `id` or `email`                                                       | Yes                                | No                               |
 | GET    | `/user/read-all`             | Used to get all users information                        | -                                                                     | Yes                                | Yes                              |
 | POST   | `/user/signup`               | Used to create new user                                  | `email` <br> `password` <br> `confirmPassword`                        | No                                 | -                                |
-| PUT    | `/user/update`               | Used to update user information (username)               | `id` <br> `username`                                                  | Yes                                | No                               |
+| PUT    | `/user/display-name`         | Used to update user's display name                       | `id` <br> `username`                                                  | Yes                                | No                               |
+| PUT    | `/user/programming-language` | Used to update user's preferred programming language     | `id` <br> `programmingLanguage`                                       | Yes                                | No                               |
+| PUT    | `/user/complexity          ` | Used to update user's preferred question complexity      | `id` <br> `complexity`                                                | Yes                                | No                               |
 | POST   | `/queue/join`                | Used to join the matching queue                          | `queueName` <br> `sessionID`                                          | Yes                                | No                               |
 | POST   | `/queue/exit`                | Used to exit the matching queue                          | `queueName` <br> `sessionID`                                          | Yes                                | No                               |
 | POST   | `/history/attempts`          | Used to add attempt to user history                      | `userId` <br> `questionId` <br> `code` <br> `language`                | Yes                                | No                               |
@@ -26,15 +28,18 @@
 | GET    | `/history/piechart`          | Used to get pie chart data for a user                    | `userId` <br> `questionId` <br> `code` <br> `language`                | Yes                                | No                               |
 | GET    | `/history/attempt`           | Used to get a single attempt details                     | `attemptId`                                                           | Yes                                | No                               |
 | GET    | `/history/heatmap`           | Used to get heatmap data for a user                      | `userId`                                                              | Yes                                | No                               |
+| POST   | `/execute/python`            | Used to execute the python code in the code editor       | `codeObject`                                                          | No                                 | No                               |
+| POST   | `/execute/java`              | Used to execute the java code in the code editor         | `codeObject`                                                          | No                                 | No                               |
+| POST   | `/execute/js`                | Used to execute the javascript code in the code editor   | `codeObject`                                                          | No                                 | No                               |
 
 Remarks:
 
 - `auth` API contains all the authorization related endpoints.
 - `question` API contains all the question data related endpoints.
 - `user` API contains all the user data related endpoints (including authentication).
-- `match` API contains all the matching related events.
-- `collab` API contains all the collaboration related endpoints.
+- `queue` API contains all the matching related events.
 - `history` API contains all the history related endpoints.
+- `execute` API contains all the execution related endpoints.
 - For endpoints requiring JWT token to be in the header, it means the user has to be logged in (authenticated).
 - Endpoints can be a probed (eg. via [Postman](https://www.postman.com/downloads/)) like `http://<API host>:<API port>/<endpoint>`
   - Eg. `http://localhost:4001/user/signup`
@@ -45,6 +50,7 @@ Remarks:
   - `match`: 7001
   - `collab`: 8001
   - `history`: 9001
+  - `execution`: 10001
 
 ---
 

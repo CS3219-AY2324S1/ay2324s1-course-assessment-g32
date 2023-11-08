@@ -1,6 +1,5 @@
 import { axiosExecution } from '../utils/axios';
-import { Language } from '../constants';
-import { Status } from '../constants';
+import { Status, Language } from '../constants';
 
 const getConfig = () => {
   return {
