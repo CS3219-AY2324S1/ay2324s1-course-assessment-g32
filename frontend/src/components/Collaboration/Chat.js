@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Event } from '../../constants';
 import '../../css/Chat.css';
 
 const Chat = ({ socket, roomId, user }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
+  const chatContainerRef = useRef(null);
 
   const getTimestamp = () => {
     const date = new Date();
@@ -40,18 +41,24 @@ const Chat = ({ socket, roomId, user }) => {
     });
   }, []);
 
+  useEffect(() => {
+    // Scroll to the bottom of the chat container
+    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+  }, [messages]);
+
   return (
     <div className='chat-container'>
-      <div className='chat-messages'>
+      <div className='chat-messages' ref={chatContainerRef}>
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`message ${msg.sender === user
+            className={`message ${
+              msg.sender === user
                 ? 'self'
                 : msg.sender === 'server'
-                  ? 'server'
-                  : 'other'
-              }`}
+                ? 'server'
+                : 'other'
+            }`}
           >
             {msg.text}
             {msg.timestamp && (
