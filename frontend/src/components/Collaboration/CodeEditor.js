@@ -9,7 +9,7 @@ import { attemptQuestion } from '../../api/HistoryApi';
 import { showSuccessToast } from '../../utils/toast';
 import { errorHandler } from '../../utils/errors';
 import { isWithinWindow, getBoilerplate, getLanguageExtension } from '../../utils/helpers';
-import { Language, Event } from '../../constants';
+import { Event } from '../../constants';
 import '../../css/CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage, selectedQuestion }) => {
