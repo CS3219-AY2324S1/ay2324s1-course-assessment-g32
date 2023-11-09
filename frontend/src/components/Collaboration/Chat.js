@@ -52,13 +52,10 @@ const Chat = ({ socket, roomId, user }) => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`message ${
-              msg.sender === user
-                ? 'self'
-                : msg.sender === 'server'
-                ? 'server'
-                : 'other'
-            }`}
+            className={`message ${msg.sender === user
+              ? 'self'
+              : (msg.sender === 'server' ? 'server' : 'other')
+              }`}
           >
             {msg.text}
             {msg.timestamp && (
@@ -74,7 +71,6 @@ const Chat = ({ socket, roomId, user }) => {
             placeholder='Enter a message'
             value={inputMessage}
             onChange={handleInputChange}
-            onKe
           />
           <button type='submit'>Send</button>
         </div>
