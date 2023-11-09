@@ -17,7 +17,9 @@ const Chat = ({ socket, roomId, user }) => {
     setInputMessage(e.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (event) => {
+    event.preventDefault();
+
     if (inputMessage) {
       const message = {
         text: inputMessage,
@@ -44,13 +46,12 @@ const Chat = ({ socket, roomId, user }) => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`message ${
-              msg.sender === user
+            className={`message ${msg.sender === user
                 ? 'self'
                 : msg.sender === 'server'
-                ? 'server'
-                : 'other'
-            }`}
+                  ? 'server'
+                  : 'other'
+              }`}
           >
             {msg.text}
             {msg.timestamp && (
@@ -59,15 +60,18 @@ const Chat = ({ socket, roomId, user }) => {
           </div>
         ))}
       </div>
-      <div className='chat-input'>
-        <input
-          type='text'
-          placeholder='Enter a message'
-          value={inputMessage}
-          onChange={handleInputChange}
-        />
-        <button onClick={handleSendMessage}>Send</button>
-      </div>
+      <form onSubmit={handleSendMessage}>
+        <div className='chat-input'>
+          <input
+            type='text'
+            placeholder='Enter a message'
+            value={inputMessage}
+            onChange={handleInputChange}
+            onKe
+          />
+          <button type='submit'>Send</button>
+        </div>
+      </form>
     </div>
   );
 };
