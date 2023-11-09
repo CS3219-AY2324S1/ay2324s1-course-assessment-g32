@@ -56,7 +56,6 @@ const Collaboration = () => {
   }, []);
 
   const handleLeaveRoom = () => {
-    sessionStorage.removeItem(`codeEditorContent_${roomId}`); // Remove CodeMirror content from session storage when leaving the room
     socket.emit(Event.Socket.LEAVE_ROOM, { room: roomId, user: displayName });
     navigate('/landing');
   };
@@ -89,12 +88,6 @@ const Collaboration = () => {
 
   const handleCancelQuestionChange = () => {
     setIsChangeQuestionWindowOpen(false);
-  };
-
-  // Retrieve last language used from session storage
-  const retrieveLanguage = () => {
-    const storedLanguage = sessionStorage.getItem(`codeEditorLanguage_${roomId}`);
-    return storedLanguage ? storedLanguage : language;
   };
 
   // Receive question changes from the server
@@ -140,7 +133,7 @@ const Collaboration = () => {
               userId={userId}
               displayName={displayName}
               jwt={jwt}
-              selectedLanguage={retrieveLanguage()}
+              selectedLanguage={language}
               selectedQuestion={question}
             />
             <Chat socket={socket} roomId={roomId} user={displayName} />
