@@ -35,7 +35,7 @@ try {
       socket.join(room);
       logger.log(`${user} joined room: ${room}`);
 
-      const message = { text: `${user} joined room` };
+      const message = { text: `${user} joined room`, sender: 'server' };
       io.to(room).emit(Event.Communication.CHAT_RECEIVE, message);
     });
 
@@ -48,7 +48,7 @@ try {
       socket.disconnect(true);
       logger.log(`${user} left room: ${room}`);
 
-      const message = { text: `${user} left room` };
+      const message = { text: `${user} left room`, sender: 'server' };
       io.to(room).emit(Event.Communication.CHAT_RECEIVE, message);
     });
 

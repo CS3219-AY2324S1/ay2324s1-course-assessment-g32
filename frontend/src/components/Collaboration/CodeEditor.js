@@ -116,6 +116,14 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
       room: roomId,
       updatedLanguage: newSelectedLanguage,
     });
+    // Broadcast the language change to the chat
+    socket.emit(Event.Communication.CHAT_SEND, {
+      room: roomId,
+      message: {
+        text: `Language changed the from ${language} to ${newSelectedLanguage}`,
+        sender: 'server',
+      },
+    });
   };
 
   // Revert the language to the previous language and close the change language window on cancellation

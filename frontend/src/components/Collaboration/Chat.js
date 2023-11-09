@@ -44,7 +44,13 @@ const Chat = ({ socket, roomId, user }) => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`message ${msg.sender === user ? 'self' : 'other'}`}
+            className={`message ${
+              msg.sender === user
+                ? 'self'
+                : msg.sender === 'server'
+                ? 'server'
+                : 'other'
+            }`}
           >
             {msg.text}
             {msg.timestamp && (

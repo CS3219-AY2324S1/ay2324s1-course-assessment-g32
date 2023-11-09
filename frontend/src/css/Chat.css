@@ -38,6 +38,14 @@
   color: black;
 }
 
+.server {
+  align-self: center;
+  text-align: center;
+  background-color: #ccc;
+  color: black;
+  font-size: 12px;
+}
+
 .timestamp {
   font-size: 0.6rem;
   color: black;
