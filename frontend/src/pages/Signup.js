@@ -60,6 +60,7 @@ function Signup() {
             <label>Email address</label>
             <input
               type='email'
+              autoComplete='email'
               className='form-control mt-1'
               placeholder='Enter email'
               onChange={handleEmailChange}
@@ -69,6 +70,7 @@ function Signup() {
             <label>Password</label>
             <input
               type='password'
+              autoComplete='new-password'
               className='form-control mt-1'
               placeholder='Enter password'
               onChange={handlePasswordChange}
@@ -78,6 +80,7 @@ function Signup() {
             <label>Confirm Password</label>
             <input
               type='password'
+              autoComplete='new-password'
               className='form-control mt-1'
               placeholder='Enter password'
               onChange={handleConfirmPasswordChange}

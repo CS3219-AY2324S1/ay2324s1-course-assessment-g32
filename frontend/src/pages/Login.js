@@ -62,6 +62,7 @@ const Login = () => {
             <label>Email address</label>
             <input
               type='email'
+              autoComplete='email'
               className='form-control mt-1'
               placeholder='Enter email'
               onChange={handleEmailChange}
@@ -71,6 +72,7 @@ const Login = () => {
             <label>Password</label>
             <input
               type='password'
+              autoComplete='current-password'
               className='form-control mt-1'
               placeholder='Enter password'
               onChange={handlePasswordChange}
