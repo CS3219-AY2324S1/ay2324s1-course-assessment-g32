@@ -30,7 +30,7 @@ function Signup() {
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
 
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       showFailureToast('Password are mismatched');
       return;
     }
