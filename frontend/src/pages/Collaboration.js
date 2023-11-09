@@ -35,29 +35,22 @@ const Collaboration = () => {
 
       setUserId(await getUserId());
 
-      // Join the Socket.io room when the component mounts
-      socket.emit(Event.Socket.JOIN_ROOM, { room: roomId, user: displayName });
-
-      const storedQuestion = sessionStorage.getItem(`question_${roomId}`);
-      let question = JSON.parse(storedQuestion);
-
-      if (!question) {
-        // If the question is not in sessionStorage, generate and store it
-        try {
-          question = await getRandomQuestionByCriteria(complexity, jwt);
-        } catch (error) {
-          if (error.response.status === Status.UNAUTHORIZED) {
-            navigate('/unauthorized');
-          }
-        }
-
-        sessionStorage.setItem(`question_${roomId}`, JSON.stringify(question));
-        socket.emit(Event.Question.CHANGE, {
+      try {
+        const question = await getRandomQuestionByCriteria(complexity, jwt);
+        const socketMessage = {
           room: roomId,
+          user: displayName,
           question: question,
-        });
+          language: language
+        }
+        // Join the Socket.io room when the component mounts
+        socket.emit(Event.Socket.JOIN_ROOM, socketMessage);
+
+      } catch (error) {
+        if (error.response.status === Status.UNAUTHORIZED) {
+          navigate('/unauthorized');
+        }
       }
-      setQuestion(question);
     };
     initializeRoom();
   }, []);
@@ -109,10 +102,6 @@ const Collaboration = () => {
     socket.on(Event.Question.UPDATE, (updatedQuestion) => {
       if (updatedQuestion !== question) {
         setQuestion(updatedQuestion);
-        sessionStorage.setItem(
-          `question_${roomId}`,
-          JSON.stringify(updatedQuestion)
-        );
       }
     });
   }, [socket, question]);

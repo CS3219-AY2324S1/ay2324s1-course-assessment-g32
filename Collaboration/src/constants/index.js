@@ -1,3 +1,35 @@
+const Language = {
+  PYTHON: 'Python',
+  JAVA: 'Java',
+  JS: 'Javascript',
+};
+
+const Boilerplate = {
+  PYTHON: `def main():
+  # Write your code here
+
+if __name__ == "__main__":
+  main()
+`,
+  JAVA: `public class Main {
+  public static void main(String[] args) {
+    // Write your code here
+
+  }
+
+  // You may implement your methods here
+
+}
+`,
+  JS: `function main() {
+  // Write your code here
+
+}
+
+main();
+`,
+};
+
 const Event = {
   Socket: {
     CONNECT: 'connection',
@@ -12,6 +44,7 @@ const Event = {
   Code: {
     CHANGE: 'code-change',
     UPDATE: 'code-update',
+    RESET: 'code-reset',
   },
   Language: {
     CHANGE: 'language-change',
@@ -32,9 +65,12 @@ const Event = {
   Communication: {
     CHAT_SEND: 'chat-send',
     CHAT_RECEIVE: 'chat-receive',
+    SYNCHRONIZE: 'synchronize',
   },
 };
 
 module.exports = {
+  Language,
+  Boilerplate,
   Event,
 };

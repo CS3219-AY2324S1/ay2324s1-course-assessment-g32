@@ -130,18 +130,13 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
   };
 
   const confirmResetCode = () => {
-    // Set the code to boilerplate code if Java; else, set it to empty string
-    const codeToStore = getBoilerplate(language);
-    setCode(codeToStore);
 
-    sessionStorage.setItem(`codeEditorContent_${roomId}`, codeToStore);
-    setIsResetCodeWindowOpen(false);
-
-    // Send code changes to the server
-    socket.emit(Event.Code.CHANGE, {
+    // Send reset change to the server
+    socket.emit(Event.Code.RESET, {
       room: roomId,
-      updatedCode: codeToStore,
+      language: language,
     });
+    setIsResetCodeWindowOpen(false);
   };
 
   const cancelResetCode = () => {
