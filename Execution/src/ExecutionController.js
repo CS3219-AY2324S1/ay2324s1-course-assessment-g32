@@ -9,6 +9,7 @@ const {
   SIGNAL_TERMINATE,
   SUCCESS_CODE,
   SIGNAL_KILL,
+  OUTPUT_EMPTY,
 } = require('./constants');
 const logger = require('./Log');
 
@@ -19,6 +20,15 @@ const isCodeEmpty = (code) => {
 const handleEmptyCode = (res) => {
   logger.error('No code provided.');
   res.json({ output: 'No code provided.' });
+};
+
+const isOutputEmpty = (code) => {
+  return code.trim() === OUTPUT_EMPTY;
+};
+
+const handleOutputEmpty = (res) => {
+  logger.error('No output produced.');
+  res.json({ output: 'No output produced.' });
 };
 
 const uniqueId = () => {
@@ -124,6 +134,12 @@ const executePython = async (req, res) => {
 
     logger.logSuccess('Program executed successfully.');
 
+    // Check if output is empty
+    if (isOutputEmpty(result)) {
+      handleOutputEmpty(res);
+      return;
+    }
+
     res.json({ output: result });
   } catch (err) {
     logger.error(err);
@@ -170,6 +186,12 @@ const executeJava = async (req, res) => {
 
       logger.logSuccess('Program executed successfully.');
 
+      // Check if output is empty
+      if (isOutputEmpty(result)) {
+        handleOutputEmpty(res);
+        return;
+      }
+
       res.json({ output: result });
     }
   } catch (err) {
@@ -198,6 +220,12 @@ const executeJs = async (req, res) => {
     const result = await executeScript(scriptPath, jsProcess);
 
     logger.logSuccess('Program executed successfully.');
+
+    // Check if output is empty
+    if (isOutputEmpty(result)) {
+      handleOutputEmpty(res);
+      return;
+    }
 
     res.json({ output: result });
   } catch (err) {
