@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
-import { python } from '@codemirror/lang-python';
-import { java } from '@codemirror/lang-java';
-import { javascript } from '@codemirror/lang-javascript';
 import CollapsibleOutput from './CollapsibleOutput';
 import OverlayCursor from './OverlayCursor';
 import { ChangeLanguageWindow, ResetCodeWindow } from '../ConfirmationWindows';
@@ -11,26 +8,13 @@ import { executeCode } from '../../api/ExecutionApi';
 import { attemptQuestion } from '../../api/HistoryApi';
 import { showSuccessToast } from '../../utils/toast';
 import { errorHandler } from '../../utils/errors';
-import { isWithinWindow } from '../../utils/helpers';
-import { Language, Boilerplate, Event } from '../../constants';
+import { isWithinWindow, getBoilerplate, getLanguageExtension } from '../../utils/helpers';
+import { Language, Event } from '../../constants';
 import '../../css/CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage, selectedQuestion }) => {
   const editorBoxRef = useRef(null);
   const codeMirrorRef = useRef(null);
-
-  const getBoilerplate = (language) => {
-    switch (language) {
-      case Language.PYTHON:
-        return Boilerplate.PYTHON;
-      case Language.JAVA:
-        return Boilerplate.JAVA;
-      case Language.JS:
-        return Boilerplate.JS;
-      default:
-        return Boilerplate.PYTHON;
-    }
-  };
 
   // Initialize code editor content
   const [code, setCode] = useState(getBoilerplate(selectedLanguage));
@@ -56,19 +40,6 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
 
   // Initialize states for code execution
   const [isExecuting, setIsExecuting] = useState(false);
-
-  const getLanguageExtension = (language) => {
-    switch (language) {
-      case Language.PYTHON:
-        return python();
-      case Language.JAVA:
-        return java();
-      case Language.JS:
-        return javascript();
-      default:
-        return python();
-    }
-  };
 
   const broadcastMousePosition = () => {
     if (editorBoxRef.current) {
