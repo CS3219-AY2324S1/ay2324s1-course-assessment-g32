@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
-import { python } from '@codemirror/lang-python';
-import { java } from '@codemirror/lang-java';
-import { javascript } from '@codemirror/lang-javascript';
 import CollapsibleOutput from './CollapsibleOutput';
 import OverlayCursor from './OverlayCursor';
-import { ChangeLanguageWindow } from '../ConfirmationWindows';
+import { ChangeLanguageWindow, ResetCodeWindow } from '../ConfirmationWindows';
 import { executeCode } from '../../api/ExecutionApi';
 import { attemptQuestion } from '../../api/HistoryApi';
 import { showSuccessToast } from '../../utils/toast';
 import { errorHandler } from '../../utils/errors';
-import { isWithinWindow } from '../../utils/helpers';
-import { Language, JAVA_BOILERPLATE, Event } from '../../constants';
+import { isWithinWindow, getBoilerplate, getLanguageExtension } from '../../utils/helpers';
+import { Event } from '../../constants';
 import '../../css/CodeEditor.css';
 
 const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage, selectedQuestion }) => {
@@ -20,11 +17,12 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
   const codeMirrorRef = useRef(null);
 
   // Initialize code editor content
-  const [code, setCode] = useState(selectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '');
+  const [code, setCode] = useState(getBoilerplate(selectedLanguage));
   const [result, setResult] = useState('');
   const [language, setLanguage] = useState(selectedLanguage);
   const [newSelectedLanguage, setNewSelectedLanguage] = useState(selectedLanguage);
   const [isChangeLanguageWindowOpen, setIsChangeLanguageWindowOpen] = useState(false);
+  const [isResetCodeWindowOpen, setIsResetCodeWindowOpen] = useState(false);
 
   // Initialize cursor position for code editor
   const [scrollTop, setScrollTop] = useState(0);
@@ -42,19 +40,6 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
 
   // Initialize states for code execution
   const [isExecuting, setIsExecuting] = useState(false);
-
-  const getLanguageExtension = (selectedLanguage) => {
-    switch (selectedLanguage) {
-      case Language.PYTHON:
-        return python();
-      case Language.JAVA:
-        return java();
-      case Language.JS:
-        return javascript();
-      default:
-        return python();
-    }
-  };
 
   const broadcastMousePosition = () => {
     if (editorBoxRef.current) {
@@ -122,25 +107,14 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
   // Update the language state when the user changes the language on confirmation
   const handleConfirmLanguageChange = () => {
     setLanguage(newSelectedLanguage);
-
-    // Set the code to boilerplate code if Java; else, set it to empty string
-    const codeToStore = newSelectedLanguage === Language.JAVA ? JAVA_BOILERPLATE : '';
-    setCode(codeToStore);
-
-    sessionStorage.setItem(`codeEditorContent_${roomId}`, codeToStore);
-    sessionStorage.setItem(`codeEditorLanguage_${roomId}`, newSelectedLanguage); // Store the language in session storage
-
     setIsChangeLanguageWindowOpen(false);
+
+    sessionStorage.setItem(`codeEditorLanguage_${roomId}`, newSelectedLanguage); // Store the language in session storage
 
     // Send language changes to the server
     socket.emit(Event.Language.CHANGE, {
       room: roomId,
       updatedLanguage: newSelectedLanguage,
-    });
-    // Send code changes to the server
-    socket.emit(Event.Code.CHANGE, {
-      room: roomId,
-      updatedCode: codeToStore,
     });
   };
 
@@ -149,6 +123,29 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
     const languageSelect = document.getElementById('languageSelect');
     languageSelect.value = language;
     setIsChangeLanguageWindowOpen(false);
+  };
+
+  const handleResetCode = () => {
+    setIsResetCodeWindowOpen(true);
+  };
+
+  const confirmResetCode = () => {
+    // Set the code to boilerplate code if Java; else, set it to empty string
+    const codeToStore = getBoilerplate(language);
+    setCode(codeToStore);
+
+    sessionStorage.setItem(`codeEditorContent_${roomId}`, codeToStore);
+    setIsResetCodeWindowOpen(false);
+
+    // Send code changes to the server
+    socket.emit(Event.Code.CHANGE, {
+      room: roomId,
+      updatedCode: codeToStore,
+    });
+  };
+
+  const cancelResetCode = () => {
+    setIsResetCodeWindowOpen(false);
   };
 
   const handleCodeExecution = async () => {
@@ -275,18 +272,28 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
       <div className='editor-container'>
         <div className='row editor-nav-bar'>
           <div className='d-flex justify-content-between'>
-            <select
-              className='form-select-sm'
-              id='languageSelect'
-              defaultValue={language}
-              onChange={handleLanguageChange}
-            >
-              <option value='Python'>Python</option>
-              <option value='Java'>Java</option>
-              <option value='Javascript'>Javascript</option>
-            </select>
-            <div>
+            <div className='d-flex'>
+              <select
+                className='form-select-sm me-2'
+                id='languageSelect'
+                defaultValue={language}
+                onChange={handleLanguageChange}
+              >
+                <option value='Python'>Python</option>
+                <option value='Java'>Java</option>
+                <option value='Javascript'>Javascript</option>
+              </select>
               <button
+                type='button'
+                className={`btn btn-secondary`}
+                onClick={handleResetCode}
+              >
+                ↺ Reset
+              </button>
+            </div>
+            <div className='d-flex'>
+              <button
+                type='button'
                 className={`btn ${isExecuting ? 'btn-secondary' : 'btn-primary'} me-2`}
                 onClick={handleCodeExecution}
                 disabled={isExecuting}
@@ -294,6 +301,7 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
                 ▶ Run
               </button>
               <button
+                type='button'
                 className='btn btn-success'
                 onClick={handleSubmitAttempt}
               >
@@ -332,7 +340,14 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
         <ChangeLanguageWindow
           onClose={handleCancelLanguageChange}
           onConfirm={handleConfirmLanguageChange}
-          language={newSelectedLanguage}
+          oldLanguage={language}
+          newLanguage={newSelectedLanguage}
+        />
+      )}
+      {isResetCodeWindowOpen && (
+        <ResetCodeWindow
+          onClose={cancelResetCode}
+          onConfirm={confirmResetCode}
         />
       )}
     </>

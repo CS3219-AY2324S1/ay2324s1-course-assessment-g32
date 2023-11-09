@@ -1,5 +1,9 @@
 import Cookies from 'js-cookie';
+import { python } from '@codemirror/lang-python';
+import { java } from '@codemirror/lang-java';
+import { javascript } from '@codemirror/lang-javascript';
 import { authorize, authorizeMaintainer } from '../api/AuthApi';
+import { Language, Boilerplate } from '../constants';
 
 export const getCookie = () => {
   try {
@@ -68,10 +72,37 @@ export const parseDatetime = (datetime) => {
 export const isWithinWindow = (position, editorBoxRef) => {
   if (editorBoxRef.current) {
     const { x, y } = position;
-    const { top, left, width, height } = editorBoxRef.current.getBoundingClientRect();
+    const { top, left, width, height } =
+      editorBoxRef.current.getBoundingClientRect();
     if (x > left && x < left + width - 10 && y > top && y < top + height - 10) {
       return true;
     }
   }
   return false;
+};
+
+export const getBoilerplate = (language) => {
+  switch (language) {
+    case Language.PYTHON:
+      return Boilerplate.PYTHON;
+    case Language.JAVA:
+      return Boilerplate.JAVA;
+    case Language.JS:
+      return Boilerplate.JS;
+    default:
+      return Boilerplate.PYTHON;
+  }
+};
+
+export const getLanguageExtension = (language) => {
+  switch (language) {
+    case Language.PYTHON:
+      return python();
+    case Language.JAVA:
+      return java();
+    case Language.JS:
+      return javascript();
+    default:
+      return python();
+  }
 };

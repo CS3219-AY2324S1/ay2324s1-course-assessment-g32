@@ -19,15 +19,31 @@ const Language = {
   JS: 'Javascript',
 };
 
-const JAVA_BOILERPLATE = `public class Main {
+const Boilerplate = {
+  PYTHON: `def main():
+  # Write your code here
+
+if __name__ == "__main__":
+  main()
+`,
+  JAVA: `public class Main {
   public static void main(String[] args) {
     // Write your code here
-
+  
   }
-
+  
   // You may implement your methods here
 
-}`;
+}
+`,
+  JS: `function main() {
+  // Write your code here
+
+}
+
+main();
+`,
+};
 
 const Event = {
   Socket: {
@@ -142,7 +158,7 @@ module.exports = {
   Status,
   Complexity,
   Language,
-  JAVA_BOILERPLATE,
+  Boilerplate,
   Event,
   Topics,
 };
