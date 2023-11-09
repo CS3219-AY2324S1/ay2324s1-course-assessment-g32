@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../images/logo.png';
-import '../css//UnauthorizedPage.css';
+import '../css/UnauthorizedPage.css';
 
 const UnauthorizedPage = () => {
   return (

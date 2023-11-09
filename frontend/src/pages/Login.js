@@ -49,7 +49,7 @@ const Login = () => {
 
   return (
     <div className='Auth-form-container'>
-      <form className='Auth-form'>
+      <form className='Auth-form' onSubmit={handleLoginSubmit}>
         <div className='Auth-form-content'>
           <h3 className='Auth-form-title'>Sign In</h3>
           <div className='text-center'>
@@ -62,25 +62,29 @@ const Login = () => {
             <label>Email address</label>
             <input
               type='email'
+              autoComplete='email'
               className='form-control mt-1'
               placeholder='Enter email'
               onChange={handleEmailChange}
+              autoFocus
+              required
             />
           </div>
           <div className='form-group mt-3'>
             <label>Password</label>
             <input
               type='password'
+              autoComplete='current-password'
               className='form-control mt-1'
               placeholder='Enter password'
               onChange={handlePasswordChange}
+              required
             />
           </div>
           <div className='d-grid gap-2 mt-3'>
             <button
               type='submit'
-              className='btn btn-primary'
-              onClick={handleLoginSubmit}>
+              className='btn btn-primary'>
               Submit
             </button>
           </div>
