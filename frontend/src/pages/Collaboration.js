@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { Chat, CodeEditor, QuestionPanel } from '../components/Collaboration';
-import { ChangeQuestionWindow } from '../components/ConfirmationWindows';
+import { ChangeQuestionWindow, LeaveRoomWindow } from '../components/ConfirmationWindows';
 import { QuestionContent } from '../components/Question';
 import { getRandomQuestionByCriteria } from '../api/QuestionApi';
 import { showFailureToast } from '../utils/toast';
@@ -17,6 +17,7 @@ const Collaboration = () => {
   const [question, setQuestion] = useState({});
   const [selectedQuestion, setSelectedQuestion] = useState({});
   const [isChangeQuestionWindowOpen, setIsChangeQuestionWindowOpen] = useState(false);
+  const [isLeaveRoomWindowOpen, setIsLeaveRoomWindowOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -69,13 +70,6 @@ const Collaboration = () => {
     }
   }, []);
 
-  const handleLeaveRoom = () => {
-    removeSessionStorage();
-    socket.emit(Event.Socket.TERMINATE_ROOM, { room: roomId, user: userId, displayName: displayName });
-    window.history.replaceState({}, location.state);
-    navigate('/landing');
-  };
-
   const handleOpenPanel = () => {
     setIsPanelOpen(true);
   };
@@ -83,6 +77,10 @@ const Collaboration = () => {
   const handleClosePanel = () => {
     setIsPanelOpen(false);
   };
+
+  const handleOpenLeaveRoomWindow = () => {
+    setIsLeaveRoomWindowOpen(true);
+  }
 
   // Open the change question window on question change
   const handleQuestionChange = (selectedQuestion) => {
@@ -102,8 +100,20 @@ const Collaboration = () => {
     });
   };
 
+  const handleConfirmLeaveRoom = () => {
+    setIsLeaveRoomWindowOpen(false);
+    removeSessionStorage();
+    socket.emit(Event.Socket.TERMINATE_ROOM, { room: roomId, user: userId, displayName: displayName });
+    window.history.replaceState({}, location.state);
+    navigate('/landing');
+  };
+
   const handleCancelQuestionChange = () => {
     setIsChangeQuestionWindowOpen(false);
+  };
+
+  const handleCancelLeaveRoom = () => {
+    setIsLeaveRoomWindowOpen(false);
   };
 
   // Receive question changes from the server
@@ -130,7 +140,7 @@ const Collaboration = () => {
             <button
               type='button'
               className='btn btn-danger'
-              onClick={handleLeaveRoom}
+              onClick={handleOpenLeaveRoomWindow}
             >
               Leave Room
             </button>
@@ -169,6 +179,12 @@ const Collaboration = () => {
           onConfirm={handleConfirmQuestionChange}
           onClose={handleCancelQuestionChange}
           questionTitle={selectedQuestion.title}
+        />
+      )}
+      {isLeaveRoomWindowOpen && (
+        <LeaveRoomWindow
+          onConfirm={handleConfirmLeaveRoom}
+          onClose={handleCancelLeaveRoom}
         />
       )}
     </>
