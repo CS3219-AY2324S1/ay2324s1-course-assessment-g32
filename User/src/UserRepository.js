@@ -96,11 +96,11 @@ exports.getUserInfoById = async (id) => {
 
 exports.getUserInfoByEmail = async (email) => {
   var _userId = String();
-  await findByEmail(email).then((userInfo) => (_userId = userInfo.id));
+  await exports.findByEmail(email).then((userInfo) => (_userId = userInfo.id));
 
   if (!_userId) throw 'No user is using ' + email;
 
-  return getUserInfoById(_userId);
+  return exports.getUserInfoById(_userId);
 };
 
 /**
@@ -169,7 +169,7 @@ exports.updatePassword = async (id, password) => {
  * @returns If the deletion was successful
  */
 exports.toggleUserRole = async (id) => {
-  const user = await getUserInfoById(id);
+  const user = await exports.getUserInfoById(id);
   const newIsMaintainer = user?.isMaintainer ? 0 : 1; // Toggle the isMaintainer field
   try {
     const update = { isMaintainer: newIsMaintainer };

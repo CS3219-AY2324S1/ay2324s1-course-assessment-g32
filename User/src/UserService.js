@@ -157,6 +157,7 @@ exports.getAllUserInfo = async () => {
 
 exports.getUserInfo = async (userId, email) => {
   try {
+    // Check for no inputs
     if (!userId && !email) {
       throw Object.assign(new Error('Need at least id or email'), {
         status: Status.BAD_REQUEST,

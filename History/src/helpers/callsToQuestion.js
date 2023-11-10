@@ -16,7 +16,7 @@ const appendQuestionTitle = async (jwtToken, attempts) => {
   try {
     const data = { attempts: attempts };
     const response = await axios.post(
-      questionRootUrl + '/appendQuestionTitle',
+      questionRootUrl + '/append-question-title',
       data,
       getConfig(jwtToken),
     );
@@ -36,7 +36,7 @@ const getQuestionDifficultyCount = async (jwtToken, questionsId) => {
   try {
     const data = { questionsId: questionsId };
     const response = await axios.post(
-      questionRootUrl + '/getQuestionDifficultyCount',
+      questionRootUrl + '/count-by-difficulty',
       data,
       getConfig(jwtToken),
     );
@@ -55,7 +55,7 @@ const getQuestionDifficultyCount = async (jwtToken, questionsId) => {
 const getQuestionStatistics = async (jwtToken) => {
   try {
     const response = await axios.get(
-      questionRootUrl + '/getQuestionStatistics',
+      questionRootUrl + '/statistics',
       getConfig(jwtToken),
     );
     return response;

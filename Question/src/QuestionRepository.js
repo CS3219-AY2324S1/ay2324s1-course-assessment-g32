@@ -111,7 +111,6 @@ exports.deleteQuestion = async (id) => {
 };
 
 exports.getQuestionsDifficultyCount = async (questionsId) => {
-
   try {
     const objectIdArray = questionsId.map((s) => new ObjectId(s));
     const result = await questionModel.aggregate([
@@ -129,7 +128,7 @@ exports.getQuestionsDifficultyCount = async (questionsId) => {
   }
 };
 
-exports.getQuestionStatistics = async (questionsId) => {
+exports.getQuestionStatistics = async () => {
   try {
     const result = await questionModel.aggregate([
       {

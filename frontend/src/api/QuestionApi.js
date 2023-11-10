@@ -24,11 +24,7 @@ export const createQuestion = async (
       description: description,
       tags: tags,
     };
-    return await axiosQuestion.post(
-      '/create',
-      questionData,
-      getConfig(jwtToken)
-    );
+    return await axiosQuestion.post('/',questionData,getConfig(jwtToken));
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -42,7 +38,7 @@ export const createQuestion = async (
 
 export const getQuestions = async (jwtToken) => {
   try {
-    const response = await axiosQuestion.get('/read-all', getConfig(jwtToken));
+    const response = await axiosQuestion.get('/all', getConfig(jwtToken));
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -59,7 +55,7 @@ export const getQuestionsByCriteria = async (complexity, tags, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { complexity: complexity, tags: tags };
-    const response = await axiosQuestion.get('/read-all-by-criteria', config);
+    const response = await axiosQuestion.get('/by-criteria', config);
     return response.data.questions;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -76,7 +72,7 @@ export const getQuestionDetails = async (questionId, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { id: questionId };
-    const questionDetails = await axiosQuestion.get('/read', config);
+    const questionDetails = await axiosQuestion.get('/', config);
     return questionDetails.data.question;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -93,7 +89,7 @@ export const getRandomQuestionByCriteria = async (complexity, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { complexity: complexity };
-    const questionDetails = await axiosQuestion.get('/read-random', config);
+    const questionDetails = await axiosQuestion.get('/random', config);
     return questionDetails.data.question;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -122,7 +118,7 @@ export const editQuestion = async (
       description: description,
       tags: tags,
     };
-    return await axiosQuestion.put('/edit', questionData, getConfig(jwtToken));
+    return await axiosQuestion.put('/', questionData, getConfig(jwtToken));
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -138,7 +134,7 @@ export const deleteQuestion = async (id, jwtToken) => {
   try {
     let config = getConfig(jwtToken);
     config.params = { id: id };
-    const response = await axiosQuestion.delete('/delete', config);
+    const response = await axiosQuestion.delete('/', config);
     return response;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
