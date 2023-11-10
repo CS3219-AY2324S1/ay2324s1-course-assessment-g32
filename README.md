@@ -1,8 +1,8 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
 
-> **[ IMPORTANT! ]**\
+> [!IMPORTANT]
 > Do _not_ test while on NUS grounds or connected
-> (either directly or indirectly) to NUS Wifi.
+> (either directly or indirectly) to NUS Wifi.\
 > (NUS networks blocks MongoDB Atlas which is required by our application.)
 
 # Application Installation and Setup
