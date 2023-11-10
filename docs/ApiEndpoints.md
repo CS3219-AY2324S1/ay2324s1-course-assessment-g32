@@ -20,19 +20,18 @@
 | GET    | `/user/all`                  | Get information for all users                   | -                                                                     | JWT token       | Maintainer      |
 | POST   | `/user/login`                | Login                                           | `email` <br> `password`                                               | -               | Guest           |
 | POST   | `/user/signup`               | create new user                                 | `email` <br> `password` <br> `confirmPassword`                        | -               | Guest           | 
+| PUT    | `/user/toggle-user-role`     | Toggle the user's role (user or maintainer)     | `id`
 | PUT    | `/user/display-name`         | Update user's display name                      | `id` <br> `username`                                                  | JWT token       | User            |
 | PUT    | `/user/change-password`      | Change user's password                          | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | JWT token       | User            |
 | PUT    | `/user/programming-language` | Update user's preferred programming language    | `id` <br> `programmingLanguage`                                       | JWT token       | User            |
 | PUT    | `/user/complexity`           | Update user's preferred question complexity     | `id` <br> `complexity`                                                | JWT token       | User            |
 | POST   | `/queue/join`                | Join the matching queue                         | `queueName` <br> `sessionID`                                          | JWT token       | User            |
 | POST   | `/queue/exit`                | Exit the matching queue                         | `queueName` <br> `sessionID`                                          | JWT token       | User            |
-| POST   | `/history/attempt`           | Edd attempt to user history                     | `userId` <br> `questionId` <br> `code` <br> `language`                | JWT token       | User            |
-| GET    | `/history/attempts`          | Get all attempts submitted by a user            | `userId`                                                              | JWT token       | User            |
-| GET    | `/history/attempts`          | Get attempts for a question, submitted by a user| `userId` <br> `questionId`                                            | JWT token       | User            |
-| GET    | `/history/heatmap`           | Get heatmap data for a user                     | `userId`                                                              | JWT token       | User            |
 | GET    | `/history/piechart`          | Get pie chart data for a user                   | `userId` <br> `questionId` <br> `code` <br> `language`                | JWT token       | User            |
-| GET    | `/history/attempt`           | Get a single attempt details                    | `attemptId`                                                           | JWT token       | User            |
 | GET    | `/history/heatmap`           | Get heatmap data for a user                     | `userId`                                                              | JWT token       | User            |
+| GET    | `/history/attempts`          | Get attempts by user, for all or one question   | `userId` <br> `questionId` (optional)                                 | JWT token       | User            |
+| GET    | `/history/attempt`           | Get a single attempt details                    | `attemptId`                                                           | JWT token       | User            |
+| POST   | `/history/attempt`           | Add attempt to user history                     | `userId` <br> `questionId` <br> `code` <br> `language`                | JWT token       | User            |
 | POST   | `/execute/python`            | Execute the Python code in the code editor      | `codeObject`                                                          | -               | User            |
 | POST   | `/execute/java`              | Execute the Java code in the code editor        | `codeObject`                                                          | -               | User            |
 | POST   | `/execute/js`                | Execute the JavaScript code in the code editor  | `codeObject`                                                          | -               | User            |
