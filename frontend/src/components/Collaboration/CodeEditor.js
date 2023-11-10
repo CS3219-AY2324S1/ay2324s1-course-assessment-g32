@@ -160,6 +160,8 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
     } catch (err) {
       errorHandler(err);
     } finally {
+      // Allow the user to execute code again after 200ms
+      await new Promise(r => setTimeout(r, 200));
       setIsExecuting(false);
       // Send button un-disabling signal to the server
       socket.emit(Event.Button.DISABLE_EXEC, {

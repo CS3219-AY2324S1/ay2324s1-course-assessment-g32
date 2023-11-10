@@ -82,7 +82,6 @@ class RedisMemory {
       } else {
         await this.client.set(roomId, JSON.stringify(parsedData), expiry);
       }
-
     }
   };
 
@@ -117,7 +116,7 @@ class RedisMemory {
     const data = await this.client.get(roomId);
     if (data) {
       const parsedData = JSON.parse(data);
-      parsedData.language = result;
+      parsedData.result = result;
       await this.client.set(roomId, JSON.stringify(parsedData), expiry);
     }
   };
@@ -126,7 +125,7 @@ class RedisMemory {
     const data = await this.client.get(roomId);
     if (data) {
       const parsedData = JSON.parse(data);
-      parsedData.btnState = await btnState;
+      parsedData.btnState = btnState;
       await this.client.set(roomId, JSON.stringify(parsedData), expiry);
     }
   };
