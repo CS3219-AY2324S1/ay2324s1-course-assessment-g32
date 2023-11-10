@@ -1,5 +1,6 @@
 const logger = require('./Log');
 const { createClient } = require('redis');
+const { MAX_CONNECTION_ATTEMPTS, CONNECTION_INTERVAL } = require('./constants');
 
 // Set expiry time to 2 hours if there is no activity
 const expiry = {
@@ -8,16 +9,32 @@ const expiry = {
 
 class RedisMemory {
   constructor(url) {
-    this.client = createClient(
-      {
-        url: url,
-      }
-    );
+    this.url = url;
   };
 
   connect = async () => {
-    await this.client.connect();
-    logger.log('Connected to Redis');
+    var connected = false;
+
+    for (let i = 0; i < MAX_CONNECTION_ATTEMPTS; i++) {
+      try {
+        this.client = createClient(
+          {
+            url: this.url,
+          }
+        );
+        await this.client.connect();
+        logger.log('Connected to Redis');
+        connected = true;
+        break;
+      } catch (err) {
+        logger.error(`Connection attempt ${i + 1} of ${MAX_CONNECTION_ATTEMPTS} to Redis: ${this.url} failed`);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+      }
+    }
+    if (!connected) {
+      logger.error('Redis connection failed, exiting...');
+      process.exit(1);
+    }
   };
 
   handleRoomJoining = async (roomId, question, language, code, message, user) => {

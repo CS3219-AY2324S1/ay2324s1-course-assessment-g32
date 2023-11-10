@@ -70,8 +70,13 @@ const Event = {
   },
 };
 
+const MAX_CONNECTION_ATTEMPTS = 20;
+const CONNECTION_INTERVAL = 5000; // 5 seconds
+
 module.exports = {
   Language,
   Boilerplate,
   Event,
+  MAX_CONNECTION_ATTEMPTS,
+  CONNECTION_INTERVAL,
 };
