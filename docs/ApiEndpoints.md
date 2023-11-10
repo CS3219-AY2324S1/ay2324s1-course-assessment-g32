@@ -15,13 +15,13 @@
 | GET    | `/question/statistics`       | Get number of questions by complexity           | -                                                                     | JWT token       | User            |
 | POST   | `/question/append-question-title` | For given array of question IDs, <br> return the questions IDs + title | `attempts` (array)                        | JWT token       | User            |
 | POST   | `/question/count-by-difficulty` | For given array of question IDs, <br> count how many questions in each difficulty   | `questionsId` (array)          | JWT token       | User            |
-| PUT    | `/user/change-password`      | Change user's password                          | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | JWT token       | User            |
-| DELETE | `/user/delete`               | Delete user                                     | `id`                                                                  | JWT token       | User            |
+| GET    | `/user/`                     | Get user information                            | `id` or `email`                                                       | JWT token       | User            |
+| DELETE | `/user/`                     | Delete user                                     | `id`                                                                  | JWT token       | User            |
+| GET    | `/user/all`                  | Get information for all users                   | -                                                                     | JWT token       | Maintainer      |
 | POST   | `/user/login`                | Login                                           | `email` <br> `password`                                               | -               | Guest           |
-| GET    | `/user/read`                 | Get user information                            | `id` or `email`                                                       | JWT token       | User            |
-| GET    | `/user/read-all`             | Get all users information                       | -                                                                     | JWT token       | Maintainer      |
 | POST   | `/user/signup`               | create new user                                 | `email` <br> `password` <br> `confirmPassword`                        | -               | Guest           | 
 | PUT    | `/user/display-name`         | Update user's display name                      | `id` <br> `username`                                                  | JWT token       | User            |
+| PUT    | `/user/change-password`      | Change user's password                          | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | JWT token       | User            |
 | PUT    | `/user/programming-language` | Update user's preferred programming language    | `id` <br> `programmingLanguage`                                       | JWT token       | User            |
 | PUT    | `/user/complexity`           | Update user's preferred question complexity     | `id` <br> `complexity`                                                | JWT token       | User            |
 | POST   | `/queue/join`                | Join the matching queue                         | `queueName` <br> `sessionID`                                          | JWT token       | User            |

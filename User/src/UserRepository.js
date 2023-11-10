@@ -96,11 +96,11 @@ exports.getUserInfoById = async (id) => {
 
 exports.getUserInfoByEmail = async (email) => {
   var _userId = String();
-  await findByEmail(email).then((userInfo) => (_userId = userInfo.id));
+  await exports.findByEmail(email).then((userInfo) => (_userId = userInfo.id));
 
   if (!_userId) throw 'No user is using ' + email;
 
-  return getUserInfoById(_userId);
+  return exports.getUserInfoById(_userId);
 };
 
 /**
