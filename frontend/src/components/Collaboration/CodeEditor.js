@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Spinner from 'react-bootstrap/Spinner';
 import CodeMirror from '@uiw/react-codemirror';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import CollapsibleOutput from './CollapsibleOutput';
@@ -173,8 +174,9 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
 
   const handleSubmitAttempt = async () => {
     try {
+      await handleCodeExecution();
       const questionId = selectedQuestion._id;
-      const response = await attemptQuestion(jwt, userId, questionId, code, language);
+      const response = await attemptQuestion(jwt, userId, questionId, code, language, result);
       showSuccessToast(response.data.message);
     } catch (err) {
       errorHandler(err);
@@ -284,8 +286,9 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
               </button>
               <button
                 type='button'
-                className='btn btn-success'
+                className={`btn ${isExecuting ? 'btn-secondary' : 'btn-success'}`}
                 onClick={handleSubmitAttempt}
+                disabled={isExecuting}
               >
                 Submit
               </button>

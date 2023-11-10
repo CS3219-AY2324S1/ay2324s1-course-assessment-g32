@@ -25,10 +25,10 @@ const CollapsibleOutput = ({ result }) => {
           placeholder='Code execution results will appear here'
           value={result.output}
         />
-        <div className='border-top'>
-          <span className='p-3'>
+        <div className='border'>
+          <strong className='p-3'>
             Execution Duration: {result.duration ? result.duration : 0 } ms
-          </span>
+          </strong>
         </div>
       </div>
     </>

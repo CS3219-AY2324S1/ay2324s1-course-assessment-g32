@@ -4,9 +4,9 @@ const { Status } = require('./constants');
 const logger = require('./Log');
 
 const addAttempt = async (req, res) => {
-  const { userId, questionId, code, language } = req.body;
+  const { userId, questionId, code, language, result } = req.body;
   try {
-    await historyService.addAttempt(userId, questionId, code, language);
+    await historyService.addAttempt(userId, questionId, code, language, result);
     logger.logSuccess(`Attempt added for user ${userId}`);
     res.json({ message: 'Submitted Attempt!' });
   } catch (err) {

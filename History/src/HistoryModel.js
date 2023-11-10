@@ -21,6 +21,12 @@ const HistorySchema = new Schema(
       type: String,
       required: true,
     },
+    output: {
+      type: String,
+    },
+    duration: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );

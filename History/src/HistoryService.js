@@ -5,7 +5,7 @@ const summationOfCounts = (counts) => {
   return Object.values(counts).reduce((acc, val) => acc + val, 0);
 };
 
-const addAttempt = async (userId, questionId, code, language) => {
+const addAttempt = async (userId, questionId, code, language, result) => {
   try {
     // Check for missing inputs
     if (!userId || !questionId || !language) {
@@ -18,7 +18,7 @@ const addAttempt = async (userId, questionId, code, language) => {
     }
 
     // Create using with userId and questionId
-    await historyDatabase.addAttempt(userId, questionId, code, language);
+    await historyDatabase.addAttempt(userId, questionId, code, language, result);
   } catch (err) {
     throw err;
   }
