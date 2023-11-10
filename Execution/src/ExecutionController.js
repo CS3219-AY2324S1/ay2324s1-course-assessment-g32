@@ -112,7 +112,7 @@ const executeScript = (scriptPath, childProcess, executionDirectory = null) => {
 };
 
 // Execute python code
-const executePython = async (req, res) => {
+exports.executePython = async (req, res) => {
   try {
     const pythonCode = req.body.code;
 
@@ -146,7 +146,7 @@ const executePython = async (req, res) => {
   }
 };
 
-const executeJava = async (req, res) => {
+exports.executeJava = async (req, res) => {
   try {
     const javaCode = req.body.code;
     const javaClassName = 'Main';
@@ -199,7 +199,7 @@ const executeJava = async (req, res) => {
   }
 };
 
-const executeJs = async (req, res) => {
+exports.executeJs = async (req, res) => {
   try {
     const javascriptCode = req.body.code;
 
@@ -231,10 +231,4 @@ const executeJs = async (req, res) => {
   } catch (err) {
     logger.error(err);
   }
-};
-
-module.exports = {
-  executePython,
-  executeJava,
-  executeJs,
 };

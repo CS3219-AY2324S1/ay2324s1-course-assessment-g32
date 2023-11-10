@@ -3,7 +3,7 @@ const questionApi = require('./helpers/callsToQuestion');
 const { Status } = require('./constants');
 const logger = require('./Log');
 
-const addAttempt = async (req, res) => {
+exports.addAttempt = async (req, res) => {
   const { userId, questionId, code, language } = req.body;
   try {
     await historyService.addAttempt(userId, questionId, code, language);
@@ -15,7 +15,7 @@ const addAttempt = async (req, res) => {
   }
 };
 
-const getAttempts = async (req, res) => {
+exports.getAttempts = async (req, res) => {
   const { userId, questionId } = req.query;
   try {
     if (questionId) {
@@ -35,7 +35,19 @@ const getAttempts = async (req, res) => {
   }
 };
 
-const getHeatMapData = async (req, res) => {
+exports.getAttempt = async (req, res) => {
+  const { attemptId } = req.query;
+  try {
+    const attempt = await historyService.getAttempt(attemptId);
+    logger.logSuccess(`Attempt details retrieved for attempt ${attemptId}`);
+    res.json({ message: 'SUCCESS', attempt });
+  } catch (err) {
+    logger.error(`Cannot retrieve ${attemptId} attempt: `, err?.message || err);
+    res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
+  }
+};
+
+exports.getHeatMapData = async (req, res) => {
   const { userId } = req.query;
   try {
     const heatMapData = await historyService.getHeatMapData(userId);
@@ -47,7 +59,7 @@ const getHeatMapData = async (req, res) => {
   }
 };
 
-const getPieChartData = async (req, res) => {
+exports.getPieChartData = async (req, res) => {
   const { userId } = req.query;
   try {
     const jwtToken = req.headers['authorization'];
@@ -68,24 +80,4 @@ const getPieChartData = async (req, res) => {
     logger.error(`Cannot retrieve pie chart data for ${userId}: `, err?.message || err);
     res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
   }
-};
-
-const getAttempt = async (req, res) => {
-  const { attemptId } = req.query;
-  try {
-    const attempt = await historyService.getAttempt(attemptId);
-    logger.logSuccess(`Attempt details retrieved for attempt ${attemptId}`);
-    res.json({ message: 'SUCCESS', attempt });
-  } catch (err) {
-    logger.error(`Cannot retrieve ${attemptId} attempt: `, err?.message || err);
-    res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
-  }
-};
-
-module.exports = {
-  addAttempt,
-  getAttempts,
-  getHeatMapData,
-  getPieChartData,
-  getAttempt,
 };

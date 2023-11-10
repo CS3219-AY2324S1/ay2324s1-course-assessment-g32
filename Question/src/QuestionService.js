@@ -1,22 +1,7 @@
 const questionRepository = require('./QuestionRepository');
 const { Status } = require('./constants');
 
-const missingInputsThrowsValidationError = (title, complexity, description) => {
-  const innerText = description.replace(/<[^>]+>|\s+/g, '');
-  if (!title || !complexity || !innerText) {
-    throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
-  }
-};
-
-const duplicateTitleThrowsDuplicateError = async (id, title) => {
-  // id == null then simply check if title exist, else cross-check id
-  const isDuplicateTitle = await questionRepository.findByTitle(title);
-  if (isDuplicateTitle && !isDuplicateTitle._id.equals(id)) {
-    throw { status: Status.CONFLICT, message: 'Question title already exist' };
-  }
-};
-
-const createQuestion = async (title, complexity, description, tags) => {
+exports.createQuestion = async (title, complexity, description, tags) => {
   try {
     missingInputsThrowsValidationError(title, complexity, description);
     await duplicateTitleThrowsDuplicateError(null, title);
@@ -31,7 +16,7 @@ const createQuestion = async (title, complexity, description, tags) => {
   }
 };
 
-const getQuestions = async () => {
+exports.getQuestions = async () => {
   try {
     return await questionRepository.getQuestions();
   } catch (err) {
@@ -39,7 +24,7 @@ const getQuestions = async () => {
   }
 };
 
-const getQuestionsByCriteria = async (complexity, tags) => {
+exports.getQuestionsByCriteria = async (complexity, tags) => {
   try {
     if (tags.length === 1 && tags[0] === 'All') {
       return await questionRepository.getQuestionsByComplexity(complexity);
@@ -51,7 +36,7 @@ const getQuestionsByCriteria = async (complexity, tags) => {
   }
 };
 
-const getQuestionDetails = async (id) => {
+exports.getQuestionDetails = async (id) => {
   try {
     const question = await questionRepository.getQuestionDetails(id);
     if (!question) {
@@ -63,7 +48,7 @@ const getQuestionDetails = async (id) => {
   }
 };
 
-const getRandomQuestionByComplexity = async (complexity) => {
+exports.getRandomQuestionByComplexity = async (complexity) => {
   try {
     const question = await questionRepository.getRandomQuestionByComplexity(
       complexity
@@ -77,7 +62,7 @@ const getRandomQuestionByComplexity = async (complexity) => {
   }
 };
 
-const editQuestion = async (id, title, complexity, description, tags) => {
+exports.editQuestion = async (id, title, complexity, description, tags) => {
   try {
     missingInputsThrowsValidationError(title, complexity, description);
     await duplicateTitleThrowsDuplicateError(id, title);
@@ -99,7 +84,7 @@ const editQuestion = async (id, title, complexity, description, tags) => {
   }
 };
 
-const deleteQuestion = async (id) => {
+exports.deleteQuestion = async (id) => {
   if (!id) {
     throw { status: 410, message: 'No question id is given' };
   }
@@ -111,7 +96,7 @@ const deleteQuestion = async (id) => {
   }
 };
 
-const appendQuestionTitle = async (attempts) => {
+exports.appendQuestionTitle = async (attempts) => {
   try {
     const attemptsWithTitles = await Promise.all(attempts.map(async (entry) => {
       const question = await questionRepository.getQuestionDetails(entry.questionId);
@@ -126,7 +111,7 @@ const appendQuestionTitle = async (attempts) => {
   }
 };
 
-const getQuestionCountByDifficulty = async (questionsId) => {
+exports.getQuestionCountByDifficulty = async (questionsId) => {
   try {
     const difficultyCount = await questionRepository.getQuestionsDifficultyCount(questionsId);
     const stats = difficultyCount.reduce((acc, item) => {
@@ -139,7 +124,7 @@ const getQuestionCountByDifficulty = async (questionsId) => {
   }
 };
 
-const getQuestionStatistics = async () => {
+exports.getQuestionStatistics = async () => {
   try {
     const difficultyCount = await questionRepository.getQuestionStatistics();
     const stats = difficultyCount.reduce((acc, item) => {
@@ -152,15 +137,17 @@ const getQuestionStatistics = async () => {
   }
 };
 
-module.exports = {
-  createQuestion,
-  getQuestions,
-  getQuestionsByCriteria,
-  getQuestionDetails,
-  getRandomQuestionByComplexity,
-  editQuestion,
-  deleteQuestion,
-  appendQuestionTitle,
-  getQuestionCountByDifficulty,
-  getQuestionStatistics,
+const missingInputsThrowsValidationError = (title, complexity, description) => {
+  const innerText = description.replace(/<[^>]+>|\s+/g, '');
+  if (!title || !complexity || !innerText) {
+    throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
+  }
+};
+
+const duplicateTitleThrowsDuplicateError = async (id, title) => {
+  // id == null then simply check if title exist, else cross-check id
+  const isDuplicateTitle = await questionRepository.findByTitle(title);
+  if (isDuplicateTitle && !isDuplicateTitle._id.equals(id)) {
+    throw { status: Status.CONFLICT, message: 'Question title already exist' };
+  }
 };

@@ -5,7 +5,7 @@ const { Status } = require('./constants');
 const logger = require('./Log');
 
 // Used by login requests
-const generate = async (req, res) => {
+exports.generate = async (req, res) => {
   try {
     const userInfo = req.body;
     if (Object.keys(userInfo).join(',') == ['isMaintainer', 'id'].join(',')) {
@@ -27,7 +27,7 @@ const generate = async (req, res) => {
 };
 
 // Used to check if user is authorized by checking the validity of their JWT token
-const authorize = async (req, res) => {
+exports.authorize = async (req, res) => {
   try {
     // Extract the token from the Authorization header
     const authHeader = req.headers['authorization'];
@@ -66,7 +66,7 @@ const authorize = async (req, res) => {
 };
 
 // Used to check if user is an authorized maintainer by checking the validity of their JWT token and isMaintainer value
-const authorizeMaintainer = async (req, res) => {
+exports.authorizeMaintainer = async (req, res) => {
   try {
     // Extract the token from the Authorization header
     const authHeader = req.headers['authorization'];
@@ -113,10 +113,4 @@ const authorizeMaintainer = async (req, res) => {
       .status(err?.status || Status.INTERNAL_SERVER_ERROR)
       .json({ error: err?.message || err });
   }
-};
-
-module.exports = {
-  generate,
-  authorize,
-  authorizeMaintainer,
 };
