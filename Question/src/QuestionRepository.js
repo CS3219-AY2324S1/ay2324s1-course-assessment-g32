@@ -1,7 +1,7 @@
 const questionModel = require('./QuestionModel');
 const { ObjectId } = require('mongodb');
 
-const createQuestion = async (title, complexity, description, tags) => {
+exports.createQuestion = async (title, complexity, description, tags) => {
   try {
     const question = new questionModel({
       title: title,
@@ -19,7 +19,7 @@ const createQuestion = async (title, complexity, description, tags) => {
   }
 };
 
-const getQuestions = async () => {
+exports.getQuestions = async () => {
   try {
     // Return all questions without the description
     return await questionModel.find({}, { description: 0 });
@@ -28,7 +28,7 @@ const getQuestions = async () => {
   }
 };
 
-const getQuestionsByCriteria = async (complexity, tags) => {
+exports.getQuestionsByCriteria = async (complexity, tags) => {
   try {
     // Return all questions that match the criteria without the description
     return await questionModel.find(
@@ -40,7 +40,7 @@ const getQuestionsByCriteria = async (complexity, tags) => {
   }
 };
 
-const getQuestionsByComplexity = async (complexity) => {
+exports.getQuestionsByComplexity = async (complexity) => {
   try {
     // Return all questions without the description
     return await questionModel.find({ complexity: complexity }, { description: 0 });
@@ -49,7 +49,7 @@ const getQuestionsByComplexity = async (complexity) => {
   }
 };
 
-const getQuestionDetails = async (id) => {
+exports.getQuestionDetails = async (id) => {
   try {
     return await questionModel.findOne({ _id: id });
   } catch (err) {
@@ -57,7 +57,7 @@ const getQuestionDetails = async (id) => {
   }
 };
 
-const getRandomQuestionByComplexity = async (complexity) => {
+exports.getRandomQuestionByComplexity = async (complexity) => {
   try {
     const randomQuestion = await questionModel
       .aggregate([
@@ -72,7 +72,7 @@ const getRandomQuestionByComplexity = async (complexity) => {
   }
 };
 
-const findById = async (id) => {
+exports.findById = async (id) => {
   try {
     return await questionModel.findOne({ _id: id });
   } catch (err) {
@@ -80,7 +80,7 @@ const findById = async (id) => {
   }
 };
 
-const findByTitle = async (title) => {
+exports.findByTitle = async (title) => {
   try {
     return await questionModel.findOne({ title: title });
   } catch (err) {
@@ -88,7 +88,7 @@ const findByTitle = async (title) => {
   }
 };
 
-const editQuestion = async (id, title, complexity, description, tags) => {
+exports.editQuestion = async (id, title, complexity, description, tags) => {
   try {
     const fields = {
       title: title,
@@ -102,7 +102,7 @@ const editQuestion = async (id, title, complexity, description, tags) => {
   }
 };
 
-const deleteQuestion = async (id) => {
+exports.deleteQuestion = async (id) => {
   try {
     return await questionModel.deleteOne({ _id: id });
   } catch (err) {
@@ -110,7 +110,7 @@ const deleteQuestion = async (id) => {
   }
 };
 
-const getQuestionsDifficultyCount = async (questionsId) => {
+exports.getQuestionsDifficultyCount = async (questionsId) => {
 
   try {
     const objectIdArray = questionsId.map((s) => new ObjectId(s));
@@ -129,7 +129,7 @@ const getQuestionsDifficultyCount = async (questionsId) => {
   }
 };
 
-const getQuestionStatistics = async (questionsId) => {
+exports.getQuestionStatistics = async (questionsId) => {
   try {
     const result = await questionModel.aggregate([
       {
@@ -143,19 +143,4 @@ const getQuestionStatistics = async (questionsId) => {
   } catch (err) {
     throw err;
   }
-};
-
-module.exports = {
-  createQuestion,
-  getQuestions,
-  getQuestionsByCriteria,
-  getQuestionsByComplexity,
-  getQuestionDetails,
-  getRandomQuestionByComplexity,
-  findById,
-  findByTitle,
-  editQuestion,
-  deleteQuestion,
-  getQuestionsDifficultyCount,
-  getQuestionStatistics,
 };
