@@ -36,8 +36,7 @@ const Login = () => {
       const response = await login(userData);
 
       Cookies.set('jwt', response.data.token, {
-        secure: true,
-        sameSite: 'strict',
+        sameSite: 'Lax',
       });
 
       navigate('/landing');
