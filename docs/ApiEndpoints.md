@@ -1,6 +1,9 @@
 # API Endpoints
 
-## Microservices API
+## Microservices Ports
+
+> [!NOTE]
+> The ports can be configured in `template.env` (or `.env`).
 
 | Port  | Microservice | Description                                          |
 |-------|--------------|------------------------------------------------------|
@@ -11,9 +14,6 @@
 | 8001  | collab       | API manages sockets for user collaboration           |
 | 9001  | history      | API contains all the history related endpoints       |
 | 10001 | execution    | API contains all the execution related endpoints     |
-
-> [!NOTE]
-> The ports can be configured in `template.env` (or `.env`).
 
 ## Endpoints
 
@@ -47,7 +47,7 @@
 | GET    | `/user/all`                  | Get information for all users                   | -                                                                     | JWT token       | Maintainer      |
 | POST   | `/user/login`                | Login                                           | `email` <br> `password`                                               | -               | Guest           |
 | POST   | `/user/signup`               | create new user                                 | `email` <br> `password` <br> `confirmPassword`                        | -               | Guest           | 
-| PUT    | `/user/toggle-user-role`     | Toggle the user's role (user or maintainer)     | `id`
+| PUT    | `/user/toggle-user-role`     | Toggle the user's role (user or maintainer)     | `id`                                                                  | JWT token       | Maintainer      |
 | PUT    | `/user/display-name`         | Update user's display name                      | `id` <br> `username`                                                  | JWT token       | User            |
 | PUT    | `/user/change-password`      | Change user's password                          | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | JWT token       | User            |
 | PUT    | `/user/programming-language` | Update user's preferred programming language    | `id` <br> `programmingLanguage`                                       | JWT token       | User            |
@@ -69,7 +69,7 @@ Remarks:
   - Can also access other more pages (but not all)
 - Maintainer
   - Has account with maintainer (admin) privilege
-  - Can access all pages by Guest
+  - Can access all pages by User
   - Can also access all pages
 
 ---
