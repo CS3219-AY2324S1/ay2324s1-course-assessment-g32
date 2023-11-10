@@ -122,6 +122,10 @@ The frontend would only be available after the containers are running.
 
 ### Frontend Application
 
+> [!WARNING]
+> Take caution when deleting maintainer accounts.
+> Do not delete until there is no accounts with admin rights.
+
 Locally, open a web browser and go to [http://localhost:3000](http://localhost:3000).
 
 ## Post-testing
