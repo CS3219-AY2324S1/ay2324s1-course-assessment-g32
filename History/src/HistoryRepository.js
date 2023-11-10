@@ -1,7 +1,6 @@
 const historyModel = require('./HistoryModel');
-const mongoose = require('mongoose');
 
-const findAttemptByUserIdAndQuestion = async (userId, questionId) => {
+exports.findAttemptByUserIdAndQuestion = async (userId, questionId) => {
   try {
     return await historyModel.findOne({ userId: userId, questionId: questionId });
   } catch (err) {
@@ -9,7 +8,7 @@ const findAttemptByUserIdAndQuestion = async (userId, questionId) => {
   }
 };
 
-const addAttempt = async (userId, questionId, code, language, result) => {
+exports.addAttempt = async (userId, questionId, code, language, result) => {
   // Add new attempt to database
   try {
     const history = new historyModel({
@@ -27,7 +26,7 @@ const addAttempt = async (userId, questionId, code, language, result) => {
   }
 };
 
-const getAttemptsByUserId = async (userId) => {
+exports.getAttemptsByUserId = async (userId) => {
   try {
     return await historyModel.find({ userId: userId }).sort({ createdAt: -1 });
   } catch (err) {
@@ -35,7 +34,7 @@ const getAttemptsByUserId = async (userId) => {
   }
 };
 
-const getAttemptById = async (attemptId) => {
+exports.getAttemptById = async (attemptId) => {
   try {
     return await historyModel.findById(attemptId);
   } catch (err) {
@@ -43,18 +42,10 @@ const getAttemptById = async (attemptId) => {
   }
 };
 
-const getAttemptsByQuestionAndUser = async (questionId, userId) => {
+exports.getAttemptsByQuestionAndUser = async (questionId, userId) => {
   try {
     return await historyModel.find({ questionId: questionId, userId: userId }).sort({ createdAt: -1 });
   } catch (err) {
     throw err;
   }
-};
-
-module.exports = {
-  findAttemptByUserIdAndQuestion,
-  addAttempt,
-  getAttemptsByUserId,
-  getAttemptById,
-  getAttemptsByQuestionAndUser,
 };

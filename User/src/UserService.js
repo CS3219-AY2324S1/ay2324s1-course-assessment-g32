@@ -7,52 +7,7 @@ const {
   BCRYPT_SALT_ROUNDS,
 } = require('./constants');
 
-const verifyPassword = async (userId, givenPassword) => {
-  const storedPassword = (await userDatabase.getUserInfoById(userId)).password;
-  return bcrypt.compare(givenPassword, storedPassword);
-};
-
-const loginUser = async (email, password) => {
-  try {
-    let userInfo = new Object();
-
-    // Check for missing inputs
-    if (!email || !password) {
-      throw Object.assign(new Error('Missing inputs'), {
-        status: Status.BAD_REQUEST,
-      });
-    }
-
-    // Check if email is valid
-    if (!EMAIL_REGEX.test(email)) {
-      throw Object.assign(new Error('Invalid email'), {
-        status: Status.BAD_REQUEST,
-      });
-    }
-
-    // Check if a user with the given email exists
-    await userDatabase.findByEmail(email).then((info) => (userInfo = info));
-
-    if (!userInfo) {
-      throw Object.assign(new Error('Email not registered with any user'), {
-        status: Status.GONE,
-      });
-    }
-
-    // Compare the entered password with the hashed password stored in the database
-    if (!(await verifyPassword(userInfo.id, password))) {
-      throw Object.assign(new Error('Incorrect password'), {
-        status: Status.UNAUTHORIZED,
-      });
-    }
-
-    return userInfo;
-  } catch (err) {
-    throw err;
-  }
-};
-
-const createUser = async (email, password, confirmPassword) => {
+exports.createUser = async (email, password, confirmPassword) => {
   try {
     let passExistingUserCheck = undefined;
 
@@ -112,98 +67,7 @@ const createUser = async (email, password, confirmPassword) => {
   }
 };
 
-const getAllUserInfo = async () => {
-  try {
-    return userDatabase.getAllUserInfo();
-  } catch (err) {
-    throw err;
-  }
-};
-
-const getUserInfo = async (userId, email) => {
-  try {
-    if (!userId && !email) {
-      throw Object.assign(new Error('Need at least id or email'), {
-        status: Status.BAD_REQUEST,
-      });
-    }
-
-    if (userId != null) return userDatabase.getUserInfoById(userId);
-    else return userDatabase.getUserInfoByEmail(email);
-  } catch (err) {
-    throw err;
-  }
-};
-
-/**
- * Update user info of speficied userId.
- * Only supports changing of displayName and password.
- *
- * @param {int|string} userId ID of user in DB. Read-only.
- * @param {string} displayName New displayName
- */
-const updateDisplayName = async (userId, displayName) => {
-  try {
-    if (!userId) {
-      throw Object.assign(new Error('Missing id'), {
-        status: Status.BAD_REQUEST,
-      });
-    }
-
-    if (!displayName) {
-      throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
-        status: Status.BAD_REQUEST,
-      });
-    }
-
-    return userDatabase.updateDisplayName(userId, displayName);
-  } catch (err) {
-    throw err;
-  }
-};
-
-const updateProgrammingLanguage = async (userId, programmingLanguage) => {
-  try {
-    if (!userId) {
-      throw Object.assign(new Error('Missing id'), {
-        status: Status.BAD_REQUEST,
-      });
-    }
-
-    if (!programmingLanguage) {
-      throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
-        status: Status.BAD_REQUEST,
-      });
-    }
-
-    return userDatabase.updateProgrammingLanguage(userId, programmingLanguage);
-  } catch (err) {
-    throw err;
-  }
-};
-
-const updateComplexity = async (userId, newComplexity) => {
-  try {
-    if (!userId) {
-      throw Object.assign(new Error('Missing id'), {
-        status: Status.BAD_REQUEST,
-      });
-    }
-
-    if (!newComplexity) {
-      throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
-        status: Status.BAD_REQUEST,
-      });
-    }
-
-    return userDatabase.updateComplexity(userId, newComplexity);
-  } catch (err) {
-    throw err;
-  }
-};
-
-
-const deleteUser = async (id) => {
+exports.deleteUser = async (id) => {
   try {
     let _success = Boolean();
 
@@ -227,6 +91,153 @@ const deleteUser = async (id) => {
   }
 };
 
+exports.loginUser = async (email, password) => {
+  try {
+    let userInfo = new Object();
+
+    // Check for missing inputs
+    if (!email || !password) {
+      throw Object.assign(new Error('Missing inputs'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    // Check if email is valid
+    if (!EMAIL_REGEX.test(email)) {
+      throw Object.assign(new Error('Invalid email'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    // Check if a user with the given email exists
+    await userDatabase.findByEmail(email).then((info) => (userInfo = info));
+
+    if (!userInfo) {
+      throw Object.assign(new Error('Email not registered with any user'), {
+        status: Status.GONE,
+      });
+    }
+
+    // Compare the entered password with the hashed password stored in the database
+    if (!(await verifyPassword(userInfo.id, password))) {
+      throw Object.assign(new Error('Incorrect password'), {
+        status: Status.UNAUTHORIZED,
+      });
+    }
+
+    return userInfo;
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
+ * Toggles the role of the user. Throws error if no parameters.
+ * @param {string | number} id User ID
+ */
+exports.toggleUserRole = async (id) => {
+  try {
+    if (!id) {
+      throw Object.assign(new Error('Missing user id'), { status: 400 });
+    }
+
+    return userDatabase.toggleUserRole(id);
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.getAllUserInfo = async () => {
+  try {
+    return userDatabase.getAllUserInfo();
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.getUserInfo = async (userId, email) => {
+  try {
+    // Check for no inputs
+    if (!userId && !email) {
+      throw Object.assign(new Error('Need at least id or email'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    if (userId != null) return userDatabase.getUserInfoById(userId);
+    else return userDatabase.getUserInfoByEmail(email);
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
+ * Update user info of speficied userId.
+ * Only supports changing of displayName and password.
+ *
+ * @param {int|string} userId ID of user in DB. Read-only.
+ * @param {string} displayName New displayName
+ */
+exports.updateDisplayName = async (userId, displayName) => {
+  try {
+    if (!userId) {
+      throw Object.assign(new Error('Missing id'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    if (!displayName) {
+      throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    return userDatabase.updateDisplayName(userId, displayName);
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.updateProgrammingLanguage = async (userId, programmingLanguage) => {
+  try {
+    if (!userId) {
+      throw Object.assign(new Error('Missing id'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    if (!programmingLanguage) {
+      throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    return userDatabase.updateProgrammingLanguage(userId, programmingLanguage);
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.updateComplexity = async (userId, newComplexity) => {
+  try {
+    if (!userId) {
+      throw Object.assign(new Error('Missing id'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    if (!newComplexity) {
+      throw Object.assign(new Error('WARN: Nothing given, not doing update'), {
+        status: Status.BAD_REQUEST,
+      });
+    }
+
+    return userDatabase.updateComplexity(userId, newComplexity);
+  } catch (err) {
+    throw err;
+  }
+};
+
 /**
  * Changes password of user. Throws error if invalid parameters.
  * @param {string | number} id User ID
@@ -234,7 +245,7 @@ const deleteUser = async (id) => {
  * @param {string} newPassword New Password
  * @param {string} confirmPassword Confirm New Password
  */
-const changeUserPassword = async (
+exports.changeUserPassword = async (
   id,
   curPassword,
   newPassword,
@@ -298,31 +309,7 @@ const changeUserPassword = async (
   }
 };
 
-/**
- * Toggles the role of the user. Throws error if no parameters.
- * @param {string | number} id User ID
- */
-const toggleUserRole = async (id) => {
-  try {
-    if (!id) {
-      throw Object.assign(new Error('Missing user id'), { status: 400 });
-    }
-
-    return userDatabase.toggleUserRole(id);
-  } catch (err) {
-    throw err;
-  }
-};
-
-module.exports = {
-  loginUser,
-  createUser,
-  getAllUserInfo,
-  getUserInfo,
-  updateDisplayName,
-  updateProgrammingLanguage,
-  updateComplexity,
-  deleteUser,
-  changeUserPassword,
-  toggleUserRole,
+const verifyPassword = async (userId, givenPassword) => {
+  const storedPassword = (await userDatabase.getUserInfoById(userId)).password;
+  return bcrypt.compare(givenPassword, storedPassword);
 };

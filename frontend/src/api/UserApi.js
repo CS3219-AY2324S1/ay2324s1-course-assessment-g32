@@ -48,7 +48,7 @@ export const login = async (userData) => {
 
 export const getAllUsers = async (jwtToken) => {
   try {
-    const res = await axiosUser.get('/read-all', getTokenConfig(jwtToken));
+    const res = await axiosUser.get('/all', getTokenConfig(jwtToken));
     return res.data.info;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -65,7 +65,7 @@ export const getUser = async (id, jwtToken) => {
   try {
     let config = getTokenConfig(jwtToken);
     config.params = { id: id };
-    const res = await axiosUser.get('/read', config);
+    const res = await axiosUser.get('/', config);
     return res.data.info;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -168,7 +168,7 @@ export const deleteUser = async (id, jwtToken) => {
   try {
     let config = getTokenConfig(jwtToken);
     config.params = { id: id };
-    return await axiosUser.delete('/delete', config);
+    return await axiosUser.delete('/', config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {

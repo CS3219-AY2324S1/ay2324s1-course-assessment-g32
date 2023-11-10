@@ -23,7 +23,7 @@ We have various micro-services including:
 
 Ensure that you are connected to the internet.
 
-> Note!\
+> [!IMPORTANT]
 > Do **not** connect to NUS Wifi/Network.\
 > The application would be unable to connect to MongoDB Atlas.
 
@@ -33,7 +33,8 @@ Download and install these software if you do not have them locally.
 
 - [Docker Desktop](https://www.docker.com/get-started/)
 
-**Ensure that RabbitMQ Server is NOT running locally.**
+> [!NOTE]
+> **Ensure that RabbitMQ Server is NOT running locally.**
 
 # Testing
 
@@ -121,20 +122,11 @@ The frontend would only be available after the containers are running.
 
 ### Frontend Application
 
+> [!WARNING]
+> Take caution when deleting maintainer accounts.
+> Do not delete until there is no accounts with admin rights.
+
 Locally, open a web browser and go to [http://localhost:3000](http://localhost:3000).
-
-### Sample Accounts
-
-By default, we have created 2 accounts as part of the fresh database. These accounts are for testing purposes, and would not be avilable for production.
-
-| Email          | Password | Remarks                                  |
-| -------------- | -------- | ---------------------------------------- |
-| admin@test.com | password | Has admin rights. Regard as a superuser. |
-| user@test.com  | password | Normal user. Cannot manage other users.  |
-
-> Note: if you delete these accounts via the user profile management
-> functionalities, you may have from restart the pre-testing steps to
-> get back the accounts.
 
 ## Post-testing
 
@@ -146,4 +138,5 @@ docker compose down
 ```
 
 ---
+
 [Go to README](../README.md)

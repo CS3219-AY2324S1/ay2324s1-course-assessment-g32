@@ -14,6 +14,8 @@
 
 ## Start RabbitMQ Service
 
+For Windows OS,
+
 1. `Win + R` to open the Run window
 2. Type `services.msc` into the Run window
 3. Press `Ctrl + Shift + Enter` to **run as administrator**

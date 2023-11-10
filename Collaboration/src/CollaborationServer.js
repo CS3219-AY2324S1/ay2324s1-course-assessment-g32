@@ -46,7 +46,7 @@ try {
       const boilerplate = getBoilerplate(language);
 
       const notification = `${displayName} joined room`;
-      const message = { text: notification };
+      const message = { text: notification, sender: 'server' };
 
       redisMemory.handleRoomJoining(room, question, language, boilerplate, message, user).then((response) => {
         // Synchronize the newly joined user with the current state of the room
@@ -69,7 +69,7 @@ try {
       socket.disconnect(true);
       logger.log(`${displayName} left room: ${room}`);
 
-      const message = { text: `${displayName} left room` };
+      const message = { text: `${displayName} left room`, sender: 'server' };
       io.to(room).emit(Event.Communication.CHAT_RECEIVE, message);
 
       redisMemory.handleChatMessage(room, message);

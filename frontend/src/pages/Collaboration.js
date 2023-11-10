@@ -90,13 +90,24 @@ const Collaboration = () => {
     }
   };
 
-  // Send question changes to the server on confirmation
+  // Update the question change state when the user changes the question on confirmation
   const handleConfirmQuestionChange = () => {
     setQuestion(selectedQuestion);
     setIsChangeQuestionWindowOpen(false);
+    sessionStorage.setItem(`question_${roomId}`, JSON.stringify(selectedQuestion));
+
+    // Send question change to the server
     socket.emit(Event.Question.CHANGE, {
       room: roomId,
       question: selectedQuestion,
+    });
+    // Broadcast the question change to the chat
+    socket.emit(Event.Communication.CHAT_SEND, {
+      room: roomId,
+      message: {
+        text: `Question changed the from ${question.title} to ${selectedQuestion.title}`,
+        sender: 'server',
+      },
     });
   };
 

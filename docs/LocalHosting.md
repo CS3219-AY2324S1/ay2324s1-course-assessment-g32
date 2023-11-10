@@ -12,7 +12,7 @@ Download and install these software if you do not have them locally.
 
 Ensure that you are connected to the internet.
 
-> Note!\
+> [!IMPORTANT]
 > Do **not** connect to NUS Wifi/Network.\
 > The application would be unable to connect to MongoDB Atlas.
 

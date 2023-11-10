@@ -3,7 +3,7 @@ const questionApi = require('./helpers/callsToQuestion');
 const { Status } = require('./constants');
 const logger = require('./Log');
 
-const addAttempt = async (req, res) => {
+exports.addAttempt = async (req, res) => {
   const { userId, questionId, code, language, result } = req.body;
   try {
     await historyService.addAttempt(userId, questionId, code, language, result);
@@ -15,7 +15,7 @@ const addAttempt = async (req, res) => {
   }
 };
 
-const getAttempts = async (req, res) => {
+exports.getAttempts = async (req, res) => {
   const { userId, questionId } = req.query;
   try {
     if (questionId) {
@@ -35,46 +35,11 @@ const getAttempts = async (req, res) => {
   }
 };
 
-const getHeatMapData = async (req, res) => {
-  const { userId } = req.query;
-  try {
-    const heatMapData = await historyService.getHeatMapData(userId);
-    logger.logSuccess(`Heatmap data retrieved for user ${userId}`);
-    res.json({ message: 'SUCCESS', heatMapData });
-  } catch (err) {
-    logger.error(`Cannot retrieve heatmap data for ${userId}: `, err?.message || err);
-    res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
-  }
-};
-
-const getPieChartData = async (req, res) => {
-  const { userId } = req.query;
-  try {
-    const jwtToken = req.headers['authorization'];
-    const attemptedQuestionsId = await historyService.getAttemptedQuestionsId(userId);
-    const attemptedQuestionsStats = await questionApi.getQuestionDifficultyCount(jwtToken, attemptedQuestionsId);
-    const allQuestionsStats = await questionApi.getQuestionStatistics(jwtToken);
-    const unattemptedQuestionsStats = historyService.getUnattemptedQuestionsStats(
-      attemptedQuestionsStats.data.questionCountByDifficulty, allQuestionsStats.data.questionStatistics);
-
-    const pieChartData = {
-      attemptedQuestionsStats: attemptedQuestionsStats.data.questionCountByDifficulty,
-      allQuestionsStats: allQuestionsStats.data.questionStatistics,
-      unattemptedQuestionsStats: unattemptedQuestionsStats,
-    };
-    logger.logSuccess(`Pie chart data retrieved for user ${userId}`);
-    res.json({ message: 'SUCCESS', pieChartData });
-  } catch (err) {
-    logger.error(`Cannot retrieve pie chart data for ${userId}: `, err?.message || err);
-    res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
-  }
-};
-
-const getAttempt = async (req, res) => {
+exports.getAttempt = async (req, res) => {
   const { attemptId } = req.query;
   try {
     const attempt = await historyService.getAttempt(attemptId);
-    logger.logSuccess(`Attempt details retrieved for attempt ${attemptId}`);
+    logger.logSuccess(`Retrieved attempt details for attempt ${attemptId}`);
     res.json({ message: 'SUCCESS', attempt });
   } catch (err) {
     logger.error(`Cannot retrieve ${attemptId} attempt: `, err?.message || err);
@@ -82,10 +47,40 @@ const getAttempt = async (req, res) => {
   }
 };
 
-module.exports = {
-  addAttempt,
-  getAttempts,
-  getHeatMapData,
-  getPieChartData,
-  getAttempt,
+exports.getHeatMapData = async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const heatMapData = await historyService.getHeatMapData(userId);
+    logger.logSuccess(`Retrieved heatmap data for user ${userId}`);
+    res.json({ message: 'SUCCESS', heatMapData });
+  } catch (err) {
+    logger.error(`Cannot retrieve heatmap data for ${userId}: `, err?.message || err);
+    res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
+  }
+};
+
+exports.getPieChartData = async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const jwtToken = req.headers['authorization'];
+    const attemptedQuestionsId = await historyService.getAttemptedQuestionsId(userId);
+    const attemptedQuestionsStats = await questionApi.getQuestionDifficultyCount(jwtToken, attemptedQuestionsId);
+    const allQuestionsStats = await questionApi.getQuestionStatistics(jwtToken);
+    const unattemptedQuestionsStats = historyService.getUnattemptedQuestionsStats(
+      attemptedQuestionsStats.data.questionCountByDifficulty,
+      allQuestionsStats.data.questionStatistics);
+
+    // Set pie char data
+    const pieChartData = {
+      attemptedQuestionsStats: attemptedQuestionsStats.data.questionCountByDifficulty,
+      allQuestionsStats: allQuestionsStats.data.questionStatistics,
+      unattemptedQuestionsStats: unattemptedQuestionsStats,
+    };
+    
+    logger.logSuccess(`Retrieved pie chart data for user ${userId}`);
+    res.json({ message: 'SUCCESS', pieChartData });
+  } catch (err) {
+    logger.error(`Cannot retrieve pie chart data for ${userId}: `, err?.message || err);
+    res.status(err?.status || Status.INTERNAL_SERVER_ERROR).json({ error: err?.message || err });
+  }
 };
