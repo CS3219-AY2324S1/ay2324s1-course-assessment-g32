@@ -7,9 +7,12 @@ const expiry = {
 };
 
 class RedisMemory {
-  constructor() {
-    this.client = createClient();
-    this.client.on('error', err => logger.error('Error connecting to Redis'));
+  constructor(url) {
+    this.client = createClient(
+      {
+        url: url,
+      }
+    );
   };
 
   connect = async () => {

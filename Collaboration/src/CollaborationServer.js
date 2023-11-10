@@ -4,7 +4,7 @@ const env = require('./loadEnvironment');
 const logger = require('./Log');
 const { Event } = require('./constants');
 const { getBoilerplate } = require('./utils/helpers');
-const {RedisMemory} = require('./RedisMemory');
+const { RedisMemory } = require('./RedisMemory');
 
 logger.register({
   serviceName: 'Collaboration Service',
@@ -13,7 +13,7 @@ logger.register({
 
 logger.log('Starting ...');
 
-const redisMemory = new RedisMemory();
+const redisMemory = new RedisMemory(env.REDIS_URL);
 redisMemory.connect();
 
 try {
