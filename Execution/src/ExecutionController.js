@@ -19,7 +19,7 @@ const isCodeEmpty = (code) => {
 
 const handleEmptyCode = (res) => {
   logger.error('No code provided.');
-  res.json({ output: 'No code provided.' });
+  res.json({ output: 'No code provided.', duration: 0 });
 };
 
 const isOutputEmpty = (code) => {
@@ -28,7 +28,7 @@ const isOutputEmpty = (code) => {
 
 const handleOutputEmpty = (res) => {
   logger.error('No output produced.');
-  res.json({ output: 'No output produced.' });
+  res.json({ output: 'No output produced.', duration: 0 });
 };
 
 const uniqueId = () => {
@@ -131,7 +131,7 @@ const executePython = async (req, res) => {
 
     const pythonProcess = spawn('python3', [scriptPath]); // Command to execute the script
     const result = await executeScript(scriptPath, pythonProcess);
-
+    const duration = Date.now() - timestamp;
     logger.logSuccess('Program executed successfully.');
 
     // Check if output is empty
@@ -140,7 +140,7 @@ const executePython = async (req, res) => {
       return;
     }
 
-    res.json({ output: result });
+    res.json({ output: result, duration: duration });
   } catch (err) {
     logger.error(err);
   }
@@ -176,14 +176,14 @@ const executeJava = async (req, res) => {
 
     if (compileResult.includes('error')) {
       logger.error('Compilation failed.');
-      res.json({ output: compileResult });
+      res.json({ output: compileResult, duration: 0 });
       fs.rmSync(executionDirectory, { recursive: true });
     } else {
       logger.logSuccess('Program compiled successfully.');
 
       const javaProcess = spawn('java', [javaClassName], { cwd: executionDirectory });
       const result = await executeScript(javaClassName + '.class', javaProcess, executionDirectory);
-
+      const duration = Date.now() - timestamp;
       logger.logSuccess('Program executed successfully.');
 
       // Check if output is empty
@@ -192,7 +192,7 @@ const executeJava = async (req, res) => {
         return;
       }
 
-      res.json({ output: result });
+      res.json({ output: result, duration: duration });
     }
   } catch (err) {
     logger.error(err);
@@ -219,6 +219,7 @@ const executeJs = async (req, res) => {
     const jsProcess = spawn('node', [scriptPath]); // Command to execute the script
     const result = await executeScript(scriptPath, jsProcess);
 
+    const duration = Date.now() - timestamp;
     logger.logSuccess('Program executed successfully.');
 
     // Check if output is empty
@@ -227,7 +228,7 @@ const executeJs = async (req, res) => {
       return;
     }
 
-    res.json({ output: result });
+    res.json({ output: result, duration: duration });
   } catch (err) {
     logger.error(err);
   }

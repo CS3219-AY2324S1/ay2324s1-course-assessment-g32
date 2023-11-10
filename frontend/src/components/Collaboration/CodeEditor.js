@@ -18,7 +18,7 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
 
   // Initialize code editor content
   const [code, setCode] = useState(getBoilerplate(selectedLanguage));
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState({});
   const [language, setLanguage] = useState(selectedLanguage);
   const [newSelectedLanguage, setNewSelectedLanguage] = useState(selectedLanguage);
   const [isChangeLanguageWindowOpen, setIsChangeLanguageWindowOpen] = useState(false);
