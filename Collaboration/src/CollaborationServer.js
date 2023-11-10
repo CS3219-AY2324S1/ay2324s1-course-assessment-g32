@@ -47,7 +47,7 @@ try {
       const notification = `${user} joined room`;
       const message = { text: notification };
 
-      redisMemory.handleRoomJoining(room, question, language, boilerplate, message).then((response) => {
+      redisMemory.handleRoomJoining(room, question, language, boilerplate, message, user).then((response) => {
         // Synchronize the newly joined user with the current state of the room
         io.to(room).emit(Event.Question.UPDATE, response.question);
         io.to(room).emit(Event.Code.UPDATE, response.code);
@@ -70,8 +70,15 @@ try {
       const message = { text: `${user} left room` };
       io.to(room).emit(Event.Communication.CHAT_RECEIVE, message);
 
-      redisMemory.handleRoomLeaving(room);
       redisMemory.handleChatMessage(room, message);
+    });
+
+    // Handle room termination
+    socket.on(Event.Socket.TERMINATE_ROOM, (data) => {
+      const room = data.room;
+      const user = data.user;
+
+      redisMemory.handleRoomTermination(room, user);
     });
 
     // Handle question changes

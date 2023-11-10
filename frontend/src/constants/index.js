@@ -51,7 +51,7 @@ const Event = {
     DISCONNECT: 'disconnect',
     JOIN_ROOM: 'join-room',
     LEAVE_ROOM: 'leave-room',
-    SYNC_ROOM: 'sync-room',
+    TERMINATE_ROOM: 'terminate-room',
   },
   Question: {
     CHANGE: 'question-change',

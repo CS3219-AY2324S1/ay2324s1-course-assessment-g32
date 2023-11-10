@@ -36,6 +36,7 @@ const Event = {
     DISCONNECT: 'disconnect',
     JOIN_ROOM: 'join-room',
     LEAVE_ROOM: 'leave-room',
+    TERMINATE_ROOM: 'terminate-room',
   },
   Question: {
     CHANGE: 'question-change',

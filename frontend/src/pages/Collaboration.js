@@ -6,7 +6,7 @@ import { ChangeQuestionWindow } from '../components/ConfirmationWindows';
 import { QuestionContent } from '../components/Question';
 import { getRandomQuestionByCriteria } from '../api/QuestionApi';
 import { showFailureToast } from '../utils/toast';
-import { getUserId } from '../utils/helpers';
+import { getUserId, removeSessionStorage } from '../utils/helpers';
 import { Status, Event } from '../constants';
 import env from '../loadEnvironment';
 import '../css/Collaboration.css';
@@ -22,7 +22,7 @@ const Collaboration = () => {
   const navigate = useNavigate();
 
   const socket = io(env.COLLAB_URL);
-  const { roomId, displayName, questionData, jwt } = location.state || {};
+  const { roomId, displayName, questionData, jwt, time } = location.state || {};
   const { complexity, language } = questionData || {};
 
   useEffect(() => {
@@ -31,10 +31,10 @@ const Collaboration = () => {
       if (!roomId) {
         showFailureToast('Invalid Room');
         navigate('/landing');
+        return;
       }
 
       setUserId(await getUserId());
-
       try {
         const question = await getRandomQuestionByCriteria(complexity, jwt);
         const socketMessage = {
@@ -42,10 +42,17 @@ const Collaboration = () => {
           user: displayName,
           question: question,
           language: language
-        }
+        };
         // Join the Socket.io room when the component mounts
         socket.emit(Event.Socket.JOIN_ROOM, socketMessage);
 
+        const session = {
+          room: roomId,
+          question: question,
+          language: language,
+          time: time
+        }
+        sessionStorage.setItem(`current_session`, JSON.stringify(session));
       } catch (error) {
         if (error.response.status === Status.UNAUTHORIZED) {
           navigate('/unauthorized');
@@ -53,10 +60,16 @@ const Collaboration = () => {
       }
     };
     initializeRoom();
+    return () => {
+      socket.emit(Event.Socket.LEAVE_ROOM, { room: roomId, user: displayName });
+      socket.disconnect();
+    }
   }, []);
 
   const handleLeaveRoom = () => {
-    socket.emit(Event.Socket.LEAVE_ROOM, { room: roomId, user: displayName });
+    removeSessionStorage();
+    socket.emit(Event.Socket.TERMINATE_ROOM, { room: roomId, user: displayName });
+    window.history.replaceState({}, location.state);
     navigate('/landing');
   };
 

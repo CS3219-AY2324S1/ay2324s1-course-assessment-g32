@@ -27,6 +27,7 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
           const userId = await getUserId();
           const user = await getUser(userId, getCookie());
           const displayName = user.displayName;
+          const time = Date.now();
 
           const questionData = {
             complexity: complexity,
@@ -42,6 +43,7 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
                   displayName,
                   questionData,
                   jwt,
+                  time
                 },
               });
             }, randomDelay);
