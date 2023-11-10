@@ -1,36 +1,41 @@
 # API Endpoints
 
-| Method | API Endpoints                | Purpose                                                  | Parameters <br> (JSON format)                                         | Header Contains | [Roles](#roles) |
-| ------ | ---------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- | --------------- | ----------      |
-| GET    | `/auth/authorize`            | Used to authorize all users                              | -                                                                     | JWT token       | User            |
-| GET    | `/auth/authorize-maintainer` | Used to authorize maintainers                            | -                                                                     | JWT token       | Maintainer      |
-| POST   | `/auth/generate`             | Used to generate JWT token after user has logged in      | `userId` <br> `isMaintainer`                                          | -               | Guest           |
-| POST   | `/question/create`           | Used to create new question                              | `title` <br> `complexity` <br> `description` <br> `tags`              | JWT token       | Maintainer      |
-| DELETE | `/question/delete`           | Used to delete question                                  | `id`                                                                  | JWT token       | Maintainer      |
-| PUT    | `/question/edit`             | Used to edit question                                    | `id` <br> `title` <br> `complexity` <br> `description` <br> `tags`    | JWT token       | Maintainer      |
-| GET    | `/question/read-all`         | Used to get all the questions from the database          | -                                                                     | JWT token       | User            |
-| GET    | `/question/read`             | Used to get the details of the specified question        | `id`                                                                  | JWT token       | User            |
-| PUT    | `/user/change-password`      | Used to change user password                             | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | JWT token       | User            |
-| DELETE | `/user/delete`               | Used to delete user                                      | `id`                                                                  | JWT token       | User            |
-| POST   | `/user/login`                | Used to login                                            | `email` <br> `password`                                               | -               | Guest           |
-| GET    | `/user/read`                 | Used to get user information                             | `id` or `email`                                                       | JWT token       | User            |
-| GET    | `/user/read-all`             | Used to get all users information                        | -                                                                     | JWT token       | Maintainer      |
-| POST   | `/user/signup`               | Used to create new user                                  | `email` <br> `password` <br> `confirmPassword`                        | -               | Guest           | 
-| PUT    | `/user/display-name`         | Used to update user's display name                       | `id` <br> `username`                                                  | JWT token       | User            |
-| PUT    | `/user/programming-language` | Used to update user's preferred programming language     | `id` <br> `programmingLanguage`                                       | JWT token       | User            |
-| PUT    | `/user/complexity          ` | Used to update user's preferred question complexity      | `id` <br> `complexity`                                                | JWT token       | User            |
-| POST   | `/queue/join`                | Used to join the matching queue                          | `queueName` <br> `sessionID`                                          | JWT token       | User            |
-| POST   | `/queue/exit`                | Used to exit the matching queue                          | `queueName` <br> `sessionID`                                          | JWT token       | User            |
-| POST   | `/history/attempt`           | Used to add attempt to user history                      | `userId` <br> `questionId` <br> `code` <br> `language`                | JWT token       | User            |
-| GET    | `/history/attempts`          | Used to get all attempts submitted by a user             | `userId`                                                              | JWT token       | User            |
-| GET    | `/history/attempts`          | Used to get attempts for a question, submitted by a user | `userId` <br> `questionId`                                            | JWT token       | User            |
-| GET    | `/history/heatmap`           | Used to get heatmap data for a user                      | `userId`                                                              | JWT token       | User            |
-| GET    | `/history/piechart`          | Used to get pie chart data for a user                    | `userId` <br> `questionId` <br> `code` <br> `language`                | JWT token       | User            |
-| GET    | `/history/attempt`           | Used to get a single attempt details                     | `attemptId`                                                           | JWT token       | User            |
-| GET    | `/history/heatmap`           | Used to get heatmap data for a user                      | `userId`                                                              | JWT token       | User            |
-| POST   | `/execute/python`            | Used to execute the Python code in the code editor       | `codeObject`                                                          | -               | User            |
-| POST   | `/execute/java`              | Used to execute the Java code in the code editor         | `codeObject`                                                          | -               | User            |
-| POST   | `/execute/js`                | Used to execute the JavaScript code in the code editor   | `codeObject`                                                          | -               | User            |
+| Method | API Endpoints                | Purpose                                         | Parameters <br> (JSON format)                                         | Header Contains | [Roles](#roles) |
+|-------:|------------------------------|-------------------------------------------------|-----------------------------------------------------------------------|-----------------|-----------------|
+| GET    | `/auth/authorize`            | Authorize all users                             | -                                                                     | JWT token       | User            |
+| GET    | `/auth/authorize-maintainer` | Authorize maintainers                           | -                                                                     | JWT token       | Maintainer      |
+| POST   | `/auth/generate`             | Generate JWT token (after user has logged in)   | `userId` <br> `isMaintainer`                                          | -               | Guest           |
+| GET    | `/question/`                 | Get the details of specified question           | `id`                                                                  | JWT token       | User            |
+| POST   | `/question/`                 | Create new question                             | `title` <br> `complexity` <br> `description` <br> `tags`              | JWT token       | Maintainer      |
+| PUT    | `/question/`                 | Edit existing question                          | `id` <br> `title` <br> `complexity` <br> `description` <br> `tags`    | JWT token       | Maintainer      |
+| DELETE | `/question/`                 | Delete question                                 | `id`                                                                  | JWT token       | Maintainer      |
+| GET    | `/question/all`              | Get all questions                               | -                                                                     | JWT token       | User            |
+| GET    | `/question/by-criteria`      | Get all questions fitting criteria              | `complexity` <br> `tags`                                              | JWT token       | User            |
+| GET    | `/question/random`           | Get random question fitting criteria            | `complexity`                                                          | JWT token       | User            |
+| GET    | `/question/statistics`       | Get number of questions by complexity           | -                                                                     | JWT token       | User            |
+| POST   | `/question/append-question-title` | For given array of question IDs, <br> return the questions IDs + title | `attempts` (array)                        | JWT token       | User            |
+| POST   | `/question/count-by-difficulty` | For given array of question IDs, <br> count how many questions in each difficulty   | `questionsId` (array)          | JWT token       | User            |
+| PUT    | `/user/change-password`      | Change user's password                          | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | JWT token       | User            |
+| DELETE | `/user/delete`               | Delete user                                     | `id`                                                                  | JWT token       | User            |
+| POST   | `/user/login`                | Login                                           | `email` <br> `password`                                               | -               | Guest           |
+| GET    | `/user/read`                 | Get user information                            | `id` or `email`                                                       | JWT token       | User            |
+| GET    | `/user/read-all`             | Get all users information                       | -                                                                     | JWT token       | Maintainer      |
+| POST   | `/user/signup`               | create new user                                 | `email` <br> `password` <br> `confirmPassword`                        | -               | Guest           | 
+| PUT    | `/user/display-name`         | Update user's display name                      | `id` <br> `username`                                                  | JWT token       | User            |
+| PUT    | `/user/programming-language` | Update user's preferred programming language    | `id` <br> `programmingLanguage`                                       | JWT token       | User            |
+| PUT    | `/user/complexity`           | Update user's preferred question complexity     | `id` <br> `complexity`                                                | JWT token       | User            |
+| POST   | `/queue/join`                | Join the matching queue                         | `queueName` <br> `sessionID`                                          | JWT token       | User            |
+| POST   | `/queue/exit`                | Exit the matching queue                         | `queueName` <br> `sessionID`                                          | JWT token       | User            |
+| POST   | `/history/attempt`           | Edd attempt to user history                     | `userId` <br> `questionId` <br> `code` <br> `language`                | JWT token       | User            |
+| GET    | `/history/attempts`          | Get all attempts submitted by a user            | `userId`                                                              | JWT token       | User            |
+| GET    | `/history/attempts`          | Get attempts for a question, submitted by a user| `userId` <br> `questionId`                                            | JWT token       | User            |
+| GET    | `/history/heatmap`           | Get heatmap data for a user                     | `userId`                                                              | JWT token       | User            |
+| GET    | `/history/piechart`          | Get pie chart data for a user                   | `userId` <br> `questionId` <br> `code` <br> `language`                | JWT token       | User            |
+| GET    | `/history/attempt`           | Get a single attempt details                    | `attemptId`                                                           | JWT token       | User            |
+| GET    | `/history/heatmap`           | Get heatmap data for a user                     | `userId`                                                              | JWT token       | User            |
+| POST   | `/execute/python`            | Execute the Python code in the code editor      | `codeObject`                                                          | -               | User            |
+| POST   | `/execute/java`              | Execute the Java code in the code editor        | `codeObject`                                                          | -               | User            |
+| POST   | `/execute/js`                | Execute the JavaScript code in the code editor  | `codeObject`                                                          | -               | User            |
 
 Remarks:
 
