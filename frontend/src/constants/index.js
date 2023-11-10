@@ -96,7 +96,7 @@ const Topics = {
   BIT_MANIPULATION: 'Bit Manipulation',
   BITMASK: 'Bitmask',
   BREADTH_FIRST_SEARCH: 'Breadth-First Search',
-  BRAINTASER: 'Brainteaser',
+  BRAINTEASER: 'Brainteaser',
   BUCKET_SORT: 'Bucket Sort',
   COMBINATORICS: 'Combinatorics',
   CONCURRENCY: 'Concurrency',

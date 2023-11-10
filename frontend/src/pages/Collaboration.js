@@ -29,19 +29,22 @@ const Collaboration = () => {
     const initializeRoom = async () => {
       // If roomId is not present in the location state, redirect to landing page
       if (!roomId) {
-        showFailureToast('Invalid Room');
+        showFailureToast('Unable to join room.');
         navigate('/landing');
         return;
       }
 
-      setUserId(await getUserId());
+      const userId = await getUserId();
+      setUserId(userId);
+
       try {
         const question = await getRandomQuestionByCriteria(complexity, jwt);
         const socketMessage = {
           room: roomId,
-          user: displayName,
+          user: userId,
           question: question,
-          language: language
+          language: language,
+          displayName: displayName,
         };
         // Join the Socket.io room when the component mounts
         socket.emit(Event.Socket.JOIN_ROOM, socketMessage);
@@ -61,14 +64,14 @@ const Collaboration = () => {
     };
     initializeRoom();
     return () => {
-      socket.emit(Event.Socket.LEAVE_ROOM, { room: roomId, user: displayName });
+      socket.emit(Event.Socket.LEAVE_ROOM, { room: roomId, user: userId, displayName: displayName });
       socket.disconnect();
     }
   }, []);
 
   const handleLeaveRoom = () => {
     removeSessionStorage();
-    socket.emit(Event.Socket.TERMINATE_ROOM, { room: roomId, user: displayName });
+    socket.emit(Event.Socket.TERMINATE_ROOM, { room: roomId, user: userId, displayName: displayName });
     window.history.replaceState({}, location.state);
     navigate('/landing');
   };
@@ -149,7 +152,7 @@ const Collaboration = () => {
               selectedLanguage={language}
               selectedQuestion={question}
             />
-            <Chat socket={socket} roomId={roomId} user={displayName} />
+            <Chat socket={socket} roomId={roomId} user={userId} />
           </div>
         </div>
       </div>

@@ -38,13 +38,14 @@ try {
       const user = data.user;
       const question = data.question;
       const language = data.language;
+      const displayName = data.displayName;
 
       socket.join(room);
-      logger.log(`${user} joined room: ${room}`);
+      logger.log(`${displayName} joined room: ${room}`);
 
       const boilerplate = getBoilerplate(language);
 
-      const notification = `${user} joined room`;
+      const notification = `${displayName} joined room`;
       const message = { text: notification };
 
       redisMemory.handleRoomJoining(room, question, language, boilerplate, message, user).then((response) => {
@@ -62,12 +63,13 @@ try {
     socket.on(Event.Socket.LEAVE_ROOM, (data) => {
       const room = data.room;
       const user = data.user;
+      const displayName = data.displayName;
 
       socket.leave(room);
       socket.disconnect(true);
-      logger.log(`${user} left room: ${room}`);
+      logger.log(`${displayName} left room: ${room}`);
 
-      const message = { text: `${user} left room` };
+      const message = { text: `${displayName} left room` };
       io.to(room).emit(Event.Communication.CHAT_RECEIVE, message);
 
       redisMemory.handleChatMessage(room, message);
