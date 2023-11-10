@@ -137,6 +137,9 @@ const Collaboration = () => {
             >
               Change Question
             </button>
+            <span className='logo'>
+              PeerPrep
+            </span>
             <button
               type='button'
               className='btn btn-danger'
