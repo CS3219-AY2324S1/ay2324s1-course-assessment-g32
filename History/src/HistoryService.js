@@ -108,7 +108,3 @@ exports.getUnattemptedQuestionsStats = (attemptedQuestionsStats, allQuestionsSta
   totalQuestions = summationOfCounts(allQuestionsStats);
   return { count: totalQuestions - totalAttemptedQuestions };
 };
-
-const summationOfCounts = (counts) => {
-  return Object.values(counts).reduce((acc, val) => acc + val, 0);
-};
