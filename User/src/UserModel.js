@@ -55,4 +55,5 @@ UserSchema.pre('findOneAndUpdate', function (next) {
 
 // Create a model named "User", which represents a collection in the database
 const User = mongoose.model('User', UserSchema);
+
 module.exports = User;
