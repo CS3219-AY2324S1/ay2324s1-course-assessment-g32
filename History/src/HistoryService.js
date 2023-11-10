@@ -1,11 +1,7 @@
 const historyDatabase = require('./HistoryRepository');
 const { Status } = require('./constants');
 
-const summationOfCounts = (counts) => {
-  return Object.values(counts).reduce((acc, val) => acc + val, 0);
-};
-
-const addAttempt = async (userId, questionId, code, language) => {
+exports.addAttempt = async (userId, questionId, code, language) => {
   try {
     // Check for missing inputs
     if (!userId || !questionId || !language) {
@@ -24,7 +20,7 @@ const addAttempt = async (userId, questionId, code, language) => {
   }
 };
 
-const getAttempts = async (userId) => {
+exports.getAttempts = async (userId) => {
   try {
     if (!userId) {
       throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
@@ -36,7 +32,47 @@ const getAttempts = async (userId) => {
   }
 };
 
-const getHeatMapData = async (userId) => {
+exports.getAttemptsByQuestionAndUser = async (questionId, userId) => {
+  try {
+    if (!questionId || !userId) {
+      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
+    }
+    const attempts = await historyDatabase.getAttemptsByQuestionAndUser(questionId, userId);
+    return attempts;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.getAttempt = async (attemptId) => {
+  try {
+    if (!attemptId) {
+      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
+    }
+    const attempt = await historyDatabase.getAttemptById(attemptId);
+    if (!attempt) {
+      throw { status: Status.GONE, message: 'Attempt does not exist' };
+    }
+    return attempt;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.getAttemptedQuestionsId = async (userId) => {
+  try {
+    if (!userId) {
+      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
+    }
+    const result = await historyDatabase.getAttemptsByUserId(userId);
+    const questionsId = result.map(item => item.questionId);
+    return questionsId;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.getHeatMapData = async (userId) => {
   try {
     if (!userId) {
       throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
@@ -63,58 +99,12 @@ const getHeatMapData = async (userId) => {
   }
 };
 
-const getAttemptedQuestionsId = async (userId) => {
-  try {
-    if (!userId) {
-      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
-    }
-    const result = await historyDatabase.getAttemptsByUserId(userId);
-    const questionsId = result.map(item => item.questionId);
-    return questionsId;
-  } catch (err) {
-    throw err;
-  }
-};
-
-const getUnattemptedQuestionsStats = (attemptedQuestionsStats, allQuestionsStats) => {
+exports.getUnattemptedQuestionsStats = (attemptedQuestionsStats, allQuestionsStats) => {
   totalAttemptedQuestions = summationOfCounts(attemptedQuestionsStats);
   totalQuestions = summationOfCounts(allQuestionsStats);
   return { count: totalQuestions - totalAttemptedQuestions };
 };
 
-const getAttempt = async (attemptId) => {
-  try {
-    if (!attemptId) {
-      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
-    }
-    const attempt = await historyDatabase.getAttemptById(attemptId);
-    if (!attempt) {
-      throw { status: Status.GONE, message: 'Attempt does not exist' };
-    }
-    return attempt;
-  } catch (err) {
-    throw err;
-  }
-};
-
-const getAttemptsByQuestionAndUser = async (questionId, userId) => {
-  try {
-    if (!questionId || !userId) {
-      throw { status: Status.BAD_REQUEST, message: 'Missing inputs' };
-    }
-    const attempts = await historyDatabase.getAttemptsByQuestionAndUser(questionId, userId);
-    return attempts;
-  } catch (err) {
-    throw err;
-  }
-};
-
-module.exports = {
-  addAttempt,
-  getAttempts,
-  getHeatMapData,
-  getAttemptedQuestionsId,
-  getUnattemptedQuestionsStats,
-  getAttempt,
-  getAttemptsByQuestionAndUser,
+const summationOfCounts = (counts) => {
+  return Object.values(counts).reduce((acc, val) => acc + val, 0);
 };
