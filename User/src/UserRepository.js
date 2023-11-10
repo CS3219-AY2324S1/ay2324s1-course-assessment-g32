@@ -169,7 +169,7 @@ exports.updatePassword = async (id, password) => {
  * @returns If the deletion was successful
  */
 exports.toggleUserRole = async (id) => {
-  const user = await getUserInfoById(id);
+  const user = await exports.getUserInfoById(id);
   const newIsMaintainer = user?.isMaintainer ? 0 : 1; // Toggle the isMaintainer field
   try {
     const update = { isMaintainer: newIsMaintainer };
