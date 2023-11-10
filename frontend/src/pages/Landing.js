@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { SubmissionHeatMap, SubmissionPieChart } from '../components/Statistics';
+import {
+  SubmissionHeatMap,
+  SubmissionPieChart,
+} from '../components/Statistics';
 import MatchingModal from '../components/MatchMaking/MatchingModal';
 import { getUserId, getCookie } from '../utils/helpers';
 import { getUser } from '../api/UserApi';
@@ -30,29 +33,30 @@ function Landing() {
   }, [setUser]);
 
   return (
-    <div className='landing'>
-      <Header />
-      <h1 className='title m-5'>Welcome, {user.displayName}</h1>
-      <SubmissionPieChart />
-      <SubmissionHeatMap />
-      <div className='d-flex align-items-center justify-content-center'>
-        <button
-          type='button'
-          className='btn btn-success w-25 mt-5'
-          onClick={handleToggleModal}
-        >
-          Quick Match
-        </button>
+    <div className='background'>
+      <div className='landing'>
+        <Header />
+        <h1 className='title m-5'>Welcome, {user.displayName}</h1>
+        <div className='d-flex align-items-center justify-content-center'>
+          <button
+            type='button'
+            className='btn btn-success w-25 mb-5'
+            onClick={handleToggleModal}>
+            Quick Match
+          </button>
+        </div>
+        <SubmissionPieChart />
+        <SubmissionHeatMap />
+        {isMatchingModalOpen && (
+          <MatchingModal
+            user={user}
+            isOpen={isMatchingModalOpen}
+            onClose={handleToggleModal}
+          />
+        )}
       </div>
-      {isMatchingModalOpen && (
-        <MatchingModal
-          user={user}
-          isOpen={isMatchingModalOpen}
-          onClose={handleToggleModal}
-        />
-      )}
     </div>
   );
-};
+}
 
 export default Landing;

@@ -1,0 +1,19 @@
+.heatmap {
+  width: 90%;
+  padding: 10px 0  20px 0;
+  box-shadow: 0px 0px 10px rgba(1, 1, 1, 1);
+  border-radius: 10px;
+  background-color: white;
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 940px) {
+  .heatmap {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
