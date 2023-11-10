@@ -27,6 +27,7 @@ For development, you may also want to install:
 - [API Endpoints](docs/ApiEndpoints.md)
 - [Local Setup for RabbitMQ Server](docs/LocalRabbitMqSetup.md)
 - [Containerization](docs/Containerization.md)
+- [Test Accounts](docs/TestAccounts.md)
 
 ## Micro-services
 
