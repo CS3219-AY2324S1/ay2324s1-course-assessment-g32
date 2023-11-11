@@ -34,7 +34,7 @@ function Landing() {
 
   return (
     <div className='background'>
-      <div className='landing'>
+      <div className='main'>
         <Header />
         <h1 className='title m-5'>Welcome, {user.displayName}</h1>
         <div className='d-flex align-items-center justify-content-center'>
