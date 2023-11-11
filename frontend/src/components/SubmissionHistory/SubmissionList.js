@@ -67,7 +67,7 @@ const SubmissionList = () => {
         <Spinner className='spinner-border' />
       ) : (
         <>
-          <h1>Submission History</h1>
+          <h1 className='submission-history'>Submission History</h1>
           <table ref={tableRef} className='table table-hover table-striped'>
             <thead className='table-dark'>
               <tr>

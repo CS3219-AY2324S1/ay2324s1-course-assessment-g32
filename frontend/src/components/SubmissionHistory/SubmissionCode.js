@@ -33,8 +33,12 @@ const SubmissionCode = ({ attempt }) => {
         />
       </div>
       <div>
-        <span className='m-3 '>Language: {attempt.language} |</span>
-        <span>Submitted on: {parseDatetime(attempt.createdAt)}</span>
+        <span>
+          <strong>Language:</strong> {attempt.language} |{' '}
+        </span>
+        <span>
+          <strong>Submitted on:</strong> {parseDatetime(attempt.createdAt)}
+        </span>
       </div>
     </>
   );

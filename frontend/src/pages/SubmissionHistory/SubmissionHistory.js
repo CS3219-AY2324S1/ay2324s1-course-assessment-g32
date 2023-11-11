@@ -5,9 +5,13 @@ import '../../css/SubmissionHistory.css';
 
 function SubmissionHistory() {
   return (
-    <div className='submission-history'>
-      <Header />
-      <SubmissionList />
+    <div className='background'>
+      <div className='main'>
+        <div className='submission-history'>
+          <Header />
+          <SubmissionList />
+        </div>
+      </div>
     </div>
   );
 }
