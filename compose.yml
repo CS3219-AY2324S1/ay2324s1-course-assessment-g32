@@ -50,7 +50,6 @@ services:
     depends_on:
       rabbitmq:
         condition: service_started
-        restart: true
       svc-auth:
         condition: service_started
   svc-collab:
@@ -61,7 +60,6 @@ services:
     depends_on:
       redis:
         condition: service_started
-        restart: true
     links:
       - redis
     environment:
