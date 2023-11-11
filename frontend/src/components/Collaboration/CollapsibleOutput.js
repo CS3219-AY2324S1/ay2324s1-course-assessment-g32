@@ -27,7 +27,7 @@ const CollapsibleOutput = ({ result }) => {
         />
         <div className='border'>
           <strong className='p-3'>
-            Execution Duration: {result.duration ? result.duration : 0 } ms
+            Execution Duration: {result.duration ? result.duration : '-' } ms
           </strong>
         </div>
       </div>
