@@ -9,6 +9,7 @@ import { showFailureToast } from '../../utils/toast';
 
 const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) => {
   const [status, setStatus] = useState({});
+  const [showButtons, setShowButtons] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
 
       // Navigate to collaboration page if match is found
       const isMatch = reply.data.response.isMatch;
+      setShowButtons(!isMatch);
       if (isMatch) {
         const roomId = reply.data.response.roomId;
         const userId = await getUserId();
@@ -106,14 +108,16 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
     <div className='container'>
       <div className='row text-center'>
         <p>{status}</p>
-        <div className='d-flex justify-content-between'>
-          <button className='btn btn-secondary' onClick={handleCancelClick}>
-            Back
-          </button>
-          <button className='btn btn-success' onClick={handleRetryClick}>
-            Retry
-          </button>
-        </div>
+        {showButtons && (
+          <div className='d-flex justify-content-between'>
+            <button className='btn btn-secondary' onClick={handleCancelClick}>
+              Back
+            </button>
+            <button className='btn btn-success' onClick={handleRetryClick}>
+              Retry
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

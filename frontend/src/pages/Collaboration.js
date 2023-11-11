@@ -105,7 +105,7 @@ const Collaboration = () => {
     socket.emit(Event.Communication.CHAT_SEND, {
       room: roomId,
       message: {
-        text: `Question changed the from ${question.title} to ${selectedQuestion.title}`,
+        text: `Question changed from ${question.title} to ${selectedQuestion.title}`,
         sender: 'server',
       },
     });
@@ -116,7 +116,7 @@ const Collaboration = () => {
     removeSessionStorage();
     socket.emit(Event.Socket.TERMINATE_ROOM, { room: roomId, user: userId, displayName: displayName });
     window.history.replaceState({}, location.state);
-    navigate('/landing');
+    navigate('/dashboard');
   };
 
   const handleCancelQuestionChange = () => {
