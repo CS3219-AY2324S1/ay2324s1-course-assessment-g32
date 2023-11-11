@@ -96,18 +96,19 @@ const QuestionList = () => {
     <Spinner />
   ) : (
     <div className='container'>
-      <h1>Question List</h1>
-      <div className='text-md-end'>
-        {isMaintainer ? (
-          <button
-            type='button'
-            className='btn btn-success'
-            onClick={handleNewQuestionClick}
-            style={{margin:'5px 0px'}}
-          >
-            Create New Question
-          </button>
-        ) : null}
+      <div className='header'>
+        <h1>Question List</h1>
+        <div className='text-md-end'>
+          {isMaintainer ? (
+            <button
+              type='button'
+              className='btn btn-success'
+              onClick={handleNewQuestionClick}
+              style={{ margin: '5px 0px' }}>
+              Create New Question
+            </button>
+          ) : null}
+        </div>
       </div>
       <table ref={tableRef} className='table table-hover table-striped'>
         <thead className='table-dark'>

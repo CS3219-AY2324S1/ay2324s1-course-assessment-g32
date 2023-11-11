@@ -7,15 +7,17 @@ import '../../css/QuestionsPage.css';
 
 function QuestionsPage() {
   return (
-    <div className='questions-page'>
-      <Header />
-      <div className='body'>
-        <Routes>
-          <Route path='/' element={<QuestionList />} />
-          <Route path='/:id' element={<QuestionDescription />} />
-          <Route path='/edit/:id' element={<EditQuestion />} />
-          <Route path='/new' element={<CreateQuestion />} />
-        </Routes>
+    <div className='background'>
+      <div className='questions-page'>
+        <Header />
+        <div className='body'>
+          <Routes>
+            <Route path='/' element={<QuestionList />} />
+            <Route path='/:id' element={<QuestionDescription />} />
+            <Route path='/edit/:id' element={<EditQuestion />} />
+            <Route path='/new' element={<CreateQuestion />} />
+          </Routes>
+        </div>
       </div>
     </div>
   );
