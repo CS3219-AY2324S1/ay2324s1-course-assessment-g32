@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.3.1",
+    "redis": "^4.6.10",
     "socket.io": "^4.7.2"
   },
   "devDependencies": {

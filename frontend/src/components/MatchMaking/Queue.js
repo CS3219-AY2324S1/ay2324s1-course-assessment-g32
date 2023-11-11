@@ -26,20 +26,27 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
         const userId = await getUserId();
         const user = await getUser(userId, getCookie());
         const displayName = user.displayName;
+        const time = Date.now();
 
-        const questionData = {
-          complexity: complexity,
-          language: language,
-        };
+      const questionData = {
+        complexity: complexity,
+        language: language,
+      };
 
-        navigate('/collaboration', {
-          state: {
-            roomId,
-            displayName,
-            questionData,
-            jwt,
-          },
-        });
+        // Generates a random delay between 0 and 200 milliseconds to avoid users joining the room at the same time
+        const randomDelay = Math.random() * 200;
+        const randomTimeout = setTimeout(() => {
+          navigate('/collaboration', {
+            state: {
+              roomId,
+              displayName,
+              questionData,
+              jwt,
+              time
+            },
+          });
+        }, randomDelay);
+        return () => clearTimeout(randomTimeout);
       }
     } catch (error) {
       onCancel();

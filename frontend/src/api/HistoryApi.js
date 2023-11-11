@@ -10,15 +10,15 @@ const getConfig = (jwtToken) => {
   };
 };
 
-export const attemptQuestion = async (jwtToken, userId, questionId, code, language) => {
+export const attemptQuestion = async (jwtToken, userId, questionId, code, language, result) => {
   try {
     const attemptData = {
       userId: userId,
       questionId: questionId,
       code: code,
       language: language,
+      result: result,
     };
-    console.log(attemptData)
     return await axiosHistory.post('/attempt', attemptData, getConfig(jwtToken));
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {

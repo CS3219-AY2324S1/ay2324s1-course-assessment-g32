@@ -7,6 +7,8 @@ Download and install these software if you do not have them locally.
 - [NodeJS](https://nodejs.org/en/download)
 - [Erlang](https://www.erlang.org/downloads)
 - [RabbitMQ](https://www.rabbitmq.com/download.html)
+- [Ubuntu](https://ubuntu.com/download/desktop)
+- [Redis](https://redis.io/download)
 
 ## Internet Access
 
@@ -19,6 +21,7 @@ Ensure that you are connected to the internet.
 ## Setup RabbitMQ locally
 
 Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md).
+Follow the steps in [Setup Redis locally](LocalRedisSetup.md).
 
 ## Setup environment variables
 
@@ -39,10 +42,10 @@ Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md).
 npm run install-all
 ```
 
-# Start Application Locally
+Ensure that RabbitMQ Server and Redis Server has started.
+- Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md) and [Setup Redis locally](LocalRedisSetup.md)
 
-Ensure that MySQL Server service has started.
-(How to check? Click [here](LocalMySqlSetup.md#start-mysql-service).)
+# Start Application Locally
 
 Start all services using the following commands:
 

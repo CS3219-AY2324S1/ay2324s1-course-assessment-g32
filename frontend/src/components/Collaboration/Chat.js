@@ -36,6 +36,9 @@ const Chat = ({ socket, roomId, user }) => {
   };
 
   useEffect(() => {
+    socket.on(Event.Communication.SYNCHRONIZE, (messages) => {
+      setMessages(messages);
+    });
     socket.on(Event.Communication.CHAT_RECEIVE, (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });

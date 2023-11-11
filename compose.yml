@@ -11,6 +11,10 @@ services:
     container_name: rabbitmq
     image: rabbitmq:latest
     ports: ['5672:5672']
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports: ['6379:6379']
   svc-user:
     container_name: user-service
     build: ./User
@@ -53,6 +57,13 @@ services:
     build: ./Collaboration
     env_file: .env
     ports: ['8001:8001']
+    depends_on:
+      redis:
+        condition: service_started
+    links:
+      - redis
+    environment:
+      - REDIS_HOST=redis
   svc-history:
     container_name: history-service
     build: ./History

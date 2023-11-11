@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import { login } from '../api/UserApi';
 import { showSuccessToast } from '../utils/toast';
 import { errorHandler } from '../utils/errors';
+import { removeSessionStorage } from '../utils/helpers';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -34,6 +35,7 @@ const Login = () => {
 
     try {
       const response = await login(userData);
+      removeSessionStorage();
 
       Cookies.set('jwt', response.data.token, {
         sameSite: 'Lax',

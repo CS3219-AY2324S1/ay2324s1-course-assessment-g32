@@ -4,13 +4,13 @@ Docker is used to containerize our various micro-services
 which serves our combined application.
 
 We have various micro-services including:
-* MySQL Database
 * User Service
 * Auth Service
 * Question Service
 * Match Service
 * Collaboration Service
 * History Service
+* Execution Service
 * Frontend Service (Web UI)
 
 > Additional Note:\
@@ -34,7 +34,7 @@ Download and install these software if you do not have them locally.
 - [Docker Desktop](https://www.docker.com/get-started/)
 
 > [!NOTE]
-> **Ensure that RabbitMQ Server is NOT running locally.**
+> **Ensure that RabbitMQ Server and Redis Server are NOT running locally.**
 
 # Testing
 
