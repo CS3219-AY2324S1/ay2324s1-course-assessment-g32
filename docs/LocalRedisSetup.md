@@ -18,5 +18,5 @@ For Windows OS and Mac OS,
 2. Type `redis-server` into the terminal
 3. Leave the terminal running
 
-___
+---
 [Go to README](../README.md)
