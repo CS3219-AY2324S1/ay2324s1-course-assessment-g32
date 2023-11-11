@@ -19,14 +19,9 @@ redisMemory.connect();
 try {
   const httpServer = http.createServer();
 
-  const allowedOrigins = [
-    env.WEB_URL, // Run locally
-    env.REACT_APP_HOST, // Run via Nginx
-  ];
-
   const io = socketIo(httpServer, {
     cors: {
-      origin: allowedOrigins,
+      origin: '*',
       methods: ['GET', 'POST'],
     },
   });
