@@ -33,13 +33,17 @@ function ManageUserProfile() {
     <Spinner />
   ) : (
     <div>
-      <Header />
-      <Container sx={{ marginTop: '20px' }}>
-        <Grid>
-          <ViewUserTopPane user={user} />
-          <ViewUserBottomPane user={user} />
-        </Grid>
-      </Container>
+      <div className='background'>
+        <div className='main'>
+          <Header />
+          <Container sx={{ margin: '20px auto' }}>
+            <Grid>
+              <ViewUserTopPane user={user} />
+              <ViewUserBottomPane user={user} />
+            </Grid>
+          </Container>
+        </div>
+      </div>
     </div>
   );
 }

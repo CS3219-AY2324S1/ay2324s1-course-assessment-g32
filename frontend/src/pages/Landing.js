@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SubmissionHeatMap, SubmissionPieChart } from '../components/Statistics';
+import {
+  SubmissionHeatMap,
+  SubmissionPieChart,
+} from '../components/Statistics';
 import MatchingModal from '../components/MatchMaking/MatchingModal';
 import { getUserId, getCookie } from '../utils/helpers';
 import { getUser } from '../api/UserApi';
@@ -15,8 +18,6 @@ function Landing() {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [session, setSession] = useState({});
 
-
-
   const navigate = useNavigate();
 
   const handleToggleModal = () => {
@@ -25,7 +26,11 @@ function Landing() {
 
   const getSessionTime = (timestamp) => {
     const dateObject = new Date(timestamp);
-    return dateObject.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+    return dateObject.toLocaleTimeString([], {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
   };
 
   const handleReturnToSession = () => {
@@ -37,7 +42,7 @@ function Landing() {
         jwt: getCookie(),
         questionData: question,
         language: language,
-        time: time
+        time: time,
       },
     });
   };
@@ -69,43 +74,40 @@ function Landing() {
   }, []);
 
   return (
-    <div className='landing'>
-      <Header />
-      <h1 className='title m-5'>Welcome, {user.displayName}</h1>
-      <SubmissionPieChart />
-      <SubmissionHeatMap />
-      <div className='d-flex align-items-center justify-content-center vertical'>
-        { isSessionActive ? (
-          <button
-            type='button'
-            className='btn btn-success w-25 m-1'
-            disabled={!isSessionActive}
-            onClick={handleReturnToSession}
-          >
-            Return to {sessionTime} Match
-          </button> ) : (
-        <button
-          type='button'
-          className='btn btn-success w-25 m-1'
-          onClick={handleToggleModal}
-        >
-          New Match
-        </button>
-        )
-
-        }
-
-
+    <div className='background'>
+      <div className='main'>
+        <Header />
+        <h1 className='title m-5'>Welcome, {user.displayName}</h1>
+        <div className='d-flex align-items-center justify-content-center vertical'>
+          {isSessionActive ? (
+            <button
+              type='button'
+              className='btn btn-success w-25 mb-5 shadow'
+              disabled={!isSessionActive}
+              onClick={handleReturnToSession}>
+              Return to {sessionTime} Match
+            </button>
+          ) : (
+            <button
+              type='button'
+              className='btn btn-success w-25 m-1'
+              onClick={handleToggleModal}>
+              New Match
+            </button>
+          )}
+          {isMatchingModalOpen && (
+            <MatchingModal
+              user={user}
+              isOpen={isMatchingModalOpen}
+              onClose={handleToggleModal}
+            />
+          )}
+        </div>
+        <SubmissionPieChart />
+        <SubmissionHeatMap />
       </div>
-      {isMatchingModalOpen && (
-        <MatchingModal
-          user={user}
-          isOpen={isMatchingModalOpen}
-          onClose={handleToggleModal}
-        />
-      )}
     </div>
   );
-};
+}
 
 export default Landing;

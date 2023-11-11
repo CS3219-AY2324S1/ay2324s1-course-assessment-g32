@@ -15,14 +15,26 @@ const SubmissionPieChart = () => {
   const [pieChartData, setPieChartData] = useState([]);
 
   const updateData = (newData) => {
-    const { allQuestionsStats, attemptedQuestionsStats, unattemptedQuestionsStats } = newData;
+    const {
+      allQuestionsStats,
+      attemptedQuestionsStats,
+      unattemptedQuestionsStats,
+    } = newData;
     setAllQuestionsData(allQuestionsStats);
     setAttemptedQuestionsData(attemptedQuestionsStats);
     setPieChartData([
       { label: 'Easy', value: attemptedQuestionsStats.Easy, color: 'green' },
-      { label: 'Medium', value: attemptedQuestionsStats.Medium, color: 'orange' },
+      {
+        label: 'Medium',
+        value: attemptedQuestionsStats.Medium,
+        color: 'orange',
+      },
       { label: 'Hard', value: attemptedQuestionsStats.Hard, color: 'red' },
-      { label: 'Unattempted', value: unattemptedQuestionsStats.count, color: 'grey' },
+      {
+        label: 'Unattempted',
+        value: unattemptedQuestionsStats.count,
+        color: 'grey',
+      },
     ]);
   };
 
@@ -43,35 +55,54 @@ const SubmissionPieChart = () => {
   }, [setAttemptedQuestionsData, setAllQuestionsData, setPieChartData]);
 
   return (
-    <div className='d-flex align-items-center justify-content-center m-3'>
+    <div className='parent d-flex m-3'>
       {isLoading ? (
         <Spinner />
       ) : (
         <>
-          <div>
-            <div className='d-flex align-items-center'>
-              <ProgressBar className='bar green opacity-10' variant="success" now={attemptedQuestionsData.Easy / allQuestionsData.Easy * 100} />
+          <div className='bartext'>
+            <div className='level d-flex'>
+              <ProgressBar
+                className='bar green opacity-10'
+                variant='success'
+                now={
+                  (attemptedQuestionsData.Easy / allQuestionsData.Easy) * 100
+                }
+              />
               <span className='fixed-width'>
                 <span className='bold-text'> Easy </span>
                 {attemptedQuestionsData.Easy} / {allQuestionsData.Easy}
               </span>
             </div>
-            <div className='d-flex align-items-center'>
-              <ProgressBar className='bar orange opacity-10' variant="warning" now={attemptedQuestionsData.Medium / allQuestionsData.Medium * 100} />
+            <div className='level d-flex'>
+              <ProgressBar
+                className='bar orange opacity-10'
+                variant='warning'
+                now={
+                  (attemptedQuestionsData.Medium / allQuestionsData.Medium) *
+                  100
+                }
+              />
               <span className='fixed-width'>
                 <span className='bold-text'> Medium </span>
                 {attemptedQuestionsData.Medium} / {allQuestionsData.Medium}
               </span>
             </div>
-            <div className='d-flex align-items-center'>
-              <ProgressBar className='bar red opacity-10' variant="danger" now={attemptedQuestionsData.Hard / allQuestionsData.Hard * 100} />
+            <div className='level d-flex'>
+              <ProgressBar
+                className='bar red opacity-10'
+                variant='danger'
+                now={
+                  (attemptedQuestionsData.Hard / allQuestionsData.Hard) * 100
+                }
+              />
               <span className='fixed-width'>
                 <span className='bold-text'> Hard </span>
                 {attemptedQuestionsData.Hard} / {allQuestionsData.Hard}
               </span>
             </div>
           </div>
-          <div>
+          <div className='piechart'>
             <PieChart
               series={[
                 {
@@ -89,7 +120,7 @@ const SubmissionPieChart = () => {
         </>
       )}
     </div>
-  )
+  );
 };
 
 export default SubmissionPieChart;

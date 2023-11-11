@@ -3,3 +3,8 @@
   top: 50%;
   left: 50%;
 }
+
+h1.submission-history {
+  margin: 40px auto;
+  text-align: left;
+}

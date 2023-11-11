@@ -46,12 +46,8 @@ const EditUser = ({ user, isMaintainerPage }) => {
                   <a href='/users-management'>Manage User Profiles</a>
                 </li>
               ) : null}
-              <li
-                className='breadcrumb-item active'
-                aria-current='page'
-                style={{ fontWeight: 'bold' }}
-              >
-                Edit User Information
+              <li className='breadcrumb-item active' aria-current='page'>
+                <strong>Edit User Information</strong>
               </li>
             </ol>
           </nav>
@@ -61,8 +57,7 @@ const EditUser = ({ user, isMaintainerPage }) => {
       <form
         className='edit-display-name needs-validation'
         onSubmit={handleUpdateClick}
-        noValidate
-      >
+        noValidate>
         <div className='form-floating mb-3'>
           <input
             type='text'
@@ -79,8 +74,7 @@ const EditUser = ({ user, isMaintainerPage }) => {
           <button
             type='button'
             className='btn btn-secondary'
-            onClick={handleBackClick}
-          >
+            onClick={handleBackClick}>
             Back
           </button>
           <button type='submit' className='btn btn-success'>
