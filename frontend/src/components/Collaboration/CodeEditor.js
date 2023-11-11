@@ -3,7 +3,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import CollapsibleOutput from './CollapsibleOutput';
 import OverlayCursor from './OverlayCursor';
-import { ChangeLanguageWindow, ResetCodeWindow } from '../ConfirmationWindows';
+import { ResetCodeWindow } from '../ConfirmationWindows';
 import { executeCode } from '../../api/ExecutionApi';
 import { attemptQuestion } from '../../api/HistoryApi';
 import { showSuccessToast } from '../../utils/toast';
@@ -20,8 +20,6 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
   const [code, setCode] = useState(getBoilerplate(selectedLanguage));
   const [result, setResult] = useState({});
   const [language, setLanguage] = useState(selectedLanguage);
-  const [newSelectedLanguage, setNewSelectedLanguage] = useState(selectedLanguage);
-  const [isChangeLanguageWindowOpen, setIsChangeLanguageWindowOpen] = useState(false);
   const [isResetCodeWindowOpen, setIsResetCodeWindowOpen] = useState(false);
 
   // Initialize cursor position for code editor
@@ -94,40 +92,26 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
     });
   };
 
-  // Open the change language window on language change
+  // Update the language state when the user changes the language
   const handleLanguageChange = (e) => {
-    const selectedLanguage = e.target.value;
-    if (selectedLanguage !== language) {
-      setNewSelectedLanguage(selectedLanguage);
-      setIsChangeLanguageWindowOpen(true);
+    const newSelectedLanguage = e.target.value;
+    if (newSelectedLanguage !== language) {
+      setLanguage(newSelectedLanguage);
+
+      // Send language changes to the server
+      socket.emit(Event.Language.CHANGE, {
+        room: roomId,
+        updatedLanguage: newSelectedLanguage,
+      });
+      // Broadcast the language change to the chat
+      socket.emit(Event.Communication.CHAT_SEND, {
+        room: roomId,
+        message: {
+          text: `Language changed the from ${language} to ${newSelectedLanguage}`,
+          sender: 'server',
+        },
+      });
     }
-  };
-
-  // Update the language state when the user changes the language on confirmation
-  const handleConfirmLanguageChange = () => {
-    setLanguage(newSelectedLanguage);
-    setIsChangeLanguageWindowOpen(false);
-
-    // Send language changes to the server
-    socket.emit(Event.Language.CHANGE, {
-      room: roomId,
-      updatedLanguage: newSelectedLanguage,
-    });
-    // Broadcast the language change to the chat
-    socket.emit(Event.Communication.CHAT_SEND, {
-      room: roomId,
-      message: {
-        text: `Language changed the from ${language} to ${newSelectedLanguage}`,
-        sender: 'server',
-      },
-    });
-  };
-
-  // Revert the language to the previous language and close the change language window on cancellation
-  const handleCancelLanguageChange = () => {
-    const languageSelect = document.getElementById('languageSelect');
-    languageSelect.value = language;
-    setIsChangeLanguageWindowOpen(false);
   };
 
   const handleResetCode = () => {
@@ -329,14 +313,6 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
         </div>
         <CollapsibleOutput result={result} />
       </div>
-      {isChangeLanguageWindowOpen && (
-        <ChangeLanguageWindow
-          onClose={handleCancelLanguageChange}
-          onConfirm={handleConfirmLanguageChange}
-          oldLanguage={language}
-          newLanguage={newSelectedLanguage}
-        />
-      )}
       {isResetCodeWindowOpen && (
         <ResetCodeWindow
           onClose={cancelResetCode}
