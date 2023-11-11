@@ -1,0 +1,47 @@
+name: Docker Deploy
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    branches: [dev]
+    types:
+      - completed
+
+jobs:
+  deploy-packages:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Stop and remove images
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{secrets.EC2_HOST}}
+        username: ${{secrets.EC2_USERNAME}}
+        key: ${{secrets.EC2_KEY}}
+        script: |
+          cd ay2324s1-course-assessment-g32/
+          sudo docker-compose down
+          sudo docker system prune -a -f
+          cd ..
+          rm -f -r ay2324s1-course-assessment-g32/
+    - name: Pull repository
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{secrets.EC2_HOST}}
+        username: ${{secrets.EC2_USERNAME}}
+        key: ${{secrets.EC2_KEY}}
+        script: |
+          git clone https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32.git -b dev || true
+    - name: Build and deploy 
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{secrets.EC2_HOST}}
+        username: ${{secrets.EC2_USERNAME}}
+        key: ${{secrets.EC2_KEY}}
+        script: |
+          cd ay2324s1-course-assessment-g32/
+          cp template.env .env
+          sed -i 's|REACT_APP_HOST=http://localhost|REACT_APP_HOST=${{secrets.EC2_IP}}|g' .env
+          sudo docker-compose up -d || true
+          
