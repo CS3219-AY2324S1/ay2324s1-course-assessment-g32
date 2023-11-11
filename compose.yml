@@ -46,7 +46,6 @@ services:
     depends_on:
       rabbitmq:
         condition: service_started
-        restart: true
       svc-auth:
         condition: service_started
   svc-collab:
