@@ -7,7 +7,7 @@ exports.addAttempt = async (req, res) => {
   const { userId, questionId, code, language, result } = req.body;
   try {
     await historyService.addAttempt(userId, questionId, code, language, result);
-    logger.logSuccess(`Attempt added for user ${userId}`);
+    logger.logSuccess(`Added attempt for user ${userId}`);
     res.json({ message: 'Submitted Attempt!' });
   } catch (err) {
     logger.error(`Cannot add attempt for ${userId}: `, err?.message || err);

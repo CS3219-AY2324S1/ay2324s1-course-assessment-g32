@@ -42,6 +42,9 @@ Follow the steps in [Setup Redis locally](LocalRedisSetup.md).
 npm run install-all
 ```
 
+Ensure that RabbitMQ Server and Redis Server has started.
+- Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md) and [Setup Redis locally](LocalRedisSetup.md)
+
 # Start Application Locally
 
 Start all services using the following commands:

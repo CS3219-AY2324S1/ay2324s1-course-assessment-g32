@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Spinner from 'react-bootstrap/Spinner';
 import CodeMirror from '@uiw/react-codemirror';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import CollapsibleOutput from './CollapsibleOutput';

@@ -4,7 +4,6 @@ Docker is used to containerize our various micro-services
 which serves our combined application.
 
 We have various micro-services including:
-* Redis Service
 * User Service
 * Auth Service
 * Question Service

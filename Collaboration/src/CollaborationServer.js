@@ -1,10 +1,10 @@
 const http = require('http');
 const socketIo = require('socket.io');
+const { RedisMemory } = require('./RedisMemory');
+const { getBoilerplate } = require('./utils/helpers');
+const { Event } = require('./constants');
 const env = require('./loadEnvironment');
 const logger = require('./Log');
-const { Event } = require('./constants');
-const { getBoilerplate } = require('./utils/helpers');
-const { RedisMemory } = require('./RedisMemory');
 
 logger.register({
   serviceName: 'Collaboration Service',
@@ -165,7 +165,6 @@ try {
     socket.on(Event.Code.RESET, (data) => {
       const room = data.room;
       const language = data.language;
-
       const boilerplate = getBoilerplate(language);
 
       io.to(room).emit(Event.Code.UPDATE, boilerplate);
