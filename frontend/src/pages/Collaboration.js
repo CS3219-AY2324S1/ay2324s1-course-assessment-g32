@@ -31,7 +31,7 @@ const Collaboration = () => {
       // If roomId is not present in the location state, redirect to landing page
       if (!roomId) {
         showFailureToast('Unable to join room.');
-        navigate('/landing');
+        navigate('/dashboard');
         return;
       }
 

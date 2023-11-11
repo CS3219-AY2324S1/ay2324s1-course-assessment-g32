@@ -27,7 +27,7 @@ function Header() {
   return (
     <Navbar expand='lg' className='navbar navbar-dark bg-dark'>
       <Container>
-        <Navbar.Brand href='/landing'>PeerPrep</Navbar.Brand>
+        <Navbar.Brand href='/dashboard'>PeerPrep</Navbar.Brand>
         <div className='Navbar'>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>

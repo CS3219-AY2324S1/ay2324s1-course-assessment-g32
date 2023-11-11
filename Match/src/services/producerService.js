@@ -4,11 +4,6 @@ const authApi = require('../helpers/callsToAuth');
 const env = require('../loadEnvironment');
 const logger = require('../Log');
 
-logger.register({
-  serviceName: 'Match Service',
-  logLevel: logger.LOG_LEVELS.all,
-});
-
 // Generate a unique id
 const generateUuid = () => {
   return uuidv4();
