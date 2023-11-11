@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { signup } from '../api/UserApi';
 import { showFailureToast, showSuccessToast } from '../utils/toast';
 import { errorHandler } from '../utils/errors';
+import logoImage from '../images/logo.png';
+import '../css/LoginSignup.css';
 
 function Signup() {
   const [email, setEmail] = useState('');
@@ -54,6 +56,7 @@ function Signup() {
     <div className='Auth-form-container'>
       <form className='Auth-form' onSubmit={handleSignupSubmit}>
         <div className='Auth-form-content'>
+          <img src={logoImage} alt='Logo' className='logo mx-auto d-block' />
           <h3 className='Auth-form-title'>Sign Up</h3>
           <div className='text-center'>
             Already registered?{' '}
@@ -96,9 +99,7 @@ function Signup() {
             />
           </div>
           <div className='d-grid gap-2 mt-3'>
-            <button
-              type='submit'
-              className='btn btn-primary'>
+            <button type='submit' className='btn btn-primary'>
               Register
             </button>
           </div>

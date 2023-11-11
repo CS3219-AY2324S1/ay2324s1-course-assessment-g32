@@ -53,3 +53,7 @@ code {
   justify-content: space-between;
   margin-bottom: 20px;
 }
+
+.breadcrumb {
+  font-size: 1.15rem;
+}
