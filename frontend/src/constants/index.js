@@ -154,6 +154,18 @@ const Topics = {
   UNION_FIND: 'Union Find',
 };
 
+const Tables = {
+  Questions: {
+    DEFAULT_PAGE_LENGTH: 25,
+  },
+  Users: {
+    DEFAULT_PAGE_LENGTH: 10,
+  },
+  Submissions: {
+    DEFAULT_PAGE_LENGTH: 10,
+  },
+};
+
 module.exports = {
   Status,
   Complexity,
@@ -161,4 +173,5 @@ module.exports = {
   Boilerplate,
   Event,
   Topics,
+  Tables,
 };

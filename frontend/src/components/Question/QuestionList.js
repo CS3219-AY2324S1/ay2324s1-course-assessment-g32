@@ -8,13 +8,16 @@ import Spinner from '../Spinner';
 import { getQuestions } from '../../api/QuestionApi';
 import { errorHandler } from '../../utils/errors';
 import { getIsMaintainer, getCookie } from '../../utils/helpers';
+import { Tables } from '../../constants';
 
 const QuestionList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
-  const [isMaintainer, setIsMaintainer] = React.useState(false);
+  const [isMaintainer, setIsMaintainer] = useState(false);
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
+  
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDataAndInitializeTable = async () => {
@@ -41,11 +44,20 @@ const QuestionList = () => {
       }
 
       // Initialize DataTables
-      dataTableRef.current = $(tableRef.current).DataTable();
+      const pageLengthPref =
+        sessionStorage.getItem('question-table-page-length') ||
+        Tables.Questions.DEFAULT_PAGE_LENGTH;
+      dataTableRef.current = $(tableRef.current).DataTable({
+        pageLength: pageLengthPref
+      });
+
+      // Attach listener: on table pageLength change
+      $(tableRef.current).on('length.dt', function ( e, settings, len ) {
+        sessionStorage.setItem('question-table-page-length', len);
+      });
     }
   }, [tableData]); // Initialize whenever tableData changes
 
-  const navigate = useNavigate();
   const handleRowClick = (id) => {
     navigate('/question/' + id);
   };

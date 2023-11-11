@@ -8,9 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../Spinner';
 import { DeregisterWindow, ToggleUserRoleWindow } from '../ConfirmationWindows';
 import { deleteUser, getAllUsers, toggleUserRole } from '../../api/UserApi';
-import { showSuccessToast } from '../../utils/toast';
 import { getCookie, getUserId, parseDatetime } from '../../utils/helpers';
+import { showSuccessToast } from '../../utils/toast';
 import { errorHandler } from '../../utils/errors';
+import { Tables } from '../../constants';
 import '../../css/UserList.css';
 
 const UserList = () => {
@@ -58,7 +59,17 @@ const UserList = () => {
       }
 
       // Initialize DataTables
-      dataTableRef.current = $(tableRef.current).DataTable();
+      const pageLengthPref =
+        sessionStorage.getItem('user-table-page-length') ||
+        Tables.Users.DEFAULT_PAGE_LENGTH;
+      dataTableRef.current = $(tableRef.current).DataTable({
+        pageLength: pageLengthPref
+      });
+
+      // Attach listener: on table pageLength change
+      $(tableRef.current).on('length.dt', function ( e, settings, len ) {
+        sessionStorage.setItem('user-table-page-length', len);
+      });
     }
   }, [tableData]); // Initialize whenever tableData changes
 

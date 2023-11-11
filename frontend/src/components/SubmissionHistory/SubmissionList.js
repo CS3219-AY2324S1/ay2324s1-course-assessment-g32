@@ -8,6 +8,7 @@ import Spinner from '../../components/Spinner';
 import { getSubmissionHistory } from '../../api/HistoryApi';
 import { getCookie, getUserId, parseDatetime } from '../../utils/helpers';
 import { errorHandler } from '../../utils/errors';
+import { Tables } from '../../constants';
 import '../../css/SubmissionList.css';
 
 const SubmissionList = () => {
@@ -44,7 +45,17 @@ const SubmissionList = () => {
       }
 
       // Initialize DataTables
-      dataTableRef.current = $(tableRef.current).DataTable();
+      const pageLengthPref =
+        sessionStorage.getItem('submission-table-page-length') ||
+        Tables.Submissions.DEFAULT_PAGE_LENGTH;
+      dataTableRef.current = $(tableRef.current).DataTable({
+        pageLength: pageLengthPref
+      });
+
+      // Attach listener: on table pageLength change
+      $(tableRef.current).on('length.dt', function ( e, settings, len ) {
+        sessionStorage.setItem('submission-table-page-length', len);
+      });
     }
   }, [tableData]); // Initialize whenever tableData changes
 
