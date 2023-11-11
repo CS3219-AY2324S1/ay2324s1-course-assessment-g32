@@ -30,7 +30,7 @@ const Collaboration = () => {
       // If roomId is not present in the location state, redirect to landing page
       if (!roomId) {
         showFailureToast('Invalid Room');
-        navigate('/landing');
+        navigate('/dashboard');
       }
 
       setUserId(await getUserId());
@@ -65,7 +65,7 @@ const Collaboration = () => {
   const handleLeaveRoom = () => {
     sessionStorage.removeItem(`codeEditorContent_${roomId}`); // Remove CodeMirror content from session storage when leaving the room
     socket.emit(Event.Socket.LEAVE_ROOM, { room: roomId, user: displayName });
-    navigate('/landing');
+    navigate('/dashboard');
   };
 
   const handleOpenPanel = () => {

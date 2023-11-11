@@ -57,7 +57,7 @@ function App() {
         <Route path='/signup' element={<Signup />} />
 
         {/* Landing for normal users */}
-        <Route path='/landing' element={<ProtectedRoute />}>
+        <Route path='/dashboard' element={<ProtectedRoute />}>
           <Route index element={<Landing />} />
         </Route>
 

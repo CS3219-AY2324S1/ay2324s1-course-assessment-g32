@@ -39,7 +39,7 @@ const Login = () => {
         sameSite: 'Lax',
       });
 
-      navigate('/landing');
+      navigate('/dashboard');
       showSuccessToast('User logged in successfully!');
     } catch (error) {
       errorHandler(error);
