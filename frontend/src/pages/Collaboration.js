@@ -105,7 +105,7 @@ const Collaboration = () => {
     socket.emit(Event.Communication.CHAT_SEND, {
       room: roomId,
       message: {
-        text: `Question changed the from ${question.title} to ${selectedQuestion.title}`,
+        text: `Question changed from ${question.title} to ${selectedQuestion.title}`,
         sender: 'server',
       },
     });
