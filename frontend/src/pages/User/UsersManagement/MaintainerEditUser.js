@@ -18,9 +18,13 @@ const MaintainerEditUser = () => {
   return isLoading ? (
     <Spinner />
   ) : (
-    <div>
-      <Header />
-      <EditUser user={user} isMaintainerPage={true} />
+    <div className='background'>
+      <div className='main'>
+        <div>
+          <Header />
+          <EditUser user={user} isMaintainerPage={true} />
+        </div>
+      </div>
     </div>
   );
 };

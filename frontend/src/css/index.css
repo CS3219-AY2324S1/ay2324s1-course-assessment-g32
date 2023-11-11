@@ -12,6 +12,48 @@ code {
     monospace;
 }
 
-h1 {
-  text-align: center;
+.background {
+  background-image: url('../images/background.png');
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: auto 85%;
+  background-attachment: local;
+  position: relative;
+  min-height: 100vh;
+}
+
+.background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #000000;
+  opacity: 0.01;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+/* Apply width: 100%; to all direct children of .main except those listed */
+.main > *:not(.parent):not(.heatmap) {
+  width: 100%; 
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.breadcrumb {
+  font-size: 1.15rem;
 }

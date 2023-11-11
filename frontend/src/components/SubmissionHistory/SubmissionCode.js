@@ -35,8 +35,12 @@ const SubmissionCode = ({ attempt }) => {
       </div>
       <CollapsibleOutput result={attempt} />
       <div>
-        <span className='m-3 '>{attempt.language} |</span>
-        <span>{parseDatetime(attempt.createdAt)}</span>
+        <span>
+          <strong>Language:</strong> {attempt.language} |{' '}
+        </span>
+        <span>
+          <strong>Submitted on:</strong> {parseDatetime(attempt.createdAt)}
+        </span>
       </div>
     </>
   );

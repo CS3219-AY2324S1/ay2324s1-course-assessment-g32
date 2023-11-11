@@ -1,12 +1,5 @@
-.landing {
-  flex-direction: column;
-}
-
-.body {
-  display: flex;
-  justify-content: center;
-  height: 100vh;
-  min-height: 100vh;
+h1 {
+  text-align: center;
 }
 
 .vertical {
@@ -14,6 +7,4 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
 }
-

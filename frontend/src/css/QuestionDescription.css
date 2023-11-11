@@ -1,6 +1,7 @@
 .question-container {
   display: flex;
   max-height: 600px;
+  margin: 20px auto;
 }
 
 .qc-container {
@@ -17,6 +18,7 @@
 .card-header {
   border: 1px solid #ccc;
   border-radius: 5px;
+  display: inline;
 }
 
 .scrollable-div {

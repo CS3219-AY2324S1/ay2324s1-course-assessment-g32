@@ -5,9 +5,13 @@ import '../../../css/ManageUserProfiles.css';
 
 function ManageUserProfiles() {
   return (
-    <div className='users-management'>
-      <Header />
-      <UserList />
+    <div className='background'>
+      <div className='main'>
+        <div className='users-management'>
+          <Header />
+          <UserList />
+        </div>
+      </div>
     </div>
   );
 }

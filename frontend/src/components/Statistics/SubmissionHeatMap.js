@@ -5,9 +5,10 @@ import Spinner from '../../components/Spinner';
 import { getHeatMapData } from '../../api/HistoryApi';
 import { getCookie, getUserId } from '../../utils/helpers';
 import { errorHandler } from '../../utils/errors';
+import '../../css/SubmissionHeatMap.css';
 
 const SubmissionHeatMap = () => {
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   var startDate = new Date();
@@ -30,27 +31,31 @@ const SubmissionHeatMap = () => {
   }, []);
 
   return (
-    <div className='d-flex align-items-center justify-content-center m-3'>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <HeatMap
-          value={data}
-          width={800}
-          rectSize={15}
-          startDate={startDate}
-          legendCellSize='0'
-          rectRender={(props, data) => {
-            return (
-              <Tooltip placement="top" content={`${data.count || 0} submissions on ${data.date}`}>
-                <rect {...props} />
-              </Tooltip>
-            );
-          }}
-        />
-      )}
+    <div className='heatmap d-flex m-3'>
+      <div className='heatmap-content'>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <HeatMap
+            value={data}
+            width={940}
+            rectSize={15}
+            startDate={startDate}
+            legendCellSize='0'
+            rectRender={(props, data) => {
+              return (
+                <Tooltip
+                  placement='top'
+                  content={`${data.count || 0} submissions on ${data.date}`}>
+                  <rect {...props} />
+                </Tooltip>
+              );
+            }}
+          />
+        )}
+      </div>
     </div>
-  )
+  );
 };
 
 export default SubmissionHeatMap;

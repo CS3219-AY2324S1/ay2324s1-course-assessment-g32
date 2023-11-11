@@ -48,15 +48,17 @@ try {
       const notification = `${displayName} joined room`;
       const message = { text: notification, sender: 'server' };
 
-      redisMemory.handleRoomJoining(room, question, language, boilerplate, message, user).then((response) => {
-        // Synchronize the newly joined user with the current state of the room
-        io.to(room).emit(Event.Question.UPDATE, response.question);
-        io.to(room).emit(Event.Code.UPDATE, response.code);
-        io.to(room).emit(Event.Language.UPDATE, response.language);
-        io.to(room).emit(Event.Result.UPDATE, response.result);
-        io.to(room).emit(Event.Button.UPDATE_EXEC, response.btnState);
-        io.to(room).emit(Event.Communication.SYNCHRONIZE, response.messages);
-      });
+      redisMemory
+        .handleRoomJoining(room, question, language, boilerplate, message, user)
+        .then((response) => {
+          // Synchronize the newly joined user with the current state of the room
+          io.to(room).emit(Event.Question.UPDATE, response.question);
+          io.to(room).emit(Event.Code.UPDATE, response.code);
+          io.to(room).emit(Event.Language.UPDATE, response.language);
+          io.to(room).emit(Event.Result.UPDATE, response.result);
+          io.to(room).emit(Event.Button.UPDATE_EXEC, response.btnState);
+          io.to(room).emit(Event.Communication.SYNCHRONIZE, response.messages);
+        });
     });
 
     // Handle room leaving
@@ -171,7 +173,6 @@ try {
 
       redisMemory.handleCodeChange(room, boilerplate);
     });
-
   });
 
   httpServer.listen(env.COLLAB_PORT, () => {
