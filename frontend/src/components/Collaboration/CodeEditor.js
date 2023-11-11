@@ -165,6 +165,7 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
         room: roomId,
         updatedResult: result,
       });
+      return result;
     } catch (err) {
       errorHandler(err);
     } finally {
@@ -181,9 +182,9 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
 
   const handleSubmitAttempt = async () => {
     try {
-      await handleCodeExecution();
+      const executionResult = await handleCodeExecution();
       const questionId = selectedQuestion._id;
-      const response = await attemptQuestion(jwt, userId, questionId, code, language, result);
+      const response = await attemptQuestion(jwt, userId, questionId, code, language, executionResult);
       showSuccessToast(response.data.message);
     } catch (err) {
       errorHandler(err);
