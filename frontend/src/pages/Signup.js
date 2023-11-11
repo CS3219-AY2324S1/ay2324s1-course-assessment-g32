@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { signup } from '../api/UserApi';
 import { showFailureToast, showSuccessToast } from '../utils/toast';
 import { errorHandler } from '../utils/errors';
@@ -12,6 +12,12 @@ function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    setEmail(location.state.email || email);
+    setPassword(location.state.password || password);
+  }, []);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -26,7 +32,7 @@ function Signup() {
   };
 
   const handleLoginPageChange = () => {
-    navigate('/login');
+    navigate('/login', {state: { email }});
   };
 
   const handleSignupSubmit = async (e) => {
@@ -71,6 +77,7 @@ function Signup() {
               autoComplete='email'
               className='form-control mt-1'
               placeholder='Enter email'
+              value={email}
               onChange={handleEmailChange}
               autoFocus
               required
@@ -83,6 +90,7 @@ function Signup() {
               autoComplete='new-password'
               className='form-control mt-1'
               placeholder='Enter password'
+              value={password}
               onChange={handlePasswordChange}
               required
             />
@@ -94,6 +102,7 @@ function Signup() {
               autoComplete='new-password'
               className='form-control mt-1'
               placeholder='Enter password again'
+              value={confirmPassword}
               onChange={handleConfirmPasswordChange}
               required
             />

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import Cookies from 'js-cookie';
 import { login } from '../api/UserApi';
@@ -15,6 +15,11 @@ const Login = () => {
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    setEmail(location.state.email || email);
+  }, []);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -25,7 +30,7 @@ const Login = () => {
   };
 
   const handleSignupPageChange = () => {
-    navigate('/signup');
+    navigate('/signup', {state: { email, password }});
   };
 
   const handleLoginSubmit = async (e) => {
@@ -94,6 +99,7 @@ const Login = () => {
                     autoComplete='email'
                     className='form-control mt-1'
                     placeholder='Enter email'
+                    value={email}
                     onChange={handleEmailChange}
                     autoFocus
                     required
@@ -106,6 +112,7 @@ const Login = () => {
                     autoComplete='current-password'
                     className='form-control mt-1'
                     placeholder='Enter password'
+                    value={password}
                     onChange={handlePasswordChange}
                     required
                   />
