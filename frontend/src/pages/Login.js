@@ -18,7 +18,7 @@ const Login = () => {
   const location = useLocation();
 
   useEffect(() => {
-    setEmail(location.state.email || email);
+    setEmail(location?.state?.email || email);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleEmailChange = (e) => {

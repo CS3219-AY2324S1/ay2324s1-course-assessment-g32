@@ -15,8 +15,8 @@ function Signup() {
   const location = useLocation();
 
   useEffect(() => {
-    setEmail(location.state.email || email);
-    setPassword(location.state.password || password);
+    setEmail(location?.state?.email || email);
+    setPassword(location?.state?.password || password);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleEmailChange = (e) => {
