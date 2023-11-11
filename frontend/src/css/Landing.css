@@ -4,7 +4,7 @@
   background-repeat: no-repeat;
   background-size: auto 85%;
   position: relative;
-  z-index: 1;
+  min-height: 100vh;
 }
 
 .background::before {
@@ -12,7 +12,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #000;
+  background-color: #000000;
   opacity: 0.1;
   width: 100%;
   height: 100%;
@@ -25,7 +25,6 @@
   align-items: center;
   width: 100%;
   box-sizing: border-box; 
-  z-index: 2;
 }
 
 /* Apply width: 100%; to all direct children of .landing except those listed */

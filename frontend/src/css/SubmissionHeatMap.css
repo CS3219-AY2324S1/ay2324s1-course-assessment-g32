@@ -10,7 +10,7 @@
   align-items: center;
 }
 
-@media (max-width: 940px) {
+@media (max-width: 1000px) {
   .heatmap {
     display: flex;
     justify-content: flex-start;
