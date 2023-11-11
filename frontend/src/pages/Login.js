@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { login } from '../api/UserApi';
 import { showSuccessToast } from '../utils/toast';
 import { errorHandler } from '../utils/errors';
+import { removeSessionStorage } from '../utils/helpers';
 import welcomeImage from '../images/welcome.png';
 import logoImage from '../images/logo.png';
 import '../css/LoginSignup.css';
@@ -38,6 +39,7 @@ const Login = () => {
 
     try {
       const response = await login(userData);
+      removeSessionStorage();
 
       Cookies.set('jwt', response.data.token, {
         sameSite: 'Lax',

@@ -58,6 +58,11 @@ const SubmissionList = () => {
       <td>{submission.title}</td>
       <td>{parseDatetime(submission.createdAt)}</td>
       <td>{submission.language}</td>
+      <td>
+        <span>
+          {submission.duration ? submission.duration : 0} ms
+        </span>
+        </td>
     </tr>
   ));
 
@@ -82,6 +87,9 @@ const SubmissionList = () => {
                 </th>
                 <th scope='col' width='100'>
                   Language
+                </th>
+                <th scope='col' width='30'>
+                  Duration
                 </th>
               </tr>
             </thead>

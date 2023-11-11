@@ -1,7 +1,11 @@
 const historyDatabase = require('./HistoryRepository');
 const { Status } = require('./constants');
 
-exports.addAttempt = async (userId, questionId, code, language) => {
+const summationOfCounts = (counts) => {
+  return Object.values(counts).reduce((acc, val) => acc + val, 0);
+};
+
+exports.addAttempt = async (userId, questionId, code, language, result) => {
   try {
     // Check for missing inputs
     if (!userId || !questionId || !language) {
@@ -14,7 +18,7 @@ exports.addAttempt = async (userId, questionId, code, language) => {
     }
 
     // Create using with userId and questionId
-    await historyDatabase.addAttempt(userId, questionId, code, language);
+    await historyDatabase.addAttempt(userId, questionId, code, language, result);
   } catch (err) {
     throw err;
   }
@@ -103,8 +107,4 @@ exports.getUnattemptedQuestionsStats = (attemptedQuestionsStats, allQuestionsSta
   totalAttemptedQuestions = summationOfCounts(attemptedQuestionsStats);
   totalQuestions = summationOfCounts(allQuestionsStats);
   return { count: totalQuestions - totalAttemptedQuestions };
-};
-
-const summationOfCounts = (counts) => {
-  return Object.values(counts).reduce((acc, val) => acc + val, 0);
 };

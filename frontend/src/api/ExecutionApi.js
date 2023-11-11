@@ -30,7 +30,7 @@ const executePython = async (codeObject) => {
       codeObject,
       getConfig()
     );
-    return response.data.output;
+    return response.data;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -49,7 +49,7 @@ const executeJava = async (codeObject) => {
       codeObject,
       getConfig()
     );
-    return response.data.output;
+    return response.data;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {
@@ -64,7 +64,7 @@ const executeJava = async (codeObject) => {
 const executeJs = async (codeObject) => {
   try {
     const response = await axiosExecution.post('/js', codeObject, getConfig());
-    return response.data.output;
+    return response.data;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {

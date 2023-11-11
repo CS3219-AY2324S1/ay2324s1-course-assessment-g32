@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { getIsMaintainer, removeCookie } from '../utils/helpers';
+import { getIsMaintainer, removeCookie, removeSessionStorage } from '../utils/helpers';
 
 function Header() {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ function Header() {
 
   const handleSignOut = () => {
     removeCookie();
+    removeSessionStorage();
     navigate('/');
   };
 

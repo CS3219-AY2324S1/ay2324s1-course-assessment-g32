@@ -9,7 +9,7 @@ import {
 } from '../../api/UserApi';
 import { showSuccessToast } from '../../utils/toast';
 import { errorHandler } from '../../utils/errors';
-import { getCookie } from '../../utils/helpers';
+import { getCookie, removeSessionStorage } from '../../utils/helpers';
 import { Complexity, Language } from '../../constants';
 import {
   Grid,
@@ -45,6 +45,7 @@ export const ViewUserTopPane = ({ user }) => {
       await deleteUser(user.id, getCookie());
       showSuccessToast('User has been deleted successfully!');
       Cookies.remove('jwt');
+      removeSessionStorage();
       navigate('/');
     } catch (error) {
       errorHandler(error);

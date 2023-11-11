@@ -18,7 +18,7 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
 
   // Initialize code editor content
   const [code, setCode] = useState(getBoilerplate(selectedLanguage));
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState({});
   const [language, setLanguage] = useState(selectedLanguage);
   const [newSelectedLanguage, setNewSelectedLanguage] = useState(selectedLanguage);
   const [isChangeLanguageWindowOpen, setIsChangeLanguageWindowOpen] = useState(false);
@@ -86,7 +86,6 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
   // Update the code state when the user types
   const onChange = (update) => {
     setCode(update);
-    sessionStorage.setItem(`codeEditorContent_${roomId}`, update); // Store the code in session storage
 
     // Send code changes to the server
     socket.emit(Event.Code.CHANGE, {
@@ -108,8 +107,6 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
   const handleConfirmLanguageChange = () => {
     setLanguage(newSelectedLanguage);
     setIsChangeLanguageWindowOpen(false);
-
-    sessionStorage.setItem(`codeEditorLanguage_${roomId}`, newSelectedLanguage); // Store the language in session storage
 
     // Send language changes to the server
     socket.emit(Event.Language.CHANGE, {
@@ -138,18 +135,13 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
   };
 
   const confirmResetCode = () => {
-    // Set the code to boilerplate code if Java; else, set it to empty string
-    const codeToStore = getBoilerplate(language);
-    setCode(codeToStore);
 
-    sessionStorage.setItem(`codeEditorContent_${roomId}`, codeToStore);
-    setIsResetCodeWindowOpen(false);
-
-    // Send code changes to the server
-    socket.emit(Event.Code.CHANGE, {
+    // Send reset change to the server
+    socket.emit(Event.Code.RESET, {
       room: roomId,
-      updatedCode: codeToStore,
+      language: language,
     });
+    setIsResetCodeWindowOpen(false);
   };
 
   const cancelResetCode = () => {
@@ -176,6 +168,8 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
     } catch (err) {
       errorHandler(err);
     } finally {
+      // Allow the user to execute code again after 200ms
+      await new Promise(r => setTimeout(r, 200));
       setIsExecuting(false);
       // Send button un-disabling signal to the server
       socket.emit(Event.Button.DISABLE_EXEC, {
@@ -187,9 +181,9 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
 
   const handleSubmitAttempt = async () => {
     try {
+      await handleCodeExecution();
       const questionId = selectedQuestion._id;
-      console.log('userId', userId);
-      const response = await attemptQuestion(jwt, userId, questionId, code, language);
+      const response = await attemptQuestion(jwt, userId, questionId, code, language, result);
       showSuccessToast(response.data.message);
     } catch (err) {
       errorHandler(err);
@@ -219,27 +213,17 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
     }
   }, [scrollTop, scrollLeft, partner]);
 
-  // Retrieve the stored code from session storage (e.g. when the user refreshes the page)
-  useEffect(() => {
-    const storedContent = sessionStorage.getItem(`codeEditorContent_${roomId}`);
-    if (storedContent) {
-      setCode(storedContent);
-    }
-  }, []);
-
   useEffect(() => {
     // Receive code changes from the server
     socket.on(Event.Code.UPDATE, (updatedCode) => {
       setCode(updatedCode);
-      sessionStorage.setItem(`codeEditorContent_${roomId}`, updatedCode);
     });
     // Receive language changes from the server
     socket.on(Event.Language.UPDATE, (updatedLanguage) => {
       const languageSelect = document.getElementById('languageSelect');
-      if (updatedLanguage !== languageSelect.value) {
+      if (languageSelect) {
         languageSelect.value = updatedLanguage;
         setLanguage(updatedLanguage);
-        sessionStorage.setItem(`codeEditorLanguage_${roomId}`, updatedLanguage);
       }
     });
     // Receive result changes from the server
@@ -284,7 +268,6 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
               <select
                 className='form-select-sm me-2'
                 id='languageSelect'
-                defaultValue={language}
                 onChange={handleLanguageChange}
               >
                 <option value='Python'>Python</option>
@@ -310,8 +293,9 @@ const CodeEditor = ({ socket, roomId, userId, displayName, jwt, selectedLanguage
               </button>
               <button
                 type='button'
-                className='btn btn-success'
+                className={`btn ${isExecuting ? 'btn-secondary' : 'btn-success'}`}
                 onClick={handleSubmitAttempt}
+                disabled={isExecuting}
               >
                 Submit
               </button>

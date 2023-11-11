@@ -51,6 +51,7 @@ const Event = {
     DISCONNECT: 'disconnect',
     JOIN_ROOM: 'join-room',
     LEAVE_ROOM: 'leave-room',
+    TERMINATE_ROOM: 'terminate-room',
   },
   Question: {
     CHANGE: 'question-change',
@@ -59,6 +60,7 @@ const Event = {
   Code: {
     CHANGE: 'code-change',
     UPDATE: 'code-update',
+    RESET: 'code-reset',
   },
   Language: {
     CHANGE: 'language-change',
@@ -79,6 +81,7 @@ const Event = {
   Communication: {
     CHAT_SEND: 'chat-send',
     CHAT_RECEIVE: 'chat-receive',
+    SYNCHRONIZE: 'synchronize',
   },
 };
 
@@ -93,7 +96,7 @@ const Topics = {
   BIT_MANIPULATION: 'Bit Manipulation',
   BITMASK: 'Bitmask',
   BREADTH_FIRST_SEARCH: 'Breadth-First Search',
-  BRAINTASER: 'Brainteaser',
+  BRAINTEASER: 'Brainteaser',
   BUCKET_SORT: 'Bucket Sort',
   COMBINATORICS: 'Combinatorics',
   CONCURRENCY: 'Concurrency',
