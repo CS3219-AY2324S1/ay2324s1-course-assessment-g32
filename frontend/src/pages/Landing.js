@@ -40,7 +40,7 @@ function Landing() {
         <div className='d-flex align-items-center justify-content-center'>
           <button
             type='button'
-            className='btn btn-success w-25 mb-5'
+            className='btn btn-success w-25 mb-5 shadow'
             onClick={handleToggleModal}>
             Quick Match
           </button>
