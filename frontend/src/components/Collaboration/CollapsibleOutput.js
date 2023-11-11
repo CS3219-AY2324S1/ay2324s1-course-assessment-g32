@@ -23,8 +23,13 @@ const CollapsibleOutput = ({ result }) => {
           rows='8'
           readOnly
           placeholder='Code execution results will appear here'
-          value={result}
+          value={result.output}
         />
+        <div className='border'>
+          <strong className='p-3'>
+            Execution Duration: {result.duration ? result.duration : 0 } ms
+          </strong>
+        </div>
       </div>
     </>
   );

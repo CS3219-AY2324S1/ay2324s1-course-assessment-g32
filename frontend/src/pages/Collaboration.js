@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { Chat, CodeEditor, QuestionPanel } from '../components/Collaboration';
-import { ChangeQuestionWindow } from '../components/ConfirmationWindows';
+import { ChangeQuestionWindow, LeaveRoomWindow } from '../components/ConfirmationWindows';
 import { QuestionContent } from '../components/Question';
 import { getRandomQuestionByCriteria } from '../api/QuestionApi';
 import { showFailureToast } from '../utils/toast';
-import { getUserId } from '../utils/helpers';
+import { getUserId, removeSessionStorage } from '../utils/helpers';
 import { Status, Event } from '../constants';
 import env from '../loadEnvironment';
 import '../css/Collaboration.css';
@@ -17,56 +17,58 @@ const Collaboration = () => {
   const [question, setQuestion] = useState({});
   const [selectedQuestion, setSelectedQuestion] = useState({});
   const [isChangeQuestionWindowOpen, setIsChangeQuestionWindowOpen] = useState(false);
+  const [isLeaveRoomWindowOpen, setIsLeaveRoomWindowOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
 
   const socket = io(env.COLLAB_URL);
-  const { roomId, displayName, questionData, jwt } = location.state || {};
+  const { roomId, displayName, questionData, jwt, time } = location.state || {};
   const { complexity, language } = questionData || {};
 
   useEffect(() => {
     const initializeRoom = async () => {
       // If roomId is not present in the location state, redirect to landing page
       if (!roomId) {
-        showFailureToast('Invalid Room');
+        showFailureToast('Unable to join room.');
         navigate('/dashboard');
+        return;
       }
 
-      setUserId(await getUserId());
+      const userId = await getUserId();
+      setUserId(userId);
 
-      // Join the Socket.io room when the component mounts
-      socket.emit(Event.Socket.JOIN_ROOM, { room: roomId, user: displayName });
+      try {
+        const question = await getRandomQuestionByCriteria(complexity, jwt);
+        const socketMessage = {
+          room: roomId,
+          user: userId,
+          question: question,
+          language: language,
+          displayName: displayName,
+        };
+        // Join the Socket.io room when the component mounts
+        socket.emit(Event.Socket.JOIN_ROOM, socketMessage);
 
-      const storedQuestion = sessionStorage.getItem(`question_${roomId}`);
-      let question = JSON.parse(storedQuestion);
-
-      if (!question) {
-        // If the question is not in sessionStorage, generate and store it
-        try {
-          question = await getRandomQuestionByCriteria(complexity, jwt);
-        } catch (error) {
-          if (error.response.status === Status.UNAUTHORIZED) {
-            navigate('/unauthorized');
-          }
-        }
-
-        sessionStorage.setItem(`question_${roomId}`, JSON.stringify(question));
-        socket.emit(Event.Question.CHANGE, {
+        const session = {
           room: roomId,
           question: question,
-        });
+          language: language,
+          time: time
+        }
+        sessionStorage.setItem(`current_session`, JSON.stringify(session));
+      } catch (error) {
+        if (error.response.status === Status.UNAUTHORIZED) {
+          navigate('/unauthorized');
+        }
       }
-      setQuestion(question);
     };
     initializeRoom();
+    return () => {
+      socket.emit(Event.Socket.LEAVE_ROOM, { room: roomId, user: userId, displayName: displayName });
+      socket.disconnect();
+    }
   }, []);
-
-  const handleLeaveRoom = () => {
-    sessionStorage.removeItem(`codeEditorContent_${roomId}`); // Remove CodeMirror content from session storage when leaving the room
-    socket.emit(Event.Socket.LEAVE_ROOM, { room: roomId, user: displayName });
-    navigate('/dashboard');
-  };
 
   const handleOpenPanel = () => {
     setIsPanelOpen(true);
@@ -75,6 +77,10 @@ const Collaboration = () => {
   const handleClosePanel = () => {
     setIsPanelOpen(false);
   };
+
+  const handleOpenLeaveRoomWindow = () => {
+    setIsLeaveRoomWindowOpen(true);
+  }
 
   // Open the change question window on question change
   const handleQuestionChange = (selectedQuestion) => {
@@ -105,14 +111,20 @@ const Collaboration = () => {
     });
   };
 
+  const handleConfirmLeaveRoom = () => {
+    setIsLeaveRoomWindowOpen(false);
+    removeSessionStorage();
+    socket.emit(Event.Socket.TERMINATE_ROOM, { room: roomId, user: userId, displayName: displayName });
+    window.history.replaceState({}, location.state);
+    navigate('/landing');
+  };
+
   const handleCancelQuestionChange = () => {
     setIsChangeQuestionWindowOpen(false);
   };
 
-  // Retrieve last language used from session storage
-  const retrieveLanguage = () => {
-    const storedLanguage = sessionStorage.getItem(`codeEditorLanguage_${roomId}`);
-    return storedLanguage ? storedLanguage : language;
+  const handleCancelLeaveRoom = () => {
+    setIsLeaveRoomWindowOpen(false);
   };
 
   // Receive question changes from the server
@@ -120,10 +132,6 @@ const Collaboration = () => {
     socket.on(Event.Question.UPDATE, (updatedQuestion) => {
       if (updatedQuestion !== question) {
         setQuestion(updatedQuestion);
-        sessionStorage.setItem(
-          `question_${roomId}`,
-          JSON.stringify(updatedQuestion)
-        );
       }
     });
   }, [socket, question]);
@@ -140,10 +148,13 @@ const Collaboration = () => {
             >
               Change Question
             </button>
+            <span className='logo'>
+              PeerPrep
+            </span>
             <button
               type='button'
               className='btn btn-danger'
-              onClick={handleLeaveRoom}
+              onClick={handleOpenLeaveRoomWindow}
             >
               Leave Room
             </button>
@@ -162,10 +173,10 @@ const Collaboration = () => {
               userId={userId}
               displayName={displayName}
               jwt={jwt}
-              selectedLanguage={retrieveLanguage()}
+              selectedLanguage={language}
               selectedQuestion={question}
             />
-            <Chat socket={socket} roomId={roomId} user={displayName} />
+            <Chat socket={socket} roomId={roomId} user={userId} />
           </div>
         </div>
       </div>
@@ -182,6 +193,12 @@ const Collaboration = () => {
           onConfirm={handleConfirmQuestionChange}
           onClose={handleCancelQuestionChange}
           questionTitle={selectedQuestion.title}
+        />
+      )}
+      {isLeaveRoomWindowOpen && (
+        <LeaveRoomWindow
+          onConfirm={handleConfirmLeaveRoom}
+          onClose={handleCancelLeaveRoom}
         />
       )}
     </>

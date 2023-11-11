@@ -26,6 +26,7 @@ For development, you may also want to install:
 
 - [API Endpoints](docs/ApiEndpoints.md)
 - [Local Setup for RabbitMQ Server](docs/LocalRabbitMqSetup.md)
+- [Local Setup for Redis Server](docs/LocalRedisSetup.md)
 - [Containerization](docs/Containerization.md)
 - [Test Accounts](docs/TestAccounts.md)
 
@@ -44,6 +45,7 @@ Run them in different terminals:
 - Match service: `npm run start:match`
 - Collaboration Service: `npm run start:collab`
 - History Service: `npm run start:history`
+- Execution Service: `npm run start:execution`
 - Frontend: `npm run start:frontend`
 
 ---

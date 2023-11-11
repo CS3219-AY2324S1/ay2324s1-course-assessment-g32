@@ -8,7 +8,7 @@ exports.findAttemptByUserIdAndQuestion = async (userId, questionId) => {
   }
 };
 
-exports.addAttempt = async (userId, questionId, code, language) => {
+exports.addAttempt = async (userId, questionId, code, language, result) => {
   // Add new attempt to database
   try {
     const history = new historyModel({
@@ -16,6 +16,8 @@ exports.addAttempt = async (userId, questionId, code, language) => {
       questionId: questionId,
       code: code,
       language: language,
+      output: result.output,
+      duration: result.duration,
     });
 
     await history.save();

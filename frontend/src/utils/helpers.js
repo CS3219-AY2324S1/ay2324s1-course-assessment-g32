@@ -17,6 +17,10 @@ export const removeCookie = () => {
   Cookies.remove('jwt');
 };
 
+export const removeSessionStorage = () => {
+  sessionStorage.removeItem('current_session');
+}
+
 export const getUserInfo = async () => {
   try {
     const token = getCookie();

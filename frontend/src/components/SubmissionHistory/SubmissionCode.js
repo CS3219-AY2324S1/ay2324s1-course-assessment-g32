@@ -4,6 +4,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorState } from '@codemirror/state';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { parseDatetime, getLanguageExtension } from '../../utils/helpers';
+import CollapsibleOutput from '../Collaboration/CollapsibleOutput';
 import '../../css/SubmissionCode.css';
 
 const SubmissionCode = ({ attempt }) => {
@@ -32,9 +33,14 @@ const SubmissionCode = ({ attempt }) => {
           }}
         />
       </div>
+      <CollapsibleOutput result={attempt} />
       <div>
-        <span className='m-3 '>Language: {attempt.language} |</span>
-        <span>Submitted on: {parseDatetime(attempt.createdAt)}</span>
+        <span>
+          <strong>Language:</strong> {attempt.language} |{' '}
+        </span>
+        <span>
+          <strong>Submitted on:</strong> {parseDatetime(attempt.createdAt)}
+        </span>
       </div>
     </>
   );

@@ -69,6 +69,11 @@ const SubmissionList = () => {
       <td>{submission.title}</td>
       <td>{parseDatetime(submission.createdAt)}</td>
       <td>{submission.language}</td>
+      <td>
+        <span>
+          {submission.duration ? submission.duration : 0} ms
+        </span>
+        </td>
     </tr>
   ));
 
@@ -78,7 +83,7 @@ const SubmissionList = () => {
         <Spinner className='spinner-border' />
       ) : (
         <>
-          <h1>Submission History</h1>
+          <h1 className='submission-history'>Submission History</h1>
           <table ref={tableRef} className='table table-hover table-striped'>
             <thead className='table-dark'>
               <tr>
@@ -93,6 +98,9 @@ const SubmissionList = () => {
                 </th>
                 <th scope='col' width='100'>
                   Language
+                </th>
+                <th scope='col' width='30'>
+                  Duration
                 </th>
               </tr>
             </thead>
