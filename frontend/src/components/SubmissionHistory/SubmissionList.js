@@ -46,14 +46,14 @@ const SubmissionList = () => {
 
       // Initialize DataTables
       const pageLengthPref =
-        sessionStorage.getItem('submission-table-page-length') ||
+        parseInt(sessionStorage.getItem('submission-table-page-length')) ||
         Tables.Submissions.DEFAULT_PAGE_LENGTH;
       dataTableRef.current = $(tableRef.current).DataTable({
         pageLength: pageLengthPref
       });
 
       // Attach listener: on table pageLength change
-      $(tableRef.current).on('length.dt', function ( e, settings, len ) {
+      $(tableRef.current).on('length.dt', function (e, settings, len) {
         sessionStorage.setItem('submission-table-page-length', len);
       });
     }

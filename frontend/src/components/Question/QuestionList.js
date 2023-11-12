@@ -4,6 +4,7 @@ import $ from 'jquery';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { renderTags, getComplexityColor } from './index';
 import Spinner from '../Spinner';
 import { getQuestions } from '../../api/QuestionApi';
 import { errorHandler } from '../../utils/errors';
@@ -21,8 +22,8 @@ const QuestionList = () => {
   const tbConsts = Tables.Questions;
 
   // The '-pre' postfix is needed, do not change
-  $.fn.dataTable.ext.type.order[ tbConsts.CustomSort.ColumnName + '-pre']
-    = function ( a ) {
+  $.fn.dataTable.ext.type.order[tbConsts.CustomSort.ColumnName + '-pre']
+    = function (a) {
       return $.inArray(a, tbConsts.CustomSort.SortOrder);
     };
 
@@ -52,7 +53,7 @@ const QuestionList = () => {
 
       // Initialize DataTables
       const pageLengthPref =
-        sessionStorage.getItem('question-table-page-length') ||
+        parseInt(sessionStorage.getItem('question-table-page-length')) ||
         tbConsts.DEFAULT_PAGE_LENGTH;
       dataTableRef.current = $(tableRef.current).DataTable({
         pageLength: pageLengthPref,
@@ -63,7 +64,7 @@ const QuestionList = () => {
       });
 
       // Attach listener: on table pageLength change
-      $(tableRef.current).on('length.dt', function ( e, settings, len ) {
+      $(tableRef.current).on('length.dt', function (e, settings, len) {
         sessionStorage.setItem('question-table-page-length', len);
       });
     }
@@ -77,36 +78,13 @@ const QuestionList = () => {
     navigate('/question/new');
   };
 
-  const RenderTags = (tags) => {
-    return tags?.map((tag, index) => {
-      return (
-        <span key={index} className='badge bg-secondary'>
-          {tag}
-        </span>
-      );
-    });
-  };
-
-  const getComplexityColor = (complexity) => {
-    switch (complexity) {
-      case 'Easy':
-        return 'bg-success';
-      case 'Medium':
-        return 'bg-warning';
-      case 'Hard':
-        return 'bg-danger';
-      default:
-        return 'bg-primary';
-    }
-  };
-
   const questionList = tableData.map((question, index) => (
     <tr key={question._id} onClick={() => handleRowClick(question._id)}>
       <th scope='row'>{index + 1}</th>
       <td style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
         {question.title}
       </td>
-      <td>{RenderTags(question.tags)}</td>
+      <td>{renderTags(question.tags)}</td>
       <td>
         <span className={`badge ${getComplexityColor(question?.complexity)}`}>
           {question.complexity}

@@ -60,14 +60,14 @@ const UserList = () => {
 
       // Initialize DataTables
       const pageLengthPref =
-        sessionStorage.getItem('user-table-page-length') ||
+        parseInt(sessionStorage.getItem('user-table-page-length')) ||
         Tables.Users.DEFAULT_PAGE_LENGTH;
       dataTableRef.current = $(tableRef.current).DataTable({
         pageLength: pageLengthPref
       });
 
       // Attach listener: on table pageLength change
-      $(tableRef.current).on('length.dt', function ( e, settings, len ) {
+      $(tableRef.current).on('length.dt', function (e, settings, len) {
         sessionStorage.setItem('user-table-page-length', len);
       });
     }
