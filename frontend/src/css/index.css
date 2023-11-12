@@ -19,7 +19,7 @@ code {
   background-size: auto 85%;
   background-attachment: local;
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .background::before {

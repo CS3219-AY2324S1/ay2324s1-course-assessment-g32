@@ -63,11 +63,11 @@ const UserList = () => {
         sessionStorage.getItem('user-table-page-length') ||
         Tables.Users.DEFAULT_PAGE_LENGTH;
       dataTableRef.current = $(tableRef.current).DataTable({
-        pageLength: pageLengthPref
+        pageLength: pageLengthPref,
       });
 
       // Attach listener: on table pageLength change
-      $(tableRef.current).on('length.dt', function ( e, settings, len ) {
+      $(tableRef.current).on('length.dt', function (e, settings, len) {
         sessionStorage.setItem('user-table-page-length', len);
       });
     }
@@ -181,59 +181,65 @@ const UserList = () => {
   return isLoading ? (
     <Spinner />
   ) : (
-    <div className='container'>
-      <div className='header'>
-        <h1>Manage User Profiles</h1>
-        <div className='text-md-end'>
-          <button
-            type='button'
-            className='btn btn-success'
-            style={{ margin: '5px' }}
-            onClick={handleNewUserClick}>
-            Register New User
-          </button>
+    <div className='background'>
+      <div className='main'>
+        <div className='container'>
+          <div className='header'>
+            <h1>Manage User Profiles</h1>
+            <div className='text-md-end'>
+              <button
+                type='button'
+                className='btn btn-success'
+                style={{ margin: '5px' }}
+                onClick={handleNewUserClick}>
+                Register New User
+              </button>
+            </div>
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table ref={tableRef} className='table table-hover table-striped'>
+              <thead className='table-dark'>
+                <tr>
+                  <th scope='col' width='50'>
+                    No.
+                  </th>
+                  <th scope='col' width='300'>
+                    Display Name
+                  </th>
+                  <th scope='col' width='400'>
+                    Email
+                  </th>
+                  <th scope='col' width='400'>
+                    Created At
+                  </th>
+                  <th scope='col' width='400'>
+                    Updated At
+                  </th>
+                  <th scope='col' width='400'>
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody key={userList} className='table-group-divider'>
+                {userList}
+              </tbody>
+            </table>
+          </div>
+          {isDeregisterWindowOpen && (
+            <DeregisterWindow
+              onConfirm={handleDeregisterConfirm}
+              onClose={handleDeregisterCancel}
+            />
+          )}
+          {isToggleUserRoleWindowOpen && (
+            <ToggleUserRoleWindow
+              onConfirm={handleToggleUserRoleConfirm}
+              onClose={handleToggleUserRoleCancel}
+              isMaintainer={toggleUserRoleIsMaintainer}
+            />
+          )}
         </div>
       </div>
-      <table ref={tableRef} className='table table-hover table-striped'>
-        <thead className='table-dark'>
-          <tr>
-            <th scope='col' width='50'>
-              No.
-            </th>
-            <th scope='col' width='300'>
-              Display Name
-            </th>
-            <th scope='col' width='400'>
-              Email
-            </th>
-            <th scope='col' width='400'>
-              Created At
-            </th>
-            <th scope='col' width='400'>
-              Updated At
-            </th>
-            <th scope='col' width='400'>
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody key={userList} className='table-group-divider'>
-          {userList}
-        </tbody>
-      </table>
-      {isDeregisterWindowOpen && (
-        <DeregisterWindow
-          onConfirm={handleDeregisterConfirm}
-          onClose={handleDeregisterCancel}
-        />
-      )}
-      {isToggleUserRoleWindowOpen && (
-        <ToggleUserRoleWindow
-          onConfirm={handleToggleUserRoleConfirm}
-          onClose={handleToggleUserRoleCancel}
-          isMaintainer={toggleUserRoleIsMaintainer}
-        />
-      )}
     </div>
   );
 };

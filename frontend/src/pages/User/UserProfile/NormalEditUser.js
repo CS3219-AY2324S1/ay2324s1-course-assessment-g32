@@ -25,9 +25,9 @@ const NormalEditUser = () => {
     <Spinner />
   ) : (
     <div>
+      <Header />
       <div className='background'>
         <div className='main'>
-          <Header />
           <Container sx={{ marginTop: '20px' }}>
             <Grid>
               <ViewUserTopPane user={user} />

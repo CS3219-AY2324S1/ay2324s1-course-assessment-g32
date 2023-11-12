@@ -49,11 +49,11 @@ const SubmissionList = () => {
         sessionStorage.getItem('submission-table-page-length') ||
         Tables.Submissions.DEFAULT_PAGE_LENGTH;
       dataTableRef.current = $(tableRef.current).DataTable({
-        pageLength: pageLengthPref
+        pageLength: pageLengthPref,
       });
 
       // Attach listener: on table pageLength change
-      $(tableRef.current).on('length.dt', function ( e, settings, len ) {
+      $(tableRef.current).on('length.dt', function (e, settings, len) {
         sessionStorage.setItem('submission-table-page-length', len);
       });
     }
@@ -70,10 +70,8 @@ const SubmissionList = () => {
       <td>{parseDatetime(submission.createdAt)}</td>
       <td>{submission.language}</td>
       <td>
-        <span>
-          {submission.duration ? submission.duration : '-'} ms
-        </span>
-        </td>
+        <span>{submission.duration ? submission.duration : '-'} ms</span>
+      </td>
     </tr>
   ));
 
@@ -84,28 +82,30 @@ const SubmissionList = () => {
       ) : (
         <>
           <h1 className='submission-history'>Submission History</h1>
-          <table ref={tableRef} className='table table-hover table-striped'>
-            <thead className='table-dark'>
-              <tr>
-                <th scope='col' width='50'>
-                  No.
-                </th>
-                <th scope='col' width='400'>
-                  Question Title
-                </th>
-                <th scope='col' width='200'>
-                  Time of Submission
-                </th>
-                <th scope='col' width='100'>
-                  Language
-                </th>
-                <th scope='col' width='30'>
-                  Duration
-                </th>
-              </tr>
-            </thead>
-            <tbody className='table-group-divider'>{submissionList}</tbody>
-          </table>
+          <div style={{ overflowX: 'auto' }}>
+            <table ref={tableRef} className='table table-hover table-striped'>
+              <thead className='table-dark'>
+                <tr>
+                  <th scope='col' width='50'>
+                    No.
+                  </th>
+                  <th scope='col' width='400'>
+                    Question Title
+                  </th>
+                  <th scope='col' width='200'>
+                    Time of Submission
+                  </th>
+                  <th scope='col' width='100'>
+                    Language
+                  </th>
+                  <th scope='col' width='30'>
+                    Duration
+                  </th>
+                </tr>
+              </thead>
+              <tbody className='table-group-divider'>{submissionList}</tbody>
+            </table>
+          </div>
         </>
       )}
     </div>
