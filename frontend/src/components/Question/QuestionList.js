@@ -21,8 +21,8 @@ const QuestionList = () => {
   const tbConsts = Tables.Questions;
 
   // The '-pre' postfix is needed, do not change
-  $.fn.dataTable.ext.type.order[ tbConsts.CustomSort.ColumnName + '-pre']
-    = function ( a ) {
+  $.fn.dataTable.ext.type.order[tbConsts.CustomSort.ColumnName + '-pre']
+    = function (a) {
       return $.inArray(a, tbConsts.CustomSort.SortOrder);
     };
 
@@ -52,7 +52,7 @@ const QuestionList = () => {
 
       // Initialize DataTables
       const pageLengthPref =
-        sessionStorage.getItem('question-table-page-length') ||
+        parseInt(sessionStorage.getItem('question-table-page-length')) ||
         tbConsts.DEFAULT_PAGE_LENGTH;
       dataTableRef.current = $(tableRef.current).DataTable({
         pageLength: pageLengthPref,
