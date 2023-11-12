@@ -18,6 +18,13 @@ const QuestionList = () => {
   const dataTableRef = useRef(null);
   
   const navigate = useNavigate();
+  const tbConsts = Tables.Questions;
+
+  // The '-pre' postfix is needed, do not change
+  $.fn.dataTable.ext.type.order[ tbConsts.CustomSort.ColumnName + '-pre']
+    = function ( a ) {
+      return $.inArray(a, tbConsts.CustomSort.SortOrder);
+    };
 
   useEffect(() => {
     const fetchDataAndInitializeTable = async () => {
@@ -46,9 +53,13 @@ const QuestionList = () => {
       // Initialize DataTables
       const pageLengthPref =
         sessionStorage.getItem('question-table-page-length') ||
-        Tables.Questions.DEFAULT_PAGE_LENGTH;
+        tbConsts.DEFAULT_PAGE_LENGTH;
       dataTableRef.current = $(tableRef.current).DataTable({
-        pageLength: pageLengthPref
+        pageLength: pageLengthPref,
+        columnDefs: [{
+          target: tbConsts.CustomSort.ColumnNum,
+          type: tbConsts.CustomSort.ColumnName,
+        }],
       });
 
       // Attach listener: on table pageLength change

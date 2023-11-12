@@ -160,6 +160,16 @@ const Topics = {
 const Tables = {
   Questions: {
     DEFAULT_PAGE_LENGTH: 25,
+    CustomSort: {
+      ColumnNum: 3,
+      ColumnName: 'Complexity',
+      SortOrder: [
+        // NOTE: this is very hardcoded, it's accordingly to the html output
+        '<span class="badge bg-success">Easy</span>', 
+        '<span class="badge bg-warning">Medium</span>', 
+        '<span class="badge bg-danger">Hard</span>',
+      ]
+    }
   },
   Users: {
     DEFAULT_PAGE_LENGTH: 10,
