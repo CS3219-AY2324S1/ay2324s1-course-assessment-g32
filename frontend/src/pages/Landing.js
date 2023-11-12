@@ -74,37 +74,39 @@ function Landing() {
   }, []);
 
   return (
-    <div className='background'>
-      <div className='main'>
-        <Header />
-        <h1 className='title m-5'>Welcome, {user.displayName}</h1>
-        <div className='d-flex align-items-center justify-content-center vertical'>
-          {isSessionActive ? (
-            <button
-              type='button'
-              className='btn btn-success w-25 mb-5 shadow'
-              disabled={!isSessionActive}
-              onClick={handleReturnToSession}>
-              Return to {sessionTime} Match
-            </button>
-          ) : (
-            <button
-              type='button'
-              className='btn btn-success w-25 m-1'
-              onClick={handleToggleModal}>
-              New Match
-            </button>
-          )}
-          {isMatchingModalOpen && (
-            <MatchingModal
-              user={user}
-              isOpen={isMatchingModalOpen}
-              onClose={handleToggleModal}
-            />
-          )}
+    <div>
+      <Header />
+      <div className='background'>
+        <div className='main'>
+          <h1 className='title m-5'>Welcome, {user.displayName}</h1>
+          <div className='d-flex align-items-center justify-content-center vertical'>
+            {isSessionActive ? (
+              <button
+                type='button'
+                className='btn btn-success w-25 mb-5 shadow'
+                disabled={!isSessionActive}
+                onClick={handleReturnToSession}>
+                Return to {sessionTime} Match
+              </button>
+            ) : (
+              <button
+                type='button'
+                className='btn btn-success w-25 m-1'
+                onClick={handleToggleModal}>
+                New Match
+              </button>
+            )}
+            {isMatchingModalOpen && (
+              <MatchingModal
+                user={user}
+                isOpen={isMatchingModalOpen}
+                onClose={handleToggleModal}
+              />
+            )}
+          </div>
+          <SubmissionPieChart />
+          <SubmissionHeatMap />
         </div>
-        <SubmissionPieChart />
-        <SubmissionHeatMap />
       </div>
     </div>
   );

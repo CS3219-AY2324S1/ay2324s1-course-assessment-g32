@@ -4,10 +4,12 @@ import { SubmissionList } from '../../components/SubmissionHistory';
 
 function SubmissionHistory() {
   return (
-    <div className='background'>
-      <div className='main'>
-        <Header />
-        <SubmissionList />
+    <div>
+      <Header />
+      <div className='background'>
+        <div className='main'>
+          <SubmissionList />
+        </div>
       </div>
     </div>
   );
