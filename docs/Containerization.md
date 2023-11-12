@@ -4,14 +4,15 @@ Docker is used to containerize our various micro-services
 which serves our combined application.
 
 We have various micro-services including:
-* User Service
-* Auth Service
-* Question Service
-* Match Service
-* Collaboration Service
-* History Service
-* Execution Service
-* Frontend Service (Web UI)
+
+- User Service
+- Auth Service
+- Question Service
+- Match Service
+- Collaboration Service
+- History Service
+- Execution Service
+- Frontend Service (Web UI)
 
 > Additional Note:\
 > The instructions we have are based on Windows OS.
@@ -33,8 +34,7 @@ Download and install these software if you do not have them locally.
 
 - [Docker Desktop](https://www.docker.com/get-started/)
 
-> [!NOTE]
-> **Ensure that RabbitMQ Server and Redis Server are NOT running locally.**
+> [!NOTE] > **Ensure that RabbitMQ Server and Redis Server are NOT running locally.**
 
 # Testing
 
@@ -75,6 +75,7 @@ docker version
 ```
 
 It should output something like
+
 ```
 Client:
  Cloud integration: v1.0.35+desktop.5
@@ -126,7 +127,7 @@ The frontend would only be available after the containers are running.
 > Take caution when deleting maintainer accounts.
 > Do not delete until there is no accounts with admin rights.
 
-Locally, open a web browser and go to [http://localhost:3000](http://localhost:3000).
+Locally, open a web browser and go to [http://localhost](http://localhost).
 
 ## Post-testing
 
