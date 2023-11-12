@@ -67,7 +67,7 @@ const UserList = () => {
       });
 
       // Attach listener: on table pageLength change
-      $(tableRef.current).on('length.dt', function ( e, settings, len ) {
+      $(tableRef.current).on('length.dt', function (e, settings, len) {
         sessionStorage.setItem('user-table-page-length', len);
       });
     }
