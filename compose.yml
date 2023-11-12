@@ -2,7 +2,7 @@ services:
   nginx:
     container_name: nginx
     image: nginx:latest
-    ports: ['3000:80']
+    ports: ['80:80']
     volumes:
       - ./Nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
