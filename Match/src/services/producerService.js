@@ -22,7 +22,6 @@ const joinQueue = async (jwt, queueName, sessionID) => {
   const requestQueue = queueName;
   const responseQueue = queueName + 'Response';
 
-  await channel.assertQueue('commonQueue', { durable: false });
   await channel.assertQueue(requestQueue, { durable: false, autoDelete: true });
   await channel.assertQueue(responseQueue, { durable: false, autoDelete: true });
 

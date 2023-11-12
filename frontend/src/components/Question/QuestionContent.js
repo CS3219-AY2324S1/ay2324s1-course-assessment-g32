@@ -1,4 +1,5 @@
 import DOMPurify from 'dompurify';
+import { renderTags, getComplexityColor } from'./index';
 import '../../css/QuestionContent.css';
 
 const QuestionContent = ({ question }) => {
@@ -6,29 +7,6 @@ const QuestionContent = ({ question }) => {
 
   const sanitizeHTML = (html) => {
     return DOMPurify.sanitize(html);
-  };
-
-  const renderTags = (tags) => {
-    return tags?.map((tag, index) => {
-      return (
-        <span key={index} className='badge bg-secondary'>
-          {tag}
-        </span>
-      );
-    });
-  };
-
-  const getComplexityColor = (complexity) => {
-    switch (complexity) {
-      case 'Easy':
-        return 'bg-success';
-      case 'Medium':
-        return 'bg-warning';
-      case 'Hard':
-        return 'bg-danger';
-      default:
-        return 'bg-primary';
-    }
   };
 
   return (
