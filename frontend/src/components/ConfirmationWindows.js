@@ -142,32 +142,6 @@ export function ChangeQuestionWindow({ onClose, onConfirm, questionTitle }) {
   );
 }
 
-export function ChangeLanguageWindow({ onClose, onConfirm, oldLanguage, newLanguage }) {
-  return (
-    <div className='overlay'>
-      <Alert variant='danger'>
-        <Alert.Heading>
-          Are you sure you want to change the programming language?
-        </Alert.Heading>
-        <p>The language will be changed from  <b>{oldLanguage}</b> to <b>{newLanguage}</b>.</p>
-        <hr />
-        <div className='d-flex justify-content-end'>
-          <button
-            type='button'
-            className='btn btn-outline-danger me-2'
-            onClick={onClose}
-          >
-            No
-          </button>
-          <button type='button' className='btn btn-danger' onClick={onConfirm}>
-            Yes
-          </button>
-        </div>
-      </Alert>
-    </div>
-  );
-}
-
 export function ResetCodeWindow({ onClose, onConfirm }) {
   return (
     <div className='overlay'>

@@ -71,7 +71,7 @@ const SubmissionList = () => {
       <td>{submission.language}</td>
       <td>
         <span>
-          {submission.duration ? submission.duration : 0} ms
+          {submission.duration ? submission.duration : '-'} ms
         </span>
         </td>
     </tr>

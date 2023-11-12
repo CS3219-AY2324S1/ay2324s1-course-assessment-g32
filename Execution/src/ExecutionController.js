@@ -26,9 +26,9 @@ const isOutputEmpty = (code) => {
   return code.trim() === OUTPUT_EMPTY;
 };
 
-const handleOutputEmpty = (res) => {
+const handleOutputEmpty = (res, duration) => {
   logger.error('No output produced.');
-  res.json({ output: 'No output produced.', duration: 0 });
+  res.json({ output: 'No output produced.', duration: duration });
 };
 
 const uniqueId = () => {
@@ -136,7 +136,7 @@ exports.executePython = async (req, res) => {
 
     // Check if output is empty
     if (isOutputEmpty(result)) {
-      handleOutputEmpty(res);
+      handleOutputEmpty(res, duration);
       return;
     }
 
@@ -176,7 +176,8 @@ exports.executeJava = async (req, res) => {
 
     if (compileResult.includes('error')) {
       logger.error('Compilation failed.');
-      res.json({ output: compileResult, duration: 0 });
+      const compileTime = Date.now() - timestamp;
+      res.json({ output: compileResult, duration: compileTime });
       fs.rmSync(executionDirectory, { recursive: true });
     } else {
       logger.logSuccess('Program compiled successfully.');
@@ -188,7 +189,7 @@ exports.executeJava = async (req, res) => {
 
       // Check if output is empty
       if (isOutputEmpty(result)) {
-        handleOutputEmpty(res);
+        handleOutputEmpty(res, duration);
         return;
       }
 
@@ -224,7 +225,7 @@ exports.executeJs = async (req, res) => {
 
     // Check if output is empty
     if (isOutputEmpty(result)) {
-      handleOutputEmpty(res);
+      handleOutputEmpty(res, duration);
       return;
     }
 
