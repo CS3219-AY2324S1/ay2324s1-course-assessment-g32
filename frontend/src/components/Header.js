@@ -32,6 +32,7 @@ function Header() {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='me-auto'>
+              <Nav.Link href='/dashboard'>Home</Nav.Link>
               <Nav.Link href='/questions'>Questions</Nav.Link>
               <Nav.Link href='/submission-history'>Submissions</Nav.Link>
               <NavDropdown title='User Setting' id='basic-nav-dropdown'>
