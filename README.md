@@ -15,8 +15,8 @@ Access it here: [http://peerprep.online/](http://peerprep.online/)
 
 Click for instructions for the respective modes:
 
-- [Running Locally](docs/LocalHosting.md)
-- [Running via Docker](docs/Containerization.md)
+- [Running Locally](docs/LocalHosting)
+- [Running via Docker](docs/Containerization)
 
 # Resources for Developer / Tester
 
@@ -31,10 +31,10 @@ For development, you may also want to install:
 ## Documentation
 
 - [API Endpoints](docs/ApiEndpoints.md)
-- [Local Setup for RabbitMQ Server](docs/LocalRabbitMqSetup.md)
-- [Local Setup for Redis Server](docs/LocalRedisSetup.md)
-- [Containerization](docs/Containerization.md)
-- [Test Accounts](docs/TestAccounts.md)
+- [Local Setup for RabbitMQ Server](docs/LocalRabbitMqSetup)
+- [Local Setup for Redis Server](docs/LocalRedisSetup)
+- [Containerization](docs/Containerization)
+- [Test Accounts](docs/TestAccounts)
 
 ## Micro-services
 
