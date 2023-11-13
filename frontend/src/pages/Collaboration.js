@@ -23,7 +23,7 @@ const Collaboration = () => {
   const navigate = useNavigate();
 
   const socket = io(env.COLLAB_URL);
-  const { roomId, displayName, questionData, jwt, time } = location.state || {};
+  const { roomId, displayName, questionData, jwt } = location.state || {};
   const { complexity, language } = questionData || {};
 
   useEffect(() => {
@@ -39,7 +39,13 @@ const Collaboration = () => {
       setUserId(userId);
 
       try {
-        const question = await getRandomQuestionByCriteria(complexity, jwt);
+        var question = {};
+
+        // If user has not joined the room before, get a random question
+        if (jwt && complexity && language) {
+          question = await getRandomQuestionByCriteria(complexity, jwt);
+        }
+
         const socketMessage = {
           room: roomId,
           user: userId,
@@ -50,13 +56,6 @@ const Collaboration = () => {
         // Join the Socket.io room when the component mounts
         socket.emit(Event.Socket.JOIN_ROOM, socketMessage);
 
-        const session = {
-          room: roomId,
-          question: question,
-          language: language,
-          time: time
-        }
-        sessionStorage.setItem(`current_session`, JSON.stringify(session));
       } catch (error) {
         if (error.response.status === Status.UNAUTHORIZED) {
           navigate('/unauthorized');
@@ -94,7 +93,6 @@ const Collaboration = () => {
   const handleConfirmQuestionChange = () => {
     setQuestion(selectedQuestion);
     setIsChangeQuestionWindowOpen(false);
-    sessionStorage.setItem(`question_${roomId}`, JSON.stringify(selectedQuestion));
 
     // Send question change to the server
     socket.emit(Event.Question.CHANGE, {

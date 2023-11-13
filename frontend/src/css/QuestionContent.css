@@ -28,3 +28,7 @@
   text-align: left; /* Align text to the left if needed */
   padding: 10px;
 }
+
+.badge {
+  height: 25px;
+}

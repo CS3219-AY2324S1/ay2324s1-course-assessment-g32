@@ -34,15 +34,13 @@ function Landing() {
   };
 
   const handleReturnToSession = () => {
-    const { room, question, language, time } = session;
+    const { room, complexity, time } = session;
     navigate('/collaboration', {
       state: {
         roomId: room,
         displayName: user.displayName,
         jwt: getCookie(),
-        questionData: question,
-        language: language,
-        time: time,
+        questionData: { complexity: complexity },
       },
     });
   };
