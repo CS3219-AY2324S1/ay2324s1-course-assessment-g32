@@ -30,10 +30,17 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
         const displayName = user.displayName;
         const time = Date.now();
 
-      const questionData = {
-        complexity: complexity,
-        language: language,
-      };
+        const session = {
+          room: roomId,
+          time: time
+        }
+
+        sessionStorage.setItem(`current_session`, JSON.stringify(session));
+
+        const questionData = {
+          complexity: complexity,
+          language: language,
+        };
 
         // Generates a random delay between 0 and 200 milliseconds to avoid users joining the room at the same time
         const randomDelay = Math.random() * 200;
@@ -43,8 +50,7 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
               roomId,
               displayName,
               questionData,
-              jwt,
-              time
+              jwt
             },
           });
         }, randomDelay);
