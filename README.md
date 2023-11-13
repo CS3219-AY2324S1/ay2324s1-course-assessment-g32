@@ -5,6 +5,12 @@
 > (either directly or indirectly) to NUS Wifi.\
 > (NUS networks blocks MongoDB Atlas which is required by our application.)
 
+# PeerPrep
+
+Welcome to PeerPrep, your ultimate solution for mastering technical interviews through the power of collaboration! 
+
+Access it here: [http://peerprep.online/](http://peerprep.online/)
+
 # Application Installation and Setup
 
 Click for instructions for the respective modes:
