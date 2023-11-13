@@ -32,7 +32,8 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
 
         const session = {
           room: roomId,
-          time: time
+          time: time,
+          complexity: complexity,
         }
 
         sessionStorage.setItem(`current_session`, JSON.stringify(session));
