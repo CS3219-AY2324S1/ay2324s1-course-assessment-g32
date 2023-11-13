@@ -53,6 +53,8 @@ Start all services using the following commands:
 npm run start-all
 ```
 
+The application can on [http://localhost:3000](http://localhost:3000).
+
 ---
 
 [Go to README](../README.md)
