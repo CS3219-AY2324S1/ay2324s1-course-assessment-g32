@@ -3,7 +3,7 @@ name: Docker Deploy
 on:
   workflow_run:
     workflows: ["CI Pipeline"]
-    branches: [dev]
+    branches: [master]
     types:
       - completed
 
@@ -32,7 +32,7 @@ jobs:
         username: ${{secrets.EC2_USERNAME}}
         key: ${{secrets.EC2_KEY}}
         script: |
-          git clone https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32.git -b dev || true
+          git clone https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g32.git -b master || true
     - name: Build and deploy 
       uses: appleboy/ssh-action@master
       with:
