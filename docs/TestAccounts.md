@@ -35,4 +35,4 @@ Requirement: have a user account which you want to promote to maintainer
 
 ---
 
-[Go to README](../README.md)
+[Go to README](../README)

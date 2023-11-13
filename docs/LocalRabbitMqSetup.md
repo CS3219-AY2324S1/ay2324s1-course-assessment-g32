@@ -43,4 +43,4 @@ For macOS,
 
 ---
 
-[Go to README](../README.md)
+[Go to README](../README)

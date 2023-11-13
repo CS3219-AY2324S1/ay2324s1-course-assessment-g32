@@ -19,4 +19,4 @@ For Windows OS and Mac OS,
 3. Leave the terminal running
 
 ---
-[Go to README](../README.md)
+[Go to README](../README)

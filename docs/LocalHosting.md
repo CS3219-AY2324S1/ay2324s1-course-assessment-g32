@@ -18,10 +18,11 @@ Ensure that you are connected to the internet.
 > Do **not** connect to NUS Wifi/Network.\
 > The application would be unable to connect to MongoDB Atlas.
 
-## Setup RabbitMQ locally
+## Setup RabbitMQ and Redis locally
 
-Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md).
-Follow the steps in [Setup Redis locally](LocalRedisSetup.md).
+Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup).
+
+Follow the steps in [Setup Redis locally](LocalRedisSetup).
 
 ## Setup environment variables
 
@@ -42,8 +43,9 @@ Follow the steps in [Setup Redis locally](LocalRedisSetup.md).
 npm run install-all
 ```
 
-Ensure that RabbitMQ Server and Redis Server has started.
-- Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md) and [Setup Redis locally](LocalRedisSetup.md)
+Also ensure that RabbitMQ Server and Redis Server has been started.
+- [Start RabbitMQ Server](LocalRabbitMqSetup#start-rabbitmq-service)
+- [Start Redis Server](LocalRedisSetup#start-redis-service)
 
 # Start Application Locally
 
@@ -55,4 +57,4 @@ npm run start-all
 
 ---
 
-[Go to README](../README.md)
+[Go to README](../README)
