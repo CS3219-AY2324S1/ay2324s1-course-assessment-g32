@@ -51,7 +51,7 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
               roomId,
               displayName,
               questionData,
-              jwt
+              jwt,
             },
           });
         }, randomDelay);
