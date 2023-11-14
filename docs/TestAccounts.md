@@ -13,10 +13,12 @@
 ## Creating more User accounts
 
 Option 1:
+
 1. Go to the signup page and signup for a new account
 2. Go to the login page to login as a users
 
 Option 2:
+
 1. Log in using an admin account
 2. From top-right corner, select `User Setting` > `Manage User Profiles`
 3. Click on `Register New User`
@@ -35,4 +37,4 @@ Requirement: have a user account which you want to promote to maintainer
 
 ---
 
-[Go to README](../README)
+[Go to README](../README.md)
