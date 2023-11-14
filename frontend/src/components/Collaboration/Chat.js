@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Event } from '../../constants';
+import Spinner from 'react-bootstrap/Spinner';
 import '../../css/Chat.css';
 
 const Chat = ({ socket, roomId, user }) => {
@@ -48,7 +49,7 @@ const Chat = ({ socket, roomId, user }) => {
     // Scroll to the bottom of the chat container
     chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
   }, [messages]);
-
+  
   return (
     <div className='chat-container'>
       <div className='chat-messages' ref={chatContainerRef}>
@@ -66,6 +67,7 @@ const Chat = ({ socket, roomId, user }) => {
             )}
           </div>
         ))}
+        {messages.length === 0 && (<Spinner />)}
       </div>
       <form onSubmit={handleSendMessage}>
         <div className='chat-input'>
