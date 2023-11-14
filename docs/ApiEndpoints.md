@@ -6,7 +6,7 @@
 > The ports can be configured in `template.env` (or `.env`).
 
 | Port  | Microservice | Description                                          |
-|-------|--------------|------------------------------------------------------|
+| ----- | ------------ | ---------------------------------------------------- |
 | 4001  | user         | API contains all the user data related endpoints     |
 | 5001  | auth         | API contains all the authorization related endpoints |
 | 6001  | question     | API contains all the question data related endpoints |
@@ -18,7 +18,7 @@
 ## Endpoints
 
 | Method | API Endpoints                     | Purpose                                                                           | Parameters <br> (JSON format)                                         | Header Contains | [Roles](#roles) |
-|-------:|-----------------------------------|-----------------------------------------------------------------------------------|-----------------------------------------------------------------------|-----------------|-----------------|
+| -----: | --------------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------- | --------------- |
 |    GET | `/auth/authorize`                 | Authorize all users                                                               | -                                                                     | JWT token       | User            |
 |    GET | `/auth/authorize-maintainer`      | Authorize maintainers                                                             | -                                                                     | JWT token       | Maintainer      |
 |   POST | `/auth/generate`                  | Generate JWT token (after user has logged in)                                     | `userId` <br> `isMaintainer`                                          | -               | Guest           |
@@ -46,7 +46,7 @@
 | DELETE | `/user/`                          | Delete user                                                                       | `id`                                                                  | JWT token       | User            |
 |    GET | `/user/all`                       | Get information for all users                                                     | -                                                                     | JWT token       | Maintainer      |
 |   POST | `/user/login`                     | Login                                                                             | `email` <br> `password`                                               | -               | Guest           |
-|   POST | `/user/signup`                    | create new user                                                                   | `email` <br> `password` <br> `confirmPassword`                        | -               | Guest           | 
+|   POST | `/user/signup`                    | create new user                                                                   | `email` <br> `password` <br> `confirmPassword`                        | -               | Guest           |
 |    PUT | `/user/toggle-user-role`          | Toggle the user's role (user or maintainer)                                       | `id`                                                                  | JWT token       | Maintainer      |
 |    PUT | `/user/display-name`              | Update user's display name                                                        | `id` <br> `username`                                                  | JWT token       | User            |
 |    PUT | `/user/change-password`           | Change user's password                                                            | `id` <br> `currentPassword` <br> `newPassword` <br> `confirmPassword` | JWT token       | User            |
@@ -60,6 +60,7 @@ Remarks:
   - Eg. `http://localhost:4001/user/signup`
 
 ### Roles
+
 - Guest
   - Has no account
   - Has very limited access
@@ -74,4 +75,4 @@ Remarks:
 
 ---
 
-[Go to README](../README)
+[Go to README](../README.md)

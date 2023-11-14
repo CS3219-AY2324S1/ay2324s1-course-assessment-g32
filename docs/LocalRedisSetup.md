@@ -14,9 +14,11 @@
 ## Start Redis Service
 
 For Windows OS and Mac OS,
+
 1. Start your Ubuntu terminal
 2. Type `redis-server` into the terminal
 3. Leave the terminal running
 
 ---
-[Go to README](../README)
+
+[Go to README](../README.md)

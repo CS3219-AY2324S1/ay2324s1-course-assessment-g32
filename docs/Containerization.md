@@ -140,4 +140,4 @@ docker compose down
 
 ---
 
-[Go to README](../README)
+[Go to README](../README.md)

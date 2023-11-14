@@ -20,9 +20,9 @@ Ensure that you are connected to the internet.
 
 ## Setup RabbitMQ and Redis locally
 
-Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup).
+Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md).
 
-Follow the steps in [Setup Redis locally](LocalRedisSetup).
+Follow the steps in [Setup Redis locally](LocalRedisSetup.md).
 
 ## Setup environment variables
 
@@ -31,11 +31,11 @@ Follow the steps in [Setup Redis locally](LocalRedisSetup).
    ```
    cp template.env .env
    ```
-3. Open `.env` file 
+3. Open `.env` file
 4. Fill up a JWT token password
    (for generating and decoding JWT tokens)
-    - Example: if you want to set the password to "password",
-      `JWT_SECRET_KEY=password`
+   - Example: if you want to set the password to "password",
+     `JWT_SECRET_KEY=password`
 
 ## Install NodeJS packages
 
@@ -44,8 +44,9 @@ npm run install-all
 ```
 
 Also ensure that RabbitMQ Server and Redis Server has been started.
-- [Start RabbitMQ Server](LocalRabbitMqSetup#start-rabbitmq-service)
-- [Start Redis Server](LocalRedisSetup#start-redis-service)
+
+- [Start RabbitMQ Server](LocalRabbitMqSetup.md#start-rabbitmq-service)
+- [Start Redis Server](LocalRedisSetup.md#start-redis-service)
 
 # Start Application Locally
 
@@ -59,4 +60,4 @@ The application can be accessed on [http://localhost:3000](http://localhost:3000
 
 ---
 
-[Go to README](../README)
+[Go to README](../README.md)
