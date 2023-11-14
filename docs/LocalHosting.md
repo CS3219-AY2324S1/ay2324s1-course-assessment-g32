@@ -56,7 +56,7 @@ Start all services using the following commands:
 npm run start-all
 ```
 
-The application can be accessed on [http://localhost:3000](http://localhost:3000).
+The application can be accessed on [http://localhost](http://localhost).
 
 ---
 
