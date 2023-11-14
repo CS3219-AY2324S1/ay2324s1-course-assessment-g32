@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Event } from '../../constants';
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from '../Spinner';
 import '../../css/Chat.css';
 
 const Chat = ({ socket, roomId, user }) => {
