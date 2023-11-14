@@ -1,15 +1,16 @@
 # Setup Redis Locally
 
-## Install Ubuntu on Computer
+## For Windows
 
 - Download and install [Ubuntu](https://ubuntu.com/download/desktop)
-- For Windows OS, it is recommended to install the 64-bit version
-
-## Install Redis on Computer
-
+  - It is recommended to install the 64-bit version
 - Download and install [Redis](https://redis.io/download) server
-- You can use the default settings given
-  - Port should be `6379`
+  - You can use the default settings given
+    - Port should be `6379`
+
+## For Mac OS
+
+
 
 ## Start Redis Service
 
