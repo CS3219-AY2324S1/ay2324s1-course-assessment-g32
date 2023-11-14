@@ -12,7 +12,7 @@ const QuestionContent = ({ question }) => {
 
   return (
     <div className='question-content-container'>
-      { question.title ? (
+      {question.title ? (
         <>
           <div className='card-body'>
             <h2 className='card-title'>{title}</h2>

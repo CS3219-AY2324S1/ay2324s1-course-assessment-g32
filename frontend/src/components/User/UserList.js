@@ -180,7 +180,7 @@ const UserList = () => {
 
   return  (
     <div className='background'>
-      { isLoading ? (
+      {isLoading ? (
           <Spinner />
       ) : (
         <div className='main'>
