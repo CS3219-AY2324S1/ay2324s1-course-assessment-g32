@@ -4,8 +4,8 @@
 
 - Download and install [Ubuntu](https://ubuntu.com/download/desktop)
   - It is recommended to install the 64-bit version
-- Download and install [Redis](https://redis.io/download) server
-  - You can use the default settings given
+- Download and install [Redis](https://redis.io/docs/install/install-redis/install-redis-on-windows/) server
+  - You can follow the instructions given
     - Port should be `6379`
 
 ## For Mac OS
