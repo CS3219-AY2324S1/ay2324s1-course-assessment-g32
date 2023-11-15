@@ -1,0 +1,11 @@
+.questions-page {
+  flex-direction: column;
+}
+
+.body {
+  justify-content: center;
+}
+
+.container {
+  margin-top: 20px;
+}

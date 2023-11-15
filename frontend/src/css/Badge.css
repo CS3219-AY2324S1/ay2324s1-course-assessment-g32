@@ -1,0 +1,16 @@
+.bg-success {
+  background-color: #28a745; /* Green color for 'Easy' */
+}
+
+.bg-warning {
+  background-color: #ffc107; /* Yellow color for 'medium' */
+}
+
+.bg-danger {
+  background-color: #dc3545; /* Red color for 'Hard' */
+}
+
+.custom-badge {
+  font-size: 1.5rem; /* Adjust the font size as needed */
+  padding: 0.5rem 1rem; /* Adjust padding as needed */
+}

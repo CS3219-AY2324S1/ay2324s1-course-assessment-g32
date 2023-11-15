@@ -1,0 +1,25 @@
+.editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-height: 70%;
+}
+
+.editor-nav-bar {
+  padding-bottom: 2px;
+}
+
+.code-editor {
+  flex-grow: 1;
+  background-color: #1e1e1e;
+  overflow: auto;
+}
+
+.code-mirror {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}

@@ -1,0 +1,20 @@
+{
+  "name": "collaboration",
+  "version": "1.0.0",
+  "description": "",
+  "main": "CollaborationServer.js",
+  "scripts": {
+    "dev": "nodemon src/CollaborationServer.js",
+    "start": "node src/CollaborationServer.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "redis": "^4.6.10",
+    "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

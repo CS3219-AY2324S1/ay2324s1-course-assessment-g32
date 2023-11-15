@@ -1,0 +1,26 @@
+name: CI Pipeline
+
+on: push
+jobs:
+  build:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Prepare Environment
+        run: mv template.env .env
+
+      - name: Start Containers
+        run: docker compose up -d
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+      
+      - name: Stop Containers
+        if: always()
+        run: docker compose down

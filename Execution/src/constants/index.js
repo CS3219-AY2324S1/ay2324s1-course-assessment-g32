@@ -1,0 +1,19 @@
+const MAX_EXECUTION_TIME = 5000; // 5 seconds
+
+const TIMEOUT_ERROR = 'TimeoutError';
+
+const SIGNAL_TERMINATE = 'SIGTERM';
+const SIGNAL_KILL = 'SIGKILL';
+
+const SUCCESS_CODE = 0;
+
+const OUTPUT_EMPTY = '';
+
+module.exports = {
+  MAX_EXECUTION_TIME,
+  TIMEOUT_ERROR,
+  SIGNAL_TERMINATE,
+  SIGNAL_KILL,
+  SUCCESS_CODE,
+  OUTPUT_EMPTY,
+};
