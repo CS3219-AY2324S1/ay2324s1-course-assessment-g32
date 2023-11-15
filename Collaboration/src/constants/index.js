@@ -37,6 +37,7 @@ const Event = {
     JOIN_ROOM: 'join-room',
     LEAVE_ROOM: 'leave-room',
     TERMINATE_ROOM: 'terminate-room',
+    TERMINATE_ROOM_RECEIVE: 'terminate-room-receive',
   },
   Question: {
     CHANGE: 'question-change',

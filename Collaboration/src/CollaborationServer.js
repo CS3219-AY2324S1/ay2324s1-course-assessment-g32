@@ -77,6 +77,8 @@ try {
       const room = data.room;
       const user = data.user;
 
+      io.to(room).emit(Event.Socket.TERMINATE_ROOM_RECEIVE);
+
       redisMemory.handleRoomTermination(room, user);
     });
 

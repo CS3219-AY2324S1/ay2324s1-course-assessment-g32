@@ -5,7 +5,7 @@ import { Chat, CodeEditor, QuestionPanel } from '../components/Collaboration';
 import { ChangeQuestionWindow, LeaveRoomWindow } from '../components/ConfirmationWindows';
 import { QuestionContent } from '../components/Question';
 import { getRandomQuestionByCriteria } from '../api/QuestionApi';
-import { showFailureToast } from '../utils/toast';
+import { showFailureToast, showSuccessToast } from '../utils/toast';
 import { getUserId, removeSessionStorage } from '../utils/helpers';
 import { errorHandler } from '../utils/errors';
 import { Status, Event } from '../constants';
@@ -127,12 +127,15 @@ const Collaboration = () => {
     setIsLeaveRoomWindowOpen(false);
   };
 
-  // Receive question changes from the server
+  // Receive updates from the server
   useEffect(() => {
     socket.on(Event.Question.UPDATE, (updatedQuestion) => {
       if (updatedQuestion !== question) {
         setQuestion(updatedQuestion);
       }
+    });
+    socket.on(Event.Socket.TERMINATE_ROOM_RECEIVE, () => {
+      showSuccessToast('Partner has left this session and will not be returning.');
     });
   }, [socket, question]);
 
