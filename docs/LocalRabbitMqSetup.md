@@ -1,16 +1,23 @@
 # Setup RabbitMQ Locally
 
-## Install Erlang on Computer
+For Windows OS,  
 
-- Download and install [Erlang](https://www.erlang.org/downloads) before you install the
+1. Install Erlang on Computer
+
+    - Download and install [Erlang](https://www.erlang.org/downloads) before you install the
   [RabbitMQ](https://www.rabbitmq.com/download.html) server
-- For Windows OS, it is recommended to install the 64-bit version
+    - For Windows OS, it is recommended to install the 64-bit version
 
-## Install RabbitMQ on Computer
+2. Install RabbitMQ on Computer
 
-- Download and install [RabbitMQ](https://www.rabbitmq.com/download.html) server
-- You can use the default settings given
-  - Port should be `5672`
+    - Download and install [RabbitMQ](https://www.rabbitmq.com/download.html) server
+    - You can use the default settings given
+      - Port should be `5672`
+
+For Mac OS,
+
+1. Install [Homebrew](https://brew.sh/)
+2. Install [RabbitMQ](https://www.rabbitmq.com/install-homebrew.html)
 
 ## Start RabbitMQ Service
 
@@ -26,12 +33,12 @@ For Windows OS,
    - Blank: Need to be started, do the next step
 7. Right click on the RabbitMQ Service and press `Start`
 
-For macOS,
+For Mac OS,
 
-1. Click on the apple icon on the top left of the screen
-2. Click on `System Settings` to open System Settings
-3. Search for `RabbitMQ`
-4. Click `Start RabbitMQ Server` if it has not been started
+1. Open your terminal
+2. To start service: `brew services start rabbitmq` into the terminal
+3. Leave the terminal running
+4. Remember to stop the service after you are done using PeerPrep: `brew services stop rabbitmq`
 
 ## Open RabbitMQ Management Browser
 
