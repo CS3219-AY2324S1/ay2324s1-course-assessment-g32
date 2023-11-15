@@ -8,9 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../Spinner';
 import { DeregisterWindow, ToggleUserRoleWindow } from '../ConfirmationWindows';
 import { deleteUser, getAllUsers, toggleUserRole } from '../../api/UserApi';
-import { showSuccessToast } from '../../utils/toast';
 import { getCookie, getUserId, parseDatetime } from '../../utils/helpers';
+import { showSuccessToast } from '../../utils/toast';
 import { errorHandler } from '../../utils/errors';
+import { Tables } from '../../constants';
 import '../../css/UserList.css';
 
 const UserList = () => {
@@ -19,9 +20,11 @@ const UserList = () => {
   const [tableData, setTableData] = useState([]);
   const [isDeregisterWindowOpen, setDeregisterWindowOpen] = useState(false);
   const [deregisterId, setDeregisterId] = useState(null);
-  const [isToggleUserRoleWindowOpen, setToggleUserRoleWindowOpen] = useState(false);
+  const [isToggleUserRoleWindowOpen, setToggleUserRoleWindowOpen] =
+    useState(false);
   const [toggleUserRoleId, setToggleUserRoleId] = useState(null);
-  const [toggleUserRoleIsMaintainer, setToggleUserRoleIsMaintainer] = useState(null);
+  const [toggleUserRoleIsMaintainer, setToggleUserRoleIsMaintainer] =
+    useState(null);
 
   const tableRef = useRef(null);
   const dataTableRef = useRef(null);
@@ -56,7 +59,17 @@ const UserList = () => {
       }
 
       // Initialize DataTables
-      dataTableRef.current = $(tableRef.current).DataTable();
+      const pageLengthPref =
+        parseInt(sessionStorage.getItem('user-table-page-length')) ||
+        Tables.Users.DEFAULT_PAGE_LENGTH;
+      dataTableRef.current = $(tableRef.current).DataTable({
+        pageLength: pageLengthPref,
+      });
+
+      // Attach listener: on table pageLength change
+      $(tableRef.current).on('length.dt', function (e, settings, len) {
+        sessionStorage.setItem('user-table-page-length', len);
+      });
     }
   }, [tableData]); // Initialize whenever tableData changes
 
@@ -130,72 +143,104 @@ const UserList = () => {
         <td />
       ) : (
         <td>
-          <Button variant='contained' onClick={() => handleEditClick(user.id, user.displayName)}>Edit</Button>
-          <Button variant='contained' color='error' onClick={() => handleDeregisterClick(user.id)}>Deregister</Button>
-          {user.isMaintainer === 1 ? (
-            <Button variant='contained' color='secondary' onClick={() => handleToggleUserRoleClick(user.id, user.isMaintainer)}>Demote to normal user</Button>
+          <Button
+            variant='contained'
+            onClick={() => handleEditClick(user.id, user.displayName)}>
+            Edit
+          </Button>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={() => handleDeregisterClick(user.id)}>
+            Deregister
+          </Button>
+          {user.isMaintainer === true ? (
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={() =>
+                handleToggleUserRoleClick(user.id, user.isMaintainer)
+              }>
+              Demote to normal user
+            </Button>
           ) : (
-            <Button variant='contained' color='success' onClick={() => handleToggleUserRoleClick(user.id, user.isMaintainer)}>Promote to maintainer</Button>
+            <Button
+              variant='contained'
+              color='success'
+              onClick={() =>
+                handleToggleUserRoleClick(user.id, user.isMaintainer)
+              }>
+              Promote to maintainer
+            </Button>
           )}
         </td>
       )}
     </tr>
   ));
 
-  return isLoading ? (
-    <Spinner />
-  ) : (
-    <div className='container'>
-      <h1>Manage User Profiles</h1>
-      <table ref={tableRef} className='table table-hover table-striped'>
-        <thead className='table-dark'>
-          <tr>
-            <th scope='col' width='50'>
-              No.
-            </th>
-            <th scope='col' width='300'>
-              Display Name
-            </th>
-            <th scope='col' width='400'>
-              Email
-            </th>
-            <th scope='col' width='400'>
-              Created At
-            </th>
-            <th scope='col' width='400'>
-              Updated At
-            </th>
-            <th scope='col' width='400'>
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody key={userList} className='table-group-divider'>
-          {userList}
-        </tbody>
-      </table>
-      <div className='text-md-end'>
-        <button
-          type='button'
-          className='btn btn-success'
-          style={{ margin: '5px' }}
-          onClick={handleNewUserClick}
-        >
-          Register New User
-        </button>
-      </div>
-      {isDeregisterWindowOpen && (
-        <DeregisterWindow
-          onConfirm={handleDeregisterConfirm}
-          onClose={handleDeregisterCancel}
-        />
-      )}
-      {isToggleUserRoleWindowOpen && (
-        <ToggleUserRoleWindow
-          onConfirm={handleToggleUserRoleConfirm}
-          onClose={handleToggleUserRoleCancel}
-          isMaintainer={toggleUserRoleIsMaintainer}
-        />
+  return  (
+    <div className='background'>
+      {isLoading ? (
+          <Spinner />
+      ) : (
+        <div className='main'>
+          <div className='container'>
+            <div className='header'>
+              <h1>Manage User Profiles</h1>
+              <div className='text-md-end'>
+                <button
+                  type='button'
+                  className='btn btn-success'
+                  style={{ margin: '5px' }}
+                  onClick={handleNewUserClick}>
+                  Register New User
+                </button>
+              </div>
+            </div>
+            <div style={{ overflowX: 'auto' }}>
+              <table ref={tableRef} className='table table-hover table-striped'>
+                <thead className='table-dark'>
+                  <tr>
+                    <th scope='col' width='50'>
+                      No.
+                    </th>
+                    <th scope='col' width='300'>
+                      Display Name
+                    </th>
+                    <th scope='col' width='400'>
+                      Email
+                    </th>
+                    <th scope='col' width='400'>
+                      Created At
+                    </th>
+                    <th scope='col' width='400'>
+                      Updated At
+                    </th>
+                    <th scope='col' width='400'>
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody key={userList} className='table-group-divider'>
+                  {userList}
+                </tbody>
+              </table>
+            </div>
+            {isDeregisterWindowOpen && (
+              <DeregisterWindow
+                onConfirm={handleDeregisterConfirm}
+                onClose={handleDeregisterCancel}
+              />
+            )}
+            {isToggleUserRoleWindowOpen && (
+              <ToggleUserRoleWindow
+                onConfirm={handleToggleUserRoleConfirm}
+                onClose={handleToggleUserRoleCancel}
+                isMaintainer={toggleUserRoleIsMaintainer}
+              />
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

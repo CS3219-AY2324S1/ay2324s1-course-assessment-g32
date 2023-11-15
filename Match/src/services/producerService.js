@@ -4,11 +4,6 @@ const authApi = require('../helpers/callsToAuth');
 const env = require('../loadEnvironment');
 const logger = require('../Log');
 
-logger.register({
-  serviceName: 'Match Service',
-  logLevel: logger.LOG_LEVELS.all,
-});
-
 // Generate a unique id
 const generateUuid = () => {
   return uuidv4();
@@ -27,7 +22,6 @@ const joinQueue = async (jwt, queueName, sessionID) => {
   const requestQueue = queueName;
   const responseQueue = queueName + 'Response';
 
-  await channel.assertQueue('commonQueue', { durable: false });
   await channel.assertQueue(requestQueue, { durable: false, autoDelete: true });
   await channel.assertQueue(responseQueue, { durable: false, autoDelete: true });
 

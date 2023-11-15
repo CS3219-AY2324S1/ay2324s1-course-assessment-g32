@@ -14,7 +14,8 @@ export function DeletionWindow({ onClose, onConfirm }) {
           <button
             type='button'
             className='btn btn-outline-danger me-2'
-            onClick={onClose}>
+            onClick={onClose}
+          >
             No
           </button>
           <button type='button' className='btn btn-danger' onClick={onConfirm}>
@@ -37,7 +38,8 @@ export function EditWindow({ onClose, onConfirm }) {
           <button
             type='button'
             className='btn btn-outline-danger me-2'
-            onClick={onClose}>
+            onClick={onClose}
+          >
             No
           </button>
           <button type='button' className='btn btn-danger' onClick={onConfirm}>
@@ -62,7 +64,8 @@ export function DeregisterWindow({ onClose, onConfirm }) {
           <button
             type='button'
             className='btn btn-outline-danger me-2'
-            onClick={onClose}>
+            onClick={onClose}
+          >
             No
           </button>
           <button type='button' className='btn btn-danger' onClick={onConfirm}>
@@ -100,7 +103,86 @@ export function ToggleUserRoleWindow({ onClose, onConfirm, isMaintainer }) {
           <button
             type='button'
             className='btn btn-outline-danger me-2'
-            onClick={onClose}>
+            onClick={onClose}
+          >
+            No
+          </button>
+          <button type='button' className='btn btn-danger' onClick={onConfirm}>
+            Yes
+          </button>
+        </div>
+      </Alert>
+    </div>
+  );
+}
+
+export function ChangeQuestionWindow({ onClose, onConfirm, questionTitle }) {
+  return (
+    <div className='overlay'>
+      <Alert variant='danger'>
+        <Alert.Heading>
+          Are you sure you want to change the question?
+        </Alert.Heading>
+        <p>The question will be changed to <b>{questionTitle}</b>.</p>
+        <hr />
+        <div className='d-flex justify-content-end'>
+          <button
+            type='button'
+            className='btn btn-outline-danger me-2'
+            onClick={onClose}
+          >
+            No
+          </button>
+          <button type='button' className='btn btn-danger' onClick={onConfirm}>
+            Yes
+          </button>
+        </div>
+      </Alert>
+    </div>
+  );
+}
+
+export function ResetCodeWindow({ onClose, onConfirm }) {
+  return (
+    <div className='overlay'>
+      <Alert variant='danger'>
+        <Alert.Heading>
+          Are you certain you wish to reset your code?
+        </Alert.Heading>
+        <p>Resetting will restore the code to its initial boilerplate state.</p>
+        <hr />
+        <div className='d-flex justify-content-end'>
+          <button
+            type='button'
+            className='btn btn-outline-danger me-2'
+            onClick={onClose}
+          >
+            No
+          </button>
+          <button type='button' className='btn btn-danger' onClick={onConfirm}>
+            Yes
+          </button>
+        </div>
+      </Alert>
+    </div>
+  );
+}
+
+export const LeaveRoomWindow = ({ onClose, onConfirm }) => {
+  return (
+    <div className='overlay'>
+      <Alert variant='danger'>
+        <Alert.Heading>
+          Are you certain you wish to exit the room?
+        </Alert.Heading>
+        <p>You will not be allowed to join back once you exit.</p>
+        <hr />
+        <div className='d-flex justify-content-end'>
+          <button
+            type='button'
+            className='btn btn-outline-danger me-2'
+            onClick={onClose}
+          >
             No
           </button>
           <button type='button' className='btn btn-danger' onClick={onConfirm}>

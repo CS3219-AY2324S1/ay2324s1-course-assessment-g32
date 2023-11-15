@@ -2,7 +2,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  max-height: 40%;
+  max-height: 30%;
   overflow: auto;
 }
 
@@ -36,6 +36,14 @@
   align-self: flex-start;
   background-color: #ffffc2;
   color: black;
+}
+
+.server {
+  align-self: center;
+  text-align: center;
+  background-color: #ccc;
+  color: black;
+  font-size: 12px;
 }
 
 .timestamp {

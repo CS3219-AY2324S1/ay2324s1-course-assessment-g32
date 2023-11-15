@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { getIsMaintainer, removeCookie } from '../utils/helpers';
+import { getIsMaintainer, removeCookie, removeSessionStorage } from '../utils/helpers';
 
 function Header() {
   const navigate = useNavigate();
@@ -20,17 +20,21 @@ function Header() {
 
   const handleSignOut = () => {
     removeCookie();
+    removeSessionStorage();
     navigate('/');
   };
 
   return (
-    <Navbar expand='lg' className='navbar navbar-dark bg-dark mb-5'>
+    <Navbar expand='lg' className='navbar navbar-dark bg-dark'>
       <Container>
-        <Navbar.Brand href='/landing'>PeerPrep</Navbar.Brand>
+        <Navbar.Brand href='/dashboard'>PeerPrep</Navbar.Brand>
         <div className='Navbar'>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='me-auto'>
+              <Nav.Link href='/dashboard'>Home</Nav.Link>
+              <Nav.Link href='/questions'>Questions</Nav.Link>
+              <Nav.Link href='/submission-history'>Submissions</Nav.Link>
               <NavDropdown title='User Setting' id='basic-nav-dropdown'>
                 {isMaintainerHeader ? (
                   <NavDropdown.Item href='/users-management'>

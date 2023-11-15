@@ -4,13 +4,15 @@ Docker is used to containerize our various micro-services
 which serves our combined application.
 
 We have various micro-services including:
-* MySQL Database
-* User Service
-* Auth Service
-* Question Service
-* Match Service
-* Collaboration Service
-* Frontend Service (Web UI)
+
+- User Service
+- Auth Service
+- Question Service
+- Match Service
+- Collaboration Service
+- History Service
+- Execution Service
+- Frontend Service (Web UI)
 
 > Additional Note:\
 > The instructions we have are based on Windows OS.
@@ -22,7 +24,7 @@ We have various micro-services including:
 
 Ensure that you are connected to the internet.
 
-> Note!\
+> [!IMPORTANT]
 > Do **not** connect to NUS Wifi/Network.\
 > The application would be unable to connect to MongoDB Atlas.
 
@@ -32,7 +34,7 @@ Download and install these software if you do not have them locally.
 
 - [Docker Desktop](https://www.docker.com/get-started/)
 
-**Ensure that MySQL and RabbitMQ Server is NOT running locally.** 
+> [!NOTE] > **Ensure that RabbitMQ Server and Redis Server are NOT running locally.**
 
 # Testing
 
@@ -73,6 +75,7 @@ docker version
 ```
 
 It should output something like
+
 ```
 Client:
  Cloud integration: v1.0.35+desktop.5
@@ -108,36 +111,27 @@ Server: Docker Desktop 4.24.2 (124339)
 
 ### Dockered Microservices
 
-At the root directory, open a terminal 
+At the root directory, open a terminal
 to create and start containers of the micro-services.
 
 ```shell
 docker compose up -d
 ```
 
-It may take a few minutes for the inital build as it needs to download the images online. 
+It may take a few minutes for the inital build as it needs to download the images online.
 The frontend would only be available after the containers are running.
 
 ### Frontend Application
 
-Locally, open a web browser and go to [http://localhost:3000](http://localhost:3000).
+> [!WARNING]
+> Take caution when deleting maintainer accounts.
+> Do not delete until there is no accounts with admin rights.
 
-### Sample Accounts
-
-By default, we have created 2 accounts as part of the fresh database. These accounts are for testing purposes, and would not be avilable for production.
-
-| Email          | Password | Remarks                                  |
-| -------------- | -------- | ---------------------------------------- |
-| admin@test.com | password | Has admin rights. Regard as a superuser. |
-| user@test.com  | password | Normal user. Cannot manage other users.  |
-
-> Note: if you delete these accounts via the user profile management
-> functionalities, you may have from restart the pre-testing steps to
-> get back the accounts.
+Locally, open a web browser and go to [http://localhost](http://localhost).
 
 ## Post-testing
 
-After testing, open a terminal at the root directory 
+After testing, open a terminal at the root directory
 to stop and remove the containers of the micro-services.
 
 ```shell
@@ -145,4 +139,5 @@ docker compose down
 ```
 
 ---
+
 [Go to README](../README.md)

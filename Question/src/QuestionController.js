@@ -3,7 +3,7 @@ const { Status } = require('./constants');
 const logger = require('./Log');
 
 // Define a controller function for creating questions
-const create = async (req, res) => {
+exports.create = async (req, res) => {
   try {
     const { title, complexity, description, tags } = req.body;
     const question = await questionService.createQuestion(
@@ -23,7 +23,7 @@ const create = async (req, res) => {
 };
 
 // Define a controller function for getting all questions
-const getAll = async (req, res) => {
+exports.getAll = async (req, res) => {
   try {
     const questions = await questionService.getQuestions();
     logger.logSuccess('Questions retrieved');
@@ -36,7 +36,7 @@ const getAll = async (req, res) => {
   }
 };
 
-const getAllByCriteria = async (req, res) => {
+exports.getAllByCriteria = async (req, res) => {
   try {
     const { complexity, tags } = req.query;
     const questions = await questionService.getQuestionsByCriteria(complexity, tags);
@@ -51,7 +51,7 @@ const getAllByCriteria = async (req, res) => {
 };
 
 // Define a controller function for getting details for a question
-const getQuestionDetails = async (req, res) => {
+exports.getQuestionDetails = async (req, res) => {
   try {
     const { id } = req.query;
     const question = await questionService.getQuestionDetails(id);
@@ -66,7 +66,7 @@ const getQuestionDetails = async (req, res) => {
 };
 
 // Define a controller function for getting a random question by criteria
-const getRandomQuestionByCriteria = async (req, res) => {
+exports.getRandomQuestionByCriteria = async (req, res) => {
   try {
     const { complexity } = req.query;
     const question = await questionService.getRandomQuestionByComplexity(complexity);
@@ -84,7 +84,7 @@ const getRandomQuestionByCriteria = async (req, res) => {
 };
 
 // Define a controller function for editing a question
-const edit = async (req, res) => {
+exports.edit = async (req, res) => {
   try {
     const { id, title, complexity, description, tags } = req.body;
     const question = await questionService.editQuestion(
@@ -105,7 +105,7 @@ const edit = async (req, res) => {
 };
 
 // Define a controller function for deleting a question
-const deleteQuestion = async (req, res) => {
+exports.deleteQuestion = async (req, res) => {
   try {
     const { id } = req.query;
     const question = await questionService.deleteQuestion(id);
@@ -119,12 +119,32 @@ const deleteQuestion = async (req, res) => {
   }
 };
 
-module.exports = {
-  create,
-  getAll,
-  getAllByCriteria,
-  getQuestionDetails,
-  getRandomQuestionByCriteria,
-  edit,
-  deleteQuestion,
+// Define a controller function for appending question title
+exports.appendQuestionTitle = async (req, res) => {
+  try {
+    const { attempts } = req.body;
+    const attemptsWithTitles = await questionService.appendQuestionTitle(attempts);
+    res.json({ message: 'Question title appended successfully', attemptsWithTitles });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
+exports.getQuestionDifficultyCount = async (req, res) => {
+  try {
+    const { questionsId } = req.body;
+    const questionCountByDifficulty = await questionService.getQuestionCountByDifficulty(questionsId);
+    res.json({ message: 'Question count by difficulty retrieved successfully', questionCountByDifficulty });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
+};
+
+exports.getQuestionStatistics = async (req, res) => {
+  try {
+    const questionStatistics = await questionService.getQuestionStatistics();
+    res.json({ message: 'Question statistics retrieved successfully', questionStatistics });
+  } catch (err) {
+    res.status(err?.status || 500).json({ error: err?.message || err });
+  }
 };

@@ -2,11 +2,6 @@ const { v4: uuidv4 } = require('uuid');
 const { TIMEOUT } = require('../constants');
 const logger = require('../Log');
 
-logger.register({
-  serviceName: 'Match Service',
-  logLevel: logger.LOG_LEVELS.all,
-});
-
 const waitingHosts = new Map();
 
 // Calculates how long the host has been waiting

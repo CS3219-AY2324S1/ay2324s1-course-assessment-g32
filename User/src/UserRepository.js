@@ -1,249 +1,186 @@
-const mysqlDb = require('./Connection');
+const userModel = require('./UserModel');
+
+exports.createUser = async (email, password) => {
+  const hashedPassword = await password;
+
+  try {
+    const user = new userModel({
+      displayName: getDisplayNameFromEmail(email),
+      email: email,
+      password: hashedPassword,
+    });
+
+    // Save the user to the database
+    await user.save();
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
+};
 
 /**
- * Finds and returns userId of user with email.
- *
- * userId is undefined -> Error with SQL query;
- * userId is null -> Cannot find user with email;
+ * Delete user of given id from the database.
+ * @param {string} id
+ * @returns {bool} If the deletion was successful
+ */
+exports.deleteUser = async (id) => {
+  try {
+    const result = await userModel.deleteOne({ _id: id });
+    return result.deletedCount > 0;
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
+ * Finds and returns id of user with email.
  *
  * @param {string} email
  * @returns {userId, isMaintainer}
  */
-const findByEmail = async (email) => {
-  var _userId = Number();
-  var _isMaintainer = Boolean();
-  const query = mysqlDb
-    .promise()
-    .query('SELECT id, is_maintainer FROM users WHERE email=?;', [email])
-    .then(([rows, fields]) => {
-      _userId = rows.length ? rows[0].id : null;
-      _isMaintainer = rows.length ? rows[0].is_maintainer : null;
-    })
-    .catch(console.error);
-
-  await query; // Wait for uid and isMaintainer to be updated
-  return { userId: _userId, isMaintainer: _isMaintainer };
-};
-
-const createUser = async (email, password) => {
-  var _userId = Number();
-  var _password = String();
-  const _displayName = getDisplayNameFromEmail(email);
-
-  await password.then((x) => (_password = x));
-
-  // Add new user to database
-  const query = mysqlDb
-    .promise()
-    .query(
-      'INSERT INTO users(display_name, email, password) VALUES (?, ?, ?);',
-      [_displayName, email, _password]
-    )
-    .then(([result, fields]) => {
-      _userId = result.insertId;
-    })
-    .catch(console.error);
-
-  await query; // Wait for new user to be inserted
-  return _userId;
-};
-
-const getUserInfoByEmail = async (email) => {
-  var _userId = Number();
-  await findByEmail(email).then((userInfo) => (_userId = userInfo.userId));
-
-  if (!_userId) throw 'No user is using ' + email;
-
-  return getUserInfoById(_userId);
-};
-
-const getAllUserInfo = async () => {
-  var _userInfo = [];
-
-  const selectStmt = `SELECT * FROM users;`;
-
-  const query = mysqlDb
-    .promise()
-    .query(selectStmt)
-    .then(([rows, fields]) => {
-      _userInfo = rows.map(
-        ({
-          password,
-          display_name,
-          created_at,
-          updated_at,
-          is_maintainer,
-          ...rest
-        }) => ({
-          ...rest,
-          displayName: display_name,
-          createdAt: created_at,
-          updatedAt: updated_at,
-          isMaintainer: is_maintainer,
-        })
-      );
-    })
-    .catch(console.error);
-
-  await query;
-
-  return _userInfo;
-};
-
-const getUserInfoById = async (userId) => {
-  var _userInfo = {};
-  const selectStmt = `SELECT * FROM users WHERE id=?;`;
-
-  const query = mysqlDb
-    .promise()
-    .query(selectStmt, [userId])
-    .then(([rows, fields]) => {
-      const userInfo = rows[0];
-
-      if (rows.length === 0) throw 'getUserInfo: No user with id ' + userId;
-
-      if (rows.length > 1)
-        throw 'getUserInfo: Only one user should be retrieved';
-
-      if (userInfo.id != userId) throw 'getUserInfo: Wrong user info retrieved';
-
-      _userInfo['id'] = userId;
-      _userInfo['displayName'] = userInfo.display_name;
-      _userInfo['password'] = userInfo.password;
-      _userInfo['email'] = userInfo.email;
-      _userInfo['createdAt'] = userInfo.created_at;
-      _userInfo['updatedAt'] = userInfo.updated_at;
-      _userInfo['isMaintainer'] = userInfo.is_maintainer;
-    })
-    .catch(console.error);
-
-  await query; // Wait for new user to be inserted
-
-  if (Object.keys(_userInfo).length === 0)
-    throw 'User info cannot be retrieved';
-
-  return _userInfo;
-};
-
-const updateUser = async (userId, displayName) => {
-  var _success = Boolean();
-  var _placeholders = [];
-  var _sql = 'UPDATE users SET ';
-
-  if (displayName) {
-    _sql = _sql.concat('display_name=?');
-    _placeholders.push(displayName);
+exports.findByEmail = async (email) => {
+  try {
+    const result = await userModel
+      .findOne({ email: email }, '_id isMaintainer')
+      .lean();
+    if (result) {
+      result.id = result._id;
+      delete result._id;
+    }
+    return result;
+  } catch (err) {
+    throw err;
   }
-
-  _sql = _sql.concat(' WHERE id = ?;');
-  _placeholders.push(userId);
-
-  const query = mysqlDb
-    .promise()
-    .query(_sql, _placeholders)
-    .then(([result, fields]) => {
-      _success = result.affectedRows === 1;
-    })
-    .catch(console.error);
-
-  await query; // Wait for user to be updated
-
-  if (!_success) {
-    throw 'User info cannot be updated';
-  }
-
-  return _success;
 };
 
-const updatePassword = async (userId, password) => {
-  var _success = Boolean();
-  var _placeholders = [];
-  var _sql = 'UPDATE users SET ';
-
-  if (password) {
-    _sql = _sql.concat('password=?');
-    _placeholders.push(password);
+exports.getAllUserInfo = async () => {
+  try {
+    let result = await userModel
+      .find({}, 'displayName email createdAt updatedAt isMaintainer')
+      .lean();
+    result = result.map((user) => {
+      user.id = user._id;
+      delete user._id;
+      return user;
+    });
+    if (!result) {
+      throw 'No users to be retrieved';
+    }
+    return result;
+  } catch (err) {
+    throw err;
   }
-
-  _sql = _sql.concat(' WHERE id = ?;');
-  _placeholders.push(userId);
-
-  const query = mysqlDb
-    .promise()
-    .query(_sql, _placeholders)
-    .then(([result, fields]) => {
-      _success = result.affectedRows === 1;
-    })
-    .catch(console.error);
-
-  await query; // Wait for user to be updated
-  return _success;
 };
 
 /**
- * Delete user of given userId from the database.
- * @param {int|string} userId
+ * Finds and returns user information with id.
+ *
+ * @param {string} id
+ * @returns {Object} User information
+ */
+exports.getUserInfoById = async (id) => {
+  try {
+    const result = await userModel.findById(id).lean();
+    if (result) {
+      result.id = result._id;
+      delete result._id;
+    } else {
+      throw 'No user with id ' + id;
+    }
+    return result;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.getUserInfoByEmail = async (email) => {
+  var _userId = String();
+  await exports.findByEmail(email).then((userInfo) => (_userId = userInfo.id));
+
+  if (!_userId) throw 'No user is using ' + email;
+
+  return exports.getUserInfoById(_userId);
+};
+
+/**
+ * Updates and returns user information with id.
+ *
+ * @param {string} id
+ * @param {string} displayName
+ * @returns {Boolean} Success or failure
+ */
+exports.updateDisplayName = async (id, displayName) => {
+  try {
+    const update = {
+      displayName: displayName,
+    };
+    const result = await userModel.findByIdAndUpdate(id, update, { new: true });
+    return result !== null;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.updateProgrammingLanguage = async (id, programmingLanguage) => {
+  try {
+    const update = {
+      language: programmingLanguage,
+    };
+    const result = await userModel.findByIdAndUpdate(id, update, { new: true });
+    return result !== null;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.updateComplexity = async (id, newComplexity) => {
+  try {
+    const update = {
+      complexity: newComplexity,
+    };
+    const result = await userModel.findByIdAndUpdate(id, update, { new: true });
+    return result !== null;
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
+ * Updates and returns user information with id.
+ *
+ * @param {string} id
+ * @param {string} password
+ * @returns {Boolean} Success or failure
+ */
+exports.updatePassword = async (id, password) => {
+  try {
+    const update = { password: password };
+    const result = await userModel.findByIdAndUpdate(id, update, { new: true });
+    return result !== null;
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
+ * Toggle role of user of given id from the database.
+ * @param {string} id
  * @returns If the deletion was successful
  */
-const deleteUser = async (userId) => {
-  var _success = Boolean();
-
-  const query = mysqlDb
-    .promise()
-    .query('DELETE FROM users WHERE id=?;', [userId])
-    .then(([result, fields]) => {
-      _success = result.affectedRows === 1;
-    })
-    .catch(console.error);
-
-  await query; // Wait for user to be deleted
-  return _success;
+exports.toggleUserRole = async (id) => {
+  const user = await exports.getUserInfoById(id);
+  const newIsMaintainer = user?.isMaintainer ? 0 : 1; // Toggle the isMaintainer field
+  try {
+    const update = { isMaintainer: newIsMaintainer };
+    const result = await userModel.findByIdAndUpdate(id, update, { new: true });
+    return result !== null;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const getDisplayNameFromEmail = (email) => {
   // Assumes displayName from email (up until '@')
   return email.substring(0, email.indexOf('@'));
-};
-
-/**
- * Toggle role of user of given userId from the database.
- * @param {int|string} userId
- * @returns If the deletion was successful
- */
-const toggleUserRole = async (userId) => {
-  const user = await getUserInfoById(userId);
-  const newIsMaintainer = user?.isMaintainer ? 0 : 1; // Toggle the isMaintainer field
-
-  var _success = Boolean();
-  var _placeholders = [];
-  var _sql = 'UPDATE users SET ';
-
-  _sql = _sql.concat('is_maintainer=?');
-  _placeholders.push(newIsMaintainer);
-
-  _sql = _sql.concat(' WHERE id=?;');
-  _placeholders.push(userId);
-
-  const query = mysqlDb
-    .promise()
-    .query(_sql, _placeholders)
-    .then(([result, fields]) => {
-      _success = result.affectedRows === 1;
-    })
-    .catch(console.error);
-
-  await query; // Wait for user to be updated
-  return _success;
-};
-
-module.exports = {
-  findByEmail,
-  createUser,
-  updateUser,
-  updatePassword,
-  deleteUser,
-  getAllUserInfo,
-  getUserInfoByEmail,
-  getUserInfoById,
-  toggleUserRole,
 };

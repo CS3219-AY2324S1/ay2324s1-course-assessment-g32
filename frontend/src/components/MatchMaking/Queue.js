@@ -9,30 +9,43 @@ import { showFailureToast } from '../../utils/toast';
 
 const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) => {
   const [status, setStatus] = useState({});
+  const [showButtons, setShowButtons] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const reply = await joinQueue(jwt, queueName, sessionID);
-        setStatus(reply.data.response.message);
-        setIsLoading(false);
+  const initiateMatch = async () => {
+    try {
+      const reply = await joinQueue(jwt, queueName, sessionID);
+      setStatus(reply.data.response.message);
+      setIsLoading(false);
 
-        // Navigate to collaboration page if match is found
-        const isMatch = reply.data.response.isMatch;
-        if (isMatch) {
-          const roomId = reply.data.response.roomId;
-          const userId = await getUserId();
-          const user = await getUser(userId, getCookie());
-          const displayName = user.displayName;
+      // Navigate to collaboration page if match is found
+      const isMatch = reply.data.response.isMatch;
+      setShowButtons(!isMatch);
+      if (isMatch) {
+        const roomId = reply.data.response.roomId;
+        const userId = await getUserId();
+        const user = await getUser(userId, getCookie());
+        const displayName = user.displayName;
+        const time = Date.now();
 
-          const questionData = {
-            complexity: complexity,
-            language: language,
-          };
+        const session = {
+          room: roomId,
+          time: time,
+          complexity: complexity,
+        }
 
+        sessionStorage.setItem(`current_session`, JSON.stringify(session));
+
+        const questionData = {
+          complexity: complexity,
+          language: language,
+        };
+
+        // Generates a random delay between 0 and 200 milliseconds to avoid users joining the room at the same time
+        const randomDelay = Math.random() * 200;
+        const randomTimeout = setTimeout(() => {
           navigate('/collaboration', {
             state: {
               roomId,
@@ -41,31 +54,46 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
               jwt,
             },
           });
-        }
-      } catch (error) {
-        onCancel();
-        errorHandler(error);
+        }, randomDelay);
+        return () => clearTimeout(randomTimeout);
       }
-    };
-    fetchData();
+    } catch (error) {
+      onCancel();
+      errorHandler(error);
+    }
+  };
+
+  // Join queue on component mount
+  useEffect(() => {
+    initiateMatch();
   }, [jwt, sessionID, queueName, complexity, language, navigate]);
 
   useEffect(() => {
-    setTimeout(() => {
-      // To get the latest value of isLoading
-      setIsLoading((isLoading) => {
-        if (isLoading) {
-          showFailureToast('Server is not responding. Please try again later.');
-          onCancel();
-        }
-      });
+    const timeoutId = setTimeout(() => {
+      if (isLoading) {
+        showFailureToast('Server is not responding. Please try again later.');
+        onCancel();
+      }
     }, 32000);
-  });
+
+    return () => clearTimeout(timeoutId); // Clear the timeout when the component unmounts
+  }, [isLoading, onCancel]);
+
 
   const handleCancelClick = async () => {
     try {
       await exitQueue(jwt, queueName, sessionID);
       onCancel();
+    } catch (error) {
+      errorHandler(error);
+    }
+  };
+
+  const handleRetryClick = async () => {
+    try {
+      await exitQueue(jwt, queueName, sessionID);
+      setIsLoading(true);
+      initiateMatch();
     } catch (error) {
       errorHandler(error);
     }
@@ -87,9 +115,16 @@ const Queue = ({ jwt, sessionID, onCancel, queueName, complexity, language }) =>
     <div className='container'>
       <div className='row text-center'>
         <p>{status}</p>
-        <button className='btn btn-secondary' onClick={handleCancelClick}>
-          Back
-        </button>
+        {showButtons && (
+          <div className='d-flex justify-content-between'>
+            <button className='btn btn-secondary' onClick={handleCancelClick}>
+              Back
+            </button>
+            <button className='btn btn-success' onClick={handleRetryClick}>
+              Retry
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

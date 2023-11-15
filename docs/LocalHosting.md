@@ -5,27 +5,24 @@
 Download and install these software if you do not have them locally.
 
 - [NodeJS](https://nodejs.org/en/download)
-- [MySQL](https://dev.mysql.com/downloads/mysql/)
 - [Erlang](https://www.erlang.org/downloads)
 - [RabbitMQ](https://www.rabbitmq.com/download.html)
+- [Ubuntu](https://ubuntu.com/download/desktop)
+- [Redis](https://redis.io/download)
 
 ## Internet Access
 
 Ensure that you are connected to the internet.
 
-> Note!\
+> [!IMPORTANT]
 > Do **not** connect to NUS Wifi/Network.\
 > The application would be unable to connect to MongoDB Atlas.
 
-## Setup MySQL locally
-
-Follow the steps in [Setup MySQL locally](LocalMySqlSetup.md).
-
-Note the root password used, as it would be needed in the later parts.
-
-## Setup RabbitMQ locally
+## Setup RabbitMQ and Redis locally
 
 Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md).
+
+Follow the steps in [Setup Redis locally](LocalRedisSetup.md).
 
 ## Setup environment variables
 
@@ -35,11 +32,7 @@ Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md).
    cp template.env .env
    ```
 3. Open `.env` file
-4. Fill up the MYSQL root password
-   (previously configured when installing MySQL)
-   - Example: if your root password is "password1234",
-     `MYSQL_ROOT_PASSWORD=password1234`
-5. Fill up a JWT token password
+4. Fill up a JWT token password
    (for generating and decoding JWT tokens)
    - Example: if you want to set the password to "password",
      `JWT_SECRET_KEY=password`
@@ -50,16 +43,20 @@ Follow the steps in [Setup RabbitMQ locally](LocalRabbitMqSetup.md).
 npm run install-all
 ```
 
-# Start Application Locally
+Also ensure that RabbitMQ Server and Redis Server has been started.
 
-Ensure that MySQL Server service has started.
-(How to check? Click [here](LocalMySqlSetup.md#start-mysql-service).)
+- [Start RabbitMQ Server](LocalRabbitMqSetup.md#start-rabbitmq-service)
+- [Start Redis Server](LocalRedisSetup.md#start-redis-service)
+
+# Start Application Locally
 
 Start all services using the following commands:
 
 ```
 npm run start-all
 ```
+
+The application can be accessed on [http://localhost](http://localhost).
 
 ---
 

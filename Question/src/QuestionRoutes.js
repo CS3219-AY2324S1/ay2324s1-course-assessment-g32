@@ -5,14 +5,17 @@ const questionController = require('./QuestionController');
 const middleware = require('./helpers/middleware');
 
 // Only maintainer can access these routes
-router.post('/create', middleware.checkTokenMaintainer, questionController.create);
-router.put('/edit', middleware.checkTokenMaintainer, questionController.edit);
-router.delete('/delete', middleware.checkTokenMaintainer, questionController.deleteQuestion);
+router.post('/', middleware.checkTokenMaintainer, questionController.create);
+router.put('/', middleware.checkTokenMaintainer, questionController.edit);
+router.delete('/', middleware.checkTokenMaintainer, questionController.deleteQuestion);
 
 // User and maintainer can access the remaining routes
-router.get('/read-all', middleware.checkToken, questionController.getAll);
-router.get('/read-all-by-criteria', middleware.checkToken, questionController.getAllByCriteria);
-router.get('/read', middleware.checkToken, questionController.getQuestionDetails);
-router.get('/read-random', middleware.checkToken, questionController.getRandomQuestionByCriteria);
+router.get('/', middleware.checkToken, questionController.getQuestionDetails);
+router.get('/all', middleware.checkToken, questionController.getAll);
+router.get('/by-criteria', middleware.checkToken, questionController.getAllByCriteria);
+router.get('/random', middleware.checkToken, questionController.getRandomQuestionByCriteria);
+router.post('/append-question-title', middleware.checkToken, questionController.appendQuestionTitle);
+router.post('/count-by-difficulty', middleware.checkToken, questionController.getQuestionDifficultyCount);
+router.get('/statistics', middleware.checkToken, questionController.getQuestionStatistics);
 
 module.exports = router;

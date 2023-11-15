@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Event } from '../../constants';
+import Spinner from '../Spinner';
 import '../../css/Chat.css';
 
 const Chat = ({ socket, roomId, user }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
+  const chatContainerRef = useRef(null);
 
   const getTimestamp = () => {
     const date = new Date();
@@ -17,7 +19,9 @@ const Chat = ({ socket, roomId, user }) => {
     setInputMessage(e.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (event) => {
+    event.preventDefault();
+
     if (inputMessage) {
       const message = {
         text: inputMessage,
@@ -33,18 +37,29 @@ const Chat = ({ socket, roomId, user }) => {
   };
 
   useEffect(() => {
+    socket.on(Event.Communication.SYNCHRONIZE, (messages) => {
+      setMessages(messages);
+    });
     socket.on(Event.Communication.CHAT_RECEIVE, (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
   }, []);
 
+  useEffect(() => {
+    // Scroll to the bottom of the chat container
+    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+  }, [messages]);
+  
   return (
     <div className='chat-container'>
-      <div className='chat-messages'>
+      <div className='chat-messages' ref={chatContainerRef}>
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`message ${msg.sender === user ? 'self' : 'other'}`}
+            className={`message ${msg.sender === user
+              ? 'self'
+              : (msg.sender === 'server' ? 'server' : 'other')
+              }`}
           >
             {msg.text}
             {msg.timestamp && (
@@ -52,16 +67,19 @@ const Chat = ({ socket, roomId, user }) => {
             )}
           </div>
         ))}
+        {messages.length === 0 && (<Spinner />)}
       </div>
-      <div className='chat-input'>
-        <input
-          type='text'
-          placeholder='Enter a message'
-          value={inputMessage}
-          onChange={handleInputChange}
-        />
-        <button onClick={handleSendMessage}>Send</button>
-      </div>
+      <form onSubmit={handleSendMessage}>
+        <div className='chat-input'>
+          <input
+            type='text'
+            placeholder='Enter a message'
+            value={inputMessage}
+            onChange={handleInputChange}
+          />
+          <button type='submit'>Send</button>
+        </div>
+      </form>
     </div>
   );
 };

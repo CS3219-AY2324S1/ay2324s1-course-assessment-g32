@@ -30,16 +30,29 @@ function ManageUserProfile() {
   }, [navigate, setUser]);
 
   return isLoading ? (
-    <Spinner />
+    <div>
+      <Header />
+      <div className='background'>
+        <div className='main'>
+          <div className='container'>
+            <Spinner />
+          </div>
+        </div>
+      </div>
+    </div>
   ) : (
     <div>
       <Header />
-      <Container sx={{ marginTop: '20px' }}>
-        <Grid>
-          <ViewUserTopPane user={user} />
-          <ViewUserBottomPane user={user} />
-        </Grid>
-      </Container>
+      <div className='background'>
+        <div className='main'>
+          <Container sx={{ margin: '20px auto' }}>
+            <Grid>
+              <ViewUserTopPane user={user} />
+              <ViewUserBottomPane user={user} />
+            </Grid>
+          </Container>
+        </div>
+      </div>
     </div>
   );
 }

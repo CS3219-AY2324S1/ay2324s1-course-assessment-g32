@@ -20,7 +20,11 @@ const MaintainerEditUser = () => {
   ) : (
     <div>
       <Header />
-      <EditUser user={user} isMaintainerPage={true} />
+      <div className='background'>
+        <div className='main'>
+          <EditUser user={user} isMaintainerPage={true} />
+        </div>
+      </div>
     </div>
   );
 };

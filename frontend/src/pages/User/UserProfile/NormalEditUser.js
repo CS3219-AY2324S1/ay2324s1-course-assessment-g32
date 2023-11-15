@@ -26,12 +26,16 @@ const NormalEditUser = () => {
   ) : (
     <div>
       <Header />
-      <Container sx={{ marginTop: '20px' }}>
-        <Grid>
-          <ViewUserTopPane user={user} />
-          <EditUser user={user} isMaintainerPage={false} />
-        </Grid>
-      </Container>
+      <div className='background'>
+        <div className='main'>
+          <Container sx={{ marginTop: '20px' }}>
+            <Grid>
+              <ViewUserTopPane user={user} />
+              <EditUser user={user} isMaintainerPage={false} />
+            </Grid>
+          </Container>
+        </div>
+      </div>
     </div>
   );
 };

@@ -2,34 +2,27 @@ services:
   nginx:
     container_name: nginx
     image: nginx:latest
-    ports: ['3000:80']
+    ports: ['80:80']
     volumes:
       - ./Nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - svc-web-ui
-  db-user:
-    container_name: user-storage
-    image: mysql/mysql-server:8.0
-    env_file: .env
-    ports: ['3306:3306']
-    volumes:
-      - ./User/initdb:/docker-entrypoint-initdb.d
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:latest
     ports: ['5672:5672']
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports: ['6379:6379']
   svc-user:
     container_name: user-service
     build: ./User
     env_file: .env
     environment:
-      - MYSQL_HOST=db-user
       - AUTH_HOST=svc-auth
     ports: ['4001:4001']
     depends_on:
-      db-user:
-        condition: service_started
-        restart: true
       svc-auth:
         condition: service_started
   svc-auth:
@@ -57,7 +50,6 @@ services:
     depends_on:
       rabbitmq:
         condition: service_started
-        restart: true
       svc-auth:
         condition: service_started
   svc-collab:
@@ -65,6 +57,32 @@ services:
     build: ./Collaboration
     env_file: .env
     ports: ['8001:8001']
+    depends_on:
+      redis:
+        condition: service_started
+    links:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+  svc-history:
+    container_name: history-service
+    build: ./History
+    env_file: .env
+    environment:
+      - AUTH_HOST=svc-auth
+      - QUESTION_HOST=svc-question
+    ports: ['9001:9001']
+    depends_on:
+      - svc-auth
+      - svc-question
+  svc-execution:
+    container_name: execution-service
+    build: ./Execution
+    env_file: .env
+    ports: ['10001:10001']
+    depends_on:
+     - svc-auth
+     - svc-match
   svc-web-ui:
     container_name: web-ui
     build: ./frontend
@@ -75,3 +93,5 @@ services:
       - svc-question
       - svc-match
       - svc-collab
+      - svc-history
+      - svc-execution

@@ -16,3 +16,11 @@ export const axiosQuestion = axios.create({
 export const axiosMatch = axios.create({
   baseURL: env.MATCH_URL + '/queue',
 });
+
+export const axiosHistory = axios.create({
+  baseURL: env.HISTORY_URL + '/history',
+});
+
+export const axiosExecution = axios.create({
+  baseURL: env.EXECUTION_URL + '/execute',
+});

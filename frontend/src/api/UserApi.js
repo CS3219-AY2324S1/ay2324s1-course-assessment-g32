@@ -48,7 +48,7 @@ export const login = async (userData) => {
 
 export const getAllUsers = async (jwtToken) => {
   try {
-    const res = await axiosUser.get('/read-all', getTokenConfig(jwtToken));
+    const res = await axiosUser.get('/all', getTokenConfig(jwtToken));
     return res.data.info;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -65,7 +65,7 @@ export const getUser = async (id, jwtToken) => {
   try {
     let config = getTokenConfig(jwtToken);
     config.params = { id: id };
-    const res = await axiosUser.get('/read', config);
+    const res = await axiosUser.get('/', config);
     return res.data.info;
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
@@ -81,8 +81,46 @@ export const getUser = async (id, jwtToken) => {
 export const updateDisplayName = async (id, newDisplayName, jwtToken) => {
   try {
     const res = await axiosUser.put(
-      '/update',
+      '/display-name',
       { id: id, displayName: newDisplayName },
+      getTokenConfig(jwtToken)
+    );
+    return res;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: Status.REQUEST_TIMEOUT },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+export const updateCodingLanguage = async (id, newLanguage, jwtToken) => {
+  try {
+    const res = await axiosUser.put(
+      '/programming-language',
+      { id: id, programmingLanguage: newLanguage },
+      getTokenConfig(jwtToken)
+    );
+    return res;
+  } catch (err) {
+    if (err.code === 'ERR_NETWORK') {
+      throw Object.assign(new Error(err.code), {
+        response: { status: Status.REQUEST_TIMEOUT },
+        message: 'Network Error',
+      });
+    }
+    throw err;
+  }
+};
+
+export const updateQuesionComplexity = async (id, newComplexity, jwtToken) => {
+  try {
+    const res = await axiosUser.put(
+      '/complexity',
+      { id: id, complexity: newComplexity },
       getTokenConfig(jwtToken)
     );
     return res;
@@ -130,7 +168,7 @@ export const deleteUser = async (id, jwtToken) => {
   try {
     let config = getTokenConfig(jwtToken);
     config.params = { id: id };
-    return await axiosUser.delete('/delete', config);
+    return await axiosUser.delete('/', config);
   } catch (err) {
     if (err.code === 'ERR_NETWORK') {
       throw Object.assign(new Error(err.code), {

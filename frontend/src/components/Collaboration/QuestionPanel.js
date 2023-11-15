@@ -137,7 +137,7 @@ const QuestionPanel = ({ isOpen, onClose, onChangeQuestion, complexity }) => {
     <div>
       {/* Overlay for darkening the background */}
       <div
-        className={`overlay ${isOpen ? 'open' : ''}`}
+        className={`question-panel-overlay ${isOpen ? 'open' : ''}`}
         onClick={handleOverlayClick}
       />
       <div className={`question-panel ${isOpen ? 'open' : ''}`}>

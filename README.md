@@ -1,9 +1,15 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
 
-> **[ IMPORTANT! ]**\
+> [!IMPORTANT]
 > Do _not_ test while on NUS grounds or connected
-> (either directly or indirectly) to NUS Wifi.
+> (either directly or indirectly) to NUS Wifi.\
 > (NUS networks blocks MongoDB Atlas which is required by our application.)
+
+# PeerPrep
+
+Welcome to PeerPrep, your ultimate solution for mastering technical interviews through the power of collaboration! 
+
+Access it here: [http://peerprep.online/](http://peerprep.online/)
 
 # Application Installation and Setup
 
@@ -25,9 +31,10 @@ For development, you may also want to install:
 ## Documentation
 
 - [API Endpoints](docs/ApiEndpoints.md)
-- [Local Setup for MySQL Server](docs/LocalMySqlSetup.md)
 - [Local Setup for RabbitMQ Server](docs/LocalRabbitMqSetup.md)
+- [Local Setup for Redis Server](docs/LocalRedisSetup.md)
 - [Containerization](docs/Containerization.md)
+- [Test Accounts](docs/TestAccounts.md)
 
 ## Micro-services
 
@@ -43,6 +50,8 @@ Run them in different terminals:
 - Question service: `npm run start:question`
 - Match service: `npm run start:match`
 - Collaboration Service: `npm run start:collab`
+- History Service: `npm run start:history`
+- Execution Service: `npm run start:execution`
 - Frontend: `npm run start:frontend`
 
 ---

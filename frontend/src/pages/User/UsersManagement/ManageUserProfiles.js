@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from '../../../components/Header';
 import { UserList } from '../../../components/User';
-import '../../../css/ManageUserProfiles.css';
 
 function ManageUserProfiles() {
   return (

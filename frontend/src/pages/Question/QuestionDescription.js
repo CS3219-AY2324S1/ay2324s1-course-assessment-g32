@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Spinner from '../../components/Spinner';
+import SubmissionDropdown from '../../components/SubmissionHistory/SubmissionDropdown';
 import { QuestionContent } from '../../components/Question';
 import { DeletionWindow } from '../../components/ConfirmationWindows';
 import { getQuestionDetails, deleteQuestion } from '../../api/QuestionApi';
@@ -27,7 +28,7 @@ const QuestionDescription = () => {
         setQuestion(question);
         setIsLoading(false);
       } catch (error) {
-        navigate('../');
+        navigate('../questions');
         errorHandler(error);
       }
     };
@@ -42,11 +43,11 @@ const QuestionDescription = () => {
   }, [id, navigate]);
 
   const handleBackClick = () => {
-    navigate('../');
+    navigate('../questions');
   };
 
   const handleEditClick = () => {
-    navigate('../edit/' + id);
+    navigate('./edit');
   };
 
   const handleDeleteClick = () => {
@@ -58,7 +59,7 @@ const QuestionDescription = () => {
     try {
       await deleteQuestion(id, getCookie());
       showSuccessToast('Successfully Deleted!');
-      navigate('../');
+      navigate('../questions');
     } catch (error) {
       errorHandler(error);
     }
@@ -68,35 +69,59 @@ const QuestionDescription = () => {
     setDeletionWindowOpen(false);
   };
 
-  return isLoading ? (
-    <Spinner />
-  ) : (
-    <div className='landing'>
+  return (
+    <div>
       <Header />
-      <div className='container question-container'>
-        <div className='card text-center'>
-          <div className='card-header'>
-            <div className='d-flex justify-content-between'>
-              <button type='button' className='btn btn-secondary' onClick={handleBackClick}>Back</button>
-              {isMaintainer ? (
-                <div>
-                  <button type='button' className='btn btn-primary me-2' onClick={handleEditClick}>Edit</button>
-                  <button type='button' className='btn btn-danger' onClick={handleDeleteClick}>Delete</button>
+      <div className='background'>
+        {isLoading ? (
+            <Spinner />
+        ) : (
+          <div className='main'>
+            <div className='container'>
+              <div className='question-container'>
+                <div className='card text-center'>
+                  <div className='card-header'>
+                    <div className='d-flex justify-content-between'>
+                      <button
+                        type='button'
+                        className='btn btn-secondary'
+                        onClick={handleBackClick}>
+                        Back
+                      </button>
+                      {isMaintainer ? (
+                        <div>
+                          <button
+                            type='button'
+                            className='btn btn-primary me-2'
+                            onClick={handleEditClick}>
+                            Edit
+                          </button>
+                          <button
+                            type='button'
+                            className='btn btn-danger'
+                            onClick={handleDeleteClick}>
+                            Delete
+                          </button>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                  <div className='qc-container'>
+                    <QuestionContent question={question} />
+                  </div>
                 </div>
-              ) : (
-                <></>
-              )}
+                {isDeletionWindowOpen && (
+                  <DeletionWindow
+                    onConfirm={handleConfirmDeletion}
+                    onClose={handleDeletionWindowClose}
+                  />
+                )}
+              </div>
+              <SubmissionDropdown question={id} />
             </div>
           </div>
-          <div className='qc-container'>
-            <QuestionContent question={question} />
-          </div>
-        </div>
-        {isDeletionWindowOpen && (
-          <DeletionWindow
-            onConfirm={handleConfirmDeletion}
-            onClose={handleDeletionWindowClose}
-          />
         )}
       </div>
     </div>

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { signup } from '../api/UserApi';
-import { showSuccessToast } from '../utils/toast';
+import { showFailureToast, showSuccessToast } from '../utils/toast';
 import { errorHandler } from '../utils/errors';
+import logoImage from '../images/logo.png';
+import '../css/LoginSignup.css';
 
 function Signup() {
   const [email, setEmail] = useState('');
@@ -10,6 +12,12 @@ function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    setEmail(location?.state?.email || email);
+    setPassword(location?.state?.password || password);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -24,11 +32,16 @@ function Signup() {
   };
 
   const handleLoginPageChange = () => {
-    navigate('/login');
+    navigate('/login', {state: { email }});
   };
 
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      showFailureToast('Password are mismatched');
+      return;
+    }
 
     const userData = {
       email: email,
@@ -47,8 +60,9 @@ function Signup() {
 
   return (
     <div className='Auth-form-container'>
-      <form className='Auth-form'>
+      <form className='Auth-form' onSubmit={handleSignupSubmit}>
         <div className='Auth-form-content'>
+          <img src={logoImage} alt='Logo' className='logo mx-auto d-block' />
           <h3 className='Auth-form-title'>Sign Up</h3>
           <div className='text-center'>
             Already registered?{' '}
@@ -60,34 +74,41 @@ function Signup() {
             <label>Email address</label>
             <input
               type='email'
+              autoComplete='email'
               className='form-control mt-1'
               placeholder='Enter email'
+              value={email}
               onChange={handleEmailChange}
+              autoFocus
+              required
             />
           </div>
           <div className='form-group mt-3'>
             <label>Password</label>
             <input
               type='password'
+              autoComplete='new-password'
               className='form-control mt-1'
               placeholder='Enter password'
+              value={password}
               onChange={handlePasswordChange}
+              required
             />
           </div>
           <div className='form-group mt-3'>
             <label>Confirm Password</label>
             <input
               type='password'
+              autoComplete='new-password'
               className='form-control mt-1'
-              placeholder='Enter password'
+              placeholder='Enter password again'
+              value={confirmPassword}
               onChange={handleConfirmPasswordChange}
+              required
             />
           </div>
           <div className='d-grid gap-2 mt-3'>
-            <button
-              type='submit'
-              className='btn btn-primary'
-              onClick={handleSignupSubmit}>
+            <button type='submit' className='btn btn-primary'>
               Register
             </button>
           </div>
