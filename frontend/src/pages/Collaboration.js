@@ -7,6 +7,7 @@ import { QuestionContent } from '../components/Question';
 import { getRandomQuestionByCriteria } from '../api/QuestionApi';
 import { showFailureToast } from '../utils/toast';
 import { getUserId, removeSessionStorage } from '../utils/helpers';
+import { errorHandler } from '../utils/errors';
 import { Status, Event } from '../constants';
 import env from '../loadEnvironment';
 import '../css/Collaboration.css';
@@ -60,6 +61,7 @@ const Collaboration = () => {
         if (error.response.status === Status.UNAUTHORIZED) {
           navigate('/unauthorized');
         }
+        errorHandler(error);
       }
     };
     initializeRoom();

@@ -32,3 +32,9 @@
 .badge {
   height: 25px;
 }
+
+.spinner-border {
+  position: relative !important;
+  top: 50% !important;
+  left: 50% !important;
+}

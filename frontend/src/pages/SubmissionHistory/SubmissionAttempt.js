@@ -38,20 +38,18 @@ function SubmissionAttempt() {
 
   return (
     <div className='submission-container'>
+      <Header />
       {isLoading ? (
         <Spinner />
       ) : (
-        <>
-          <Header />
-          <div className='submission-content'>
-            <div className='submission-left p-3 '>
-              <QuestionContent question={question} />
-            </div>
-            <div className='submission-right p-3'>
-              <SubmissionCode attempt={attempt} />
-            </div>
+        <div className='submission-content'>
+          <div className='submission-left p-3 '>
+            <QuestionContent question={question} />
           </div>
-        </>
+          <div className='submission-right p-3'>
+            <SubmissionCode attempt={attempt} />
+          </div>
+        </div>
       )}
     </div>
   );
