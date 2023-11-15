@@ -1,6 +1,6 @@
 # Setup Redis Locally
 
-For Windows,
+For Windows OS,
 
 1. Download and install [Ubuntu](https://ubuntu.com/download/desktop)
   - It is recommended to install the 64-bit version
@@ -15,7 +15,7 @@ For Mac OS,
 
 # Start Redis Service
 
-For Windows,
+For Windows OS,
 
 1. Start your Ubuntu terminal
 2. To start service: `redis-server` into the terminal
